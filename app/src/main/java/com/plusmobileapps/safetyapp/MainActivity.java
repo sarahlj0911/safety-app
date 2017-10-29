@@ -1,15 +1,27 @@
 package com.plusmobileapps.safetyapp;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.widget.TextView;
 
-public class MainActivity extends AppCompatActivity {
+import com.plusmobileapps.safetyapp.dashboard.DashboardFragment;
+import com.plusmobileapps.safetyapp.history.HistoryFragment;
+import com.plusmobileapps.safetyapp.survey.SurveyFragment;
+
+public class MainActivity extends AppCompatActivity
+                implements HistoryFragment.OnFragmentInteractionListener,
+                            DashboardFragment.OnFragmentInteractionListener,
+                            SurveyFragment.OnFragmentInteractionListener{
 
     private TextView mTextMessage;
+
+    private ViewPager viewPager;
+    private BottomNavigationView navigation;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -18,13 +30,13 @@ public class MainActivity extends AppCompatActivity {
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.navigation_survey:
-                    mTextMessage.setText(R.string.title_survey);
+                    viewPager.setCurrentItem(0, true);
                     return true;
                 case R.id.navigation_dashboard:
-                    mTextMessage.setText(R.string.title_dashboard);
+                    viewPager.setCurrentItem(1, true);
                     return true;
                 case R.id.navigation_history:
-                    mTextMessage.setText(R.string.title_history);
+                    viewPager.setCurrentItem(2, true);
                     return true;
             }
             return false;
@@ -33,13 +45,48 @@ public class MainActivity extends AppCompatActivity {
     };
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    protected void onCreate(Bundle savedInstanceState) {super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
         mTextMessage = (TextView) findViewById(R.id.message);
-        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
+        navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+        viewPager = (ViewPager) findViewById(R.id.view_pager);
+        final SwipeAdapter swipeAdapter = new SwipeAdapter(getSupportFragmentManager());
+        viewPager.setAdapter(swipeAdapter);
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                switch (position){
+                    case 0:
+                        navigation.setSelectedItemId(R.id.navigation_survey);
+                        break;
+                    case 1:
+                        navigation.setSelectedItemId(R.id.navigation_dashboard);
+                        break;
+                    case 2:
+                        navigation.setSelectedItemId(R.id.navigation_history);
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
     }
 
+    @Override
+    public void onFragmentInteraction(Uri uri){
+
+    }
 }
