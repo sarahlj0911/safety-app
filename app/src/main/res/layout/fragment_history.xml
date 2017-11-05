@@ -2,7 +2,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.plusmobileapps.safetyapp.history.HistoryFragment">
+    tools:context="com.plusmobileapps.safetyapp.history.HistoryFragment"
+    android:background="@color/paper">
 
     <!-- TODO: Update blank fragment layout -->
     <TextView

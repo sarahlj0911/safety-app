@@ -4,11 +4,15 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.plusmobileapps.safetyapp.R;
+
+import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -19,14 +23,24 @@ import com.plusmobileapps.safetyapp.R;
  * create an instance of this fragment.
  */
 public class SurveyFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+    private static final String TAG = "SurveyViewFragment";    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+    private static final String KEY_LAYOUT_MANAGER = "layoutManager";
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    protected RecyclerView recyclerView;
+    protected RecyclerView.LayoutManager layoutManager;
+    protected LayoutManagerType currentLayoutManagerType;
+    protected SurveyAdapter adapter;
+    ArrayList<SurveyOverview> surveys;
+
+    private enum LayoutManagerType {
+        GRID_LAYOUT_MANAGER,
+        LINEAR_LAYOUT_MANAGER
+    }
 
     private OnFragmentInteractionListener mListener;
 
@@ -49,6 +63,7 @@ public class SurveyFragment extends Fragment {
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
+
         return fragment;
     }
 
@@ -65,7 +80,55 @@ public class SurveyFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_survey, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_survey, container, false);
+        rootView.setTag(TAG);
+        recyclerView = (RecyclerView) rootView.findViewById(R.id.survey_recycler_view);
+        layoutManager = new LinearLayoutManager(getActivity());
+        currentLayoutManagerType = LayoutManagerType.LINEAR_LAYOUT_MANAGER;
+
+        if (savedInstanceState != null) {
+            // Restore saved layout manager type.
+            currentLayoutManagerType = (LayoutManagerType) savedInstanceState
+                    .getSerializable(KEY_LAYOUT_MANAGER);
+        }
+        setRecyclerViewLayoutManager(currentLayoutManagerType);
+
+        surveys = new ArrayList<>();
+        populateSurveys();
+        adapter = new SurveyAdapter(surveys);
+
+
+        recyclerView.setAdapter(adapter);
+
+        return rootView;
+    }
+
+    /**
+     * Set RecyclerView's LayoutManager to the one given.
+     *
+     * @param layoutManagerType Type of layout manager to switch to.
+     */
+    public void setRecyclerViewLayoutManager(LayoutManagerType layoutManagerType) {
+        int scrollPosition = 0;
+
+        // If a layout manager has already been set, get current scroll position.
+        if (recyclerView.getLayoutManager() != null) {
+            scrollPosition = ((LinearLayoutManager) recyclerView.getLayoutManager())
+                    .findFirstCompletelyVisibleItemPosition();
+        }
+
+        switch (layoutManagerType) {
+            case LINEAR_LAYOUT_MANAGER:
+                layoutManager = new LinearLayoutManager(getActivity());
+                layoutManagerType = LayoutManagerType.LINEAR_LAYOUT_MANAGER;
+                break;
+            default:
+                layoutManager = new LinearLayoutManager(getActivity());
+                layoutManagerType = LayoutManagerType.LINEAR_LAYOUT_MANAGER;
+        }
+
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.scrollToPosition(scrollPosition);
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -105,5 +168,28 @@ public class SurveyFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+    //populate array list
+    private void populateSurveys(){
+        ArrayList<String> titles = new ArrayList<String>();
+        titles.add("Bathroom");
+        titles.add("Classroom 1");
+        titles.add("Bathroom 2");
+        titles.add("Locker Room");
+        titles.add("Field");
+        titles.add("Office");
+        titles.add("Classroom 2");
+        titles.add("Bathroom");
+        titles.add("Classroom 1");
+        titles.add("Bathroom 2");
+        titles.add("Locker Room");
+        titles.add("Field");
+        titles.add("Office");
+        titles.add("Classroom 2");
+
+        for (int i = 0; i < titles.size(); i++) {
+            surveys.add(new SurveyOverview(titles.get(i)));
+        }
     }
 }
