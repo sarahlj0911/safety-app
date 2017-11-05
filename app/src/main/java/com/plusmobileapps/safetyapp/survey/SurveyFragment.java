@@ -188,8 +188,18 @@ public class SurveyFragment extends Fragment {
         titles.add("Office");
         titles.add("Classroom 2");
 
+
+        int progress = 90;
         for (int i = 0; i < titles.size(); i++) {
             surveys.add(new SurveyOverview(titles.get(i)));
+            if (i == 0){
+                //no op to keep progress state at 0
+            } else if(i % 2 ==1){
+                surveys.get(i).setFinished(true);
+            } else {
+                surveys.get(i).setProgress(progress);
+                progress -= 10 ;
+            }
         }
     }
 }

@@ -95,7 +95,12 @@ public class SurveyAdapter extends RecyclerView.Adapter<SurveyAdapter.ViewHolder
 
         holder.getSurveyTitle().setText(survey.getTitle());
         holder.getCheckmark().setVisibility(survey.isFinished() ? View.VISIBLE : View.INVISIBLE);
-        holder.getProgressBar().setProgress(survey.getProgress());
+        if (survey.getProgress() > 0){
+            holder.getProgressBar().setVisibility(View.VISIBLE);
+            holder.getProgressBar().setProgress(survey.getProgress());
+        } else {
+            holder.getProgressBar().setVisibility(View.INVISIBLE);
+        }
     }
 
     @Override

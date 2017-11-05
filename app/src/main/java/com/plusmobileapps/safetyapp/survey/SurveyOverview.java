@@ -13,6 +13,16 @@ public class SurveyOverview {
         this.title = title;
     }
 
+    public SurveyOverview(String title, int progress){
+        this.title = title;
+        this.progress = progress;
+    }
+
+    public SurveyOverview(String title, boolean finished){
+        this.title = title;
+        this.finished = finished;
+    }
+
     public boolean isFinished() {
         return finished;
     }
