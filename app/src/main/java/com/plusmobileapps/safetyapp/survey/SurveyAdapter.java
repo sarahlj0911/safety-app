@@ -1,5 +1,7 @@
 package com.plusmobileapps.safetyapp.survey;
 
+import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -20,19 +22,24 @@ import java.util.ArrayList;
 public class SurveyAdapter extends RecyclerView.Adapter<SurveyAdapter.ViewHolder> {
 
     private static final String TAG = "SurveyAdapter";
+    public static final String EXTRA_QUESTION = "com.plusmobileapps.safetyapp.survey.QUESTION";
+    private SurveyOverview survey;
+
 
     private ArrayList<SurveyOverview> surveys
             ;
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder {
         private final TextView surveyTitle;
         private final ProgressBar progressBar;
         private final ImageView checkmark;
         private final boolean finished = false;
         private final int progress = 0;
+        private final Context context;
 
         public ViewHolder(View view) {
             super (view);
+            context = itemView.getContext();
             surveyTitle = view.findViewById(R.id.viewholder_title_survey);
             progressBar = view.findViewById(R.id.viewholder_progressbar_survey);
             checkmark = view.findViewById(R.id.viewholder_check_survey);
@@ -40,7 +47,10 @@ public class SurveyAdapter extends RecyclerView.Adapter<SurveyAdapter.ViewHolder
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    //to do call intent for activity
+                    Intent intent = new Intent(view.getContext(), SurveyActivity.class);
+                    int question = getAdapterPosition();
+                    intent.putExtra(EXTRA_QUESTION, question);
+                    context.startActivity(intent);
                 }
             });
         }
@@ -81,7 +91,7 @@ public class SurveyAdapter extends RecyclerView.Adapter<SurveyAdapter.ViewHolder
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         Log.d(TAG, "onBindViewHolder: ");
-        final SurveyOverview survey = surveys.get(position);
+        survey = surveys.get(position);
 
         holder.getSurveyTitle().setText(survey.getTitle());
         holder.getCheckmark().setVisibility(survey.isFinished() ? View.VISIBLE : View.INVISIBLE);
