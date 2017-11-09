@@ -9,12 +9,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.widget.TextView;
 
-import com.plusmobileapps.safetyapp.dashboard.DashboardFragment;
-import com.plusmobileapps.safetyapp.history.HistoryFragment;
+import com.plusmobileapps.safetyapp.actionitems.DashboardFragment;
+import com.plusmobileapps.safetyapp.summary.SummaryFragment;
 import com.plusmobileapps.safetyapp.survey.SurveyFragment;
 
 public class MainActivity extends AppCompatActivity
-                implements HistoryFragment.OnFragmentInteractionListener,
+                implements SummaryFragment.OnFragmentInteractionListener,
                             DashboardFragment.OnFragmentInteractionListener,
                             SurveyFragment.OnFragmentInteractionListener{
 

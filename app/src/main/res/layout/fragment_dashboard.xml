@@ -2,13 +2,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.plusmobileapps.safetyapp.dashboard.DashboardFragment">
+    tools:context="com.plusmobileapps.safetyapp.actionitems.DashboardFragment">
 
     <!-- TODO: Update blank fragment layout -->
     <TextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/title_dashboard"
+        android:text="@string/title_summary"
         android:background="@color/paper"/>
 
 </FrameLayout>

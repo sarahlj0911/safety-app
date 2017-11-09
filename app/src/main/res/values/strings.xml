@@ -1,8 +1,8 @@
 <resources>
     <string name="app_name">SAfETy App</string>
     <string name="title_survey">Survey</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_history">History</string>
+    <string name="title_action_items">Action Items</string>
+    <string name="title_summary">Summary</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

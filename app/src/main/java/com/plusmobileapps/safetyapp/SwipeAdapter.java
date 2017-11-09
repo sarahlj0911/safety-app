@@ -4,8 +4,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import com.plusmobileapps.safetyapp.dashboard.DashboardFragment;
-import com.plusmobileapps.safetyapp.history.HistoryFragment;
+import com.plusmobileapps.safetyapp.actionitems.DashboardFragment;
+import com.plusmobileapps.safetyapp.summary.SummaryFragment;
 import com.plusmobileapps.safetyapp.survey.SurveyFragment;
 
 /**
@@ -25,7 +25,7 @@ public class SwipeAdapter extends FragmentPagerAdapter {
             case 1:
                 return new DashboardFragment();
             case 2:
-                return new HistoryFragment();
+                return new SummaryFragment();
             default:
                 break;
         }
