@@ -26,8 +26,7 @@ public class SurveyAdapter extends RecyclerView.Adapter<SurveyAdapter.ViewHolder
     private SurveyOverview survey;
 
 
-    private ArrayList<SurveyOverview> surveys
-            ;
+    private ArrayList<SurveyOverview> surveys;
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         private final TextView surveyTitle;
