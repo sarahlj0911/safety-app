@@ -4,9 +4,9 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import com.plusmobileapps.safetyapp.dashboard.DashboardFragment;
-import com.plusmobileapps.safetyapp.history.HistoryFragment;
-import com.plusmobileapps.safetyapp.survey.SurveyFragment;
+import com.plusmobileapps.safetyapp.actionitems.ActionItemsFragment;
+import com.plusmobileapps.safetyapp.summary.SummaryFragment;
+import com.plusmobileapps.safetyapp.surveys.overview.SurveyFragment;
 
 /**
  * Created by Andrew on 10/28/2017.
@@ -23,9 +23,9 @@ public class SwipeAdapter extends FragmentPagerAdapter {
             case 0:
                 return new SurveyFragment();
             case 1:
-                return new DashboardFragment();
+                return new ActionItemsFragment();
             case 2:
-                return new HistoryFragment();
+                return new SummaryFragment();
             default:
                 break;
         }

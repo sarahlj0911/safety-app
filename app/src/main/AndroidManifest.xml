@@ -19,9 +19,13 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".survey.SurveyActivity"
+            android:name=".surveys.survey.SurveyActivity"
             android:label="@string/title_activity_survey"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
+
+    <uses-feature android:name="android.hardware.camera"
+        android:required="false" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
 </manifest>

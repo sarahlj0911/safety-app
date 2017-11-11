@@ -1,4 +1,4 @@
-package com.plusmobileapps.safetyapp.survey;
+package com.plusmobileapps.safetyapp.surveys.overview;
 
 import android.content.Context;
 import android.content.Intent;
@@ -12,6 +12,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.plusmobileapps.safetyapp.R;
+import com.plusmobileapps.safetyapp.surveys.survey.SurveyActivity;
 
 import java.util.ArrayList;
 
@@ -22,12 +23,11 @@ import java.util.ArrayList;
 public class SurveyAdapter extends RecyclerView.Adapter<SurveyAdapter.ViewHolder> {
 
     private static final String TAG = "SurveyAdapter";
-    public static final String EXTRA_QUESTION = "com.plusmobileapps.safetyapp.survey.QUESTION";
+    public static final String EXTRA_LOCATION = "com.plusmobileapps.safetyapp.survey.overview.LOCATION";
     private SurveyOverview survey;
 
 
-    private ArrayList<SurveyOverview> surveys
-            ;
+    private ArrayList<SurveyOverview> surveys;
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         private final TextView surveyTitle;
@@ -48,8 +48,8 @@ public class SurveyAdapter extends RecyclerView.Adapter<SurveyAdapter.ViewHolder
                 @Override
                 public void onClick(View view) {
                     Intent intent = new Intent(view.getContext(), SurveyActivity.class);
-                    int question = getAdapterPosition();
-                    intent.putExtra(EXTRA_QUESTION, question);
+                    String location = surveyTitle.getText().toString();
+                    intent.putExtra(EXTRA_LOCATION, location);
                     context.startActivity(intent);
                 }
             });
