@@ -11,8 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.plusmobileapps.safetyapp.R;
-import com.plusmobileapps.safetyapp.survey.SurveyAdapter;
-import com.plusmobileapps.safetyapp.survey.SurveyFragment;
 
 import java.util.ArrayList;
 

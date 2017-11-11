@@ -6,7 +6,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 
 import com.plusmobileapps.safetyapp.actionitems.ActionItemsFragment;
 import com.plusmobileapps.safetyapp.summary.SummaryFragment;
-import com.plusmobileapps.safetyapp.survey.SurveyFragment;
+import com.plusmobileapps.safetyapp.surveys.overview.SurveyFragment;
 
 /**
  * Created by Andrew on 10/28/2017.

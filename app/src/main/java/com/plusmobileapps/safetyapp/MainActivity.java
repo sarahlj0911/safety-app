@@ -11,7 +11,7 @@ import android.widget.TextView;
 
 import com.plusmobileapps.safetyapp.actionitems.ActionItemsFragment;
 import com.plusmobileapps.safetyapp.summary.SummaryFragment;
-import com.plusmobileapps.safetyapp.survey.SurveyFragment;
+import com.plusmobileapps.safetyapp.surveys.overview.SurveyFragment;
 
 public class MainActivity extends AppCompatActivity
                 implements SummaryFragment.OnFragmentInteractionListener,

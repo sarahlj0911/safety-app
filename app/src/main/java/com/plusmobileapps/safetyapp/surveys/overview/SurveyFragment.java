@@ -1,4 +1,4 @@
-package com.plusmobileapps.safetyapp.survey;
+package com.plusmobileapps.safetyapp.surveys.overview;
 
 import android.content.Context;
 import android.net.Uri;

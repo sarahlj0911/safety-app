@@ -19,7 +19,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".survey.SurveyActivity"
+            android:name=".surveys.survey.SurveyActivity"
             android:label="@string/title_activity_survey"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
