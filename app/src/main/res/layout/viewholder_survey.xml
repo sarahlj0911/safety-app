@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="60dp"
     android:layout_margin="8dp"
-    app:cardElevation="6dp">
+    app:cardElevation="4dp">
 
     <ImageView
         android:id="@+id/viewholder_check_survey"

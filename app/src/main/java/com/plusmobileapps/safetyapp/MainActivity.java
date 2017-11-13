@@ -11,12 +11,12 @@ import android.widget.TextView;
 
 import com.plusmobileapps.safetyapp.actionitems.ActionItemsFragment;
 import com.plusmobileapps.safetyapp.summary.SummaryFragment;
-import com.plusmobileapps.safetyapp.surveys.overview.SurveyFragment;
+import com.plusmobileapps.safetyapp.surveys.location.LocationFragment;
 
 public class MainActivity extends AppCompatActivity
                 implements SummaryFragment.OnFragmentInteractionListener,
                             ActionItemsFragment.OnFragmentInteractionListener,
-                            SurveyFragment.OnFragmentInteractionListener{
+                            LocationFragment.OnFragmentInteractionListener{
 
     private TextView mTextMessage;
 
@@ -89,4 +89,5 @@ public class MainActivity extends AppCompatActivity
     public void onFragmentInteraction(Uri uri){
 
     }
+
 }

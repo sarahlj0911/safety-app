@@ -6,7 +6,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 
 import com.plusmobileapps.safetyapp.actionitems.ActionItemsFragment;
 import com.plusmobileapps.safetyapp.summary.SummaryFragment;
-import com.plusmobileapps.safetyapp.surveys.overview.SurveyFragment;
+import com.plusmobileapps.safetyapp.surveys.location.LocationFragment;
 
 /**
  * Created by Andrew on 10/28/2017.
@@ -21,7 +21,7 @@ public class SwipeAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         switch (position){
             case 0:
-                return new SurveyFragment();
+                return new LocationFragment();
             case 1:
                 return new ActionItemsFragment();
             case 2:

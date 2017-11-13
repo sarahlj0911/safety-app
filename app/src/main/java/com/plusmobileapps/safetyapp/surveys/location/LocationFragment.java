@@ -1,4 +1,4 @@
-package com.plusmobileapps.safetyapp.surveys.overview;
+package com.plusmobileapps.safetyapp.surveys.location;
 
 import android.content.Context;
 import android.net.Uri;
@@ -17,12 +17,12 @@ import java.util.ArrayList;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link SurveyFragment.OnFragmentInteractionListener} interface
+ * {@link LocationFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link SurveyFragment#newInstance} factory method to
+ * Use the {@link LocationFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class SurveyFragment extends Fragment {
+public class LocationFragment extends Fragment {
     private static final String TAG = "SurveyViewFragment";    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String KEY_LAYOUT_MANAGER = "layoutManager";
     private static final String ARG_PARAM1 = "param1";
@@ -34,8 +34,8 @@ public class SurveyFragment extends Fragment {
     protected RecyclerView recyclerView;
     protected RecyclerView.LayoutManager layoutManager;
     protected LayoutManagerType currentLayoutManagerType;
-    protected SurveyAdapter adapter;
-    ArrayList<SurveyOverview> surveys;
+    protected LocationAdapter adapter;
+    ArrayList<LocationSurveyOverview> surveys;
 
     private enum LayoutManagerType {
         GRID_LAYOUT_MANAGER,
@@ -44,7 +44,7 @@ public class SurveyFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
-    public SurveyFragment() {
+    public LocationFragment() {
         // Required empty public constructor
     }
 
@@ -54,11 +54,11 @@ public class SurveyFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment SurveyFragment.
+     * @return A new instance of fragment LocationFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static SurveyFragment newInstance(String param1, String param2) {
-        SurveyFragment fragment = new SurveyFragment();
+    public static LocationFragment newInstance(String param1, String param2) {
+        LocationFragment fragment = new LocationFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -95,8 +95,7 @@ public class SurveyFragment extends Fragment {
 
         surveys = new ArrayList<>();
         populateSurveys();
-        adapter = new SurveyAdapter(surveys);
-
+        adapter = new LocationAdapter(surveys);
 
         recyclerView.setAdapter(adapter);
 
@@ -191,7 +190,7 @@ public class SurveyFragment extends Fragment {
 
         int progress = 90;
         for (int i = 0; i < titles.size(); i++) {
-            surveys.add(new SurveyOverview(titles.get(i)));
+            surveys.add(new LocationSurveyOverview(titles.get(i)));
             if (i == 0){
                 //no op to keep progress state at 0
             } else if(i % 2 ==1){
