@@ -70,7 +70,6 @@ public class SurveyLandingAdapter extends RecyclerView.Adapter<SurveyLandingAdap
         private final TextView title;
         private final TextView modified;
         private final ProgressBar progressBar;
-        private final Context context;
 
         public interface OnSurveySelectedListener {
             public void onSurveySelected(int position);
@@ -83,7 +82,6 @@ public class SurveyLandingAdapter extends RecyclerView.Adapter<SurveyLandingAdap
             date = view.findViewById(R.id.viewholder_landing_date);
             modified = view.findViewById(R.id.viewholder_landing_modified);
             progressBar = view.findViewById(R.id.viewholder_landing_progressbar);
-            context = itemView.getContext();
             try{
                 mCallback = (OnSurveySelectedListener) itemView.getContext();
             } catch (ClassCastException e){

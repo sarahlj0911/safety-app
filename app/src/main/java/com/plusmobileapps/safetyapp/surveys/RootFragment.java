@@ -1,4 +1,4 @@
-package com.plusmobileapps.safetyapp;
+package com.plusmobileapps.safetyapp.surveys;
 
 import android.content.Context;
 import android.net.Uri;
@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.plusmobileapps.safetyapp.R;
 import com.plusmobileapps.safetyapp.surveys.landing.SurveyLandingAdapter;
 import com.plusmobileapps.safetyapp.surveys.landing.SurveyLandingFragment;
 import com.plusmobileapps.safetyapp.surveys.location.LocationFragment;
