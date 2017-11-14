@@ -4,6 +4,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
@@ -11,12 +13,11 @@ import android.widget.TextView;
 
 import com.plusmobileapps.safetyapp.actionitems.ActionItemsFragment;
 import com.plusmobileapps.safetyapp.summary.SummaryFragment;
+import com.plusmobileapps.safetyapp.surveys.landing.SurveyLandingAdapter;
+import com.plusmobileapps.safetyapp.surveys.landing.SurveyLandingFragment;
 import com.plusmobileapps.safetyapp.surveys.location.LocationFragment;
 
-public class MainActivity extends AppCompatActivity
-                implements SummaryFragment.OnFragmentInteractionListener,
-                            ActionItemsFragment.OnFragmentInteractionListener,
-                            LocationFragment.OnFragmentInteractionListener{
+public class MainActivity extends AppCompatActivity implements SurveyLandingAdapter.ViewHolder.OnSurveySelectedListener{
 
     private TextView mTextMessage;
 
@@ -86,8 +87,12 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public void onFragmentInteraction(Uri uri){
-
+    public void onSurveySelected(int position) {
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.root_frame, new LocationFragment())
+                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                .addToBackStack("survey")
+                .commit();
     }
 
 }

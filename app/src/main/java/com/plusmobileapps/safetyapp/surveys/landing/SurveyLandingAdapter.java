@@ -10,8 +10,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.plusmobileapps.safetyapp.R;
-import com.plusmobileapps.safetyapp.surveys.location.LocationSurveyOverview;
-
 import java.util.ArrayList;
 
 /**
@@ -23,8 +21,6 @@ public class SurveyLandingAdapter extends RecyclerView.Adapter<SurveyLandingAdap
     private static final String TAG = "SurveyLandingAdapter";
     public static final String EXTRA_SURVEY = "com.plusmobileapps.safetyapp.survey.landing.SURVEY";
     private LandingSurveyOverview survey;
-
-    private Callback callback;
 
     private ArrayList<LandingSurveyOverview> surveys;
 
@@ -68,12 +64,17 @@ public class SurveyLandingAdapter extends RecyclerView.Adapter<SurveyLandingAdap
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
+        OnSurveySelectedListener mCallback;
         private final TextView time;
         private final TextView date;
         private final TextView title;
         private final TextView modified;
         private final ProgressBar progressBar;
         private final Context context;
+
+        public interface OnSurveySelectedListener {
+            public void onSurveySelected(int position);
+        }
 
         public ViewHolder(View view) {
             super(view);
@@ -83,6 +84,18 @@ public class SurveyLandingAdapter extends RecyclerView.Adapter<SurveyLandingAdap
             modified = view.findViewById(R.id.viewholder_landing_modified);
             progressBar = view.findViewById(R.id.viewholder_landing_progressbar);
             context = itemView.getContext();
+            try{
+                mCallback = (OnSurveySelectedListener) itemView.getContext();
+            } catch (ClassCastException e){
+                throw new ClassCastException(itemView.getContext().toString() + " must implement OnSurveySelectedListener");
+            }
+
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mCallback.onSurveySelected(getAdapterPosition());
+                }
+            });
         }
 
         public TextView getTime() {
@@ -104,10 +117,6 @@ public class SurveyLandingAdapter extends RecyclerView.Adapter<SurveyLandingAdap
         public ProgressBar getProgressBar() {
             return progressBar;
         }
-    }
-
-    public interface Callback {
-        void onViewHolderLandingClick(int position);
     }
 
 }
