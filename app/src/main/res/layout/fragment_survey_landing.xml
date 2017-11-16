@@ -1,26 +1,25 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/lib/com.plusmobileapps.safetyapp.surveys.landing"
     xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_width="match_parent">
+    tools:context="com.plusmobileapps.safetyapp.surveys.landing.SurveyLandingFragment">
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/floatingActionButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:clickable="true"
         android:layout_gravity="bottom|right"
-        android:layout_marginRight="16dp"
         android:layout_marginBottom="16dp"
+        android:layout_marginRight="16dp"
+        android:clickable="true"
         app:fabSize="normal"
-        app:src="@drawable/plus"/>
+        app:src="@drawable/plus" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/landing_survey_recyclerview"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context="com.plusmobileapps.safetyapp.surveys.landing.SurveyLandingFragment"/>
-
+        android:layout_height="match_parent" />
 
 
 </FrameLayout>
