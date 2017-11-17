@@ -7,4 +7,5 @@
     <color name="actionItemRed">#F44336</color>
     <color name="actionItemGreen">#4CAF50</color>
     <color name="actionItemYellow">#FFEB3B</color>
+    <color name="divider">#9E9E9E</color>
 </resources>
