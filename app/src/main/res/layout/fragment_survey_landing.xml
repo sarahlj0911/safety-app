@@ -14,7 +14,8 @@
         android:layout_marginRight="16dp"
         android:clickable="true"
         app:fabSize="normal"
-        app:src="@drawable/plus" />
+        android:foreground="@drawable/plus"
+        android:onClick="createSurveyButtonClicked"/>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/landing_survey_recyclerview"

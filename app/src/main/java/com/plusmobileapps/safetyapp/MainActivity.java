@@ -1,5 +1,6 @@
 package com.plusmobileapps.safetyapp;
 
+import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -7,8 +8,10 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 
 import com.plusmobileapps.safetyapp.actionitems.ActionItemsFragment;
@@ -16,6 +19,8 @@ import com.plusmobileapps.safetyapp.summary.SummaryFragment;
 import com.plusmobileapps.safetyapp.surveys.landing.SurveyLandingAdapter;
 import com.plusmobileapps.safetyapp.surveys.landing.SurveyLandingFragment;
 import com.plusmobileapps.safetyapp.surveys.location.LocationFragment;
+
+import java.util.zip.Inflater;
 
 public class MainActivity extends AppCompatActivity implements SurveyLandingAdapter.ViewHolder.OnSurveySelectedListener{
 
@@ -93,6 +98,26 @@ public class MainActivity extends AppCompatActivity implements SurveyLandingAdap
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                 .addToBackStack("survey")
                 .commit();
+    }
+
+    public void createSurveyButtonClicked(View view){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Create New Survey")
+                .setView(getLayoutInflater().inflate(R.layout.dialog_create_survey, null))
+                .setPositiveButton("Create", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //user clicked create
+                    }
+                })
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //user clicked cancel
+                    }
+                });
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
 }
