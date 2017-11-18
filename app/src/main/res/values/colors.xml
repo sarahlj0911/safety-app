@@ -1,10 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorPrimaryDark">#303f9f</color>
     <color name="colorAccent">#FF4081</color>
     <color name="paper">#E0E0E0</color>
     <color name="actionItemRed">#F44336</color>
     <color name="actionItemGreen">#4CAF50</color>
     <color name="actionItemYellow">#FFEB3B</color>
+
+    <!-- Welcome pages dot colors -->
+    <color name="dot_active_welcome">#303F9F</color>
+    <color name="dot_inactive_welcome">#ABB6F2</color>
+
+    <array name="array_dot_active">
+        <item>@color/dot_active_welcome</item>
+    </array>
+
+    <array name="array_dot_inactive">
+        <item>@color/dot_inactive_welcome</item>
+    </array>
 </resources>

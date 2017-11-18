@@ -3,6 +3,17 @@
     <string name="title_survey">Survey</string>
     <string name="title_action_items">Action Items</string>
     <string name="title_summary">Summary</string>
+    <string name="logo_desc">SAfETy Logo</string>
+
+    <!-- Welcome pages text -->
+    <string name="welcome1_title">The SAfETy App</string>
+    <string name="welcome1_message">A Walk-through Tool for Administrators</string>
+    <string name="welcome2_message">Our goal is to help you gather data about your school climate through observation and social interaction.
+        This tool can then be used to create an action plan focusing on locations and/or indicators.</string>
+    <string name="welcome3_message">Enter brief instructions here</string>
+    <string name="welcome_skip">SKIP</string>
+    <string name="welcome_next">NEXT</string>
+    <string name="welcome_gotit">GOT IT</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
