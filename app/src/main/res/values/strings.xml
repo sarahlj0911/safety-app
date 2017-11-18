@@ -10,7 +10,11 @@
     <string name="welcome1_message">A Walk-through Tool for Administrators</string>
     <string name="welcome2_message">Our goal is to help you gather data about your school climate through observation and social interaction.
         This tool can then be used to create an action plan focusing on locations and/or indicators.</string>
-    <string name="welcome3_message">Enter brief instructions here</string>
+    <string name="welcome3_message">
+        1. Before beginning, scroll through the list on the next page and note the different locations where observations will be conducted.
+        2. Once you\'ve chosen a location, you can rate each environmental indicator, including both physical aspects of the environment and observed behaviors.
+        3.
+    </string>
     <string name="welcome_skip">SKIP</string>
     <string name="welcome_next">NEXT</string>
     <string name="welcome_gotit">GOT IT</string>

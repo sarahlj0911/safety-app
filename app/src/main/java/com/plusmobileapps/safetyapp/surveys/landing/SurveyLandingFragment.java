@@ -1,9 +1,10 @@
-package com.plusmobileapps.safetyapp.actionitems;
+package com.plusmobileapps.safetyapp.surveys.landing;
 
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -11,31 +12,31 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.plusmobileapps.safetyapp.R;
+import com.plusmobileapps.safetyapp.surveys.location.LocationFragment;
 
 import java.util.ArrayList;
 
-
-public class ActionItemsFragment extends Fragment {
-    private static final String TAG = "ActionItemsFragment";
+public class SurveyLandingFragment extends Fragment {
+    private static final String TAG = "SurveyLandingFragment";
     private static final String KEY_LAYOUT_MANAGER = "layoutManager";
     protected RecyclerView recyclerView;
     protected RecyclerView.LayoutManager layoutManager;
-    protected ActionItemsFragment.LayoutManagerType currentLayoutManagerType;
-    protected ActionItemAdapter adapter;
-    private ArrayList<ActionItem> actionItems;
+    protected SurveyLandingFragment.LayoutManagerType currentLayoutManagerType;
+    protected SurveyLandingAdapter adapter;
+    private ArrayList<LandingSurveyOverview> surveys;
 
     private enum LayoutManagerType {
         GRID_LAYOUT_MANAGER,
         LINEAR_LAYOUT_MANAGER
     }
 
-
-    public ActionItemsFragment() {
+    public SurveyLandingFragment() {
         // Required empty public constructor
     }
 
-    public static ActionItemsFragment newInstance() {
-        ActionItemsFragment fragment = new ActionItemsFragment();
+
+    public static SurveyLandingFragment newInstance() {
+        SurveyLandingFragment fragment = new SurveyLandingFragment();
         return fragment;
     }
 
@@ -47,28 +48,30 @@ public class ActionItemsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_action_items, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_survey_landing, container, false);
         rootView.setTag(TAG);
-        recyclerView = (RecyclerView) rootView.findViewById(R.id.action_items_recyclerview);
+        recyclerView = rootView.findViewById(R.id.landing_survey_recyclerview);
         layoutManager = new LinearLayoutManager(getActivity());
         currentLayoutManagerType = LayoutManagerType.LINEAR_LAYOUT_MANAGER;
 
         recyclerView.setLayoutManager(layoutManager);
-
-        actionItems = new ArrayList<>();
-        populateActionItems();
-        adapter = new ActionItemAdapter(actionItems);
-
+        populateSurveyItems();
+        adapter = new SurveyLandingAdapter(surveys);
         recyclerView.setAdapter(adapter);
 
         return rootView;
     }
 
-    private void populateActionItems(){
-        ActionItem actionItem = new ActionItem("Graffiti", "Boys Bathroom", 1, "The boys got a hold of some sharpies and really did a number on the bathroom stall. There was some profanity written that needs to be removed immediately. I don't know what kind of monster would write such a thing.");
 
-        for (int i = 0; i < 20; i++){
-            actionItems.add(actionItem);
-        }
+    private void populateSurveyItems() {
+        surveys = new ArrayList<>();
+        LandingSurveyOverview survey1 = new LandingSurveyOverview("Spring 2017");
+        LandingSurveyOverview survey2 = new LandingSurveyOverview("Fall 2017");
+        LandingSurveyOverview survey3 = new LandingSurveyOverview("Summer 2017");
+
+        surveys.add(survey1);
+        surveys.add(survey2);
+        surveys.add(survey3);
     }
+
 }

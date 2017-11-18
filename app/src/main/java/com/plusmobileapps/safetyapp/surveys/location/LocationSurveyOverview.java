@@ -1,24 +1,24 @@
-package com.plusmobileapps.safetyapp.surveys.overview;
+package com.plusmobileapps.safetyapp.surveys.location;
 
 /**
  * Crea
  */
 
-public class SurveyOverview {
+public class LocationSurveyOverview {
     private boolean finished = false;
     private String title = "";
     private Integer progress = 0;
 
-    public SurveyOverview(String title){
+    public LocationSurveyOverview(String title){
         this.title = title;
     }
 
-    public SurveyOverview(String title, int progress){
+    public LocationSurveyOverview(String title, int progress){
         this.title = title;
         this.progress = progress;
     }
 
-    public SurveyOverview(String title, boolean finished){
+    public LocationSurveyOverview(String title, boolean finished){
         this.title = title;
         this.finished = finished;
     }

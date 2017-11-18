@@ -1,4 +1,4 @@
-package com.plusmobileapps.safetyapp.surveys.overview;
+package com.plusmobileapps.safetyapp.surveys.location;
 
 import android.content.Context;
 import android.content.Intent;
@@ -16,20 +16,17 @@ import com.plusmobileapps.safetyapp.surveys.survey.SurveyActivity;
 
 import java.util.ArrayList;
 
-/**
- * Created by Andrew on 11/4/2017.
- */
 
-public class SurveyAdapter extends RecyclerView.Adapter<SurveyAdapter.ViewHolder> {
+public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHolder> {
 
-    private static final String TAG = "SurveyAdapter";
+    private static final String TAG = "LocationAdapter";
     public static final String EXTRA_LOCATION = "com.plusmobileapps.safetyapp.survey.overview.LOCATION";
-    private SurveyOverview survey;
+    private LocationSurveyOverview survey;
 
 
-    private ArrayList<SurveyOverview> surveys;
+    private ArrayList<LocationSurveyOverview> surveys;
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
         private final TextView surveyTitle;
         private final ProgressBar progressBar;
         private final ImageView checkmark;
@@ -76,7 +73,7 @@ public class SurveyAdapter extends RecyclerView.Adapter<SurveyAdapter.ViewHolder
         }
     }
 
-    public SurveyAdapter(ArrayList<SurveyOverview> surveys){
+    public LocationAdapter(ArrayList<LocationSurveyOverview> surveys){
         this.surveys = surveys;
     }
 

@@ -6,26 +6,32 @@ import android.support.v4.app.FragmentPagerAdapter;
 
 import com.plusmobileapps.safetyapp.actionitems.ActionItemsFragment;
 import com.plusmobileapps.safetyapp.summary.SummaryFragment;
-import com.plusmobileapps.safetyapp.surveys.overview.SurveyFragment;
+import com.plusmobileapps.safetyapp.surveys.RootFragment;
 
 /**
  * Created by Andrew on 10/28/2017.
  */
 
 public class SwipeAdapter extends FragmentPagerAdapter {
+
+    private ActionItemsFragment actionFragment;
+    private SummaryFragment summaryFragment;
+
     public SwipeAdapter(FragmentManager fm) {
         super(fm);
+        actionFragment = new ActionItemsFragment();
+        summaryFragment = new SummaryFragment();
     }
 
     @Override
     public Fragment getItem(int position) {
         switch (position){
             case 0:
-                return new SurveyFragment();
+                return new RootFragment();
             case 1:
-                return new ActionItemsFragment();
+                return actionFragment;
             case 2:
-                return new SummaryFragment();
+                return summaryFragment;
             default:
                 break;
         }
@@ -37,4 +43,5 @@ public class SwipeAdapter extends FragmentPagerAdapter {
     public int getCount() {
         return 3;
     }
+
 }
