@@ -17,7 +17,7 @@
             android:layout_height="@dimen/actionItemSize"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
-            android:background="@drawable/circle"
+            android:background="@drawable/circle_red"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
