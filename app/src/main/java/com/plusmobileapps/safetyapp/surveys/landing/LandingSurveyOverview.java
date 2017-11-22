@@ -8,11 +8,12 @@ public class LandingSurveyOverview {
     private String title;
     private String date;
     private String time;
-    private boolean inProgress = false;
     private int progress = 0;
 
-    public LandingSurveyOverview(String title) {
+    public LandingSurveyOverview(String title, String date, String time) {
         this.title = title;
+        this.date = date;
+        this.time = time;
     }
 
     public String getTitle() {
@@ -40,7 +41,11 @@ public class LandingSurveyOverview {
     }
 
     public boolean isInProgress() {
-        return inProgress;
+        if(progress == 0) {
+            return false;
+        } else {
+            return true;
+        }
     }
 
     public int getProgress() {
@@ -49,5 +54,13 @@ public class LandingSurveyOverview {
 
     public void setProgress(int progress) {
         this.progress = progress;
+    }
+
+    public String getModified() {
+        if (this.isInProgress()) {
+            return "Last Modified:";
+        } else {
+            return "Completed On:";
+        }
     }
 }

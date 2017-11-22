@@ -28,6 +28,8 @@ public class MainActivity extends AppCompatActivity implements SurveyLandingAdap
 
     private ViewPager viewPager;
     private BottomNavigationView navigation;
+    private SurveyLandingFragment surveyLandingFragment;
+    private LocationFragment locationFragment;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -89,15 +91,24 @@ public class MainActivity extends AppCompatActivity implements SurveyLandingAdap
 
             }
         });
+
     }
 
     @Override
     public void onSurveySelected(int position) {
+        if(position == 0){
+            locationFragment = LocationFragment.newInstance(false);
+        } else {
+            locationFragment = LocationFragment.newInstance(true);
+        }
+
+
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.root_frame, new LocationFragment())
+        transaction.replace(R.id.root_frame, locationFragment)
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                 .addToBackStack("survey")
                 .commit();
+
     }
 
     public void createSurveyButtonClicked(View view){

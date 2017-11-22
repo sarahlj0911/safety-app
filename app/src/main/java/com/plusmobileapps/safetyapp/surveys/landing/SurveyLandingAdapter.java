@@ -41,20 +41,16 @@ public class SurveyLandingAdapter extends RecyclerView.Adapter<SurveyLandingAdap
         Log.d(TAG, "onBindViewHolder: ");
         survey = surveys.get(position);
 
+        holder.getDate().setText(survey.getDate());
+        holder.getTime().setText(survey.getTime());
+        holder.getTitle().setText(survey.getTitle());
         if(survey.isInProgress()) {
+            holder.getModified().setText(survey.getModified());
             holder.getProgressBar().setVisibility(View.VISIBLE);
-            holder.getModified().setVisibility(View.VISIBLE);
-            holder.getTime().setVisibility(View.VISIBLE);
-            holder.getDate().setVisibility(View.VISIBLE);
             holder.getProgressBar().setProgress(survey.getProgress());
-            holder.getDate().setText(survey.getDate());
-            holder.getTime().setText(survey.getTime());
-            holder.getTitle().setText(survey.getTitle());
         } else {
-            holder.getModified().setVisibility(View.INVISIBLE);
-            holder.getTime().setVisibility(View.INVISIBLE);
-            holder.getDate().setVisibility(View.INVISIBLE);
             holder.getProgressBar().setVisibility(View.INVISIBLE);
+            holder.getModified().setText(survey.getModified());
         }
     }
 

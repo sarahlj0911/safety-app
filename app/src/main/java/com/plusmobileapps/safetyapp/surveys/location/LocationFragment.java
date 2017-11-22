@@ -31,6 +31,9 @@ public class LocationFragment extends Fragment {
     protected LayoutManagerType currentLayoutManagerType;
     protected LocationAdapter adapter;
     ArrayList<LocationSurveyOverview> surveys;
+    ArrayList<String> titles;
+
+    private boolean isCompleted = false;
 
     private enum LayoutManagerType {
         GRID_LAYOUT_MANAGER,
@@ -41,9 +44,9 @@ public class LocationFragment extends Fragment {
         // Required empty public constructor
     }
 
-    public static LocationFragment newInstance(String param1, String param2) {
+    public static LocationFragment newInstance(boolean isCompleted) {
         LocationFragment fragment = new LocationFragment();
-
+        fragment.isCompleted = isCompleted;
         return fragment;
     }
 
@@ -70,6 +73,7 @@ public class LocationFragment extends Fragment {
         setRecyclerViewLayoutManager(currentLayoutManagerType);
 
         surveys = new ArrayList<>();
+        titles = new ArrayList<>();
         populateSurveys();
         adapter = new LocationAdapter(surveys);
 
@@ -106,9 +110,11 @@ public class LocationFragment extends Fragment {
         recyclerView.scrollToPosition(scrollPosition);
     }
 
+    public void landingSurveyClicked(boolean isCompleted) {
+        this.isCompleted = isCompleted;
+    }
     //populate array list
     private void populateSurveys(){
-        ArrayList<String> titles = new ArrayList<String>();
         titles.add("Bathroom");
         titles.add("Classroom 1");
         titles.add("Bathroom 2");
@@ -125,17 +131,25 @@ public class LocationFragment extends Fragment {
         titles.add("Classroom 2");
 
 
-        int progress = 90;
-        for (int i = 0; i < titles.size(); i++) {
-            surveys.add(new LocationSurveyOverview(titles.get(i)));
-            if (i == 0){
-                //no op to keep progress state at 0
-            } else if(i % 2 ==1){
+        if (isCompleted){
+            for (int i =0; i < titles.size(); i++){
+                surveys.add(new LocationSurveyOverview(titles.get(i)));
                 surveys.get(i).setFinished(true);
-            } else {
-                surveys.get(i).setProgress(progress);
-                progress -= 10 ;
+            }
+        } else {
+            for (int i = 0; i < titles.size(); i++) {
+                surveys.add(new LocationSurveyOverview(titles.get(i)));
+                int progress = 90;
+                if (i == 0){
+                    //no op to keep progress state at 0
+                } else if(i % 2 ==1){
+                    surveys.get(i).setFinished(true);
+                } else {
+                    surveys.get(i).setProgress(progress);
+                    progress -= 10 ;
+                }
             }
         }
+
     }
 }

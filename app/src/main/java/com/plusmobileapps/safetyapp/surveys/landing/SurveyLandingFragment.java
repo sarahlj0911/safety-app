@@ -65,9 +65,10 @@ public class SurveyLandingFragment extends Fragment {
 
     private void populateSurveyItems() {
         surveys = new ArrayList<>();
-        LandingSurveyOverview survey1 = new LandingSurveyOverview("Spring 2017");
-        LandingSurveyOverview survey2 = new LandingSurveyOverview("Fall 2017");
-        LandingSurveyOverview survey3 = new LandingSurveyOverview("Summer 2017");
+        LandingSurveyOverview survey2 = new LandingSurveyOverview("Spring 2017", "May 12, 2017", "12:23 p.m.");
+        LandingSurveyOverview survey1 = new LandingSurveyOverview("Fall 2017", "Dec 12, 2017", "3:33 p.m.");
+        LandingSurveyOverview survey3 = new LandingSurveyOverview("Summer 2017", "Aug 13, 2017", "2:23 p.m.");
+        survey1.setProgress(50);
 
         surveys.add(survey1);
         surveys.add(survey2);
