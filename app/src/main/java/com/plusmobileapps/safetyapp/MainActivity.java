@@ -10,6 +10,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
@@ -73,12 +74,15 @@ public class MainActivity extends AppCompatActivity implements SurveyLandingAdap
             public void onPageSelected(int position) {
                 switch (position){
                     case 0:
+                        setAppBarTitle("Surveys");
                         navigation.setSelectedItemId(R.id.navigation_survey);
                         break;
                     case 1:
+                        setAppBarTitle("Action Items");
                         navigation.setSelectedItemId(R.id.navigation_dashboard);
                         break;
                     case 2:
+                        setAppBarTitle("Summary");
                         navigation.setSelectedItemId(R.id.navigation_history);
                         break;
                     default:
@@ -92,6 +96,9 @@ public class MainActivity extends AppCompatActivity implements SurveyLandingAdap
             }
         });
 
+        Toolbar toolbar = (Toolbar) findViewById(R.id.main_toolbar);
+        setSupportActionBar(toolbar);
+        setAppBarTitle("Surveys");
     }
 
     @Override
@@ -156,4 +163,10 @@ public class MainActivity extends AppCompatActivity implements SurveyLandingAdap
         dialog.show();
     }
 
+    private void setAppBarTitle(String title) {
+        if(getSupportActionBar() != null ){
+            getSupportActionBar().setTitle(title);
+            getSupportActionBar();
+        }
+    }
 }
