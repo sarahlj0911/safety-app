@@ -112,6 +112,31 @@ public class MainActivity extends AppCompatActivity implements SurveyLandingAdap
     }
 
     public void createSurveyButtonClicked(View view){
+        surveyLandingFragment = ((SurveyLandingFragment) getSupportFragmentManager().findFragmentById(R.id.root_frame));
+
+        if (surveyLandingFragment.isSurveyInProgress()) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setMessage("You have an unfinished survey. Creating a new survey will delete the unfinished one. Are you sure you want to create a new survey?")
+                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            createNewSurvey();
+                        }
+                    })
+                    .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                        }
+                    });
+            AlertDialog dialog = builder.create();
+            dialog.show();
+        } else {
+            createNewSurvey();
+        }
+    }
+
+    private void createNewSurvey() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Create New Survey")
                 .setView(getLayoutInflater().inflate(R.layout.dialog_create_survey, null))
