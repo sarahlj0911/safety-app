@@ -30,8 +30,8 @@ public class LocationFragment extends Fragment {
     protected RecyclerView.LayoutManager layoutManager;
     protected LayoutManagerType currentLayoutManagerType;
     protected LocationAdapter adapter;
-    ArrayList<LocationSurveyOverview> surveys;
-    ArrayList<String> titles;
+    ArrayList<LocationSurveyOverview> surveys = new ArrayList<>();
+    ArrayList<String> titles = new ArrayList<>();
 
     private boolean isCompleted = false;
 
@@ -47,6 +47,13 @@ public class LocationFragment extends Fragment {
     public static LocationFragment newInstance(boolean isCompleted) {
         LocationFragment fragment = new LocationFragment();
         fragment.isCompleted = isCompleted;
+        fragment.populateSurveys();
+        return fragment;
+    }
+
+    public static LocationFragment newInstance() {
+        LocationFragment fragment = new LocationFragment();
+        fragment.createNewSurvey();
         return fragment;
     }
 
@@ -72,9 +79,6 @@ public class LocationFragment extends Fragment {
         }
         setRecyclerViewLayoutManager(currentLayoutManagerType);
 
-        surveys = new ArrayList<>();
-        titles = new ArrayList<>();
-        populateSurveys();
         adapter = new LocationAdapter(surveys);
 
         recyclerView.setAdapter(adapter);
@@ -115,21 +119,7 @@ public class LocationFragment extends Fragment {
     }
     //populate array list
     private void populateSurveys(){
-        titles.add("Bathroom");
-        titles.add("Classroom 1");
-        titles.add("Bathroom 2");
-        titles.add("Locker Room");
-        titles.add("Field");
-        titles.add("Office");
-        titles.add("Classroom 2");
-        titles.add("Bathroom");
-        titles.add("Classroom 1");
-        titles.add("Bathroom 2");
-        titles.add("Locker Room");
-        titles.add("Field");
-        titles.add("Office");
-        titles.add("Classroom 2");
-
+        addLocations();
 
         if (isCompleted){
             for (int i =0; i < titles.size(); i++){
@@ -150,6 +140,29 @@ public class LocationFragment extends Fragment {
                 }
             }
         }
+    }
 
+    private void addLocations(){
+        titles.add("Bathroom");
+        titles.add("Classroom 1");
+        titles.add("Bathroom 2");
+        titles.add("Locker Room");
+        titles.add("Field");
+        titles.add("Office");
+        titles.add("Classroom 2");
+        titles.add("Bathroom");
+        titles.add("Classroom 1");
+        titles.add("Bathroom 2");
+        titles.add("Locker Room");
+        titles.add("Field");
+        titles.add("Office");
+        titles.add("Classroom 2");
+    }
+
+    private void createNewSurvey() {
+        addLocations();
+        for (String title : titles) {
+            surveys.add(new LocationSurveyOverview(title));
+        }
     }
 }

@@ -1,10 +1,12 @@
 package com.plusmobileapps.safetyapp;
 
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
@@ -13,6 +15,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.plusmobileapps.safetyapp.actionitems.ActionItemsFragment;
@@ -23,7 +26,8 @@ import com.plusmobileapps.safetyapp.surveys.location.LocationFragment;
 
 import java.util.zip.Inflater;
 
-public class MainActivity extends AppCompatActivity implements SurveyLandingAdapter.ViewHolder.OnSurveySelectedListener{
+public class MainActivity extends AppCompatActivity
+        implements SurveyLandingAdapter.ViewHolder.OnSurveySelectedListener{
 
     private TextView mTextMessage;
 
@@ -31,6 +35,7 @@ public class MainActivity extends AppCompatActivity implements SurveyLandingAdap
     private BottomNavigationView navigation;
     private SurveyLandingFragment surveyLandingFragment;
     private LocationFragment locationFragment;
+    private String surveyFragmentTitle = "Surveys";
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -54,7 +59,8 @@ public class MainActivity extends AppCompatActivity implements SurveyLandingAdap
     };
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {super.onCreate(savedInstanceState);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
 
@@ -72,9 +78,9 @@ public class MainActivity extends AppCompatActivity implements SurveyLandingAdap
 
             @Override
             public void onPageSelected(int position) {
-                switch (position){
+                switch (position) {
                     case 0:
-                        setAppBarTitle("Surveys");
+                        setAppBarTitle(surveyFragmentTitle);
                         navigation.setSelectedItemId(R.id.navigation_survey);
                         break;
                     case 1:
@@ -103,7 +109,7 @@ public class MainActivity extends AppCompatActivity implements SurveyLandingAdap
 
     @Override
     public void onSurveySelected(int position) {
-        if(position == 0){
+        if (position == 0) {
             locationFragment = LocationFragment.newInstance(false);
         } else {
             locationFragment = LocationFragment.newInstance(true);
@@ -118,7 +124,7 @@ public class MainActivity extends AppCompatActivity implements SurveyLandingAdap
 
     }
 
-    public void createSurveyButtonClicked(View view){
+    public void createSurveyButtonClicked(View view) {
         surveyLandingFragment = ((SurveyLandingFragment) getSupportFragmentManager().findFragmentById(R.id.root_frame));
 
         if (surveyLandingFragment.isSurveyInProgress()) {
@@ -150,7 +156,17 @@ public class MainActivity extends AppCompatActivity implements SurveyLandingAdap
                 .setPositiveButton("Create", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        //user clicked create
+                        Dialog dialogObj = Dialog.class.cast(dialog);
+                        EditText editText = dialogObj.findViewById(R.id.edittext_create_survey);
+                        surveyFragmentTitle = editText.getText().toString();
+                        setAppBarTitle(surveyFragmentTitle);
+                        locationFragment = LocationFragment.newInstance();
+
+                        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                        transaction.replace(R.id.root_frame, locationFragment)
+                                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                                .addToBackStack("survey")
+                                .commit();
                     }
                 })
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -164,9 +180,15 @@ public class MainActivity extends AppCompatActivity implements SurveyLandingAdap
     }
 
     private void setAppBarTitle(String title) {
-        if(getSupportActionBar() != null ){
+        if (getSupportActionBar() != null) {
             getSupportActionBar().setTitle(title);
-            getSupportActionBar();
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        surveyFragmentTitle = "Surveys";
+        setAppBarTitle(surveyFragmentTitle);
     }
 }
