@@ -37,6 +37,9 @@ dependencies {
     compile 'com.google.code.gson:gson:2.8.2'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
 
+    compile 'jp.wasabeef:recyclerview-animators:2.2.7'
+
+
     //test
     testCompile 'junit:junit:4.12'
 }

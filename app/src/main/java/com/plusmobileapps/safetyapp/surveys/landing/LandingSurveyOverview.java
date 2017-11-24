@@ -10,6 +10,10 @@ public class LandingSurveyOverview {
     private String time;
     private int progress = 0;
 
+    public LandingSurveyOverview() {
+
+    }
+
     public LandingSurveyOverview(String title, String date, String time) {
         this.title = title;
         this.date = date;
