@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +17,7 @@ import com.plusmobileapps.safetyapp.surveys.location.LocationFragment;
 
 import java.util.ArrayList;
 
-public class SurveyLandingFragment extends Fragment {
+public class SurveyLandingFragment extends Fragment{
     private static final String TAG = "SurveyLandingFragment";
     private static final String KEY_LAYOUT_MANAGER = "layoutManager";
     protected RecyclerView recyclerView;
@@ -82,6 +83,10 @@ public class SurveyLandingFragment extends Fragment {
             }
         }
         return false;
+    }
+
+    public String getSurveyTitle(int position) {
+        return surveys.get(position).getTitle();
     }
 
 }

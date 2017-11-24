@@ -109,6 +109,9 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onSurveySelected(int position) {
+        SurveyLandingFragment surveyLandingFragment = (SurveyLandingFragment) getSupportFragmentManager().findFragmentById(R.id.root_frame);
+        surveyFragmentTitle = surveyLandingFragment.getSurveyTitle(position);
+        setAppBarTitle(surveyFragmentTitle);
         if (position == 0) {
             locationFragment = LocationFragment.newInstance(false);
         } else {
