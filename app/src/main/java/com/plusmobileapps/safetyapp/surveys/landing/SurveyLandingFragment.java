@@ -110,7 +110,7 @@ public class SurveyLandingFragment extends Fragment{
         surveys.remove(position);
         adapter.notifyItemRemoved(position);
         Snackbar mySnackbar = Snackbar.make(getActivity().findViewById(R.id.fragment_survey_landing),
-                "Survey was dismissed", Snackbar.LENGTH_SHORT);
+                "Survey was dismissed", Snackbar.LENGTH_LONG);
         mySnackbar.setAction(R.string.undo_string, new MyUndoListener());
         mySnackbar.show();
         mySnackbar.setCallback(new Snackbar.Callback(){
