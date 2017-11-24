@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -66,9 +67,11 @@ public class SurveyLandingAdapter extends RecyclerView.Adapter<SurveyLandingAdap
         private final TextView title;
         private final TextView modified;
         private final ProgressBar progressBar;
+        private final ImageButton dismissButton;
 
         public interface OnSurveySelectedListener {
             public void onSurveySelected(int position);
+            public void onDismissSurvey(int position);
         }
 
         public ViewHolder(View view) {
@@ -78,6 +81,7 @@ public class SurveyLandingAdapter extends RecyclerView.Adapter<SurveyLandingAdap
             date = view.findViewById(R.id.viewholder_landing_date);
             modified = view.findViewById(R.id.viewholder_landing_modified);
             progressBar = view.findViewById(R.id.viewholder_landing_progressbar);
+            dismissButton = view.findViewById(R.id.viewholder_button_dismiss);
             try{
                 mCallback = (OnSurveySelectedListener) itemView.getContext();
             } catch (ClassCastException e){
@@ -88,6 +92,13 @@ public class SurveyLandingAdapter extends RecyclerView.Adapter<SurveyLandingAdap
                 @Override
                 public void onClick(View view) {
                     mCallback.onSurveySelected(getAdapterPosition());
+                }
+            });
+
+            dismissButton.setOnClickListener(new View.OnClickListener(){
+                @Override
+                public void onClick(View view) {
+                    mCallback.onDismissSurvey(getAdapterPosition());
                 }
             });
         }

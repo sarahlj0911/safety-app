@@ -33,8 +33,8 @@ public class MainActivity extends AppCompatActivity
 
     private ViewPager viewPager;
     private BottomNavigationView navigation;
-    private SurveyLandingFragment surveyLandingFragment;
     private LocationFragment locationFragment;
+    private SurveyLandingFragment surveyLandingFragment;
     private String surveyFragmentTitle = "Surveys";
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -108,8 +108,14 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
+    public void onDismissSurvey(int position) {
+        surveyLandingFragment = (SurveyLandingFragment) getSupportFragmentManager().findFragmentById(R.id.root_frame);
+        surveyLandingFragment.dismissSurvey(position);
+    }
+
+    @Override
     public void onSurveySelected(int position) {
-        SurveyLandingFragment surveyLandingFragment = (SurveyLandingFragment) getSupportFragmentManager().findFragmentById(R.id.root_frame);
+        surveyLandingFragment = (SurveyLandingFragment) getSupportFragmentManager().findFragmentById(R.id.root_frame);
         surveyFragmentTitle = surveyLandingFragment.getSurveyTitle(position);
         setAppBarTitle(surveyFragmentTitle);
         if (position == 0) {

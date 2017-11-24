@@ -89,4 +89,9 @@ public class SurveyLandingFragment extends Fragment{
         return surveys.get(position).getTitle();
     }
 
+    public void dismissSurvey(int position) {
+        surveys.remove(position);
+        adapter.notifyDataSetChanged();
+    }
+
 }

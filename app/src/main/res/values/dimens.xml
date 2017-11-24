@@ -5,4 +5,5 @@
     <dimen name="fab_margin">16dp</dimen>
 
     <dimen name="actionItemSize">36dp</dimen>
+    <dimen name="clearRightMargin">40dp</dimen>
 </resources>
