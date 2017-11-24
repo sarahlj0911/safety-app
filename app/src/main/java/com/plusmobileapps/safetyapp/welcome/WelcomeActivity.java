@@ -1,9 +1,7 @@
-package com.plusmobileapps.safetyapp;
+package com.plusmobileapps.safetyapp.welcome;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -12,11 +10,13 @@ import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.plusmobileapps.safetyapp.MainActivity;
+import com.plusmobileapps.safetyapp.PrefManager;
+import com.plusmobileapps.safetyapp.R;
 
 public class WelcomeActivity extends AppCompatActivity {
 
