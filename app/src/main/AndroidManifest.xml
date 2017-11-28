@@ -28,7 +28,11 @@
             android:name=".surveys.survey.SurveyActivity"
             android:label="@string/title_activity_survey"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".MainActivity"></activity>
+        <activity android:name=".MainActivity" />
+        <activity android:name=".summary.SummaryDetailActivity" />
+        <activity android:name=".summary.OverviewActivity" />
+        <activity android:name=".DetailActivity" />
+        <activity android:name=".summary.DetailActivity"></activity>
     </application>
 
 </manifest>

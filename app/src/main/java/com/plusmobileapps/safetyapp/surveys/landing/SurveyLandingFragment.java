@@ -23,7 +23,7 @@ public class SurveyLandingFragment extends Fragment {
     protected RecyclerView.LayoutManager layoutManager;
     protected SurveyLandingFragment.LayoutManagerType currentLayoutManagerType;
     protected SurveyLandingAdapter adapter;
-    private ArrayList<LandingSurveyOverview> surveys;
+    private ArrayList<SurveyOverview> surveys;
 
     private enum LayoutManagerType {
         GRID_LAYOUT_MANAGER,
@@ -65,9 +65,9 @@ public class SurveyLandingFragment extends Fragment {
 
     private void populateSurveyItems() {
         surveys = new ArrayList<>();
-        LandingSurveyOverview survey1 = new LandingSurveyOverview("Spring 2017");
-        LandingSurveyOverview survey2 = new LandingSurveyOverview("Fall 2017");
-        LandingSurveyOverview survey3 = new LandingSurveyOverview("Summer 2017");
+        SurveyOverview survey1 = new SurveyOverview("Spring 2017");
+        SurveyOverview survey2 = new SurveyOverview("Fall 2017");
+        SurveyOverview survey3 = new SurveyOverview("Summer 2017");
 
         surveys.add(survey1);
         surveys.add(survey2);
