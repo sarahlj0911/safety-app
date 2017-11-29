@@ -30,9 +30,14 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".MainActivity" />
         <activity android:name=".summary.SummaryDetailActivity" />
-        <activity android:name=".summary.OverviewActivity" />
-        <activity android:name=".DetailActivity" />
-        <activity android:name=".summary.DetailActivity"></activity>
+
+        <activity android:name=".summary.OverviewActivity"
+                  android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".DetailActivity"
+                  android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".summary.DetailActivity"
+                  android:theme="@style/AppTheme.NoActionBar"/>
+
     </application>
 
 </manifest>
