@@ -3,6 +3,33 @@
     <string name="title_survey">Survey</string>
     <string name="title_action_items">Action Items</string>
     <string name="title_summary">Summary</string>
+    <string name="logo_desc">SAfETy Logo</string>
+
+    <!-- Priority descriptions. Can be used anywhere in the app that they might be useful -->
+    <string name="priority_high">HIGH PRIORITY</string>
+    <string name="priority_med">MEDIUM PRIORITY</string>
+    <string name="priority_low">LOW PRIORITY</string>
+    <string name="priority_high_desc">Should be addressed as soon as possible</string>
+    <string name="priority_med_desc">Can be addressed as time allows</string>
+    <string name="priority_low_desc">Requires little or no action</string>
+
+    <!-- Welcome pages text -->
+    <string name="welcome1_title">The SAfETy App</string>
+    <string name="welcome1_message">A Walk-through Tool for Administrators</string>
+    <string name="welcome2_item1">Our goal is to help you gather data about your school climate through observation and social interaction.</string>
+    <string name="welcome2_item2">This tool can then be used to create an action plan focusing on locations and/or indicators.</string>
+    <string name="welcome3_title">General Instructions</string>
+    <string name="welcome3_item1">1. Once you\'ve created a new survey, you can scroll through and select from a list of locations where observations will be conducted.</string>
+    <string name="welcome3_item2">2. Once you\'ve chosen a location, rank and prioritize each environmental indicator or observed behavior.</string>
+    <string name="welcome3_item3">3. Use the Action Plan space to note possible actions to resolve specific issues.</string>
+    <string name="welcome3_item4">4. It is best to conduct the observations when students and staff are using the space as they normally would.</string>
+    <string name="welcome3_item5">5. Ideally, the walk-through will be completed in one day by the same person or persons. If this is not possible, try and complete the walk-
+through during one week.</string>
+    <string name="welcome4_title">Prioritization Guide</string>
+
+    <string name="welcome_skip">SKIP</string>
+    <string name="welcome_next">NEXT</string>
+    <string name="welcome_gotit">GOT IT</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
