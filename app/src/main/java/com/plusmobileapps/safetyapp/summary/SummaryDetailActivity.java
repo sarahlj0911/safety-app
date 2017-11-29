@@ -41,15 +41,6 @@ public class SummaryDetailActivity extends AppCompatActivity {
         intent = new Intent(this, DetailActivity.class);
         spec.setContent(intent);
         host.addTab(spec);
-//
-//        host.setCurrentTab(1);
-////        host.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
-////            @Override
-////            public void onTabChanged(String tabId) {
-////                // display the name of the tab whenever a tab is changed
-////                Toast.makeText(getApplicationContext(), tabId, Toast.LENGTH_SHORT).show();
-////            }
-////        });
     }
 }
 
