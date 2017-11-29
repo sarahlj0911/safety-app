@@ -49,9 +49,11 @@ public class SurveyLandingAdapter extends RecyclerView.Adapter<SurveyLandingAdap
             holder.getModified().setText(survey.getModified());
             holder.getProgressBar().setVisibility(View.VISIBLE);
             holder.getProgressBar().setProgress(survey.getProgress());
+            holder.getDismissButton().setVisibility(View.VISIBLE);
         } else {
             holder.getProgressBar().setVisibility(View.INVISIBLE);
             holder.getModified().setText(survey.getModified());
+            holder.getDismissButton().setVisibility(View.INVISIBLE);
         }
     }
 
@@ -121,6 +123,10 @@ public class SurveyLandingAdapter extends RecyclerView.Adapter<SurveyLandingAdap
 
         public ProgressBar getProgressBar() {
             return progressBar;
+        }
+
+        public ImageButton getDismissButton() {
+            return dismissButton;
         }
     }
 
