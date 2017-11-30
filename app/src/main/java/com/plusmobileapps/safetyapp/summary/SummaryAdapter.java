@@ -61,12 +61,6 @@ public class SummaryAdapter extends RecyclerView.Adapter<SummaryAdapter.ViewHold
         public ViewHolder(View view) {
             super(view);
             context = itemView.getContext();
-            view.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    //handle the click of the view holder here
-                }
-            });
 
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
