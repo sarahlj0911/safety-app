@@ -12,12 +12,12 @@ import com.plusmobileapps.safetyapp.surveys.RootFragment;
  * Created by Andrew on 10/28/2017.
  */
 
-public class SwipeAdapter extends FragmentPagerAdapter {
+public class MainSwipeAdapter extends FragmentPagerAdapter {
 
     private ActionItemsFragment actionFragment;
     private SummaryFragment summaryFragment;
 
-    public SwipeAdapter(FragmentManager fm) {
+    public MainSwipeAdapter(FragmentManager fm) {
         super(fm);
         actionFragment = new ActionItemsFragment();
         summaryFragment = new SummaryFragment();

@@ -1,11 +1,9 @@
 package com.plusmobileapps.safetyapp;
 
 import android.content.DialogInterface;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
@@ -14,13 +12,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
-import com.plusmobileapps.safetyapp.actionitems.ActionItemsFragment;
-import com.plusmobileapps.safetyapp.summary.SummaryFragment;
 import com.plusmobileapps.safetyapp.surveys.landing.SurveyLandingAdapter;
-import com.plusmobileapps.safetyapp.surveys.landing.SurveyLandingFragment;
 import com.plusmobileapps.safetyapp.surveys.location.LocationFragment;
-
-import java.util.zip.Inflater;
 
 public class MainActivity extends AppCompatActivity implements SurveyLandingAdapter.ViewHolder.OnSurveySelectedListener{
 
@@ -59,7 +52,7 @@ public class MainActivity extends AppCompatActivity implements SurveyLandingAdap
         navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         viewPager = (ViewPager) findViewById(R.id.view_pager);
-        final SwipeAdapter swipeAdapter = new SwipeAdapter(getSupportFragmentManager());
+        final MainSwipeAdapter swipeAdapter = new MainSwipeAdapter(getSupportFragmentManager());
         viewPager.setAdapter(swipeAdapter);
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
