@@ -6,6 +6,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TabHost;
@@ -23,6 +24,9 @@ public class SummaryDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_summary_detail);
 
+        Toolbar toolbar = (Toolbar) findViewById(R.id.summary_toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle("Summary");
         viewPager = findViewById(R.id.summary_view_pager);
         tabLayout = findViewById(R.id.summary_detail_tabs);
         final SummarySwipeAdapter swipeAdapter = new SummarySwipeAdapter(getSupportFragmentManager());
