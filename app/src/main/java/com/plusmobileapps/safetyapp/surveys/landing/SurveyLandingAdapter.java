@@ -20,11 +20,11 @@ public class SurveyLandingAdapter extends RecyclerView.Adapter<SurveyLandingAdap
 
     private static final String TAG = "SurveyLandingAdapter";
     public static final String EXTRA_SURVEY = "com.plusmobileapps.safetyapp.survey.landing.SURVEY";
-    private LandingSurveyOverview survey;
+    private SurveyOverview survey;
 
-    private ArrayList<LandingSurveyOverview> surveys;
+    private ArrayList<SurveyOverview> surveys;
 
-    public SurveyLandingAdapter(ArrayList<LandingSurveyOverview> surveys) {
+    public SurveyLandingAdapter(ArrayList<SurveyOverview> surveys) {
         this.surveys = surveys;
     }
 
