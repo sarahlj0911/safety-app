@@ -101,32 +101,10 @@ public class SurveyLandingFragment extends Fragment{
     }
 
     public String getSurveyTitle(int position) {
-        return surveys.get(position).getTitle();
-    }
-
-    public void dismissSurvey(final int position) {
-        removePosition = position;
-        landingSurveyOverview = surveys.get(position);
-        surveys.remove(position);
-        adapter.notifyItemRemoved(position);
-        Snackbar mySnackbar = Snackbar.make(getActivity().findViewById(R.id.fragment_survey_landing),
-                "Survey was dismissed", Snackbar.LENGTH_LONG);
-        mySnackbar.setAction(R.string.undo_string, new MyUndoListener());
-        mySnackbar.show();
-        mySnackbar.setCallback(new Snackbar.Callback(){
-            @Override
-            public void onDismissed(Snackbar transientBottomBar, int event) {
-                super.onDismissed(transientBottomBar, event);
-            }
-        });
-    }
-
-    public class MyUndoListener implements View.OnClickListener{
-
-        @Override
-        public void onClick(View v) {
-            surveys.add(removePosition, landingSurveyOverview);
-            adapter.notifyItemInserted(removePosition);
+        if (position > 2){
+            return surveys.get(position-2).getTitle();
+        } else {
+            return surveys.get(position-1).getTitle();
         }
     }
 

@@ -2,12 +2,9 @@ package com.plusmobileapps.safetyapp;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
@@ -18,16 +15,12 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.plusmobileapps.safetyapp.actionitems.ActionItemsFragment;
-import com.plusmobileapps.safetyapp.summary.SummaryFragment;
 import com.plusmobileapps.safetyapp.surveys.landing.SurveyLandingAdapter;
 import com.plusmobileapps.safetyapp.surveys.landing.SurveyLandingFragment;
 import com.plusmobileapps.safetyapp.surveys.location.LocationFragment;
 
-import java.util.zip.Inflater;
-
 public class MainActivity extends AppCompatActivity
-        implements SurveyLandingAdapter.ViewHolder.OnSurveySelectedListener{
+        implements SurveyLandingAdapter.CardViewHolder.OnSurveySelectedListener{
 
     private TextView mTextMessage;
 
@@ -107,18 +100,13 @@ public class MainActivity extends AppCompatActivity
         setAppBarTitle("Surveys");
     }
 
-    @Override
-    public void onDismissSurvey(int position) {
-        surveyLandingFragment = (SurveyLandingFragment) getSupportFragmentManager().findFragmentById(R.id.root_frame);
-        surveyLandingFragment.dismissSurvey(position);
-    }
 
     @Override
     public void onSurveySelected(int position) {
         surveyLandingFragment = (SurveyLandingFragment) getSupportFragmentManager().findFragmentById(R.id.root_frame);
         surveyFragmentTitle = surveyLandingFragment.getSurveyTitle(position);
         setAppBarTitle(surveyFragmentTitle);
-        if (position == 0) {
+        if (position == 1) {
             locationFragment = LocationFragment.newInstance(false);
         } else {
             locationFragment = LocationFragment.newInstance(true);

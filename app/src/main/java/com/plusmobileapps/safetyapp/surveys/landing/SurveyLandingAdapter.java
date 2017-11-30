@@ -1,6 +1,5 @@
 package com.plusmobileapps.safetyapp.surveys.landing;
 
-import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,11 +16,14 @@ import java.util.ArrayList;
  * Created by Andrew on 11/13/2017.
  */
 
-public class SurveyLandingAdapter extends RecyclerView.Adapter<SurveyLandingAdapter.ViewHolder> {
+public class SurveyLandingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private static final String TAG = "SurveyLandingAdapter";
+    public static final int ITEM_TYPE_NORMAL = 1;
+    public static final int ITEM_TYPE_HEADER = 0;
     public static final String EXTRA_SURVEY = "com.plusmobileapps.safetyapp.survey.landing.SURVEY";
     private LandingSurveyOverview survey;
+    private int surveyCount = 0;
 
     private ArrayList<LandingSurveyOverview> surveys;
 
@@ -30,60 +32,101 @@ public class SurveyLandingAdapter extends RecyclerView.Adapter<SurveyLandingAdap
     }
 
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.viewholder_landing_survey, parent, false);
-
-        return new ViewHolder(v);
-    }
-
-    @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
-        Log.d(TAG, "onBindViewHolder: ");
-        survey = surveys.get(position);
-
-        holder.getDate().setText(survey.getDate());
-        holder.getTime().setText(survey.getTime());
-        holder.getTitle().setText(survey.getTitle());
-        if(survey.isInProgress()) {
-            holder.getModified().setText(survey.getModified());
-            holder.getProgressBar().setVisibility(View.VISIBLE);
-            holder.getProgressBar().setProgress(survey.getProgress());
-            holder.getDismissButton().setVisibility(View.VISIBLE);
+    public int getItemViewType(int position) {
+        if (position == 0 || position == 2) {
+            return ITEM_TYPE_HEADER;
         } else {
-            holder.getProgressBar().setVisibility(View.INVISIBLE);
-            holder.getModified().setText(survey.getModified());
-            holder.getDismissButton().setVisibility(View.INVISIBLE);
+            return ITEM_TYPE_NORMAL;
         }
     }
 
     @Override
-    public int getItemCount() {
-        return surveys.size();
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        switch (viewType) {
+            case ITEM_TYPE_HEADER:
+                View titleView = LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.viewholder_title, parent, false);
+                return new TitleViewHolder(titleView);
+            case 1:
+                View cardViewHolder = LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.viewholder_landing_survey, parent, false);
+                return new CardViewHolder(cardViewHolder);
+        }
+        return null;
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+
+    @Override
+    public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
+        Log.d(TAG, "onBindViewHolder: ");
+            final int itemType = getItemViewType(position);
+
+            if (itemType == ITEM_TYPE_HEADER){
+                TitleViewHolder titleViewHolder = (TitleViewHolder) holder;
+                if (position == 0) {
+                    titleViewHolder.getTitle().setText("In Progress");
+                } else {
+                    titleViewHolder.getTitle().setText("Completed");
+                }
+            } else if (itemType == ITEM_TYPE_NORMAL){
+                CardViewHolder cardViewHolder = (CardViewHolder) holder;
+                if (position > 2){
+                    survey = surveys.get(position-2);
+                } else {
+                    survey = surveys.get(position-1);
+                }
+                cardViewHolder.getDate().setText(survey.getDate());
+                cardViewHolder.getTime().setText(survey.getTime());
+                cardViewHolder.getTitle().setText(survey.getTitle());
+                if(survey.isInProgress()) {
+                    cardViewHolder.getModified().setText(survey.getModified());
+                    cardViewHolder.getProgressBar().setVisibility(View.VISIBLE);
+                    cardViewHolder.getProgressBar().setProgress(survey.getProgress());
+                } else {
+                    cardViewHolder.getProgressBar().setVisibility(View.INVISIBLE);
+                    cardViewHolder.getModified().setText(survey.getModified());
+                }
+                surveyCount++;
+            }
+    }
+
+    @Override
+    public int getItemCount() {
+        return (surveys.size() + 2);
+    }
+
+    public static class TitleViewHolder extends RecyclerView.ViewHolder {
+        private final TextView title;
+
+        public TitleViewHolder(View view) {
+            super(view);
+            title = view.findViewById(R.id.viewholder_title);
+        }
+
+        public TextView getTitle() {
+            return title;
+        }
+    }
+
+    public static class CardViewHolder extends RecyclerView.ViewHolder {
         OnSurveySelectedListener mCallback;
         private final TextView time;
         private final TextView date;
         private final TextView title;
         private final TextView modified;
         private final ProgressBar progressBar;
-        private final ImageButton dismissButton;
 
         public interface OnSurveySelectedListener {
             public void onSurveySelected(int position);
-            public void onDismissSurvey(int position);
         }
 
-        public ViewHolder(View view) {
+        public CardViewHolder(View view) {
             super(view);
             title = view.findViewById(R.id.viewholder_landing_title);
             time = view.findViewById(R.id.viewholder_landing_time);
             date = view.findViewById(R.id.viewholder_landing_date);
             modified = view.findViewById(R.id.viewholder_landing_modified);
             progressBar = view.findViewById(R.id.viewholder_landing_progressbar);
-            dismissButton = view.findViewById(R.id.viewholder_button_dismiss);
             try{
                 mCallback = (OnSurveySelectedListener) itemView.getContext();
             } catch (ClassCastException e){
@@ -94,13 +137,6 @@ public class SurveyLandingAdapter extends RecyclerView.Adapter<SurveyLandingAdap
                 @Override
                 public void onClick(View view) {
                     mCallback.onSurveySelected(getAdapterPosition());
-                }
-            });
-
-            dismissButton.setOnClickListener(new View.OnClickListener(){
-                @Override
-                public void onClick(View view) {
-                    mCallback.onDismissSurvey(getAdapterPosition());
                 }
             });
         }
@@ -123,10 +159,6 @@ public class SurveyLandingAdapter extends RecyclerView.Adapter<SurveyLandingAdap
 
         public ProgressBar getProgressBar() {
             return progressBar;
-        }
-
-        public ImageButton getDismissButton() {
-            return dismissButton;
         }
     }
 

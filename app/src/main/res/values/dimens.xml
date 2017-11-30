@@ -16,4 +16,5 @@
     <dimen name="welcome3_left_margins">15dp</dimen>
     <dimen name="welcome3_right_margins">15dp</dimen>
     <dimen name="welcome3_text_size">14sp</dimen>
+    <dimen name="clearRightMargin">8dp</dimen>
 </resources>
