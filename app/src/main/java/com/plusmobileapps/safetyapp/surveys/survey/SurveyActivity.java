@@ -15,11 +15,9 @@ import java.util.ArrayList;
 
 public class SurveyActivity extends AppCompatActivity {
 
-
     public static final String EXTRA_LOCATION = "com.plusmobileapps.safetyapp.survey.overview.LOCATION";
     FragmentManager fragmentManager;
     SurveyQuestion survey;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,9 +36,7 @@ public class SurveyActivity extends AppCompatActivity {
         initialTransaction
                 .add(R.id.suvey_container, fragment, "0")
                 .commit();
-
     }
-
 
     /**
      * handle the click events of the radio button group
@@ -66,7 +62,6 @@ public class SurveyActivity extends AppCompatActivity {
 
                 break;
         }
-
     }
 
     /**

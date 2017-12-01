@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity
         navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         viewPager = (ViewPager) findViewById(R.id.view_pager);
-        final SwipeAdapter swipeAdapter = new SwipeAdapter(getSupportFragmentManager());
+        final MainSwipeAdapter swipeAdapter = new MainSwipeAdapter(getSupportFragmentManager());
         viewPager.setAdapter(swipeAdapter);
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override

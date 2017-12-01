@@ -22,12 +22,12 @@ public class SurveyLandingAdapter extends RecyclerView.Adapter<RecyclerView.View
     public static final int ITEM_TYPE_NORMAL = 1;
     public static final int ITEM_TYPE_HEADER = 0;
     public static final String EXTRA_SURVEY = "com.plusmobileapps.safetyapp.survey.landing.SURVEY";
-    private LandingSurveyOverview survey;
+    private SurveyOverview survey;
     private int surveyCount = 0;
 
-    private ArrayList<LandingSurveyOverview> surveys;
+    private ArrayList<SurveyOverview> surveys;
 
-    public SurveyLandingAdapter(ArrayList<LandingSurveyOverview> surveys) {
+    public SurveyLandingAdapter(ArrayList<SurveyOverview> surveys) {
         this.surveys = surveys;
     }
 
