@@ -4,14 +4,14 @@ package com.plusmobileapps.safetyapp.surveys.landing;
  * Created by Andrew on 11/13/2017.
  */
 
-public class LandingSurveyOverview {
+public class SurveyOverview {
     private String title;
     private String date;
     private String time;
     private boolean inProgress = false;
     private int progress = 0;
 
-    public LandingSurveyOverview(String title) {
+    public SurveyOverview(String title) {
         this.title = title;
     }
 
