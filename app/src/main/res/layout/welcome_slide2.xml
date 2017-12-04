@@ -18,7 +18,9 @@
             android:fontFamily="sans-serif"
             android:lineSpacingExtra="8sp"
             android:text="@string/welcome2_item1"
-            android:textSize="18sp" />
+            android:textColor="@android:color/black"
+            android:textSize="18sp"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/welcome2_textView2"
@@ -28,6 +30,8 @@
             android:fontFamily="sans-serif"
             android:lineSpacingExtra="8sp"
             android:text="@string/welcome2_item2"
-            android:textSize="18sp" />
+            android:textColor="@android:color/black"
+            android:textSize="18sp"
+            android:textStyle="bold" />
     </LinearLayout>
 </RelativeLayout>

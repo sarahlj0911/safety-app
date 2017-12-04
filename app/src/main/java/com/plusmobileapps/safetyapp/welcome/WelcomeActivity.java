@@ -25,7 +25,7 @@ public class WelcomeActivity extends AppCompatActivity {
     private LinearLayout dotsLayout;
     private TextView[] dots;
     private int[] layouts;
-    private Button btnSkip, btnNext;
+    private Button btnBack, btnNext;
     private PrefManager prefManager;
 
     @Override
@@ -34,16 +34,16 @@ public class WelcomeActivity extends AppCompatActivity {
 
         // Checking for first time launch - before calling setContentView()
         prefManager = new PrefManager(this);
-        /*if (!prefManager.isFirstTimeLaunch()) {
+        if (!prefManager.isFirstTimeLaunch()) {
             launchHomeScreen();
             finish();
-        }*/
+        }
 
         setContentView(R.layout.activity_welcome);
 
         welcomeViewPager = (ViewPager) findViewById(R.id.welcome_view_pager);
         dotsLayout = (LinearLayout) findViewById(R.id.layoutDots);
-        btnSkip = (Button) findViewById(R.id.welcome_btn_skip);
+        btnBack = (Button) findViewById(R.id.welcome_btn_back);
         btnNext = (Button) findViewById(R.id.welcome_btn_next);
 
         layouts = new int[] {
@@ -60,10 +60,14 @@ public class WelcomeActivity extends AppCompatActivity {
         welcomeViewPager.setAdapter(welcomeViewPagerAdapter);
         welcomeViewPager.addOnPageChangeListener(viewPagerPageChangeListener);
 
-        btnSkip.setOnClickListener(new View.OnClickListener() {
+        btnBack.setVisibility(View.GONE);
+        btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                launchHomeScreen();
+                int current = getItem(-1);
+                if (current > -1) {
+                    welcomeViewPager.setCurrentItem(current);
+                }
             }
         });
 
@@ -119,15 +123,17 @@ public class WelcomeActivity extends AppCompatActivity {
         public void onPageSelected(int position) {
             addBottomDots(position);
 
-            // changing the next button text 'NEXT' / 'GOT IT'
-            if (position == layouts.length - 1) {
-                // last page. make button text to GOT IT
+            // Don't show BACK button on first page
+            if (position == 0) {
+                btnBack.setVisibility(View.GONE);
+            } else if (position == layouts.length - 1) {
+                // On last page, change NEXT to GOT IT
                 btnNext.setText(getString(R.string.welcome_gotit));
-                btnSkip.setVisibility(View.GONE);
+                //btnBack.setVisibility(View.GONE);
             } else {
-                // still pages are left
+                // Neither first nor last page, so show BACK and NEXT
                 btnNext.setText(getString(R.string.welcome_next));
-                btnSkip.setVisibility(View.VISIBLE);
+                btnBack.setVisibility(View.VISIBLE);
             }
         }
 
