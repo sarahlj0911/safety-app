@@ -8,11 +8,16 @@ public class SurveyOverview {
     private String title;
     private String date;
     private String time;
-    private boolean inProgress = false;
     private int progress = 0;
 
-    public SurveyOverview(String title) {
+    public SurveyOverview(String title){
         this.title = title;
+    }
+
+    public SurveyOverview(String title, String date, String time) {
+        this.title = title;
+        this.date = date;
+        this.time = time;
     }
 
     public String getTitle() {
@@ -40,7 +45,11 @@ public class SurveyOverview {
     }
 
     public boolean isInProgress() {
-        return inProgress;
+        if(progress == 0) {
+            return false;
+        } else {
+            return true;
+        }
     }
 
     public int getProgress() {
@@ -49,5 +58,13 @@ public class SurveyOverview {
 
     public void setProgress(int progress) {
         this.progress = progress;
+    }
+
+    public String getModified() {
+        if (this.isInProgress()) {
+            return "Last Modified:";
+        } else {
+            return "Completed On:";
+        }
     }
 }

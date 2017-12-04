@@ -4,7 +4,8 @@
     android:layout_height="match_parent"
     tools:context="com.plusmobileapps.safetyapp.surveys.location.LocationFragment"
     android:orientation="vertical"
-    android:background="@android:color/background_light">
+    android:background="@android:color/background_light"
+    android:id="@+id/fragment_survey_location">
 
     <TextView
         android:layout_width="wrap_content"

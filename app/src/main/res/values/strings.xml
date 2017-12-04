@@ -35,4 +35,5 @@ through during one week.</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_survey">SurveyActivity</string>
     <string name="action_settings">Settings</string>
+    <string name="undo_string">Undo</string>
 </resources>

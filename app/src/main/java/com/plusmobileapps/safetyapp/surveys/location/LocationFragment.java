@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,7 +31,10 @@ public class LocationFragment extends Fragment {
     protected RecyclerView.LayoutManager layoutManager;
     protected LayoutManagerType currentLayoutManagerType;
     protected LocationAdapter adapter;
-    ArrayList<LocationSurveyOverview> surveys;
+    ArrayList<LocationSurveyOverview> surveys = new ArrayList<>();
+    ArrayList<String> titles = new ArrayList<>();
+
+    private boolean isCompleted = false;
 
     private enum LayoutManagerType {
         GRID_LAYOUT_MANAGER,
@@ -41,9 +45,16 @@ public class LocationFragment extends Fragment {
         // Required empty public constructor
     }
 
-    public static LocationFragment newInstance(String param1, String param2) {
+    public static LocationFragment newInstance(boolean isCompleted) {
         LocationFragment fragment = new LocationFragment();
+        fragment.isCompleted = isCompleted;
+        fragment.populateSurveys();
+        return fragment;
+    }
 
+    public static LocationFragment newInstance() {
+        LocationFragment fragment = new LocationFragment();
+        fragment.createNewSurvey();
         return fragment;
     }
 
@@ -69,8 +80,6 @@ public class LocationFragment extends Fragment {
         }
         setRecyclerViewLayoutManager(currentLayoutManagerType);
 
-        surveys = new ArrayList<>();
-        populateSurveys();
         adapter = new LocationAdapter(surveys);
 
         recyclerView.setAdapter(adapter);
@@ -106,36 +115,55 @@ public class LocationFragment extends Fragment {
         recyclerView.scrollToPosition(scrollPosition);
     }
 
+    public void landingSurveyClicked(boolean isCompleted) {
+        this.isCompleted = isCompleted;
+    }
     //populate array list
     private void populateSurveys(){
-        ArrayList<String> titles = new ArrayList<String>();
-        titles.add("Bathroom");
-        titles.add("Classroom 1");
-        titles.add("Bathroom 2");
-        titles.add("Locker Room");
-        titles.add("Field");
-        titles.add("Office");
-        titles.add("Classroom 2");
-        titles.add("Bathroom");
-        titles.add("Classroom 1");
-        titles.add("Bathroom 2");
-        titles.add("Locker Room");
-        titles.add("Field");
-        titles.add("Office");
-        titles.add("Classroom 2");
+        addLocations();
 
-
-        int progress = 90;
-        for (int i = 0; i < titles.size(); i++) {
-            surveys.add(new LocationSurveyOverview(titles.get(i)));
-            if (i == 0){
-                //no op to keep progress state at 0
-            } else if(i % 2 ==1){
+        if (isCompleted){
+            for (int i =0; i < titles.size(); i++){
+                surveys.add(new LocationSurveyOverview(titles.get(i)));
                 surveys.get(i).setFinished(true);
-            } else {
-                surveys.get(i).setProgress(progress);
-                progress -= 10 ;
             }
+        } else {
+            for (int i = 0; i < titles.size(); i++) {
+                surveys.add(new LocationSurveyOverview(titles.get(i)));
+                int progress = 90;
+                if (i == 0){
+                    //no op to keep progress state at 0
+                } else if(i % 2 ==1){
+                    surveys.get(i).setFinished(true);
+                } else {
+                    surveys.get(i).setProgress(progress);
+                    progress -= 10 ;
+                }
+            }
+        }
+    }
+
+    private void addLocations(){
+        titles.add("Bathroom");
+        titles.add("Classroom 1");
+        titles.add("Bathroom 2");
+        titles.add("Locker Room");
+        titles.add("Field");
+        titles.add("Office");
+        titles.add("Classroom 2");
+        titles.add("Bathroom");
+        titles.add("Classroom 1");
+        titles.add("Bathroom 2");
+        titles.add("Locker Room");
+        titles.add("Field");
+        titles.add("Office");
+        titles.add("Classroom 2");
+    }
+
+    private void createNewSurvey() {
+        addLocations();
+        for (String title : titles) {
+            surveys.add(new LocationSurveyOverview(title));
         }
     }
 }
