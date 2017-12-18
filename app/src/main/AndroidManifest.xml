@@ -32,9 +32,8 @@
         <activity
             android:name=".summary.SummaryDetailActivity"
             android:label="SummaryDetailActivity"
-            android:theme="@style/AppTheme.NoActionBar"
-            />
-
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".actionitems.ActionItemDetailActivity"></activity>
     </application>
 
 </manifest>
