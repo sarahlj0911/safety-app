@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:columnCount="2">
+
+    <ImageView
+        android:id="@+id/survey_red_image"
+        android:layout_width="@dimen/actionItemSize"
+        android:layout_height="@dimen/actionItemSize"
+        android:layout_margin="8dp"
+        android:background="@drawable/circle_red" />
+
+    <TextView
+        android:id="@+id/textView11"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="fill_horizontal|center_vertical"
+        android:gravity="center_vertical"
+        android:text="@string/priority_high"
+        android:textColor="@android:color/black" />
+
+    <ImageView
+        android:id="@+id/survey_yellow_image"
+        android:layout_width="@dimen/actionItemSize"
+        android:layout_height="@dimen/actionItemSize"
+        android:layout_margin="8dp"
+        android:background="@drawable/circle_yellow" />
+
+    <TextView
+        android:id="@+id/textView12"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="fill_horizontal|center_vertical"
+        android:gravity="center_vertical"
+        android:text="@string/priority_med"
+        android:textColor="@android:color/black"/>
+
+    <ImageView
+        android:id="@+id/survey_green_image"
+        android:layout_width="@dimen/actionItemSize"
+        android:layout_height="@dimen/actionItemSize"
+        android:layout_margin="8dp"
+        android:background="@drawable/circle_green" />
+
+    <TextView
+        android:id="@+id/textView13"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="fill_horizontal|center_vertical"
+        android:gravity="center_vertical"
+        android:text="@string/priority_low"
+        android:textColor="@android:color/black"/>
+</GridLayout>
