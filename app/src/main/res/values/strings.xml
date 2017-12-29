@@ -27,8 +27,9 @@
     <string name="welcome3_item5">5. Ideally, the walk-through will be completed in one day by the same person or persons. If this is not possible, try and complete the walk-
 through during one week.</string>
     <string name="welcome4_title">Prioritization Guide</string>
+    <string name="prioritization_tip_text">You may set a priority level for each item in the walk-through to help determine how soon action items need to be addressed.</string>
 
-    <string name="welcome_skip">SKIP</string>
+    <string name="welcome_skip">BACK</string>
     <string name="welcome_next">NEXT</string>
     <string name="welcome_gotit">GOT IT</string>
 

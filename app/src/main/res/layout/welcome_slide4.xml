@@ -14,6 +14,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="32dp"
         android:text="@string/welcome4_title"
+        android:textColor="@android:color/black"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.503"
@@ -25,10 +26,10 @@
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_marginStart="32dp"
-        android:layout_marginTop="64dp"
+        android:layout_marginTop="24dp"
         android:background="@drawable/circle_red"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+        app:layout_constraintTop_toBottomOf="@+id/textView6" />
 
 
     <View
@@ -61,6 +62,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:text="@string/priority_high"
+        android:textColor="@android:color/black"
         android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@+id/welcome4_circle_red"
         app:layout_constraintTop_toTopOf="@+id/welcome4_circle_red" />
@@ -71,6 +73,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:text="@string/priority_med"
+        android:textColor="@android:color/black"
         android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@+id/welcome4_circle_yellow"
         app:layout_constraintTop_toTopOf="@+id/welcome4_circle_yellow" />
@@ -81,6 +84,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:text="@string/priority_low"
+        android:textColor="@android:color/black"
         android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@+id/welcome4_circle_green"
         app:layout_constraintTop_toTopOf="@+id/welcome4_circle_green" />
@@ -91,6 +95,7 @@
         android:layout_height="0dp"
         android:layout_marginStart="16dp"
         android:text="@string/priority_high_desc"
+        android:textColor="@android:color/black"
         android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="@+id/welcome4_circle_red"
         app:layout_constraintStart_toEndOf="@+id/welcome4_circle_red" />
@@ -101,6 +106,7 @@
         android:layout_height="0dp"
         android:layout_marginStart="16dp"
         android:text="@string/priority_med_desc"
+        android:textColor="@android:color/black"
         android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="@+id/welcome4_circle_yellow"
         app:layout_constraintStart_toEndOf="@+id/welcome4_circle_yellow" />
@@ -111,8 +117,26 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:text="@string/priority_low_desc"
+        android:textColor="@android:color/black"
         android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="@+id/welcome4_circle_green"
         app:layout_constraintStart_toEndOf="@+id/welcome4_circle_green" />
+
+    <TextView
+        android:id="@+id/textView6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="24dp"
+        android:paddingLeft="8dp"
+        android:text="@string/prioritization_tip_text"
+        android:textColor="@android:color/black"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView"
+        tools:layout_width="0dp" />
 
 </android.support.constraint.ConstraintLayout>
