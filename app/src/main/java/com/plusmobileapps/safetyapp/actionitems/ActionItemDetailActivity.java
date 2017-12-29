@@ -4,12 +4,15 @@ import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
 import com.plusmobileapps.safetyapp.R;
 
+/**
+ * Created by rbeerma
+ * This activity displays the details of a specific action item.
+ */
 public class ActionItemDetailActivity extends AppCompatActivity
         implements EditPriorityDialogFragment.PriorityDialogListener{
     Button editPriorityBtn;
@@ -38,7 +41,6 @@ public class ActionItemDetailActivity extends AppCompatActivity
     public void onItemSelected(DialogFragment dialog, CharSequence selectedItem) {
         EditPriorityDialogFragment priorityDialog = (EditPriorityDialogFragment) dialog;
         String selectedPriority = priorityDialog.getSelectedItem().toString();
-        Log.d(this.getClass().toString(), "Item selected: " + priorityDialog.getSelectedItem().toString());
 
         switch (selectedPriority) {
             case "High":

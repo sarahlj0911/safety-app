@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
-import android.util.Log;
 
 import com.plusmobileapps.safetyapp.R;
 
@@ -45,7 +44,6 @@ public class EditPriorityDialogFragment extends DialogFragment {
 
         try {
             priorityDialogListener = (PriorityDialogListener) getActivity();
-            Log.d(this.getClass().toString(), "Successfully attached PriorityDialogListener to " + priorityDialogListener.getClass().toString());
         } catch (ClassCastException e) {
             // The activity doesn't implement the PriorityDialogListener interface
             throw new ClassCastException(context.toString()
