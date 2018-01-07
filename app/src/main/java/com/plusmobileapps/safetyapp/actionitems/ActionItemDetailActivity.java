@@ -15,8 +15,9 @@ import com.plusmobileapps.safetyapp.R;
  */
 public class ActionItemDetailActivity extends AppCompatActivity
         implements EditPriorityDialogFragment.PriorityDialogListener{
-    Button editPriorityBtn;
-    View statusDot;
+    private Button editPriorityBtn;
+    private View statusDot;
+    private Button saveButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,7 +30,8 @@ public class ActionItemDetailActivity extends AppCompatActivity
 
         statusDot = findViewById(R.id.action_item_status);
         editPriorityBtn = findViewById(R.id.edit_priority_btn);
-
+        saveButton = findViewById(R.id.save_action_item_detail);
+        saveButton.setOnClickListener(saveListener);
     }
 
     public void showEditPriorityDialog(View view) {
@@ -56,4 +58,12 @@ public class ActionItemDetailActivity extends AppCompatActivity
                 break;
         }
     }
+
+    private View.OnClickListener saveListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            //TODO: save the data for any changes made to the action item
+            finish(); //destroy the activity for prototype sake
+        }
+    };
 }
