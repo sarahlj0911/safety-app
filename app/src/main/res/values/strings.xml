@@ -2,6 +2,7 @@
     <string name="app_name">SAfETy App</string>
     <string name="title_survey">Survey</string>
     <string name="title_action_items">Action Items</string>
+    <string name="title_action_item_detail">Action Item Detail</string>
     <string name="title_summary">Summary</string>
     <string name="logo_desc">SAfETy Logo</string>
 
@@ -37,4 +38,5 @@ through during one week.</string>
     <string name="title_activity_survey">SurveyActivity</string>
     <string name="action_settings">Settings</string>
     <string name="undo_string">Undo</string>
+    <string name="title_edit_priority_dialog">Select a priority:</string>
 </resources>

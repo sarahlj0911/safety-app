@@ -32,9 +32,9 @@
         <activity
             android:name=".summary.SummaryDetailActivity"
             android:label="SummaryDetailActivity"
-            android:theme="@style/AppTheme.NoActionBar"
-            />
-
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".actionitems.ActionItemDetailActivity"
+            android:windowSoftInputMode="adjustPan"/>
     </application>
 
 </manifest>

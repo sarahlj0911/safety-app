@@ -1,6 +1,7 @@
 package com.plusmobileapps.safetyapp.actionitems;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -70,7 +71,8 @@ public class ActionItemAdapter extends RecyclerView.Adapter<ActionItemAdapter.Vi
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    //handle the click of the view holder here
+                    Intent intent = new Intent(view.getContext(), ActionItemDetailActivity.class);
+                    context.startActivity(intent);
                 }
             });
         }

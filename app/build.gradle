@@ -39,7 +39,6 @@ dependencies {
 
     compile 'jp.wasabeef:recyclerview-animators:2.2.7'
 
-
     //test
     testCompile 'junit:junit:4.12'
 }
