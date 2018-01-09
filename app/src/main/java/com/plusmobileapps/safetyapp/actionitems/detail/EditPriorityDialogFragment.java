@@ -1,4 +1,4 @@
-package com.plusmobileapps.safetyapp.actionitems;
+package com.plusmobileapps.safetyapp.actionitems.detail;
 
 import android.app.AlertDialog;
 import android.app.Dialog;

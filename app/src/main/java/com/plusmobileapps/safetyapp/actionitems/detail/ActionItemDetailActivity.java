@@ -1,4 +1,4 @@
-package com.plusmobileapps.safetyapp.actionitems;
+package com.plusmobileapps.safetyapp.actionitems.detail;
 
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
@@ -14,7 +14,10 @@ import com.plusmobileapps.safetyapp.R;
  * This activity displays the details of a specific action item.
  */
 public class ActionItemDetailActivity extends AppCompatActivity
-        implements EditPriorityDialogFragment.PriorityDialogListener{
+        implements EditPriorityDialogFragment.PriorityDialogListener {
+
+    public static final String EXTRA_ACTION_ITEM_ID = "ACTION_ITEM_ID";
+
     private Button editPriorityBtn;
     private View statusDot;
     private Button saveButton;

@@ -1,4 +1,4 @@
-package com.plusmobileapps.safetyapp.actionitems;
+package com.plusmobileapps.safetyapp.actionitems.landing;
 
 import android.content.Context;
 import android.content.Intent;
@@ -13,21 +13,19 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import com.plusmobileapps.safetyapp.R;
-
-
-/**
- * Created by Andrew on 11/8/2017.
- */
+import com.plusmobileapps.safetyapp.actionitems.detail.ActionItemDetailActivity;
 
 public class ActionItemAdapter extends RecyclerView.Adapter<ActionItemAdapter.ViewHolder> {
 
     private static final String TAG = "ActionItemAdapter";
     private ActionItem actionItem;
+    private ActionItemsFragment.ActionItemListener itemListener;
 
     private ArrayList<ActionItem> actionItems;
 
-    public ActionItemAdapter(ArrayList<ActionItem> actionItems){
+    public ActionItemAdapter(ArrayList<ActionItem> actionItems, ActionItemsFragment.ActionItemListener itemListener){
         this.actionItems = actionItems;
+        this.itemListener = itemListener;
     }
 
     @Override
@@ -56,9 +54,20 @@ public class ActionItemAdapter extends RecyclerView.Adapter<ActionItemAdapter.Vi
         return actionItems.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
-        //TODO
-        private final Context context;
+    public void replaceData(ArrayList<ActionItem> actionItems) {
+        setList(actionItems);
+        notifyDataSetChanged();
+    }
+
+    private void setList(ArrayList<ActionItem> actionItems) {
+        this.actionItems = actionItems;
+    }
+
+    public ActionItem getActionItem(int position) {
+        return actionItems.get(position);
+    }
+
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private final View status = itemView.findViewById(R.id.action_item_status);
         private final TextView title = itemView.findViewById(R.id.action_item_title);
         private final TextView location = itemView.findViewById(R.id.action_item_location);
@@ -67,16 +76,14 @@ public class ActionItemAdapter extends RecyclerView.Adapter<ActionItemAdapter.Vi
 
         public ViewHolder(View view) {
             super(view);
-            context = itemView.getContext();
-            view.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent intent = new Intent(view.getContext(), ActionItemDetailActivity.class);
-                    context.startActivity(intent);
-                }
-            });
+            itemView.setOnClickListener(this);
         }
 
+        @Override
+        public void onClick(View v) {
+            ActionItem actionItem = getActionItem(getAdapterPosition());
+            itemListener.onActionItemClicked(actionItem);
+        }
 
         public View getStatus() {
             return status;
