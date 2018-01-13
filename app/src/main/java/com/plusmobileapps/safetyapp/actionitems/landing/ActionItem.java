@@ -1,4 +1,4 @@
-package com.plusmobileapps.safetyapp.actionitems;
+package com.plusmobileapps.safetyapp.actionitems.landing;
 
 import android.graphics.Bitmap;
 
@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
  */
 
 public class ActionItem {
+    private String id;
     private int status;
     private String title;
     private String location;
@@ -64,6 +65,12 @@ public class ActionItem {
         this.description = description;
     }
 
+    public String getId() {
+        return id;
+    }
 
+    public void setId(String id) {
+        this.id = id;
+    }
 
 }
