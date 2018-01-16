@@ -1,5 +1,7 @@
 package com.plusmobileapps.safetyapp.actionitems.landing;
 
+import com.plusmobileapps.safetyapp.actionitems.landing.model.ActionItem;
+
 import java.util.ArrayList;
 
 public interface ActionItemContract {

@@ -4,5 +4,5 @@
     android:background="@color/paper"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.plusmobileapps.safetyapp.actionitems.landing.ActionItemsFragment" />
+    tools:context="com.plusmobileapps.safetyapp.actionitems.landing.view.ActionItemsFragment" />
 

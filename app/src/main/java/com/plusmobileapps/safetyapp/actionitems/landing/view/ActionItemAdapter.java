@@ -1,7 +1,5 @@
-package com.plusmobileapps.safetyapp.actionitems.landing;
+package com.plusmobileapps.safetyapp.actionitems.landing.view;
 
-import android.content.Context;
-import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,7 +11,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import com.plusmobileapps.safetyapp.R;
-import com.plusmobileapps.safetyapp.actionitems.detail.ActionItemDetailActivity;
+import com.plusmobileapps.safetyapp.actionitems.landing.model.ActionItem;
 
 public class ActionItemAdapter extends RecyclerView.Adapter<ActionItemAdapter.ViewHolder> {
 
@@ -43,7 +41,7 @@ public class ActionItemAdapter extends RecyclerView.Adapter<ActionItemAdapter.Vi
 
         holder.getDescription().setText(actionItem.getDescription());
         holder.getLocation().setText(actionItem.getLocation());
-        holder.getPicture().setImageBitmap(actionItem.getPhoto());
+//        holder.getPicture().setImageBitmap(actionItem.getPhoto());
         holder.getTitle().setText(actionItem.getTitle());
 
         //TODO handle the changing of statuses and bind the corresponding colors to status value
@@ -70,9 +68,11 @@ public class ActionItemAdapter extends RecyclerView.Adapter<ActionItemAdapter.Vi
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private final View status = itemView.findViewById(R.id.action_item_status);
         private final TextView title = itemView.findViewById(R.id.action_item_title);
-        private final TextView location = itemView.findViewById(R.id.action_item_location);
         private final TextView description = itemView.findViewById(R.id.action_item_description);
-        private final ImageView picture = itemView.findViewById(R.id.action_item_image);
+
+        private final TextView location = itemView.findViewById(R.id.action_item_location);
+        //TODO: figure out how to add image to persistence
+        //        private final ImageView picture = itemView.findViewById(R.id.action_item_image);
 
         public ViewHolder(View view) {
             super(view);
@@ -101,9 +101,9 @@ public class ActionItemAdapter extends RecyclerView.Adapter<ActionItemAdapter.Vi
             return description;
         }
 
-        public ImageView getPicture() {
-            return picture;
-        }
+//        public ImageView getPicture() {
+//            return picture;
+//        }
     }
 
 

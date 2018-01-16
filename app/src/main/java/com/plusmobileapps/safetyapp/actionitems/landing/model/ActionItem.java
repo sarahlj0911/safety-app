@@ -1,17 +1,26 @@
-package com.plusmobileapps.safetyapp.actionitems.landing;
+package com.plusmobileapps.safetyapp.actionitems.landing.model;
 
+import android.arch.persistence.room.ColumnInfo;
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.PrimaryKey;
 import android.graphics.Bitmap;
 
-/**
- * Created by Andrew on 11/8/2017.
- */
-
+@Entity(tableName = "actionItem")
 public class ActionItem {
-    private String id;
+    @PrimaryKey(autoGenerate = true)
+    private int id;
+
+    @ColumnInfo(name = "status")
     private int status;
+
+    @ColumnInfo(name = "title")
     private String title;
+
+    @ColumnInfo(name = "location")
     private String location;
-    private Bitmap photo;
+
+
+    @ColumnInfo(name = "description")
     private String description;
 
     public enum Status {
@@ -25,51 +34,45 @@ public class ActionItem {
         this.description = description;
     }
 
+    //Getters
     public int getStatus() {
         return status;
     }
 
-    public void setStatus(int status) {
-        this.status = status;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
+    public int getId() {
+        return id;
     }
 
     public String getLocation() {
         return location;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    //Setters
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
     public void setLocation(String location) {
         this.location = location;
     }
 
-    public Bitmap getPhoto() {
-        return photo;
-    }
-
-    public void setPhoto(Bitmap photo) {
-        this.photo = photo;
-    }
-
-    public String getDescription() {
-        return description;
+    public void setStatus(int status) {
+        this.status = status;
     }
 
     public void setDescription(String description) {
         this.description = description;
     }
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 

@@ -1,6 +1,9 @@
 package com.plusmobileapps.safetyapp.actionitems.landing;
 
 
+import com.plusmobileapps.safetyapp.actionitems.landing.model.ActionItem;
+import com.plusmobileapps.safetyapp.actionitems.landing.model.FakeModel;
+
 import java.util.ArrayList;
 
 public class ActionItemPresenter implements ActionItemContract.UserActionsListener {
@@ -37,6 +40,6 @@ public class ActionItemPresenter implements ActionItemContract.UserActionsListen
      */
     @Override
     public void openActionItemDetail(ActionItem requestedActionItem) {
-        actionItemView.showActionItemDetailUi(requestedActionItem.getId());
+        actionItemView.showActionItemDetailUi("2");
     }
 }

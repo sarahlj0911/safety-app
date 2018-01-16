@@ -1,4 +1,6 @@
-package com.plusmobileapps.safetyapp.actionitems.landing;
+package com.plusmobileapps.safetyapp.actionitems.landing.model;
+
+import com.plusmobileapps.safetyapp.actionitems.landing.model.ActionItem;
 
 import java.util.ArrayList;
 

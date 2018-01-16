@@ -1,4 +1,4 @@
-package com.plusmobileapps.safetyapp.actionitems.landing;
+package com.plusmobileapps.safetyapp.actionitems.landing.view;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,6 +11,9 @@ import android.view.ViewGroup;
 
 import com.plusmobileapps.safetyapp.R;
 import com.plusmobileapps.safetyapp.actionitems.detail.ActionItemDetailActivity;
+import com.plusmobileapps.safetyapp.actionitems.landing.model.ActionItem;
+import com.plusmobileapps.safetyapp.actionitems.landing.ActionItemContract;
+import com.plusmobileapps.safetyapp.actionitems.landing.ActionItemPresenter;
 
 import java.util.ArrayList;
 

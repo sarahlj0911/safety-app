@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 26
-    buildToolsVersion "$rootProject.ext.supportLibraryVersion"
+    buildToolsVersion "$rootProject.ext.buildToolsVersion"
     defaultConfig {
         applicationId "com.plusmobileapps.safetyapp"
         minSdkVersion 19
@@ -38,6 +38,8 @@ dependencies {
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
 
     compile 'jp.wasabeef:recyclerview-animators:2.2.7'
+    implementation "android.arch.persistence.room:runtime:1.0.0"
+    annotationProcessor "android.arch.persistence.room:compiler:1.0.0"
 
     //test
     testCompile 'junit:junit:4.12'
