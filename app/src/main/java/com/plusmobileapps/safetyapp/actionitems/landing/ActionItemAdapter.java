@@ -1,17 +1,16 @@
-package com.plusmobileapps.safetyapp.actionitems.landing.view;
+package com.plusmobileapps.safetyapp.actionitems.landing;
 
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import com.plusmobileapps.safetyapp.R;
-import com.plusmobileapps.safetyapp.actionitems.landing.model.ActionItem;
+import com.plusmobileapps.safetyapp.data.ActionItem;
 
 public class ActionItemAdapter extends RecyclerView.Adapter<ActionItemAdapter.ViewHolder> {
 
@@ -19,9 +18,9 @@ public class ActionItemAdapter extends RecyclerView.Adapter<ActionItemAdapter.Vi
     private ActionItem actionItem;
     private ActionItemsFragment.ActionItemListener itemListener;
 
-    private ArrayList<ActionItem> actionItems;
+    private List<ActionItem> actionItems;
 
-    public ActionItemAdapter(ArrayList<ActionItem> actionItems, ActionItemsFragment.ActionItemListener itemListener){
+    public ActionItemAdapter(List<ActionItem> actionItems, ActionItemsFragment.ActionItemListener itemListener){
         this.actionItems = actionItems;
         this.itemListener = itemListener;
     }
@@ -52,12 +51,12 @@ public class ActionItemAdapter extends RecyclerView.Adapter<ActionItemAdapter.Vi
         return actionItems.size();
     }
 
-    public void replaceData(ArrayList<ActionItem> actionItems) {
+    public void replaceData(List<ActionItem> actionItems) {
         setList(actionItems);
         notifyDataSetChanged();
     }
 
-    private void setList(ArrayList<ActionItem> actionItems) {
+    private void setList(List<ActionItem> actionItems) {
         this.actionItems = actionItems;
     }
 

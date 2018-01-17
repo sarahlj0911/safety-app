@@ -1,4 +1,4 @@
-package com.plusmobileapps.safetyapp.actionitems.landing.model;
+package com.plusmobileapps.safetyapp.data;
 
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;

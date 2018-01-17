@@ -1,8 +1,7 @@
 package com.plusmobileapps.safetyapp.actionitems.landing;
 
 
-import com.plusmobileapps.safetyapp.actionitems.landing.model.ActionItem;
-import com.plusmobileapps.safetyapp.actionitems.landing.model.FakeModel;
+import com.plusmobileapps.safetyapp.data.ActionItem;
 
 import java.util.ArrayList;
 
@@ -27,10 +26,10 @@ public class ActionItemPresenter implements ActionItemContract.UserActionsListen
         }
 
         //this is where you would grab the data asynchronously
-        ArrayList<ActionItem> actionItems = new FakeModel().getActionItems();
+        new LoadActionItemTask(actionItemView).execute();
         //wrapping these next two lines in the onLoadComplete callback
-        actionItemView.setProgressIndicator(false);
-        actionItemView.showActionItems(actionItems);
+        //actionItemView.setProgressIndicator(false);
+        //actionItemView.showActionItems(actionItems);
     }
 
     /**

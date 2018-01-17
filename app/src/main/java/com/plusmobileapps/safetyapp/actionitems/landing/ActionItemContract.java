@@ -1,14 +1,14 @@
 package com.plusmobileapps.safetyapp.actionitems.landing;
 
-import com.plusmobileapps.safetyapp.actionitems.landing.model.ActionItem;
+import com.plusmobileapps.safetyapp.data.ActionItem;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public interface ActionItemContract {
 
     interface View {
         void setProgressIndicator(boolean active);
-        void showActionItems(ArrayList<ActionItem> actionItems);
+        void showActionItems(List<ActionItem> actionItems);
         void showActionItemDetailUi(String actionItemId);
     }
 

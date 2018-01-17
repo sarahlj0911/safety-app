@@ -1,12 +1,9 @@
-package com.plusmobileapps.safetyapp;
+package com.plusmobileapps.safetyapp.data;
 
 import android.arch.persistence.room.Database;
 import android.arch.persistence.room.Room;
 import android.arch.persistence.room.RoomDatabase;
 import android.content.Context;
-
-import com.plusmobileapps.safetyapp.actionitems.landing.model.ActionItem;
-import com.plusmobileapps.safetyapp.actionitems.landing.model.ActionItemDao;
 
 @Database(entities = {ActionItem.class}, version = 1)
 public abstract class AppDatabase extends RoomDatabase {

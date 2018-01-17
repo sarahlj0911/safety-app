@@ -1,4 +1,4 @@
-package com.plusmobileapps.safetyapp.actionitems.landing.view;
+package com.plusmobileapps.safetyapp.actionitems.landing;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,11 +11,10 @@ import android.view.ViewGroup;
 
 import com.plusmobileapps.safetyapp.R;
 import com.plusmobileapps.safetyapp.actionitems.detail.ActionItemDetailActivity;
-import com.plusmobileapps.safetyapp.actionitems.landing.model.ActionItem;
-import com.plusmobileapps.safetyapp.actionitems.landing.ActionItemContract;
-import com.plusmobileapps.safetyapp.actionitems.landing.ActionItemPresenter;
+import com.plusmobileapps.safetyapp.data.ActionItem;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class ActionItemsFragment extends Fragment implements ActionItemContract.View {
@@ -80,7 +79,7 @@ public class ActionItemsFragment extends Fragment implements ActionItemContract.
      * @param actionItems   list of all action items to pass to adapter
      */
     @Override
-    public void showActionItems(ArrayList<ActionItem> actionItems) {
+    public void showActionItems(List<ActionItem> actionItems) {
         adapter.replaceData(actionItems);
     }
 
