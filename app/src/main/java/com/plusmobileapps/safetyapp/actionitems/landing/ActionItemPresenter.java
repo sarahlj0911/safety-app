@@ -27,9 +27,6 @@ public class ActionItemPresenter implements ActionItemContract.UserActionsListen
 
         //this is where you would grab the data asynchronously
         new LoadActionItemTask(actionItemView).execute();
-        //wrapping these next two lines in the onLoadComplete callback
-        //actionItemView.setProgressIndicator(false);
-        //actionItemView.showActionItems(actionItems);
     }
 
     /**
