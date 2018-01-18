@@ -11,9 +11,15 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 
+import com.github.amlcurran.showcaseview.OnShowcaseEventListener;
+import com.github.amlcurran.showcaseview.ShowcaseView;
+import com.github.amlcurran.showcaseview.targets.ActionViewTarget;
+import com.github.amlcurran.showcaseview.targets.ViewTarget;
 import com.plusmobileapps.safetyapp.R;
 import com.plusmobileapps.safetyapp.surveys.location.LocationFragment;
 
@@ -21,7 +27,8 @@ import java.util.ArrayList;
 
 import jp.wasabeef.recyclerview.animators.SlideInRightAnimator;
 
-public class SurveyLandingFragment extends Fragment{
+public class SurveyLandingFragment extends Fragment implements OnShowcaseEventListener {
+    private static ShowcaseView showcaseView;
     private static final String TAG = "SurveyLandingFragment";
     private static final String KEY_LAYOUT_MANAGER = "layoutManager";
     protected RecyclerView recyclerView;
@@ -30,6 +37,26 @@ public class SurveyLandingFragment extends Fragment{
     protected SurveyLandingAdapter adapter;
 
     private ArrayList<SurveyOverview> surveys;
+
+    @Override
+    public void onShowcaseViewHide(ShowcaseView showcaseView) {
+
+    }
+
+    @Override
+    public void onShowcaseViewDidHide(ShowcaseView showcaseView) {
+
+    }
+
+    @Override
+    public void onShowcaseViewShow(ShowcaseView showcaseView) {
+
+    }
+
+    @Override
+    public void onShowcaseViewTouchBlocked(MotionEvent motionEvent) {
+
+    }
 
     private enum LayoutManagerType {
         GRID_LAYOUT_MANAGER,
@@ -71,7 +98,6 @@ public class SurveyLandingFragment extends Fragment{
         return rootView;
     }
 
-
     private void populateSurveyItems() {
         surveys = new ArrayList<>();
 
@@ -98,6 +124,23 @@ public class SurveyLandingFragment extends Fragment{
     @Override
     public void onResume() {
         super.onResume();
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+        params.addRule(RelativeLayout.ALIGN_PARENT_END);
+        int margin = ((Number) (getResources().getDisplayMetrics().density *12)).intValue();
+        params.setMargins(margin, margin, margin, margin);
+
+        ViewTarget target = new ViewTarget(R.id.floatingActionButton, getActivity());
+        showcaseView = new ShowcaseView.Builder(getActivity())
+                .withMaterialShowcase()
+                .setTarget(target)
+                .setContentTitle(R.string.tutorial_title)
+                .setContentText(R.string.tutorial_content)
+                .setStyle(R.style.CustomShowcaseTheme2)
+                .setShowcaseEventListener(this)
+                .replaceEndButton(R.layout.tutorial_custom_button)
+                .build();
+        showcaseView.setButtonPosition(params);
 
     }
 
