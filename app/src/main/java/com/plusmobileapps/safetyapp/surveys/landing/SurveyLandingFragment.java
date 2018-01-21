@@ -20,6 +20,7 @@ import com.github.amlcurran.showcaseview.OnShowcaseEventListener;
 import com.github.amlcurran.showcaseview.ShowcaseView;
 import com.github.amlcurran.showcaseview.targets.ActionViewTarget;
 import com.github.amlcurran.showcaseview.targets.ViewTarget;
+import com.plusmobileapps.safetyapp.PrefManager;
 import com.plusmobileapps.safetyapp.R;
 import com.plusmobileapps.safetyapp.surveys.location.LocationFragment;
 
@@ -31,6 +32,7 @@ public class SurveyLandingFragment extends Fragment implements OnShowcaseEventLi
     private static ShowcaseView showcaseView;
     private static final String TAG = "SurveyLandingFragment";
     private static final String KEY_LAYOUT_MANAGER = "layoutManager";
+    private PrefManager prefManager;
     protected RecyclerView recyclerView;
     protected RecyclerView.LayoutManager layoutManager;
     protected SurveyLandingFragment.LayoutManagerType currentLayoutManagerType;
@@ -98,20 +100,6 @@ public class SurveyLandingFragment extends Fragment implements OnShowcaseEventLi
         return rootView;
     }
 
-    private void populateSurveyItems() {
-        surveys = new ArrayList<>();
-
-        //SurveyOverview survey1 = new SurveyOverview("Spring 2017");
-        SurveyOverview survey2 = new SurveyOverview("Fall 2017");
-        SurveyOverview survey3 = new SurveyOverview("Summer 2017");
-
-        SurveyOverview survey1 = new SurveyOverview("Fall 2017", "Dec 12, 2017", "3:33 p.m.");
-        survey1.setProgress(50);
-        surveys.add(survey1);
-        surveys.add(survey2);
-        surveys.add(survey3);
-    }
-
     public boolean isSurveyInProgress(){
         for (SurveyOverview survey : surveys) {
             if (survey.isInProgress()){
@@ -124,6 +112,13 @@ public class SurveyLandingFragment extends Fragment implements OnShowcaseEventLi
     @Override
     public void onResume() {
         super.onResume();
+        prefManager = new PrefManager(getContext());
+        if (prefManager.isFirstTimeLaunch()) {
+            initShowcaseTutorial();
+        }
+    }
+
+    private void initShowcaseTutorial() {
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
         params.addRule(RelativeLayout.ALIGN_PARENT_END);
@@ -139,9 +134,9 @@ public class SurveyLandingFragment extends Fragment implements OnShowcaseEventLi
                 .setStyle(R.style.CustomShowcaseTheme2)
                 .setShowcaseEventListener(this)
                 .replaceEndButton(R.layout.tutorial_custom_button)
+                .setOnClickListener(tutorialClickListener)
                 .build();
         showcaseView.setButtonPosition(params);
-
     }
 
     public String getSurveyTitle(int position) {
@@ -150,6 +145,35 @@ public class SurveyLandingFragment extends Fragment implements OnShowcaseEventLi
         } else {
             return surveys.get(position-1).getTitle();
         }
+    }
+
+    /**
+     * handle click listeners
+     */
+    private View.OnClickListener tutorialClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            prefManager.setFirstTimeLaunch(false);
+            showcaseView.hide();
+        }
+    };
+
+
+    /**
+     * Create mock data
+     */
+    private void populateSurveyItems() {
+        surveys = new ArrayList<>();
+
+        //SurveyOverview survey1 = new SurveyOverview("Spring 2017");
+        SurveyOverview survey2 = new SurveyOverview("Fall 2017");
+        SurveyOverview survey3 = new SurveyOverview("Summer 2017");
+
+        SurveyOverview survey1 = new SurveyOverview("Fall 2017", "Dec 12, 2017", "3:33 p.m.");
+        survey1.setProgress(50);
+        surveys.add(survey1);
+        surveys.add(survey2);
+        surveys.add(survey3);
     }
 
 }
