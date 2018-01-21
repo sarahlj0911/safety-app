@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="fill_parent"
@@ -10,7 +9,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical">
 
         <TextView
@@ -34,7 +33,6 @@
 
             <RadioButton
                 android:id="@+id/radio_button1"
-
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -46,7 +44,6 @@
 
             <RadioButton
                 android:id="@+id/radio_button2"
-
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -77,36 +74,83 @@
             android:layout_marginTop="8dp"
             android:textAppearance="@style/TextAppearance.AppCompat"
             android:textSize="18sp"
-            android:text="Priority (Green = No action)"/>
+            android:text="Priority:"/>
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:orientation="horizontal">
+            android:layout_width="204dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:paddingBottom="8dp"
+            android:paddingTop="8dp">
 
             <View
                 android:id="@+id/priority_btn_red"
-                android:layout_width="@dimen/actionItemSize"
-                android:layout_height="@dimen/actionItemSize"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginStart="8dp"
-                android:background="@drawable/circle_red" />
+                android:layout_width="@dimen/priority_dot_unselected"
+                android:layout_height="@dimen/priority_dot_unselected"
+                android:layout_marginBottom="8dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/circle_red"
+                android:clickable="true"
+                android:focusable="true"/>
+
+            <View
+                android:id="@+id/priority_btn_red_selected"
+                android:layout_width="@dimen/priority_dot_selected"
+                android:layout_height="@dimen/priority_dot_selected"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:background="@drawable/circle_red"
+                android:clickable="true"
+                android:focusable="true"
+                android:visibility="gone" />
 
             <View
                 android:id="@+id/priority_btn_yellow"
-                android:layout_width="@dimen/actionItemSize"
-                android:layout_height="@dimen/actionItemSize"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginStart="8dp"
-                android:background="@drawable/circle_yellow" />
+                android:layout_width="@dimen/priority_dot_unselected"
+                android:layout_height="@dimen/priority_dot_unselected"
+                android:layout_marginBottom="8dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/circle_yellow"
+                android:clickable="true"
+                android:focusable="true"/>
+
+            <View
+                android:id="@+id/priority_btn_yellow_selected"
+                android:layout_width="@dimen/priority_dot_selected"
+                android:layout_height="@dimen/priority_dot_selected"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:background="@drawable/circle_yellow"
+                android:clickable="true"
+                android:focusable="true"
+                android:visibility="gone" />
 
             <View
                 android:id="@+id/priority_btn_green"
-                android:layout_width="@dimen/actionItemSize"
-                android:layout_height="@dimen/actionItemSize"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginStart="8dp"
-                android:background="@drawable/circle_green" />
+                android:layout_width="@dimen/priority_dot_unselected"
+                android:layout_height="@dimen/priority_dot_unselected"
+                android:layout_marginBottom="8dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/circle_green"
+                android:clickable="true"
+                android:focusable="true"/>
+
+            <View
+                android:id="@+id/priority_btn_green_selected"
+                android:layout_width="@dimen/priority_dot_selected"
+                android:layout_height="@dimen/priority_dot_selected"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:background="@drawable/circle_green"
+                android:clickable="true"
+                android:focusable="true"
+                android:visibility="gone"/>
         </LinearLayout>
 
         <View style="@style/Divider"/>
@@ -130,6 +174,8 @@
             android:ems="10"
             android:hint="Tap to enter action plan here"
             android:inputType="textMultiLine" />
+
+        <View style="@style/Divider"/>
 
         <TextView
             android:id="@+id/title_take_photo"
