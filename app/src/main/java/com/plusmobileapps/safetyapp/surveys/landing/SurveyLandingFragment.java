@@ -134,6 +134,7 @@ public class SurveyLandingFragment extends Fragment implements OnShowcaseEventLi
                 .setStyle(R.style.CustomShowcaseTheme2)
                 .setShowcaseEventListener(this)
                 .replaceEndButton(R.layout.tutorial_custom_button)
+                .hideOnTouchOutside()
                 .setOnClickListener(tutorialClickListener)
                 .build();
         showcaseView.setButtonPosition(params);
