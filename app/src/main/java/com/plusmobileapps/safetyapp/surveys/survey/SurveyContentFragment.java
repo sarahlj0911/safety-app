@@ -14,6 +14,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
+import com.plusmobileapps.safetyapp.model.Priority;
 import com.plusmobileapps.safetyapp.R;
 
 import static android.app.Activity.RESULT_OK;
@@ -23,9 +24,11 @@ import static android.app.Activity.RESULT_OK;
  */
 public class SurveyContentFragment extends Fragment implements View.OnClickListener {
 
+    static final String TAG = "SurveyContentFragment";
     static final int REQUEST_IMAGE_CAPTURE = 1;
     SurveyQuestion survey;
     ImageButton cameraButton;
+    Priority currentPriority;
     View priorityRed;
     View priorityYellow;
     View priorityGreen;
@@ -50,6 +53,7 @@ public class SurveyContentFragment extends Fragment implements View.OnClickListe
         survey = new Gson().fromJson(surveyJsonObject, SurveyQuestion.class);
         TextView description = view.findViewById(R.id.question_description);
         description.setText(survey.getDescription());
+        currentPriority = null;
 
         cameraButton = view.findViewById(R.id.button_take_photo);
         cameraButton.setOnClickListener(this);
@@ -64,13 +68,10 @@ public class SurveyContentFragment extends Fragment implements View.OnClickListe
         priorityGreen.setOnClickListener(this);
 
         priorityRedSelected = view.findViewById(R.id.priority_btn_red_selected);
-        priorityRedSelected.setOnClickListener(this);
 
         priorityYellowSelected = view.findViewById(R.id.priority_btn_yellow_selected);
-        priorityYellowSelected.setOnClickListener(this);
 
         priorityGreenSelected = view.findViewById(R.id.priority_btn_green_selected);
-        priorityGreenSelected.setOnClickListener(this);
 
         return view;
     }
@@ -90,29 +91,40 @@ public class SurveyContentFragment extends Fragment implements View.OnClickListe
                 }
                 break;
             case R.id.priority_btn_red:
-                Log.d(this.getClass().toString(), "Red Button selected: ");
-                /*priorityRed.setMinimumHeight(52);
-                priorityRed.setMinimumWidth(52);*/
-               /* view.findViewById(R.id.priority_btn_red).setVisibility(View.GONE);
-                view.findViewById(R.id.priority_btn_red_selected).setVisibility(View.VISIBLE);*/
+                Log.d(TAG, "Red Button selected: ");
+                currentPriority = Priority.HIGH;
+                priorityRed.setVisibility(View.GONE);
+                priorityRedSelected.setVisibility(View.VISIBLE);
+                priorityYellowSelected.setVisibility(View.GONE);
+                priorityYellow.setVisibility(View.VISIBLE);
+                priorityGreenSelected.setVisibility(View.GONE);
+                priorityGreen.setVisibility(View.VISIBLE);
                 break;
             case R.id.priority_btn_yellow:
-                Log.d(this.getClass().toString(), "Yellow Button selected: ");
-                /*priorityYellow.setMinimumHeight(52);
-                priorityYellow.setMinimumWidth(52);*/
-                /*view.findViewById(R.id.priority_btn_yellow).setVisibility(View.GONE);
-                view.findViewById(R.id.priority_btn_yellow_selected).setVisibility(View.VISIBLE);*/
+                Log.d(TAG, "Yellow Button selected: ");
+                currentPriority = Priority.MEDIUM;
+                priorityYellow.setVisibility(View.GONE);
+                priorityYellowSelected.setVisibility(View.VISIBLE);
+                priorityRedSelected.setVisibility(View.GONE);
+                priorityRed.setVisibility(View.VISIBLE);
+                priorityGreenSelected.setVisibility(View.GONE);
+                priorityGreen.setVisibility(View.VISIBLE);
                 break;
             case R.id.priority_btn_green:
-                Log.d(this.getClass().toString(), "Green Button selected: ");
-                /*priorityGreen.setMinimumHeight(52);
-                priorityGreen.setMinimumWidth(52);*/
-                /*view.findViewById(R.id.priority_btn_green).setVisibility(View.GONE);
-                view.findViewById(R.id.priority_btn_green_selected).setVisibility(View.VISIBLE);*/
+                Log.d(TAG, "Green Button selected: ");
+                currentPriority = Priority.NONE;
+                priorityGreen.setVisibility(View.GONE);
+                priorityGreenSelected.setVisibility(View.VISIBLE);
+                priorityYellowSelected.setVisibility(View.GONE);
+                priorityYellow.setVisibility(View.VISIBLE);
+                priorityRedSelected.setVisibility(View.GONE);
+                priorityRed.setVisibility(View.VISIBLE);
                 break;
             default:
                 break;
         }
+
+        Log.d(TAG, "Current priority: " + currentPriority);
     }
 
 
