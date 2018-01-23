@@ -1,15 +1,10 @@
 package com.plusmobileapps.safetyapp.surveys.landing;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -18,11 +13,9 @@ import android.widget.RelativeLayout;
 
 import com.github.amlcurran.showcaseview.OnShowcaseEventListener;
 import com.github.amlcurran.showcaseview.ShowcaseView;
-import com.github.amlcurran.showcaseview.targets.ActionViewTarget;
 import com.github.amlcurran.showcaseview.targets.ViewTarget;
 import com.plusmobileapps.safetyapp.PrefManager;
 import com.plusmobileapps.safetyapp.R;
-import com.plusmobileapps.safetyapp.surveys.location.LocationFragment;
 
 import java.util.ArrayList;
 
@@ -33,32 +26,14 @@ public class SurveyLandingFragment extends Fragment implements OnShowcaseEventLi
     private static final String TAG = "SurveyLandingFragment";
     private static final String KEY_LAYOUT_MANAGER = "layoutManager";
     private PrefManager prefManager;
-    protected RecyclerView recyclerView;
-    protected RecyclerView.LayoutManager layoutManager;
-    protected SurveyLandingFragment.LayoutManagerType currentLayoutManagerType;
-    protected SurveyLandingAdapter adapter;
+    private View overlay;
+    private FloatingActionButton fab;
+    private RecyclerView recyclerView;
+    private RecyclerView.LayoutManager layoutManager;
+    private SurveyLandingFragment.LayoutManagerType currentLayoutManagerType;
+    private SurveyLandingAdapter adapter;
 
     private ArrayList<SurveyOverview> surveys;
-
-    @Override
-    public void onShowcaseViewHide(ShowcaseView showcaseView) {
-
-    }
-
-    @Override
-    public void onShowcaseViewDidHide(ShowcaseView showcaseView) {
-
-    }
-
-    @Override
-    public void onShowcaseViewShow(ShowcaseView showcaseView) {
-
-    }
-
-    @Override
-    public void onShowcaseViewTouchBlocked(MotionEvent motionEvent) {
-
-    }
 
     private enum LayoutManagerType {
         GRID_LAYOUT_MANAGER,
@@ -86,6 +61,8 @@ public class SurveyLandingFragment extends Fragment implements OnShowcaseEventLi
         View rootView = inflater.inflate(R.layout.fragment_survey_landing, container, false);
         rootView.setTag(TAG);
         recyclerView = rootView.findViewById(R.id.landing_survey_recyclerview);
+        overlay = rootView.findViewById(R.id.overlay);
+        fab = rootView.findViewById(R.id.floatingActionButton);
         layoutManager = new LinearLayoutManager(getActivity());
         currentLayoutManagerType = LayoutManagerType.LINEAR_LAYOUT_MANAGER;
         populateSurveyItems();
@@ -119,9 +96,11 @@ public class SurveyLandingFragment extends Fragment implements OnShowcaseEventLi
     }
 
     private void initShowcaseTutorial() {
+        fab.setClickable(false);
+        overlay.setVisibility(View.VISIBLE);
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-        params.addRule(RelativeLayout.ALIGN_PARENT_END);
+        params.addRule(RelativeLayout.ALIGN_PARENT_START);
         int margin = ((Number) (getResources().getDisplayMetrics().density *12)).intValue();
         params.setMargins(margin, margin, margin, margin);
 
@@ -158,6 +137,28 @@ public class SurveyLandingFragment extends Fragment implements OnShowcaseEventLi
             showcaseView.hide();
         }
     };
+
+    /**
+     * Callbacks for the showcase view
+     */
+    @Override
+    public void onShowcaseViewHide(ShowcaseView showcaseView) {
+        fab.setClickable(true);
+        overlay.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void onShowcaseViewDidHide(ShowcaseView showcaseView) {
+    }
+
+    @Override
+    public void onShowcaseViewShow(ShowcaseView showcaseView) {
+    }
+
+    @Override
+    public void onShowcaseViewTouchBlocked(MotionEvent motionEvent) {
+
+    }
 
 
     /**
