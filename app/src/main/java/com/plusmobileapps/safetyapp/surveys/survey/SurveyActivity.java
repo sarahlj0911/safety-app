@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.RadioButton;
 
 import com.plusmobileapps.safetyapp.R;
+import com.plusmobileapps.safetyapp.model.Priority;
 
 import java.util.ArrayList;
 
@@ -110,6 +111,7 @@ public class SurveyActivity extends AppCompatActivity {
         survey = new SurveyQuestion(
                 location,
                 "This is what you should be looking for in the boys bathroom while you are walking through the bathroom",
-                options);
+                options,
+                Priority.NONE);
     }
 }

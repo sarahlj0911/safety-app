@@ -17,6 +17,8 @@ import com.google.gson.Gson;
 import com.plusmobileapps.safetyapp.model.Priority;
 import com.plusmobileapps.safetyapp.R;
 
+import java.util.ArrayList;
+
 import static android.app.Activity.RESULT_OK;
 
 /**
@@ -28,7 +30,8 @@ public class SurveyContentFragment extends Fragment implements View.OnClickListe
     static final int REQUEST_IMAGE_CAPTURE = 1;
     SurveyQuestion survey;
     ImageButton cameraButton;
-    Priority currentPriority;
+    ArrayList<String> options = new ArrayList<>();
+    Priority priority;
     View priorityRed;
     View priorityYellow;
     View priorityGreen;
@@ -50,10 +53,10 @@ public class SurveyContentFragment extends Fragment implements View.OnClickListe
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_survey_question, container, false);
         String surveyJsonObject = getArguments().getString("survey");
+        Log.d(TAG, surveyJsonObject);
         survey = new Gson().fromJson(surveyJsonObject, SurveyQuestion.class);
         TextView description = view.findViewById(R.id.question_description);
         description.setText(survey.getDescription());
-        currentPriority = null;
 
         cameraButton = view.findViewById(R.id.button_take_photo);
         cameraButton.setOnClickListener(this);
@@ -68,10 +71,30 @@ public class SurveyContentFragment extends Fragment implements View.OnClickListe
         priorityGreen.setOnClickListener(this);
 
         priorityRedSelected = view.findViewById(R.id.priority_btn_red_selected);
-
         priorityYellowSelected = view.findViewById(R.id.priority_btn_yellow_selected);
-
         priorityGreenSelected = view.findViewById(R.id.priority_btn_green_selected);
+
+        priority = survey.getPriority();
+
+        if (priority != null) {
+            switch (priority) {
+                case HIGH:
+                    priorityRed.setVisibility(View.GONE);
+                    priorityRedSelected.setVisibility(View.VISIBLE);
+                    break;
+                case MEDIUM:
+                    priorityYellow.setVisibility(View.GONE);
+                    priorityYellowSelected.setVisibility(View.VISIBLE);
+                    break;
+                case NONE:
+                    priorityGreen.setVisibility(View.GONE);
+                    priorityGreenSelected.setVisibility(View.VISIBLE);
+                    break;
+                default:
+                    Log.d(TAG, "SurveyQuestion has unrecognized priority!");
+                    break;
+            }
+        }
 
         return view;
     }
@@ -92,7 +115,7 @@ public class SurveyContentFragment extends Fragment implements View.OnClickListe
                 break;
             case R.id.priority_btn_red:
                 Log.d(TAG, "Red Button selected: ");
-                currentPriority = Priority.HIGH;
+                priority = Priority.HIGH;
                 priorityRed.setVisibility(View.GONE);
                 priorityRedSelected.setVisibility(View.VISIBLE);
                 priorityYellowSelected.setVisibility(View.GONE);
@@ -102,7 +125,7 @@ public class SurveyContentFragment extends Fragment implements View.OnClickListe
                 break;
             case R.id.priority_btn_yellow:
                 Log.d(TAG, "Yellow Button selected: ");
-                currentPriority = Priority.MEDIUM;
+                priority = Priority.MEDIUM;
                 priorityYellow.setVisibility(View.GONE);
                 priorityYellowSelected.setVisibility(View.VISIBLE);
                 priorityRedSelected.setVisibility(View.GONE);
@@ -112,7 +135,7 @@ public class SurveyContentFragment extends Fragment implements View.OnClickListe
                 break;
             case R.id.priority_btn_green:
                 Log.d(TAG, "Green Button selected: ");
-                currentPriority = Priority.NONE;
+                priority = Priority.NONE;
                 priorityGreen.setVisibility(View.GONE);
                 priorityGreenSelected.setVisibility(View.VISIBLE);
                 priorityYellowSelected.setVisibility(View.GONE);
@@ -124,7 +147,8 @@ public class SurveyContentFragment extends Fragment implements View.OnClickListe
                 break;
         }
 
-        Log.d(TAG, "Current priority: " + currentPriority);
+        survey.setPriority(priority);
+        Log.d(TAG, "Current priority: " + priority);
     }
 
 

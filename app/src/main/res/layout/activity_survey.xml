@@ -39,7 +39,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="Back"
+            android:text="@string/back"
             android:onClick="onBackButtonPress"/>
 
         <Button
@@ -48,7 +48,7 @@
             android:layout_height="match_parent"
             android:layout_gravity="bottom"
             android:layout_weight="1"
-            android:text="Next"
+            android:text="@string/next"
             android:onClick="onNextButtonPressed"/>
 
 

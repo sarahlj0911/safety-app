@@ -2,6 +2,8 @@ package com.plusmobileapps.safetyapp.surveys.survey;
 
 import android.graphics.Bitmap;
 
+import com.plusmobileapps.safetyapp.model.Priority;
+
 import java.util.ArrayList;
 
 /**
@@ -12,13 +14,15 @@ public class SurveyQuestion {
     private String location;
     private String description;
     private ArrayList<String> options;
+    private Priority priority;
     private String actionPlan;
     private Bitmap photo;
 
-    public SurveyQuestion(String location, String description, ArrayList<String> options) {
+    public SurveyQuestion(String location, String description, ArrayList<String> options, Priority priority) {
         this.location = location;
         this.description = description;
         this.options = options;
+        this.priority = priority;
     }
 
     public String getLocation() {
@@ -39,6 +43,14 @@ public class SurveyQuestion {
 
     public ArrayList<String> getOptions() {
         return options;
+    }
+
+    public Priority getPriority() {
+        return priority;
+    }
+
+    public void setPriority(Priority priority) {
+        this.priority = priority;
     }
 
     public void setOptions(ArrayList<String> options) {

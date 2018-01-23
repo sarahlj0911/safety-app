@@ -29,9 +29,13 @@ through during one week.</string>
     <string name="welcome4_title">Prioritization Guide</string>
     <string name="prioritization_tip_text">You may set a priority level for each item in the walk-through to help determine how soon action items need to be addressed. Only items with a red or yellow priority will be shown in your list of action items.</string>
 
-    <string name="welcome_skip">BACK</string>
-    <string name="welcome_next">NEXT</string>
-    <string name="welcome_gotit">GOT IT</string>
+    <string name="back">BACK</string>
+    <string name="next">NEXT</string>
+    <string name="got_it">GOT IT</string>
+    <string name="label_priority">Priority:</string>
+    <string name="label_action_plan">Action Plan:</string>
+    <string name="label_take_photo">Take a Photo:</string>
+    <string name="hint_action_plan">Tap to enter action plan here</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
