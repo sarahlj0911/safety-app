@@ -7,7 +7,7 @@
     app:cardElevation="4dp">
 
     <ImageView
-        android:id="@+id/viewholder_check_survey"
+        android:id="@+id/checkmark"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center|end"
@@ -15,7 +15,7 @@
         app:srcCompat="@drawable/ic_done_black_36dp" />
 
     <ProgressBar
-        android:id="@+id/viewholder_progressbar_survey"
+        android:id="@+id/progressBar"
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
@@ -24,7 +24,7 @@
         android:visibility="gone" />
 
     <TextView
-        android:id="@+id/viewholder_title_survey"
+        android:id="@+id/title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="5dp"

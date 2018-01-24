@@ -19,7 +19,7 @@
         android:background="@android:color/darker_gray"/>
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/survey_recycler_view"
+        android:id="@+id/surveyRecyclerview"
         android:scrollbars="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>

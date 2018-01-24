@@ -1,4 +1,7 @@
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'      //Kotlin goodness
+apply plugin: 'kotlin-android-extensions' //no more findViewById()
+
 
 android {
     compileSdkVersion 26
@@ -45,4 +48,8 @@ dependencies {
 
     //test
     testCompile 'junit:junit:4.12'
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+}
+repositories {
+    mavenCentral()
 }
