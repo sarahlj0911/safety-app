@@ -107,9 +107,9 @@ public class MainActivity extends AppCompatActivity
         surveyFragmentTitle = surveyLandingFragment.getSurveyTitle(position);
         setAppBarTitle(surveyFragmentTitle);
         if (position == 1) {
-            locationFragment = LocationFragment.newInstance(false);
+            locationFragment = LocationFragment.Companion.newInstance(false);
         } else {
-            locationFragment = LocationFragment.newInstance(true);
+            locationFragment = LocationFragment.Companion.newInstance(true);
         }
 
 
@@ -157,7 +157,7 @@ public class MainActivity extends AppCompatActivity
                         EditText editText = dialogObj.findViewById(R.id.edittext_create_survey);
                         surveyFragmentTitle = editText.getText().toString();
                         setAppBarTitle(surveyFragmentTitle);
-                        locationFragment = LocationFragment.newInstance();
+                        locationFragment = LocationFragment.Companion.newInstance();
 
                         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
                         transaction.replace(R.id.root_frame, locationFragment)
