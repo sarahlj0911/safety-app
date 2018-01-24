@@ -25,5 +25,4 @@ public interface WalkthroughDao {
 
     @Delete
     void delete(Walkthrough walkthrough);
-
 }
