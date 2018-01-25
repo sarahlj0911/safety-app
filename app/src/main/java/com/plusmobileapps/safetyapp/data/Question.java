@@ -11,8 +11,8 @@ import android.graphics.Bitmap;
 
 @Entity(tableName = "question")
 public class Question {
-    @PrimaryKey(autoGenerate = true)
-    private int id;
+    @PrimaryKey(autoGenerate = false)
+    private int questionId;
 
     @ColumnInfo(name = "questionText")
     private String questionText;
@@ -23,16 +23,16 @@ public class Question {
     @ColumnInfo(name = "locationID")
     private int locationID;
 
-    public Question(int id, String questionText, String ratingOptions, int locationID) {
-        this.id = id;
+    public Question(int questionId, String questionText, String ratingOptions, int locationID) {
+        this.questionId = questionId;
         this.questionText = questionText;
         this.ratingOptions = ratingOptions;
         this.locationID = locationID;
     }
 
     //Getters
-    public int getId() {
-        return id;
+    public int getQuestionId() {
+        return questionId;
     }
 
     public String getQuestionText() {
@@ -48,8 +48,8 @@ public class Question {
     }
 
     //Setters
-    public void setId(int id) {
-        this.id = id;
+    public void setQuestionId(int id) {
+        this.questionId = id;
     }
 
     public void setQuestionText(String questionText) {

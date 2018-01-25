@@ -10,17 +10,18 @@ import android.widget.TextView;
 import java.util.List;
 
 import com.plusmobileapps.safetyapp.R;
-import com.plusmobileapps.safetyapp.data.ActionItem;
+import com.plusmobileapps.safetyapp.data.Response;
+//import com.plusmobileapps.safetyapp.data.ActionItem;
 
 public class ActionItemAdapter extends RecyclerView.Adapter<ActionItemAdapter.ViewHolder> {
 
     private static final String TAG = "ActionItemAdapter";
-    private ActionItem actionItem;
+    private Response actionItem;
     private ActionItemsFragment.ActionItemListener itemListener;
 
-    private List<ActionItem> actionItems;
+    private List<Response> actionItems;
 
-    public ActionItemAdapter(List<ActionItem> actionItems, ActionItemsFragment.ActionItemListener itemListener){
+    public ActionItemAdapter(List<Response> actionItems, ActionItemsFragment.ActionItemListener itemListener){
         this.actionItems = actionItems;
         this.itemListener = itemListener;
     }
@@ -38,8 +39,8 @@ public class ActionItemAdapter extends RecyclerView.Adapter<ActionItemAdapter.Vi
         Log.d(TAG, "onBindViewHolder: " + position);
         actionItem = actionItems.get(position);
 
-        holder.getDescription().setText(actionItem.getDescription());
-        holder.getLocation().setText(actionItem.getLocation());
+        holder.getDescription().setText(actionItem.getActionPlan());
+        holder.getLocation().setText(actionItem.getLocationId());
 //        holder.getPicture().setImageBitmap(actionItem.getPhoto());
         holder.getTitle().setText(actionItem.getTitle());
 
@@ -51,16 +52,16 @@ public class ActionItemAdapter extends RecyclerView.Adapter<ActionItemAdapter.Vi
         return actionItems.size();
     }
 
-    public void replaceData(List<ActionItem> actionItems) {
+    public void replaceData(List<Response> actionItems) {
         setList(actionItems);
         notifyDataSetChanged();
     }
 
-    private void setList(List<ActionItem> actionItems) {
+    private void setList(List<Response> actionItems) {
         this.actionItems = actionItems;
     }
 
-    public ActionItem getActionItem(int position) {
+    public Response getActionItem(int position) {
         return actionItems.get(position);
     }
 
@@ -80,7 +81,7 @@ public class ActionItemAdapter extends RecyclerView.Adapter<ActionItemAdapter.Vi
 
         @Override
         public void onClick(View v) {
-            ActionItem actionItem = getActionItem(getAdapterPosition());
+            Response actionItem = getActionItem(getAdapterPosition());
             itemListener.onActionItemClicked(actionItem);
         }
 

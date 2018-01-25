@@ -15,8 +15,8 @@ public interface LocationDao {
     @Query("SELECT * FROM location")
     List<Location> getAllLocations();
 
-    @Query("SELECT * FROM location WHERE locationId LIKE :id")
-    Location getByLocationId(int locationIf);
+    @Query("SELECT * FROM location WHERE locationId LIKE :locationId")
+    Location getByLocationId(int locationId);
 
 }
 

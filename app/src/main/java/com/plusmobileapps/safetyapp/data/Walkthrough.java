@@ -12,7 +12,7 @@ import java.util.Date;
 
 @Entity(tableName = "walkthrough")
 public class Walkthrough {
-    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey(autoGenerate = false)
     private int walkthroughId;
 
     @ColumnInfo(name = "name")
@@ -22,12 +22,12 @@ public class Walkthrough {
     private int percentComplete;
 
     @ColumnInfo(name = "createdDate")
-    private Date createdDate;
+    private String createdDate;
 
     @ColumnInfo(name = "lastUpdatedDate")
-    private Date lastUpdatedDate;
+    private String lastUpdatedDate;
 
-    public Walkthrough(int walkthroughId, String name, int percentComplete, Date createdDate, Date lastUpdatedDate) {
+    public Walkthrough(int walkthroughId, String name, int percentComplete, String createdDate, String lastUpdatedDate) {
         this.walkthroughId = walkthroughId;
         this.name = name;
         this.createdDate = createdDate;
@@ -35,30 +35,15 @@ public class Walkthrough {
     }
 
     //Getters
-    public int getWalkthroughId() {
+    public int getWalkthroughId() { return this.walkthroughId; }
 
-        return this.walkthroughId;
-    }
+    public String getName() { return this.name; }
 
-    public String getName() {
+    public int getPercentComplete() { return this.percentComplete; }
 
-        return this.name;
-    }
+    public String getCreatedDate() { return this.createdDate; }
 
-    public int getPercentComplete() {
-
-        return this.percentComplete;
-    }
-
-    public Date getCreatedDate() {
-
-        return this.createdDate;
-    }
-
-    public Date getLastUpdatedDate() {
-
-        return this.lastUpdatedDate;
-    }
+    public String  getLastUpdatedDate() { return this.lastUpdatedDate; }
 
     //Setters
     public void setWalkthroughId(int walkthroughId) {
@@ -73,11 +58,11 @@ public class Walkthrough {
         this.percentComplete = percentComplete;
     }
 
-    public void setCreatedDate(Date createdDate) {
+    public void setCreatedDate(String  createdDate) {
         this.createdDate = createdDate;
     }
 
-    public void setLastUpdatedDate(Date lastUpdatedDate) {
+    public void setLastUpdatedDate(String lastUpdatedDate) {
         this.lastUpdatedDate = lastUpdatedDate;
     }
 }

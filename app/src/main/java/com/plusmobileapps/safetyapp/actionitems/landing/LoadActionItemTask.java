@@ -3,13 +3,13 @@ package com.plusmobileapps.safetyapp.actionitems.landing;
 import android.os.AsyncTask;
 
 import com.plusmobileapps.safetyapp.MyApplication;
-import com.plusmobileapps.safetyapp.data.ActionItem;
-import com.plusmobileapps.safetyapp.data.ActionItemDao;
+import com.plusmobileapps.safetyapp.data.Response;
+import com.plusmobileapps.safetyapp.data.ResponseDao;
 import com.plusmobileapps.safetyapp.data.AppDatabase;
 
 import java.util.List;
 
-public class LoadActionItemTask extends AsyncTask<Void, Void, List<ActionItem>> {
+public class LoadActionItemTask extends AsyncTask<Void, Void, List<Response>> {
     ActionItemContract.View view;
     AppDatabase db;
 
@@ -18,14 +18,15 @@ public class LoadActionItemTask extends AsyncTask<Void, Void, List<ActionItem>> 
     }
 
     @Override
-    protected List<ActionItem> doInBackground(Void... voids) {
+    protected List<Response> doInBackground(Void... voids) {
         db = AppDatabase.getAppDatabase(MyApplication.getAppContext());
-        ActionItemDao actionItemDao = db.actionItemDao();
-        return actionItemDao.getAll();
+        ResponseDao responseDao = db.responseDao();
+        int walkthroughId = 0; //mocked survey id
+        return responseDao.getAllActionItems(walkthroughId);
     }
 
     @Override
-    protected void onPostExecute(List<ActionItem> actionItems) {
+    protected void onPostExecute(List<Response> actionItems) {
         super.onPostExecute(actionItems);
         view.showActionItems(actionItems);
         db.close();

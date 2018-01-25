@@ -1,7 +1,8 @@
 package com.plusmobileapps.safetyapp.actionitems.landing;
 
 
-import com.plusmobileapps.safetyapp.data.ActionItem;
+//import com.plusmobileapps.safetyapp.data.ActionItem;
+import com.plusmobileapps.safetyapp.data.Response;
 
 import java.util.ArrayList;
 
@@ -38,7 +39,7 @@ public class ActionItemPresenter implements ActionItemContract.UserActionsListen
      * @param requestedActionItem
      */
     @Override
-    public void openActionItemDetail(ActionItem requestedActionItem) {
+    public void openActionItemDetail(Response requestedActionItem) {
         actionItemView.showActionItemDetailUi("2");
     }
 }

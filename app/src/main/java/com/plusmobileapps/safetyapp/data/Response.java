@@ -12,7 +12,7 @@ import android.media.Image;
 
 @Entity(tableName = "response")
 public class Response {
-    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey(autoGenerate = false)
     private int responseId;
 
     @ColumnInfo(name = "walkthroughId")
@@ -21,8 +21,9 @@ public class Response {
     @ColumnInfo(name = "isActionItem")
     private boolean isActionItem;
 
-    @ColumnInfo(name = "image")
-    private Image image;
+    //Not a column in the database. Stored somewhere in the file manager.
+//    //TODO: figure this out.
+//    private Image image;
 
     @ColumnInfo(name = "locationId")
     private int locationId;
@@ -42,21 +43,24 @@ public class Response {
     @ColumnInfo(name = "questionId")
     private int questionId;
 
-    public Response(int responseId, int walkthroughId, boolean isActionItem, Image image, int locationId, String timeStamp, String rating, String priority, String actionPlan, int questionId) {
+    @ColumnInfo(name = "Title")
+    private String title;
+
+    public Response(int responseId, int walkthroughId, boolean isActionItem, int locationId, String timeStamp, String rating, String priority, String actionPlan, int questionId, String title) {
         this.responseId = responseId;
         this.walkthroughId = walkthroughId;
         this.isActionItem = isActionItem;
-        this.image = image;
         this.locationId = locationId;
         this.timeStamp = timeStamp;
         this.rating = rating;
         this.priority = priority;
         this.actionPlan = actionPlan;
         this.questionId = questionId;
+        this.title = title;
     }
 
     //Getters
-    public int getResponseID() {
+    public int getResponseId() {
         return this.responseId;
     }
 
@@ -68,9 +72,9 @@ public class Response {
         return this.isActionItem;
     }
 
-    public Image getImage() {
-        return this.image;
-    }
+//    public Image getImage() {
+//        return this.image;
+//    }
 
     public int getLocationId() {
         return this.locationId;
@@ -96,6 +100,8 @@ public class Response {
         return this.questionId;
     }
 
+    public String getTitle() { return this.title; }
+
     //Setters
     public void setResponseId(int responseId) {
         this.responseId = responseId;
@@ -109,9 +115,9 @@ public class Response {
         this.isActionItem = isActionItem;
     }
 
-    public void setImage(Image image) {
-        this.image = image;
-    }
+//    public void setImage(Image image) {
+//        this.image = image;
+//    }
 
     public void setLocationId(int locationId) {
         this.locationId = locationId;
@@ -136,6 +142,8 @@ public class Response {
     public void setQuestionId(int questionId) {
         this.questionId = questionId;
     }
+
+    public void setTitle(String title) { this.title = title; }
 }
 
 

@@ -9,8 +9,8 @@ import android.graphics.Bitmap;
 
 @Entity(tableName = "location")
 public class Location {
-    @PrimaryKey(autoGenerate = true)
-    private int id;
+    @PrimaryKey(autoGenerate = false)
+    private int locationId;
 
     @ColumnInfo(name = "type")
     private String type; //TODO Create Type Enum
@@ -21,16 +21,16 @@ public class Location {
     @ColumnInfo(name = "walkthroughID")
     private int walkthroughID;
 
-    public Location(int id, String type, String name, int walkthroughID) {
-        this.id = id;
+    public Location(int locationId, String type, String name, int walkthroughID) {
+        this.locationId = locationId;
         this.type = type;
         this.name = name;
         this.walkthroughID = walkthroughID;
     }
 
     //Getters
-    public int getid() {
-        return this.id;
+    public int getLocationId() {
+        return this.locationId;
     }
 
     public String getType() {
@@ -47,7 +47,7 @@ public class Location {
 
     //Setters
     public void setId(int id) {
-        this.id = id;
+        this.locationId = id;
     }
 
     public void setType(String type) {

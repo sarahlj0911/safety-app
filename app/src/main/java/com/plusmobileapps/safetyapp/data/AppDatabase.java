@@ -5,12 +5,20 @@ import android.arch.persistence.room.Room;
 import android.arch.persistence.room.RoomDatabase;
 import android.content.Context;
 
-@Database(entities = {ActionItem.class}, version = 1)
+@Database(entities = {Location.class, Question.class, Response.class, User.class, Walkthrough.class}, version = 1)
 public abstract class AppDatabase extends RoomDatabase {
 
     private static AppDatabase INSTANCE;
 
-    public abstract ActionItemDao actionItemDao();
+    public abstract LocationDao locationDao();
+
+    public abstract QuestionDao questionDao();
+
+    public abstract ResponseDao responseDao();
+
+    public abstract UserDao userDao();
+
+    public abstract WalkthroughDao walkthroughDao();
 
     public static AppDatabase getAppDatabase(Context context) {
         if(INSTANCE == null) {
