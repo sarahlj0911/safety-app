@@ -63,7 +63,7 @@ public class ActionItemAdapter extends RecyclerView.Adapter<ActionItemAdapter.Vi
         this.actionItems = actionItems;
     }
 
-    public ActionItem getActionItem(int position) {
+    private ActionItem getActionItem(int position) {
         return actionItems.get(position);
     }
 
