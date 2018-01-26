@@ -112,6 +112,6 @@ public class SurveyActivity extends AppCompatActivity {
                 location,
                 "This is what you should be looking for in the boys bathroom while you are walking through the bathroom",
                 options,
-                Priority.NONE);
+                null);
     }
 }

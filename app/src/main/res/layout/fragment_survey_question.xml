@@ -38,8 +38,7 @@
                 android:button="@null"
                 android:drawableBottom="?android:attr/listChoiceIndicatorSingle"
                 android:gravity="center_horizontal|bottom"
-                android:onClick="onRadioButtonClicked"
-                android:text="None" />
+                android:onClick="onRadioButtonClicked" />
 
             <RadioButton
                 android:id="@+id/radio_button2"
@@ -49,8 +48,7 @@
                 android:button="@null"
                 android:drawableBottom="?android:attr/listChoiceIndicatorSingle"
                 android:gravity="center_horizontal|bottom"
-                android:onClick="onRadioButtonClicked"
-                android:text="1" />
+                android:onClick="onRadioButtonClicked" />
 
             <RadioButton
                 android:id="@+id/radio_button3"
@@ -60,8 +58,7 @@
                 android:button="@null"
                 android:drawableBottom="?android:attr/listChoiceIndicatorSingle"
                 android:gravity="center_horizontal|bottom"
-                android:onClick="onRadioButtonClicked"
-                android:text="4 or more" />
+                android:onClick="onRadioButtonClicked" />
         </RadioGroup>
 
         <View style="@style/Divider"/>
@@ -100,7 +97,7 @@
                 android:layout_height="@dimen/priority_dot_selected"
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"
-                android:background="@drawable/circle_red"
+                android:background="@drawable/circle_red_selected"
                 android:clickable="true"
                 android:focusable="true"
                 android:visibility="gone" />
@@ -123,7 +120,7 @@
                 android:layout_height="@dimen/priority_dot_selected"
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"
-                android:background="@drawable/circle_yellow"
+                android:background="@drawable/circle_yellow_selected"
                 android:clickable="true"
                 android:focusable="true"
                 android:visibility="gone" />
@@ -146,7 +143,7 @@
                 android:layout_height="@dimen/priority_dot_selected"
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"
-                android:background="@drawable/circle_green"
+                android:background="@drawable/circle_green_selected"
                 android:clickable="true"
                 android:focusable="true"
                 android:visibility="gone"/>
@@ -162,17 +159,19 @@
             android:layout_marginTop="8dp"
             android:text="@string/label_action_plan"
             android:textAppearance="@style/TextAppearance.AppCompat"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            android:enabled="false" />
 
         <EditText
-            android:id="@+id/editText"
+            android:id="@+id/actionPlanEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
             android:ems="10"
             android:hint="@string/hint_action_plan"
-            android:inputType="textMultiLine" />
+            android:inputType="textMultiLine"
+            android:enabled="false" />
 
         <View style="@style/Divider"/>
 
@@ -189,7 +188,7 @@
 
         <ImageButton
             android:id="@+id/button_take_photo"
-            android:layout_width="256dp"
+            android:layout_width="match_parent"
             android:layout_height="256dp"
             android:layout_gravity="center_horizontal"
             android:src="@android:drawable/ic_menu_camera" />

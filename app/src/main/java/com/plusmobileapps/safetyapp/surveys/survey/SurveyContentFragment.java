@@ -10,7 +10,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
@@ -38,6 +41,8 @@ public class SurveyContentFragment extends Fragment implements View.OnClickListe
     View priorityRedSelected;
     View priorityYellowSelected;
     View priorityGreenSelected;
+    TextView actionPlanLabel;
+    EditText actionPlanEditText;
 
     public static SurveyContentFragment newInstance(SurveyQuestion survey) {
         SurveyContentFragment fragment = new SurveyContentFragment();
@@ -57,9 +62,12 @@ public class SurveyContentFragment extends Fragment implements View.OnClickListe
         survey = new Gson().fromJson(surveyJsonObject, SurveyQuestion.class);
         TextView description = view.findViewById(R.id.question_description);
         description.setText(survey.getDescription());
+        actionPlanLabel = view.findViewById(R.id.title_action_plan);
+        actionPlanEditText = view.findViewById(R.id.actionPlanEditText);
 
-        cameraButton = view.findViewById(R.id.button_take_photo);
-        cameraButton.setOnClickListener(this);
+        options = survey.getOptions();
+
+        populateOptionRadioButtons(view);
 
         priorityRed = view.findViewById(R.id.priority_btn_red);
         priorityRed.setOnClickListener(this);
@@ -76,30 +84,15 @@ public class SurveyContentFragment extends Fragment implements View.OnClickListe
 
         priority = survey.getPriority();
 
-        if (priority != null) {
-            switch (priority) {
-                case HIGH:
-                    priorityRed.setVisibility(View.GONE);
-                    priorityRedSelected.setVisibility(View.VISIBLE);
-                    break;
-                case MEDIUM:
-                    priorityYellow.setVisibility(View.GONE);
-                    priorityYellowSelected.setVisibility(View.VISIBLE);
-                    break;
-                case NONE:
-                    priorityGreen.setVisibility(View.GONE);
-                    priorityGreenSelected.setVisibility(View.VISIBLE);
-                    break;
-                default:
-                    Log.d(TAG, "SurveyQuestion has unrecognized priority!");
-                    break;
-            }
-        }
+        loadPriority();
+
+        cameraButton = view.findViewById(R.id.button_take_photo);
+        cameraButton.setOnClickListener(this);
 
         return view;
     }
 
-    /**
+     /**
      * Handle all click events here within the fragment
      * @param view
      */
@@ -114,7 +107,6 @@ public class SurveyContentFragment extends Fragment implements View.OnClickListe
                 }
                 break;
             case R.id.priority_btn_red:
-                Log.d(TAG, "Red Button selected: ");
                 priority = Priority.HIGH;
                 priorityRed.setVisibility(View.GONE);
                 priorityRedSelected.setVisibility(View.VISIBLE);
@@ -122,9 +114,10 @@ public class SurveyContentFragment extends Fragment implements View.OnClickListe
                 priorityYellow.setVisibility(View.VISIBLE);
                 priorityGreenSelected.setVisibility(View.GONE);
                 priorityGreen.setVisibility(View.VISIBLE);
+                actionPlanLabel.setEnabled(true);
+                actionPlanEditText.setEnabled(true);
                 break;
             case R.id.priority_btn_yellow:
-                Log.d(TAG, "Yellow Button selected: ");
                 priority = Priority.MEDIUM;
                 priorityYellow.setVisibility(View.GONE);
                 priorityYellowSelected.setVisibility(View.VISIBLE);
@@ -132,9 +125,10 @@ public class SurveyContentFragment extends Fragment implements View.OnClickListe
                 priorityRed.setVisibility(View.VISIBLE);
                 priorityGreenSelected.setVisibility(View.GONE);
                 priorityGreen.setVisibility(View.VISIBLE);
+                actionPlanLabel.setEnabled(true);
+                actionPlanEditText.setEnabled(true);
                 break;
             case R.id.priority_btn_green:
-                Log.d(TAG, "Green Button selected: ");
                 priority = Priority.NONE;
                 priorityGreen.setVisibility(View.GONE);
                 priorityGreenSelected.setVisibility(View.VISIBLE);
@@ -142,13 +136,14 @@ public class SurveyContentFragment extends Fragment implements View.OnClickListe
                 priorityYellow.setVisibility(View.VISIBLE);
                 priorityRedSelected.setVisibility(View.GONE);
                 priorityRed.setVisibility(View.VISIBLE);
+                actionPlanLabel.setEnabled(false);
+                actionPlanEditText.setEnabled(false);
                 break;
             default:
                 break;
         }
 
         survey.setPriority(priority);
-        Log.d(TAG, "Current priority: " + priority);
     }
 
 
@@ -158,6 +153,45 @@ public class SurveyContentFragment extends Fragment implements View.OnClickListe
             Bundle extras = data.getExtras();
             Bitmap imageBitmap = (Bitmap) extras.get("data");
             cameraButton.setImageBitmap(imageBitmap);
+        }
+    }
+
+    private void loadPriority() {
+        if (priority != null) {
+            switch (priority) {
+                case HIGH:
+                    priorityRed.setVisibility(View.GONE);
+                    priorityRedSelected.setVisibility(View.VISIBLE);
+                    actionPlanLabel.setEnabled(true);
+                    actionPlanEditText.setEnabled(true);
+                    break;
+                case MEDIUM:
+                    priorityYellow.setVisibility(View.GONE);
+                    priorityYellowSelected.setVisibility(View.VISIBLE);
+                    actionPlanLabel.setEnabled(true);
+                    actionPlanEditText.setEnabled(true);
+                    break;
+                case NONE:
+                    priorityGreen.setVisibility(View.GONE);
+                    priorityGreenSelected.setVisibility(View.VISIBLE);
+                    actionPlanLabel.setEnabled(false);
+                    actionPlanEditText.setEnabled(false);
+                    break;
+                default:
+                    Log.d(TAG, "SurveyQuestion has unrecognized priority!");
+                    break;
+            }
+        }
+    }
+
+    private void populateOptionRadioButtons(View view) {
+        RadioGroup radioGroup = view.findViewById(R.id.radioGroup);
+
+        for (int i = 0; i < options.size(); i++) {
+            View v = radioGroup.getChildAt(i);
+            if (v instanceof RadioButton) {
+                ((RadioButton) v).setText(options.get(i));
+            }
         }
     }
 }
