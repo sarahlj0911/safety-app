@@ -2,10 +2,16 @@ package com.plusmobileapps.safetyapp.surveys.survey;
 
 
 import android.app.Fragment;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.v4.content.FileProvider;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,6 +26,8 @@ import com.google.gson.Gson;
 import com.plusmobileapps.safetyapp.model.Priority;
 import com.plusmobileapps.safetyapp.R;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import static android.app.Activity.RESULT_OK;
@@ -43,6 +51,8 @@ public class SurveyContentFragment extends Fragment implements View.OnClickListe
     View priorityGreenSelected;
     TextView actionPlanLabel;
     EditText actionPlanEditText;
+    String currentPhotoPath;
+    PackageManager packageManager;
 
     public static SurveyContentFragment newInstance(SurveyQuestion survey) {
         SurveyContentFragment fragment = new SurveyContentFragment();
@@ -56,6 +66,7 @@ public class SurveyContentFragment extends Fragment implements View.OnClickListe
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        packageManager = this.getActivity().getPackageManager();
         View view = inflater.inflate(R.layout.fragment_survey_question, container, false);
         String surveyJsonObject = getArguments().getString("survey");
         Log.d(TAG, surveyJsonObject);
@@ -87,7 +98,12 @@ public class SurveyContentFragment extends Fragment implements View.OnClickListe
         loadPriority();
 
         cameraButton = view.findViewById(R.id.button_take_photo);
-        cameraButton.setOnClickListener(this);
+
+        if (packageManager.hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
+            cameraButton.setOnClickListener(this);
+        } else {
+            cameraButton.setEnabled(false);
+        }
 
         return view;
     }
@@ -103,7 +119,25 @@ public class SurveyContentFragment extends Fragment implements View.OnClickListe
             case R.id.button_take_photo:
                 Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
-                    startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+                    // Create the File where the photo should go
+                    File imageFile = null;
+
+                    try {
+                        imageFile = createImageFile();
+                    } catch (IOException ioe) {
+                        Log.d(TAG, "Error while creating image file");
+                        ioe.printStackTrace();
+                    }
+
+                    if (imageFile != null) {
+                        Uri imageURI = FileProvider.getUriForFile(this.getActivity(),
+                                "com.plusmobileapps.safetyapp.fileprovider",
+                                imageFile);
+                        takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageURI);
+                        startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+                    }
+
+                    // startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
                 }
                 break;
             case R.id.priority_btn_red:
@@ -150,8 +184,27 @@ public class SurveyContentFragment extends Fragment implements View.OnClickListe
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            Bundle extras = data.getExtras();
-            Bitmap imageBitmap = (Bitmap) extras.get("data");
+            //Bundle extras = data.getExtras();
+            //Bitmap imageBitmap = (Bitmap) extras.get("data");
+
+            int targetWidth = cameraButton.getWidth();
+            int targetHeight = cameraButton.getHeight();
+            BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+            bmOptions.inJustDecodeBounds = true;
+            BitmapFactory.decodeFile(currentPhotoPath, bmOptions);
+            int photoWidth = bmOptions.outWidth;
+            int photoHeight = bmOptions.outHeight;
+
+            // Determine how much to scale down the image
+            int scaleFactor = Math.min(photoWidth/targetWidth, photoHeight/targetHeight);
+
+            // Decode the image file into a Bitmap sized to fill the View
+            bmOptions.inJustDecodeBounds = false;
+            bmOptions.inSampleSize = scaleFactor;
+            bmOptions.inPurgeable = true;
+
+            Bitmap imageBitmap = BitmapFactory.decodeFile(currentPhotoPath, bmOptions);
+
             cameraButton.setImageBitmap(imageBitmap);
         }
     }
@@ -193,5 +246,13 @@ public class SurveyContentFragment extends Fragment implements View.OnClickListe
                 ((RadioButton) v).setText(options.get(i));
             }
         }
+    }
+
+    private File createImageFile() throws IOException {
+        String imageFileName = "JPEG_" + survey.getLocation() + "_";
+        File storageDir = this.getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(imageFileName, ".jpg", storageDir);
+        currentPhotoPath = image.getAbsolutePath();
+        return image;
     }
 }

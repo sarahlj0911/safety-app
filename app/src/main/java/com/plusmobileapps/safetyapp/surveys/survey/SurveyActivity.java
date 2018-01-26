@@ -37,6 +37,7 @@ public class SurveyActivity extends AppCompatActivity {
         initialTransaction
                 .add(R.id.suvey_container, fragment, "0")
                 .commit();
+
     }
 
     /**
