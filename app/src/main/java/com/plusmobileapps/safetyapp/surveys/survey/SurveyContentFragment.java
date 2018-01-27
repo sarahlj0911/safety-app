@@ -7,6 +7,8 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Camera;
+import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -18,6 +20,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -75,23 +78,19 @@ public class SurveyContentFragment extends Fragment implements View.OnClickListe
         description.setText(survey.getDescription());
         actionPlanLabel = view.findViewById(R.id.title_action_plan);
         actionPlanEditText = view.findViewById(R.id.actionPlanEditText);
+        priorityRed = view.findViewById(R.id.priority_btn_red);
+        priorityRed.setOnClickListener(this);
+        priorityYellow = view.findViewById(R.id.priority_btn_yellow);
+        priorityYellow.setOnClickListener(this);
+        priorityGreen = view.findViewById(R.id.priority_btn_green);
+        priorityGreen.setOnClickListener(this);
+        priorityRedSelected = view.findViewById(R.id.priority_btn_red_selected);
+        priorityYellowSelected = view.findViewById(R.id.priority_btn_yellow_selected);
+        priorityGreenSelected = view.findViewById(R.id.priority_btn_green_selected);
 
         options = survey.getOptions();
 
         populateOptionRadioButtons(view);
-
-        priorityRed = view.findViewById(R.id.priority_btn_red);
-        priorityRed.setOnClickListener(this);
-
-        priorityYellow = view.findViewById(R.id.priority_btn_yellow);
-        priorityYellow.setOnClickListener(this);
-
-        priorityGreen = view.findViewById(R.id.priority_btn_green);
-        priorityGreen.setOnClickListener(this);
-
-        priorityRedSelected = view.findViewById(R.id.priority_btn_red_selected);
-        priorityYellowSelected = view.findViewById(R.id.priority_btn_yellow_selected);
-        priorityGreenSelected = view.findViewById(R.id.priority_btn_green_selected);
 
         priority = survey.getPriority();
 
@@ -136,8 +135,6 @@ public class SurveyContentFragment extends Fragment implements View.OnClickListe
                         takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageURI);
                         startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
                     }
-
-                    // startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
                 }
                 break;
             case R.id.priority_btn_red:
@@ -184,9 +181,6 @@ public class SurveyContentFragment extends Fragment implements View.OnClickListe
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            //Bundle extras = data.getExtras();
-            //Bitmap imageBitmap = (Bitmap) extras.get("data");
-
             int targetWidth = cameraButton.getWidth();
             int targetHeight = cameraButton.getHeight();
             BitmapFactory.Options bmOptions = new BitmapFactory.Options();
@@ -198,14 +192,27 @@ public class SurveyContentFragment extends Fragment implements View.OnClickListe
             // Determine how much to scale down the image
             int scaleFactor = Math.min(photoWidth/targetWidth, photoHeight/targetHeight);
 
-            // Decode the image file into a Bitmap sized to fill the View
+            // Decode the image file into a Bitmap sized to fit the View
             bmOptions.inJustDecodeBounds = false;
             bmOptions.inSampleSize = scaleFactor;
             bmOptions.inPurgeable = true;
 
-            Bitmap imageBitmap = BitmapFactory.decodeFile(currentPhotoPath, bmOptions);
+            Bitmap scaledBitmap = BitmapFactory.decodeFile(currentPhotoPath, bmOptions);
 
-            cameraButton.setImageBitmap(imageBitmap);
+            // Rotate the image
+            /* TODO There must be a way to determine IF we need to rotate the image or not
+               and/or manipulate the camera setup to make it output the correct orientation,
+               but this is what works for now. */
+            Matrix matrix = new Matrix();
+            matrix.postRotate(90);
+            Bitmap rotatedBitmap = Bitmap.createBitmap(scaledBitmap, 0, 0, scaledBitmap.getWidth(), scaledBitmap.getHeight(), matrix, true);
+
+            ViewGroup.LayoutParams params = cameraButton.getLayoutParams();
+            params.width = rotatedBitmap.getWidth();
+            params.height = rotatedBitmap.getHeight();
+            cameraButton.setLayoutParams(params);
+
+            cameraButton.setImageBitmap(rotatedBitmap);
         }
     }
 
