@@ -1,4 +1,4 @@
-package com.plusmobileapps.safetyapp.summary;
+package com.plusmobileapps.safetyapp.summary.detail;
 
 
 import android.os.Bundle;
