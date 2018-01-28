@@ -5,7 +5,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 import com.plusmobileapps.safetyapp.actionitems.landing.ActionItemsFragment;
-import com.plusmobileapps.safetyapp.summary.SummaryFragment;
+import com.plusmobileapps.safetyapp.summary.landing.SummaryFragment;
 import com.plusmobileapps.safetyapp.surveys.RootFragment;
 
 /**
