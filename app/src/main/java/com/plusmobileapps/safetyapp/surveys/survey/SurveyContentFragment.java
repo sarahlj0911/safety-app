@@ -349,8 +349,4 @@ public class SurveyContentFragment extends Fragment implements View.OnClickListe
         photoPath = image.getAbsolutePath();
         return image;
     }
-
-    public String getActionPlan() {
-        return actionPlan;
-    }
 }
