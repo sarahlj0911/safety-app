@@ -171,7 +171,8 @@
             android:ems="10"
             android:hint="@string/hint_action_plan"
             android:inputType="textMultiLine"
-            android:enabled="false" />
+            android:enabled="false"
+            android:maxLength="250" />
 
         <View style="@style/Divider"/>
 

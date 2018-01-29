@@ -2,25 +2,24 @@ package com.plusmobileapps.safetyapp.surveys.survey;
 
 
 import android.app.Fragment;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Camera;
 import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.content.FileProvider;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -41,21 +40,25 @@ import static android.app.Activity.RESULT_OK;
 public class SurveyContentFragment extends Fragment implements View.OnClickListener {
 
     static final String TAG = "SurveyContentFragment";
-    static final int REQUEST_IMAGE_CAPTURE = 1;
-    SurveyQuestion survey;
-    ImageButton cameraButton;
-    ArrayList<String> options = new ArrayList<>();
-    Priority priority;
-    View priorityRed;
-    View priorityYellow;
-    View priorityGreen;
-    View priorityRedSelected;
-    View priorityYellowSelected;
-    View priorityGreenSelected;
-    TextView actionPlanLabel;
-    EditText actionPlanEditText;
-    String currentPhotoPath;
-    PackageManager packageManager;
+    private static final int REQUEST_IMAGE_CAPTURE = 1;
+    private SurveyQuestion survey;
+    private TextView descriptionTextView;
+    private String description;
+    private ImageButton cameraButton;
+    private ArrayList<String> options = new ArrayList<>();
+    private int rating;
+    private Priority priority;
+    private View priorityRed;
+    private View priorityYellow;
+    private View priorityGreen;
+    private View priorityRedSelected;
+    private View priorityYellowSelected;
+    private View priorityGreenSelected;
+    private TextView actionPlanLabel;
+    private EditText actionPlanEditText;
+    private String actionPlan;
+    private String photoPath;
+    private PackageManager packageManager;
 
     public static SurveyContentFragment newInstance(SurveyQuestion survey) {
         SurveyContentFragment fragment = new SurveyContentFragment();
@@ -72,10 +75,9 @@ public class SurveyContentFragment extends Fragment implements View.OnClickListe
         packageManager = this.getActivity().getPackageManager();
         View view = inflater.inflate(R.layout.fragment_survey_question, container, false);
         String surveyJsonObject = getArguments().getString("survey");
-        Log.d(TAG, surveyJsonObject);
+
         survey = new Gson().fromJson(surveyJsonObject, SurveyQuestion.class);
-        TextView description = view.findViewById(R.id.question_description);
-        description.setText(survey.getDescription());
+        descriptionTextView = view.findViewById(R.id.question_description);
         actionPlanLabel = view.findViewById(R.id.title_action_plan);
         actionPlanEditText = view.findViewById(R.id.actionPlanEditText);
         priorityRed = view.findViewById(R.id.priority_btn_red);
@@ -87,16 +89,44 @@ public class SurveyContentFragment extends Fragment implements View.OnClickListe
         priorityRedSelected = view.findViewById(R.id.priority_btn_red_selected);
         priorityYellowSelected = view.findViewById(R.id.priority_btn_yellow_selected);
         priorityGreenSelected = view.findViewById(R.id.priority_btn_green_selected);
+        cameraButton = view.findViewById(R.id.button_take_photo);
 
-        options = survey.getOptions();
+        actionPlanEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                // Required method deliberately left empty
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                // Required method left empty
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                actionPlan = actionPlanEditText.getText().toString();
+            }
+        });
+
+        if (savedInstanceState != null) {
+            description = savedInstanceState.getString("description");
+            descriptionTextView.setText(description);
+            options = savedInstanceState.getStringArrayList("options");
+            rating = savedInstanceState.getInt("rating");
+
+            String priorityStr = savedInstanceState.getString("priority");
+            priority = Priority.valueOf(priorityStr);
+            actionPlan = savedInstanceState.getString("actionPlan");
+            actionPlanEditText.setText(actionPlan);
+            photoPath = savedInstanceState.getString("photoPath");
+        } else {
+            descriptionTextView.setText(survey.getDescription());
+            options = survey.getOptions();
+            priority = survey.getPriority();
+        }
 
         populateOptionRadioButtons(view);
-
-        priority = survey.getPriority();
-
         loadPriority();
-
-        cameraButton = view.findViewById(R.id.button_take_photo);
 
         if (packageManager.hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
             cameraButton.setOnClickListener(this);
@@ -104,7 +134,43 @@ public class SurveyContentFragment extends Fragment implements View.OnClickListe
             cameraButton.setEnabled(false);
         }
 
+        if (photoPath != null && !photoPath.equals("")) {
+
+        }
+
         return view;
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        Log.d(TAG, "Activity created!");
+        if (savedInstanceState != null) {
+            Log.d(TAG, "We have state!!");
+        } else {
+            Log.d(TAG, "No state :(");
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
+
+        actionPlan = actionPlanEditText.getText().toString();
+
+        Log.d(TAG, "actionPlan: " + actionPlan);
+        Log.d(TAG, "priority: " + priority);
+
+        savedInstanceState.putString("description", description);
+        savedInstanceState.putStringArrayList("options", options);
+        savedInstanceState.putInt("rating", rating);
+
+        if (priority != null) {
+            savedInstanceState.putString("priority", priority.toString());
+        }
+        savedInstanceState.putString("actionPlan", actionPlan);
+        savedInstanceState.putString("photoPath", photoPath);
     }
 
      /**
@@ -113,7 +179,6 @@ public class SurveyContentFragment extends Fragment implements View.OnClickListe
      */
     @Override
     public void onClick(View view) {
-
         switch (view.getId()) {
             case R.id.button_take_photo:
                 Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -185,7 +250,7 @@ public class SurveyContentFragment extends Fragment implements View.OnClickListe
             int targetHeight = cameraButton.getHeight();
             BitmapFactory.Options bmOptions = new BitmapFactory.Options();
             bmOptions.inJustDecodeBounds = true;
-            BitmapFactory.decodeFile(currentPhotoPath, bmOptions);
+            BitmapFactory.decodeFile(photoPath, bmOptions);
             int photoWidth = bmOptions.outWidth;
             int photoHeight = bmOptions.outHeight;
 
@@ -197,7 +262,7 @@ public class SurveyContentFragment extends Fragment implements View.OnClickListe
             bmOptions.inSampleSize = scaleFactor;
             bmOptions.inPurgeable = true;
 
-            Bitmap scaledBitmap = BitmapFactory.decodeFile(currentPhotoPath, bmOptions);
+            Bitmap scaledBitmap = BitmapFactory.decodeFile(photoPath, bmOptions);
 
             // Rotate the image
             /* TODO There must be a way to determine IF we need to rotate the image or not
@@ -259,7 +324,11 @@ public class SurveyContentFragment extends Fragment implements View.OnClickListe
         String imageFileName = "JPEG_" + survey.getLocation() + "_";
         File storageDir = this.getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         File image = File.createTempFile(imageFileName, ".jpg", storageDir);
-        currentPhotoPath = image.getAbsolutePath();
+        photoPath = image.getAbsolutePath();
         return image;
+    }
+
+    public String getActionPlan() {
+        return actionPlan;
     }
 }

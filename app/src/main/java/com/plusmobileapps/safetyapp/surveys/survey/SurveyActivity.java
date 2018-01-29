@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.RadioButton;
 
@@ -16,9 +17,11 @@ import java.util.ArrayList;
 
 public class SurveyActivity extends AppCompatActivity {
 
+    static final String TAG = "SurveyActivity";
     public static final String EXTRA_LOCATION = "com.plusmobileapps.safetyapp.survey.overview.LOCATION";
     FragmentManager fragmentManager;
     SurveyQuestion survey;
+    String currentFragmentTag;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,13 +33,18 @@ public class SurveyActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(location);
         fragmentManager = getFragmentManager();
+        SurveyContentFragment fragment;
 
-        populateSurveyQuestion(location);
-        SurveyContentFragment fragment = SurveyContentFragment.newInstance(survey);
-        FragmentTransaction initialTransaction = fragmentManager.beginTransaction();
-        initialTransaction
-                .add(R.id.suvey_container, fragment, "0")
-                .commit();
+        if (savedInstanceState != null) {
+            fragment = (SurveyContentFragment)fragmentManager.findFragmentByTag(currentFragmentTag);
+        } else {
+            populateSurveyQuestion(location);
+            fragment = SurveyContentFragment.newInstance(survey);
+            FragmentTransaction initialTransaction = fragmentManager.beginTransaction();
+            initialTransaction
+                    .add(R.id.suvey_container, fragment, "0")
+                    .commit();
+        }
 
     }
 
@@ -74,6 +82,12 @@ public class SurveyActivity extends AppCompatActivity {
     public void onBackButtonPress(View view) {
         final int count = fragmentManager.getBackStackEntryCount();
 
+        Log.d(TAG, "Count after back press: " + count);
+
+        //currentFragmentTag = Integer.toString(fragmentManager.getBackStackEntryCount());
+        SurveyContentFragment currentFragment = (SurveyContentFragment)fragmentManager.findFragmentByTag(currentFragmentTag);
+        fragmentManager.saveFragmentInstanceState(currentFragment);
+
         if (count < 1) {
             finish();   //finish whole activity if nothing on backstack
         } else {
@@ -87,9 +101,15 @@ public class SurveyActivity extends AppCompatActivity {
      * @param view  next button
      */
     public void onNextButtonPressed(View view) {
+        final int count = fragmentManager.getBackStackEntryCount();
+
+        Log.d(TAG, "Count after next press: " + count);
+
         FragmentTransaction transaction = fragmentManager.beginTransaction();
-        String currentFragmentTag = Integer.toString(fragmentManager.getBackStackEntryCount());
-        //int id = fragmentManager.findFragmentByTag(currentFragmentTag);
+        currentFragmentTag = Integer.toString(fragmentManager.getBackStackEntryCount());
+
+        SurveyContentFragment currentFragment = (SurveyContentFragment)fragmentManager.findFragmentByTag(currentFragmentTag);
+        fragmentManager.saveFragmentInstanceState(currentFragment);
 
         SurveyContentFragment newInstance = SurveyContentFragment.newInstance(survey);
 
@@ -100,7 +120,7 @@ public class SurveyActivity extends AppCompatActivity {
                         R.animator.slide_in_right,
                         R.animator.slide_out_right)
                 .replace(R.id.suvey_container, newInstance)
-                .addToBackStack("survey")
+                .addToBackStack(currentFragmentTag)
                 .commit();
     }
 
