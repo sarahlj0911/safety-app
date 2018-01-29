@@ -11,7 +11,6 @@ import android.view.View;
 import android.widget.RadioButton;
 
 import com.plusmobileapps.safetyapp.R;
-import com.plusmobileapps.safetyapp.model.Priority;
 
 import java.util.ArrayList;
 
@@ -21,7 +20,6 @@ public class SurveyActivity extends AppCompatActivity {
     public static final String EXTRA_LOCATION = "com.plusmobileapps.safetyapp.survey.overview.LOCATION";
     FragmentManager fragmentManager;
     SurveyQuestion survey;
-    String currentFragmentTag;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,19 +31,13 @@ public class SurveyActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(location);
         fragmentManager = getFragmentManager();
-        SurveyContentFragment fragment;
 
-        if (savedInstanceState != null) {
-            fragment = (SurveyContentFragment)fragmentManager.findFragmentByTag(currentFragmentTag);
-        } else {
-            populateSurveyQuestion(location);
-            fragment = SurveyContentFragment.newInstance(survey);
-            FragmentTransaction initialTransaction = fragmentManager.beginTransaction();
-            initialTransaction
-                    .add(R.id.suvey_container, fragment, "0")
-                    .commit();
-        }
-
+        populateSurveyQuestion(location);
+        SurveyContentFragment fragment = SurveyContentFragment.newInstance(survey);
+        FragmentTransaction initialTransaction = fragmentManager.beginTransaction();
+        initialTransaction
+                .add(R.id.suvey_container, fragment, "0")
+                .commit();
     }
 
     /**
@@ -60,18 +52,23 @@ public class SurveyActivity extends AppCompatActivity {
         //check which radio button is clicked
         switch (view.getId()) {
             case R.id.radio_button1:
-
+                survey.setRating(((RadioButton) view).getText().toString());
                 break;
             case R.id.radio_button2:
-
+                survey.setRating(((RadioButton) view).getText().toString());
                 break;
             case R.id.radio_button3:
-
+                survey.setRating(((RadioButton) view).getText().toString());
+                break;
+            case R.id.radio_button4:
+                survey.setRating(((RadioButton) view).getText().toString());
                 break;
             default:
 
                 break;
         }
+
+        Log.d(TAG, "New rating: " + survey.getRating());
     }
 
     /**
@@ -81,12 +78,6 @@ public class SurveyActivity extends AppCompatActivity {
      */
     public void onBackButtonPress(View view) {
         final int count = fragmentManager.getBackStackEntryCount();
-
-        Log.d(TAG, "Count after back press: " + count);
-
-        //currentFragmentTag = Integer.toString(fragmentManager.getBackStackEntryCount());
-        SurveyContentFragment currentFragment = (SurveyContentFragment)fragmentManager.findFragmentByTag(currentFragmentTag);
-        fragmentManager.saveFragmentInstanceState(currentFragment);
 
         if (count < 1) {
             finish();   //finish whole activity if nothing on backstack
@@ -101,15 +92,9 @@ public class SurveyActivity extends AppCompatActivity {
      * @param view  next button
      */
     public void onNextButtonPressed(View view) {
-        final int count = fragmentManager.getBackStackEntryCount();
-
-        Log.d(TAG, "Count after next press: " + count);
-
         FragmentTransaction transaction = fragmentManager.beginTransaction();
-        currentFragmentTag = Integer.toString(fragmentManager.getBackStackEntryCount());
-
-        SurveyContentFragment currentFragment = (SurveyContentFragment)fragmentManager.findFragmentByTag(currentFragmentTag);
-        fragmentManager.saveFragmentInstanceState(currentFragment);
+        String currentFragmentTag = Integer.toString(fragmentManager.getBackStackEntryCount());
+        //int id = fragmentManager.findFragmentByTag(currentFragmentTag);
 
         SurveyContentFragment newInstance = SurveyContentFragment.newInstance(survey);
 
@@ -120,7 +105,7 @@ public class SurveyActivity extends AppCompatActivity {
                         R.animator.slide_in_right,
                         R.animator.slide_out_right)
                 .replace(R.id.suvey_container, newInstance)
-                .addToBackStack(currentFragmentTag)
+                .addToBackStack("survey")
                 .commit();
     }
 
@@ -128,7 +113,8 @@ public class SurveyActivity extends AppCompatActivity {
         ArrayList<String> options = new ArrayList<>();
         options.add("None");
         options.add("1-2");
-        options.add("3 or more");
+        options.add("3-5");
+        options.add("6-10");
         survey = new SurveyQuestion(
                 location,
                 "This is what you should be looking for in the boys bathroom while you are walking through the bathroom",

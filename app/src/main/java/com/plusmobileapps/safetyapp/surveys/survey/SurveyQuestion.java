@@ -14,6 +14,7 @@ public class SurveyQuestion {
     private String location;
     private String description;
     private ArrayList<String> options;
+    private String rating;
     private Priority priority;
     private String actionPlan;
     private Bitmap photo;
@@ -43,6 +44,14 @@ public class SurveyQuestion {
 
     public ArrayList<String> getOptions() {
         return options;
+    }
+
+    public String getRating() {
+        return rating;
+    }
+
+    public void setRating(String rating) {
+        this.rating = rating;
     }
 
     public Priority getPriority() {

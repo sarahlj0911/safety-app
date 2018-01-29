@@ -173,6 +173,24 @@ public class SurveyContentFragment extends Fragment implements View.OnClickListe
         savedInstanceState.putString("photoPath", photoPath);
     }
 
+    @Override
+    public void onViewStateRestored(Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
+
+        Log.d(TAG, "in onViewStateRestored");
+
+        if (savedInstanceState != null) {
+            priority = Priority.valueOf(savedInstanceState.getString("priority"));
+            loadPriority();
+            actionPlan = savedInstanceState.getString("actionPlan");
+            Log.d(TAG, "Loaded action plan!!");
+            actionPlanEditText.setText(actionPlan);
+        } else {
+            Log.d(TAG, "Whatya know? No saved state");
+        }
+
+    }
+
      /**
      * Handle all click events here within the fragment
      * @param view
@@ -241,7 +259,6 @@ public class SurveyContentFragment extends Fragment implements View.OnClickListe
 
         survey.setPriority(priority);
     }
-
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -315,7 +332,12 @@ public class SurveyContentFragment extends Fragment implements View.OnClickListe
         for (int i = 0; i < options.size(); i++) {
             View v = radioGroup.getChildAt(i);
             if (v instanceof RadioButton) {
-                ((RadioButton) v).setText(options.get(i));
+                if (options.get(i) != null && !options.get(i).equals("")) {
+                    ((RadioButton) v).setText(options.get(i));
+                    v.setVisibility(View.VISIBLE);
+                } else {
+                    v.setVisibility(View.GONE);
+                }
             }
         }
     }
