@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="fill_parent"
 
-    tools:showIn="@layout/activity_survey">
+    tools:showIn="@layout/activity_walkthrough">
 
     <LinearLayout
         android:layout_width="match_parent"

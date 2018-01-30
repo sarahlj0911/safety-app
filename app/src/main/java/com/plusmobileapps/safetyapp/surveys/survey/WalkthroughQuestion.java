@@ -10,16 +10,17 @@ import java.util.ArrayList;
  * Created by Andrew on 11/10/2017.
  */
 
-public class SurveyQuestion {
+public class WalkthroughQuestion {
     private String location;
     private String description;
     private ArrayList<String> options;
     private String rating;
     private Priority priority;
+    private boolean isActionItem;
     private String actionPlan;
     private Bitmap photo;
 
-    public SurveyQuestion(String location, String description, ArrayList<String> options, Priority priority) {
+    public WalkthroughQuestion(String location, String description, ArrayList<String> options, Priority priority) {
         this.location = location;
         this.description = description;
         this.options = options;
@@ -80,5 +81,13 @@ public class SurveyQuestion {
 
     public void setPhoto(Bitmap photo) {
         this.photo = photo;
+    }
+
+    public boolean isActionItem() {
+        return isActionItem;
+    }
+
+    public void setActionItem(boolean actionItem) {
+        isActionItem = actionItem;
     }
 }

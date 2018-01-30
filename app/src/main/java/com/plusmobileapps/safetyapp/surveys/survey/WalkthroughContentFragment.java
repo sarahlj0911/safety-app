@@ -37,16 +37,16 @@ import static android.app.Activity.RESULT_OK;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class SurveyContentFragment extends Fragment implements View.OnClickListener {
+public class WalkthroughContentFragment extends Fragment implements View.OnClickListener {
 
-    static final String TAG = "SurveyContentFragment";
+    static final String TAG = "WalkthruContentFragment";
     private static final int REQUEST_IMAGE_CAPTURE = 1;
-    private SurveyQuestion survey;
+    private WalkthroughQuestion walkthroughQuestion;
     private TextView descriptionTextView;
     private String description;
     private ImageButton cameraButton;
     private ArrayList<String> options = new ArrayList<>();
-    private int rating;
+    private String rating;
     private Priority priority;
     private View priorityRed;
     private View priorityYellow;
@@ -60,10 +60,10 @@ public class SurveyContentFragment extends Fragment implements View.OnClickListe
     private String photoPath;
     private PackageManager packageManager;
 
-    public static SurveyContentFragment newInstance(SurveyQuestion survey) {
-        SurveyContentFragment fragment = new SurveyContentFragment();
+    public static WalkthroughContentFragment newInstance(WalkthroughQuestion walkthroughQuestion) {
+        WalkthroughContentFragment fragment = new WalkthroughContentFragment();
         Bundle bundle = new Bundle(1);
-        bundle.putString("survey", new Gson().toJson(survey));
+        bundle.putString("walkthroughQuestion", new Gson().toJson(walkthroughQuestion));
         fragment.setArguments(bundle);
 
         return fragment;
@@ -73,10 +73,10 @@ public class SurveyContentFragment extends Fragment implements View.OnClickListe
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         packageManager = this.getActivity().getPackageManager();
-        View view = inflater.inflate(R.layout.fragment_survey_question, container, false);
-        String surveyJsonObject = getArguments().getString("survey");
+        View view = inflater.inflate(R.layout.fragment_walkthrough_question, container, false);
+        String walkthroughJsonObject = getArguments().getString("walkthroughQuestion");
 
-        survey = new Gson().fromJson(surveyJsonObject, SurveyQuestion.class);
+        walkthroughQuestion = new Gson().fromJson(walkthroughJsonObject, WalkthroughQuestion.class);
         descriptionTextView = view.findViewById(R.id.question_description);
         actionPlanLabel = view.findViewById(R.id.title_action_plan);
         actionPlanEditText = view.findViewById(R.id.actionPlanEditText);
@@ -93,37 +93,26 @@ public class SurveyContentFragment extends Fragment implements View.OnClickListe
 
         actionPlanEditText.addTextChangedListener(new TextWatcher() {
             @Override
+            public void afterTextChanged(Editable editable) {
+                actionPlan = actionPlanEditText.getText().toString();
+            }
+
+            @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 // Required method deliberately left empty
             }
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                // Required method left empty
+                // Required method deliberately left empty
             }
 
-            @Override
-            public void afterTextChanged(Editable editable) {
-                actionPlan = actionPlanEditText.getText().toString();
-            }
+
         });
 
-        if (savedInstanceState != null) {
-            description = savedInstanceState.getString("description");
-            descriptionTextView.setText(description);
-            options = savedInstanceState.getStringArrayList("options");
-            rating = savedInstanceState.getInt("rating");
-
-            String priorityStr = savedInstanceState.getString("priority");
-            priority = Priority.valueOf(priorityStr);
-            actionPlan = savedInstanceState.getString("actionPlan");
-            actionPlanEditText.setText(actionPlan);
-            photoPath = savedInstanceState.getString("photoPath");
-        } else {
-            descriptionTextView.setText(survey.getDescription());
-            options = survey.getOptions();
-            priority = survey.getPriority();
-        }
+        descriptionTextView.setText(walkthroughQuestion.getDescription());
+        options = walkthroughQuestion.getOptions();
+        priority = walkthroughQuestion.getPriority();
 
         populateOptionRadioButtons(view);
         loadPriority();
@@ -131,11 +120,7 @@ public class SurveyContentFragment extends Fragment implements View.OnClickListe
         if (packageManager.hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
             cameraButton.setOnClickListener(this);
         } else {
-            cameraButton.setEnabled(false);
-        }
-
-        if (photoPath != null && !photoPath.equals("")) {
-
+            cameraButton.setVisibility(View.GONE);
         }
 
         return view;
@@ -158,37 +143,15 @@ public class SurveyContentFragment extends Fragment implements View.OnClickListe
         super.onSaveInstanceState(savedInstanceState);
 
         actionPlan = actionPlanEditText.getText().toString();
-
-        Log.d(TAG, "actionPlan: " + actionPlan);
-        Log.d(TAG, "priority: " + priority);
-
         savedInstanceState.putString("description", description);
         savedInstanceState.putStringArrayList("options", options);
-        savedInstanceState.putInt("rating", rating);
+        savedInstanceState.putString("rating", rating);
 
         if (priority != null) {
             savedInstanceState.putString("priority", priority.toString());
         }
         savedInstanceState.putString("actionPlan", actionPlan);
         savedInstanceState.putString("photoPath", photoPath);
-    }
-
-    @Override
-    public void onViewStateRestored(Bundle savedInstanceState) {
-        super.onViewStateRestored(savedInstanceState);
-
-        Log.d(TAG, "in onViewStateRestored");
-
-        if (savedInstanceState != null) {
-            priority = Priority.valueOf(savedInstanceState.getString("priority"));
-            loadPriority();
-            actionPlan = savedInstanceState.getString("actionPlan");
-            Log.d(TAG, "Loaded action plan!!");
-            actionPlanEditText.setText(actionPlan);
-        } else {
-            Log.d(TAG, "Whatya know? No saved state");
-        }
-
     }
 
      /**
@@ -222,6 +185,7 @@ public class SurveyContentFragment extends Fragment implements View.OnClickListe
                 break;
             case R.id.priority_btn_red:
                 priority = Priority.HIGH;
+                walkthroughQuestion.setActionItem(true);
                 priorityRed.setVisibility(View.GONE);
                 priorityRedSelected.setVisibility(View.VISIBLE);
                 priorityYellowSelected.setVisibility(View.GONE);
@@ -233,6 +197,7 @@ public class SurveyContentFragment extends Fragment implements View.OnClickListe
                 break;
             case R.id.priority_btn_yellow:
                 priority = Priority.MEDIUM;
+                walkthroughQuestion.setActionItem(true);
                 priorityYellow.setVisibility(View.GONE);
                 priorityYellowSelected.setVisibility(View.VISIBLE);
                 priorityRedSelected.setVisibility(View.GONE);
@@ -244,6 +209,7 @@ public class SurveyContentFragment extends Fragment implements View.OnClickListe
                 break;
             case R.id.priority_btn_green:
                 priority = Priority.NONE;
+                walkthroughQuestion.setActionItem(false);
                 priorityGreen.setVisibility(View.GONE);
                 priorityGreenSelected.setVisibility(View.VISIBLE);
                 priorityYellowSelected.setVisibility(View.GONE);
@@ -257,7 +223,7 @@ public class SurveyContentFragment extends Fragment implements View.OnClickListe
                 break;
         }
 
-        survey.setPriority(priority);
+        walkthroughQuestion.setPriority(priority);
     }
 
     @Override
@@ -320,7 +286,7 @@ public class SurveyContentFragment extends Fragment implements View.OnClickListe
                     actionPlanEditText.setEnabled(false);
                     break;
                 default:
-                    Log.d(TAG, "SurveyQuestion has unrecognized priority!");
+                    Log.d(TAG, "WalkthroughQuestion has unrecognized priority!");
                     break;
             }
         }
@@ -343,7 +309,7 @@ public class SurveyContentFragment extends Fragment implements View.OnClickListe
     }
 
     private File createImageFile() throws IOException {
-        String imageFileName = "JPEG_" + survey.getLocation() + "_";
+        String imageFileName = "JPEG_" + walkthroughQuestion.getLocation() + "_";
         File storageDir = this.getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         File image = File.createTempFile(imageFileName, ".jpg", storageDir);
         photoPath = image.getAbsolutePath();

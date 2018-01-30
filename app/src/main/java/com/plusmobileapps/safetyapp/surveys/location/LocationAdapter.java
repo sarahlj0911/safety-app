@@ -12,7 +12,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.plusmobileapps.safetyapp.R;
-import com.plusmobileapps.safetyapp.surveys.survey.SurveyActivity;
+import com.plusmobileapps.safetyapp.surveys.survey.WalkthroughActivity;
 
 import java.util.ArrayList;
 
@@ -44,7 +44,7 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHo
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent intent = new Intent(view.getContext(), SurveyActivity.class);
+                    Intent intent = new Intent(view.getContext(), WalkthroughActivity.class);
                     String location = surveyTitle.getText().toString();
                     intent.putExtra(EXTRA_LOCATION, location);
                     context.startActivity(intent);
