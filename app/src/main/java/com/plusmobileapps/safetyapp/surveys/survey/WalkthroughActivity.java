@@ -17,7 +17,7 @@ import java.util.ArrayList;
 public class WalkthroughActivity extends AppCompatActivity {
 
     static final String TAG = "WalkthroughActivity";
-    public static final String EXTRA_LOCATION = "com.plusmobileapps.safetyapp.walkthroughQuestion.overview.LOCATION";
+    public static final String EXTRA_LOCATION = "com.plusmobileapps.safetyapp.survey.overview.LOCATION";
     FragmentManager fragmentManager;
     WalkthroughQuestion walkthroughQuestion;
 
