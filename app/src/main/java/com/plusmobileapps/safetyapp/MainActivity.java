@@ -27,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
     private BottomNavigationView navigation;
     private LocationFragment locationFragment;
     private SurveyLandingFragment surveyLandingFragment;
-    private String surveyFragmentTitle = getString(R.string.walk_throughs);
+    private String surveyFragmentTitle = "";
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -96,7 +96,7 @@ public class MainActivity extends AppCompatActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.main_toolbar);
         setSupportActionBar(toolbar);
-        setAppBarTitle("Surveys");
+        setAppBarTitle(getString(R.string.walk_throughs));
     }
 
     private void setAppBarTitle(String title) {
