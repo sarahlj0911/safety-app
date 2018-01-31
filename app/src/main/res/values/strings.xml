@@ -6,6 +6,12 @@
     <string name="title_summary">Summary</string>
     <string name="logo_desc">SAfETy Logo</string>
 
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="create">Create</string>
+    <string name="cancel">Cancel</string>
+
+
     <!-- Priority descriptions. Can be used anywhere in the app that they might be useful -->
     <string name="priority_high">HIGH PRIORITY</string>
     <string name="priority_med">MEDIUM PRIORITY</string>
@@ -42,4 +48,9 @@ through during one week.</string>
     <string name="action_settings">Settings</string>
     <string name="undo_string">Undo</string>
     <string name="title_edit_priority_dialog">Select a priority:</string>
+
+    <!--survey landing text-->
+    <string name="viewholder_header_completed">In Progress</string>
+    <string name="viewholder_header_inprogress">Completed</string>
+    <string name="survey_dialog_message">You have an unfinished survey. Creating a new survey will delete the unfinished one. Are you sure you want to create a new survey?</string>
 </resources>

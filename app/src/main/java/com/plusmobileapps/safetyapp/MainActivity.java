@@ -19,8 +19,7 @@ import com.plusmobileapps.safetyapp.surveys.landing.SurveyLandingAdapter;
 import com.plusmobileapps.safetyapp.surveys.landing.SurveyLandingFragment;
 import com.plusmobileapps.safetyapp.surveys.location.LocationFragment;
 
-public class MainActivity extends AppCompatActivity
-        implements SurveyLandingAdapter.CardViewHolder.OnSurveySelectedListener{
+public class MainActivity extends AppCompatActivity {
 
     private TextView mTextMessage;
 
@@ -98,82 +97,6 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.main_toolbar);
         setSupportActionBar(toolbar);
         setAppBarTitle("Surveys");
-    }
-
-
-    @Override
-    public void onSurveySelected(int position) {
-        surveyLandingFragment = (SurveyLandingFragment) getSupportFragmentManager().findFragmentById(R.id.root_frame);
-        surveyFragmentTitle = surveyLandingFragment.getSurveyTitle(position);
-        setAppBarTitle(surveyFragmentTitle);
-        if (position == 1) {
-            locationFragment = LocationFragment.newInstance(false);
-        } else {
-            locationFragment = LocationFragment.newInstance(true);
-        }
-
-
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.root_frame, locationFragment)
-                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-                .addToBackStack("survey")
-                .commit();
-
-    }
-
-    public void createSurveyButtonClicked(View view) {
-        surveyLandingFragment = ((SurveyLandingFragment) getSupportFragmentManager().findFragmentById(R.id.root_frame));
-
-        if (surveyLandingFragment.isSurveyInProgress()) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setMessage("You have an unfinished survey. Creating a new survey will delete the unfinished one. Are you sure you want to create a new survey?")
-                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            createNewSurvey();
-                        }
-                    })
-                    .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-
-                        }
-                    });
-            AlertDialog dialog = builder.create();
-            dialog.show();
-        } else {
-            createNewSurvey();
-        }
-    }
-
-    private void createNewSurvey() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Create New Survey")
-                .setView(getLayoutInflater().inflate(R.layout.dialog_create_survey, null))
-                .setPositiveButton("Create", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        Dialog dialogObj = Dialog.class.cast(dialog);
-                        EditText editText = dialogObj.findViewById(R.id.edittext_create_survey);
-                        surveyFragmentTitle = editText.getText().toString();
-                        setAppBarTitle(surveyFragmentTitle);
-                        locationFragment = LocationFragment.newInstance();
-
-                        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-                        transaction.replace(R.id.root_frame, locationFragment)
-                                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-                                .addToBackStack("survey")
-                                .commit();
-                    }
-                })
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        //user clicked cancel
-                    }
-                });
-        AlertDialog dialog = builder.create();
-        dialog.show();
     }
 
     private void setAppBarTitle(String title) {
