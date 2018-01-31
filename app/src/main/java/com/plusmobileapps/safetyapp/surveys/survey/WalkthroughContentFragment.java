@@ -127,18 +127,6 @@ public class WalkthroughContentFragment extends Fragment implements View.OnClick
     }
 
     @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
-        Log.d(TAG, "Activity created!");
-        if (savedInstanceState != null) {
-            Log.d(TAG, "We have state!!");
-        } else {
-            Log.d(TAG, "No state :(");
-        }
-    }
-
-    @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
         super.onSaveInstanceState(savedInstanceState);
 
