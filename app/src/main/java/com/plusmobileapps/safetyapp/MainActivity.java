@@ -27,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
     private BottomNavigationView navigation;
     private LocationFragment locationFragment;
     private SurveyLandingFragment surveyLandingFragment;
-    private String surveyFragmentTitle = "Surveys";
+    private String surveyFragmentTitle = getString(R.string.walk_throughs);
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -108,7 +108,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        surveyFragmentTitle = "Surveys";
+        surveyFragmentTitle = getString(R.string.walk_throughs);
         setAppBarTitle(surveyFragmentTitle);
     }
 }

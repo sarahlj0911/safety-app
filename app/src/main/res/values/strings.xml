@@ -10,6 +10,7 @@
     <string name="no">No</string>
     <string name="create">Create</string>
     <string name="cancel">Cancel</string>
+    <string name="walk_throughs">"Walk Throughs"</string>
 
 
     <!-- Priority descriptions. Can be used anywhere in the app that they might be useful -->
@@ -26,7 +27,7 @@
     <string name="welcome2_item1">Our goal is to help you gather data about your school climate through observation and social interaction.</string>
     <string name="welcome2_item2">This tool can then be used to create an action plan focusing on locations and/or indicators.</string>
     <string name="welcome3_title">General Instructions</string>
-    <string name="welcome3_item1">1. Once you\'ve created a new survey, you can scroll through and select from a list of locations where observations will be conducted.</string>
+    <string name="welcome3_item1">1. Once you\'ve created a new walk through, you can scroll through and select from a list of locations where observations will be conducted.</string>
     <string name="welcome3_item2">2. Once you\'ve chosen a location, rank and prioritize each environmental indicator or observed behavior.</string>
     <string name="welcome3_item3">3. Use the Action Plan space to note possible actions to resolve specific issues.</string>
     <string name="welcome3_item4">4. It is best to conduct the observations when students and staff are using the space as they normally would.</string>
@@ -39,8 +40,8 @@ through during one week.</string>
     <string name="welcome_next">NEXT</string>
     <string name="welcome_gotit">GOT IT</string>
 
-    <string name="tutorial_title">Create a new survey</string>
-    <string name="tutorial_content">Click on the add button to start a new survey.</string>
+    <string name="tutorial_title">Create a new walk through</string>
+    <string name="tutorial_content">Click on the add button to start a new walk through.</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
@@ -52,5 +53,5 @@ through during one week.</string>
     <!--survey landing text-->
     <string name="viewholder_header_completed">In Progress</string>
     <string name="viewholder_header_inprogress">Completed</string>
-    <string name="survey_dialog_message">You have an unfinished survey. Creating a new survey will delete the unfinished one. Are you sure you want to create a new survey?</string>
+    <string name="survey_dialog_message">You have an unfinished walk through. Creating a new walk through will delete the unfinished one. Are you sure you want to create a new walk through?</string>
 </resources>
