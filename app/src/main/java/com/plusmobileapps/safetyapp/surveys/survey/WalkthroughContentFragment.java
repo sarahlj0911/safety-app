@@ -12,8 +12,6 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.content.FileProvider;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -90,25 +88,6 @@ public class WalkthroughContentFragment extends Fragment implements View.OnClick
         priorityYellowSelected = view.findViewById(R.id.priority_btn_yellow_selected);
         priorityGreenSelected = view.findViewById(R.id.priority_btn_green_selected);
         cameraButton = view.findViewById(R.id.button_take_photo);
-
-        actionPlanEditText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void afterTextChanged(Editable editable) {
-                actionPlan = actionPlanEditText.getText().toString();
-            }
-
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                // Required method deliberately left empty
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                // Required method deliberately left empty
-            }
-
-
-        });
 
         descriptionTextView.setText(walkthroughQuestion.getDescription());
         options = walkthroughQuestion.getOptions();
