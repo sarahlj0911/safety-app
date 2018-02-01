@@ -10,7 +10,7 @@ import android.widget.TextView;
 import java.util.List;
 
 import com.plusmobileapps.safetyapp.R;
-import com.plusmobileapps.safetyapp.data.Response;
+import com.plusmobileapps.safetyapp.data.entity.Response;
 //import com.plusmobileapps.safetyapp.data.ActionItem;
 
 public class ActionItemAdapter extends RecyclerView.Adapter<ActionItemAdapter.ViewHolder> {

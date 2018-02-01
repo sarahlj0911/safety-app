@@ -2,9 +2,7 @@ package com.plusmobileapps.safetyapp.actionitems.landing;
 
 
 //import com.plusmobileapps.safetyapp.data.ActionItem;
-import com.plusmobileapps.safetyapp.data.Response;
-
-import java.util.ArrayList;
+import com.plusmobileapps.safetyapp.data.entity.Response;
 
 public class ActionItemPresenter implements ActionItemContract.UserActionsListener {
 

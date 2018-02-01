@@ -3,8 +3,8 @@ package com.plusmobileapps.safetyapp.actionitems.landing;
 import android.os.AsyncTask;
 
 import com.plusmobileapps.safetyapp.MyApplication;
-import com.plusmobileapps.safetyapp.data.Response;
-import com.plusmobileapps.safetyapp.data.ResponseDao;
+import com.plusmobileapps.safetyapp.data.entity.Response;
+import com.plusmobileapps.safetyapp.data.dao.ResponseDao;
 import com.plusmobileapps.safetyapp.data.AppDatabase;
 
 import java.util.List;

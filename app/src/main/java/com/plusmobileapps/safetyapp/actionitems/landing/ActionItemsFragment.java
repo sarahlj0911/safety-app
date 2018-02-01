@@ -11,13 +11,12 @@ import android.view.ViewGroup;
 
 import com.plusmobileapps.safetyapp.R;
 import com.plusmobileapps.safetyapp.actionitems.detail.ActionItemDetailActivity;
-import com.plusmobileapps.safetyapp.data.Response;
+import com.plusmobileapps.safetyapp.data.entity.Response;
 //import com.plusmobileapps.safetyapp.data.ActionItem;
 
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.ResourceBundle;
 
 
 public class ActionItemsFragment extends Fragment implements ActionItemContract.View {

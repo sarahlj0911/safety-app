@@ -1,6 +1,6 @@
 package com.plusmobileapps.safetyapp.actionitems.landing;
 
-import com.plusmobileapps.safetyapp.data.Response;
+import com.plusmobileapps.safetyapp.data.entity.Response;
 
 import java.util.List;
 
