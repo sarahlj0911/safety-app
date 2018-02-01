@@ -5,6 +5,9 @@ import android.arch.persistence.room.Room;
 import android.arch.persistence.room.RoomDatabase;
 import android.content.Context;
 
+import com.plusmobileapps.safetyapp.data.dao.*;
+import com.plusmobileapps.safetyapp.data.entity.*;
+
 @Database(entities = {Location.class, Question.class, Response.class, User.class, Walkthrough.class}, version = 1)
 public abstract class AppDatabase extends RoomDatabase {
 
