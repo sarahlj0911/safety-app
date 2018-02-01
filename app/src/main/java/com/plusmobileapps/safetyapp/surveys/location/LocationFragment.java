@@ -1,7 +1,5 @@
 package com.plusmobileapps.safetyapp.surveys.location;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -15,14 +13,6 @@ import com.plusmobileapps.safetyapp.R;
 
 import java.util.ArrayList;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link LocationFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link LocationFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class LocationFragment extends Fragment {
     private static final String TAG = "SurveyViewFragment";    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String KEY_LAYOUT_MANAGER = "layoutManager";
