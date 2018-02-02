@@ -13,9 +13,11 @@ import android.widget.TextView;
 import com.plusmobileapps.safetyapp.FragmentFactory;
 import com.plusmobileapps.safetyapp.R;
 import com.plusmobileapps.safetyapp.actionitems.landing.ActionItemPresenter;
-import com.plusmobileapps.safetyapp.main.MainSwipeAdapter;
 import com.plusmobileapps.safetyapp.summary.landing.SummaryPresenter;
 import com.plusmobileapps.safetyapp.surveys.landing.SurveyLandingPresenter;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity implements MainActivityContract.View {
 
@@ -44,7 +46,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
 
         Toolbar toolbar = findViewById(R.id.main_toolbar);
         setSupportActionBar(toolbar);
-        setAppBarTitle(getString(R.string.walk_throughs));
+        setAppBarTitle(0);
     }
 
     private void setUpPresenters() {
@@ -62,14 +64,32 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
     @Override
     public void changePage(int position) {
         viewPager.setCurrentItem(position, true);
+        setAppBarTitle(position);
     }
 
     @Override
     public void changeNavHighlight(int position) {
         navigation.setSelectedItemId(position);
+        setAppBarTitle(position);
     }
 
-    private void setAppBarTitle(String title) {
+    private void setAppBarTitle(int index) {
+        switch (index) {
+            case 0:
+                setToolbarTitle(getString(R.string.title_walkthrough));
+                break;
+            case 1:
+                setToolbarTitle(getString(R.string.title_action_items));
+                break;
+            case 2:
+                setToolbarTitle(getString(R.string.title_summary));
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void setToolbarTitle(String title) {
         if (getSupportActionBar() != null) {
             getSupportActionBar().setTitle(title);
         }
