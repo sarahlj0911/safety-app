@@ -34,7 +34,7 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:background="@null"
-        android:text="@string/welcome_next"
+        android:text="@string/next"
         android:textColor="@android:color/black" />
 
     <Button
@@ -44,7 +44,7 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:background="@null"
-        android:text="@string/welcome_skip"
+        android:text="@string/back"
         android:textColor="@android:color/black" />
 
 </RelativeLayout>

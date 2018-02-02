@@ -9,10 +9,10 @@
     <!-- Priority descriptions. Can be used anywhere in the app that they might be useful -->
     <string name="priority_high">HIGH PRIORITY</string>
     <string name="priority_med">MEDIUM PRIORITY</string>
-    <string name="priority_low">LOW PRIORITY</string>
-    <string name="priority_high_desc">Should be addressed as soon as possible</string>
-    <string name="priority_med_desc">Can be addressed as time allows</string>
-    <string name="priority_low_desc">Requires little or no action</string>
+    <string name="priority_low">LOW/NO PRIORITY</string>
+    <string name="priority_high_desc">Immediate action required</string>
+    <string name="priority_med_desc">Action required as time allows</string>
+    <string name="priority_low_desc">No action needed</string>
 
     <!-- Welcome pages text -->
     <string name="welcome1_title">The SAfETy App</string>
@@ -27,11 +27,15 @@
     <string name="welcome3_item5">5. Ideally, the walk-through will be completed in one day by the same person or persons. If this is not possible, try and complete the walk-
 through during one week.</string>
     <string name="welcome4_title">Prioritization Guide</string>
-    <string name="prioritization_tip_text">You may set a priority level for each item in the walk-through to help determine how soon action items need to be addressed.</string>
+    <string name="prioritization_tip_text">You may set a priority level for each item in the walk-through to help determine how soon action items need to be addressed. Only items with a red or yellow priority will be shown in your list of action items.</string>
 
-    <string name="welcome_skip">BACK</string>
-    <string name="welcome_next">NEXT</string>
-    <string name="welcome_gotit">GOT IT</string>
+    <string name="back">BACK</string>
+    <string name="next">NEXT</string>
+    <string name="got_it">GOT IT</string>
+    <string name="label_priority">Priority:</string>
+    <string name="label_action_plan">Action Plan:</string>
+    <string name="label_take_photo">Take a Photo:</string>
+    <string name="hint_action_plan">Tap to enter action plan here</string>
 
     <string name="tutorial_title">Create a new survey</string>
     <string name="tutorial_content">Click on the add button to start a new survey.</string>
