@@ -86,12 +86,19 @@ public class SurveyLandingFragment extends Fragment
     }
 
     @Override
+    public void onPause() {
+        super.onPause();
+    }
+
+    @Override
     public void showSurveys(ArrayList<SurveyOverview> surveys) {
+        fab.setVisibility(View.VISIBLE);
         adapter.replaceData(surveys);
     }
 
     @Override
     public void openSurvey(long id) {
+        fab.setVisibility(View.GONE);
         LocationFragment locationFragment = LocationFragment.newInstance();
         Bundle bundle = new Bundle();
         bundle.putLong("id", id);

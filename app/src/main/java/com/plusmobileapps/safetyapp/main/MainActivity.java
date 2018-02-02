@@ -7,6 +7,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 
 import com.plusmobileapps.safetyapp.FragmentFactory;
@@ -77,6 +78,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+        findViewById(R.id.floatingActionButton).setVisibility(View.VISIBLE);
     }
 
     /**
