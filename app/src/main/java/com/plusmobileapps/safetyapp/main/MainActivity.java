@@ -1,4 +1,4 @@
-package com.plusmobileapps.safetyapp;
+package com.plusmobileapps.safetyapp.main;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -9,25 +9,24 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import com.plusmobileapps.safetyapp.FragmentFactory;
+import com.plusmobileapps.safetyapp.R;
 import com.plusmobileapps.safetyapp.actionitems.landing.ActionItemPresenter;
-import com.plusmobileapps.safetyapp.actionitems.landing.ActionItemsFragment;
-import com.plusmobileapps.safetyapp.summary.landing.SummaryFragment;
+import com.plusmobileapps.safetyapp.main.MainSwipeAdapter;
 import com.plusmobileapps.safetyapp.summary.landing.SummaryPresenter;
-import com.plusmobileapps.safetyapp.surveys.landing.SurveyLandingFragment;
 import com.plusmobileapps.safetyapp.surveys.landing.SurveyLandingPresenter;
-import com.plusmobileapps.safetyapp.surveys.location.LocationFragment;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements MainActivityContract.View {
 
     private TextView mTextMessage;
 
     private ViewPager viewPager;
     private BottomNavigationView navigation;
     private String surveyFragmentTitle = "";
+    private MainActivityPresenter presenter;
     private SurveyLandingPresenter surveyLandingPresenter;
     private ActionItemPresenter actionItemPresenter;
     private SummaryPresenter summaryPresenter;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         findViewsById();
         setUpPresenters();
+        presenter = new MainActivityPresenter(this);
 
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         final MainSwipeAdapter swipeAdapter = new MainSwipeAdapter(getSupportFragmentManager());
@@ -58,6 +58,16 @@ public class MainActivity extends AppCompatActivity {
         viewPager = findViewById(R.id.view_pager);
     }
 
+    @Override
+    public void changePage(int position) {
+        viewPager.setCurrentItem(position, true);
+    }
+
+    @Override
+    public void changeNavHighlight(int position) {
+        navigation.setSelectedItemId(position);
+    }
+
     private void setAppBarTitle(String title) {
         if (getSupportActionBar() != null) {
             getSupportActionBar().setTitle(title);
@@ -67,8 +77,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        surveyFragmentTitle = getString(R.string.walk_throughs);
-        setAppBarTitle(surveyFragmentTitle);
     }
 
     /**
@@ -81,13 +89,13 @@ public class MainActivity extends AppCompatActivity {
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.navigation_survey:
-                    viewPager.setCurrentItem(0, true);
+                    presenter.navButtonClicked(0);
                     return true;
                 case R.id.navigation_dashboard:
-                    viewPager.setCurrentItem(1, true);
+                    presenter.navButtonClicked(1);
                     return true;
                 case R.id.navigation_history:
-                    viewPager.setCurrentItem(2, true);
+                    presenter.navButtonClicked(2);
                     return true;
             }
             return false;
@@ -107,22 +115,8 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void onPageSelected(int position) {
-            switch (position) {
-                case 0:
-                    setAppBarTitle(surveyFragmentTitle);
-                    navigation.setSelectedItemId(R.id.navigation_survey);
-                    break;
-                case 1:
-                    setAppBarTitle("Action Items");
-                    navigation.setSelectedItemId(R.id.navigation_dashboard);
-                    break;
-                case 2:
-                    setAppBarTitle("Summary");
-                    navigation.setSelectedItemId(R.id.navigation_history);
-                    break;
-                default:
-                    break;
-            }
+            presenter.pageSwipedTo(position);
+
         }
 
         @Override

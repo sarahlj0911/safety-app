@@ -1,8 +1,10 @@
-package com.plusmobileapps.safetyapp;
+package com.plusmobileapps.safetyapp.main;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+
+import com.plusmobileapps.safetyapp.FragmentFactory;
 
 public class MainSwipeAdapter extends FragmentPagerAdapter {
 
