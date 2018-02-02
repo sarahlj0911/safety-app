@@ -1,10 +1,13 @@
 package com.plusmobileapps.safetyapp.surveys.landing;
 
+import com.plusmobileapps.safetyapp.BasePresenter;
+import com.plusmobileapps.safetyapp.BaseView;
+
 import java.util.ArrayList;
 
 public interface SurveyLandingContract {
 
-    interface View {
+    interface View extends BaseView<Presenter>{
         void showSurveys(ArrayList<SurveyOverview> surveys);
         void openSurvey(long id);
         void showTutorial();
@@ -12,7 +15,7 @@ public interface SurveyLandingContract {
         void showCreateSurveyDialog();
     }
 
-    interface UserActionsListener {
+    interface Presenter extends BasePresenter {
         void surveyClicked(int position);
         void createNewSurveyClicked();
         void firstAppLaunch();

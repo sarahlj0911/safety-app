@@ -24,7 +24,6 @@ import com.plusmobileapps.safetyapp.R;
 import com.plusmobileapps.safetyapp.surveys.location.LocationFragment;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class SurveyLandingFragment extends Fragment
         implements OnShowcaseEventListener, SurveyLandingContract.View {
@@ -37,7 +36,7 @@ public class SurveyLandingFragment extends Fragment
     private SurveyLandingAdapter adapter;
     private ArrayList<SurveyOverview> surveys;
 
-    private SurveyLandingContract.UserActionsListener actionsListener;
+    private SurveyLandingContract.Presenter presenter;
 
     public SurveyLandingFragment() {
         // Required empty public constructor
@@ -59,7 +58,6 @@ public class SurveyLandingFragment extends Fragment
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_survey_landing, container, false);
         rootView.setTag(TAG);
-        actionsListener = new SurveyLandingPresenter(this);
         recyclerView = rootView.findViewById(R.id.landing_survey_recyclerview);
         overlay = rootView.findViewById(R.id.overlay);
         fab = rootView.findViewById(R.id.floatingActionButton);
@@ -72,13 +70,18 @@ public class SurveyLandingFragment extends Fragment
     }
 
     @Override
+    public void setPresenter(SurveyLandingContract.Presenter presenter) {
+        this.presenter = presenter;
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
         prefManager = new PrefManager(getContext());
         if (prefManager.isFirstTimeLaunch()) {
-            actionsListener.firstAppLaunch();
+            presenter.firstAppLaunch();
         } else {
-            actionsListener.loadSurveys();
+            presenter.start();
         }
     }
 
@@ -94,7 +97,7 @@ public class SurveyLandingFragment extends Fragment
         bundle.putLong("id", id);
         locationFragment.setArguments(bundle);
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
-        transaction.replace(R.id.root_frame, locationFragment)
+        transaction.replace(R.id.fragment_survey_landing, locationFragment)
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                 .addToBackStack("survey")
                 .commit();
@@ -132,7 +135,7 @@ public class SurveyLandingFragment extends Fragment
                 .setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        actionsListener.createNewSurveyConfirmed();
+                        presenter.createNewSurveyConfirmed();
                     }
                 })
                 .setNegativeButton(getString(R.string.no), new DialogInterface.OnClickListener() {
@@ -191,7 +194,7 @@ public class SurveyLandingFragment extends Fragment
     private View.OnClickListener fabListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            actionsListener.createNewSurveyClicked();
+            presenter.createNewSurveyClicked();
         }
     };
 
@@ -201,13 +204,14 @@ public class SurveyLandingFragment extends Fragment
     private SurveyLandingItemListener itemListener = new SurveyLandingItemListener() {
         @Override
         public void onSurveyClicked(int position) {
-            actionsListener.surveyClicked(position);
+            presenter.surveyClicked(position);
         }
     };
 
     public interface SurveyLandingItemListener {
         void onSurveyClicked(int position);
     }
+
     /**
      * Callbacks for the showcase view
      */

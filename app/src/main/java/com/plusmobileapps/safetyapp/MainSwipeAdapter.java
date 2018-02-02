@@ -4,34 +4,21 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import com.plusmobileapps.safetyapp.actionitems.landing.ActionItemsFragment;
-import com.plusmobileapps.safetyapp.summary.landing.SummaryFragment;
-import com.plusmobileapps.safetyapp.surveys.RootFragment;
-
-/**
- * Created by Andrew on 10/28/2017.
- */
-
 public class MainSwipeAdapter extends FragmentPagerAdapter {
-
-    private ActionItemsFragment actionFragment;
-    private SummaryFragment summaryFragment;
 
     public MainSwipeAdapter(FragmentManager fm) {
         super(fm);
-        actionFragment = new ActionItemsFragment();
-        summaryFragment = new SummaryFragment();
     }
 
     @Override
     public Fragment getItem(int position) {
         switch (position){
             case 0:
-                return new RootFragment();
+                return FragmentFactory.getInstance().getSurveyLandingFragment();
             case 1:
-                return actionFragment;
+                return FragmentFactory.getInstance().getActionItemsFragment();
             case 2:
-                return summaryFragment;
+                return FragmentFactory.getInstance().getSummaryFragment();
             default:
                 break;
         }

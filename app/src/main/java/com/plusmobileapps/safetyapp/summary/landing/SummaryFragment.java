@@ -21,7 +21,7 @@ public class SummaryFragment extends Fragment implements SummaryContract.View {
     protected SummaryAdapter adapter;
     private ArrayList<SurveyOverview> surveys;
 
-    private SummaryContract.UserActionsListener actionsListener;
+    private SummaryContract.Presenter presenter;
 
     public SummaryFragment() {
         // Required empty public constructor
@@ -42,7 +42,6 @@ public class SummaryFragment extends Fragment implements SummaryContract.View {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_summary, container, false);
         rootView.setTag(TAG);
-        actionsListener = new SummaryPresenter(this);
         recyclerView = (RecyclerView) rootView.findViewById(R.id.summary_recyclerview);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
@@ -53,9 +52,14 @@ public class SummaryFragment extends Fragment implements SummaryContract.View {
     }
 
     @Override
+    public void setPresenter(SummaryContract.Presenter presenter) {
+        this.presenter = presenter;
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
-        actionsListener.loadSummaries(true);
+        presenter.start();
     }
 
     @Override
@@ -75,7 +79,7 @@ public class SummaryFragment extends Fragment implements SummaryContract.View {
     SummaryItemListener itemListener = new SummaryItemListener() {
         @Override
         public void onSummaryItemClicked(SurveyOverview summary) {
-            actionsListener.openSummary(summary);
+            presenter.openSummary(summary);
         }
     };
 

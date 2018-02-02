@@ -2,14 +2,20 @@ package com.plusmobileapps.safetyapp.surveys.landing;
 
 import java.util.ArrayList;
 
-public class SurveyLandingPresenter implements SurveyLandingContract.UserActionsListener {
+public class SurveyLandingPresenter implements SurveyLandingContract.Presenter {
 
     private SurveyLandingContract.View view;
     private ArrayList<SurveyOverview> surveys;
 
     public SurveyLandingPresenter(SurveyLandingContract.View view) {
         this.view = view;
+        view.setPresenter(this);
         surveys = new ArrayList<>(0);
+    }
+
+    @Override
+    public void start() {
+        loadSurveys();
     }
 
     @Override
