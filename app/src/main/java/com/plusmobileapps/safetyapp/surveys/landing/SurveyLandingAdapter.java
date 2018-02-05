@@ -5,120 +5,90 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.plusmobileapps.safetyapp.R;
+
 import java.util.ArrayList;
 
 /**
  * Created by Andrew on 11/13/2017.
  */
 
-public class SurveyLandingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class SurveyLandingAdapter extends RecyclerView.Adapter<SurveyLandingAdapter.CardViewHolder> {
 
     private static final String TAG = "SurveyLandingAdapter";
+    public static final String EXTRA_SURVEY = "com.plusmobileapps.safetyapp.survey.landing.SURVEY";
     public static final int ITEM_TYPE_NORMAL = 1;
     public static final int ITEM_TYPE_HEADER = 0;
-    public static final String EXTRA_SURVEY = "com.plusmobileapps.safetyapp.survey.landing.SURVEY";
     private SurveyOverview survey;
     private int surveyCount = 0;
+    private SurveyLandingFragment.SurveyLandingItemListener itemListener;
 
     private ArrayList<SurveyOverview> surveys;
 
-    public SurveyLandingAdapter(ArrayList<SurveyOverview> surveys) {
+    public SurveyLandingAdapter(ArrayList<SurveyOverview> surveys, SurveyLandingFragment.SurveyLandingItemListener itemListener) {
         this.surveys = surveys;
+        this.itemListener = itemListener;
     }
 
     @Override
-    public int getItemViewType(int position) {
-        if (position == 0 || position == 2) {
-            return ITEM_TYPE_HEADER;
-        } else {
-            return ITEM_TYPE_NORMAL;
-        }
-    }
-
-    @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        switch (viewType) {
-            case ITEM_TYPE_HEADER:
-                View titleView = LayoutInflater.from(parent.getContext())
-                        .inflate(R.layout.viewholder_title, parent, false);
-                return new TitleViewHolder(titleView);
-            case 1:
-                View cardViewHolder = LayoutInflater.from(parent.getContext())
-                        .inflate(R.layout.viewholder_landing_survey, parent, false);
-                return new CardViewHolder(cardViewHolder);
-        }
-        return null;
+    public CardViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.viewholder_landing_survey, parent, false);
+        return new CardViewHolder(view);
     }
 
 
     @Override
-    public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
-        Log.d(TAG, "onBindViewHolder: ");
-            final int itemType = getItemViewType(position);
+    public void onBindViewHolder(final CardViewHolder holder, int position) {
+        survey = surveys.get(position);
+        TextView header = holder.getHeader();
 
-            if (itemType == ITEM_TYPE_HEADER){
-                TitleViewHolder titleViewHolder = (TitleViewHolder) holder;
-                if (position == 0) {
-                    titleViewHolder.getTitle().setText("In Progress");
-                } else {
-                    titleViewHolder.getTitle().setText("Completed");
-                }
-            } else if (itemType == ITEM_TYPE_NORMAL){
-                CardViewHolder cardViewHolder = (CardViewHolder) holder;
-                if (position > 2){
-                    survey = surveys.get(position-2);
-                } else {
-                    survey = surveys.get(position-1);
-                }
-                cardViewHolder.getDate().setText(survey.getDate());
-                cardViewHolder.getTime().setText(survey.getTime());
-                cardViewHolder.getTitle().setText(survey.getTitle());
-                if(survey.isInProgress()) {
-                    cardViewHolder.getModified().setText(survey.getModified());
-                    cardViewHolder.getProgressBar().setVisibility(View.VISIBLE);
-                    cardViewHolder.getProgressBar().setProgress(survey.getProgress());
-                } else {
-                    cardViewHolder.getProgressBar().setVisibility(View.INVISIBLE);
-                    cardViewHolder.getModified().setText(survey.getModified());
-                }
-                surveyCount++;
+        //handle the header visibility
+        if (position <= 1) {
+            header.setVisibility(View.VISIBLE);
+            if (position == 1) {
+                header.setText(R.string.viewholder_header_completed);
+            } else {
+                header.setText(R.string.viewholder_header_inprogress);
             }
+        } else {
+            header.setVisibility(View.GONE);
+        }
+
+        holder.getDate().setText(survey.getDate());
+        holder.getTime().setText(survey.getTime());
+        holder.getTitle().setText(survey.getTitle());
+
+        //handle progress bar
+        if (survey.isInProgress()) {
+            holder.getModified().setText(survey.getModified());
+            holder.getProgressBar().setVisibility(View.VISIBLE);
+            holder.getProgressBar().setProgress(survey.getProgress());
+        } else {
+            holder.getProgressBar().setVisibility(View.INVISIBLE);
+            holder.getModified().setText(survey.getModified());
+        }
     }
 
     @Override
     public int getItemCount() {
-        return (surveys.size() + 2);
+        return surveys.size();
     }
 
-    public static class TitleViewHolder extends RecyclerView.ViewHolder {
-        private final TextView title;
-
-        public TitleViewHolder(View view) {
-            super(view);
-            title = view.findViewById(R.id.viewholder_title);
-        }
-
-        public TextView getTitle() {
-            return title;
-        }
+    public void replaceData(ArrayList<SurveyOverview> surveys) {
+        this.surveys = surveys;
     }
 
-    public static class CardViewHolder extends RecyclerView.ViewHolder {
-        OnSurveySelectedListener mCallback;
+    public class CardViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private final TextView time;
         private final TextView date;
         private final TextView title;
         private final TextView modified;
         private final ProgressBar progressBar;
-
-        public interface OnSurveySelectedListener {
-            public void onSurveySelected(int position);
-        }
+        private final TextView header;
 
         public CardViewHolder(View view) {
             super(view);
@@ -127,18 +97,14 @@ public class SurveyLandingAdapter extends RecyclerView.Adapter<RecyclerView.View
             date = view.findViewById(R.id.viewholder_landing_date);
             modified = view.findViewById(R.id.viewholder_landing_modified);
             progressBar = view.findViewById(R.id.viewholder_landing_progressbar);
-            try{
-                mCallback = (OnSurveySelectedListener) itemView.getContext();
-            } catch (ClassCastException e){
-                throw new ClassCastException(itemView.getContext().toString() + " must implement OnSurveySelectedListener");
-            }
+            header = view.findViewById(R.id.viewholder_title);
 
-            view.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    mCallback.onSurveySelected(getAdapterPosition());
-                }
-            });
+            view.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View view) {
+            itemListener.onSurveyClicked(getAdapterPosition());
         }
 
         public TextView getTime() {
@@ -160,6 +126,11 @@ public class SurveyLandingAdapter extends RecyclerView.Adapter<RecyclerView.View
         public ProgressBar getProgressBar() {
             return progressBar;
         }
+
+        public TextView getHeader() {
+            return header;
+        }
+
     }
 
 }

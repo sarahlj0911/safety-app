@@ -25,7 +25,7 @@ public class ActionItemsFragment extends Fragment implements ActionItemContract.
     protected ActionItemAdapter adapter;
     private ArrayList<ActionItem> actionItems;
 
-    private ActionItemContract.UserActionsListener actionsListener;
+    private ActionItemContract.Presenter presenter;
 
     private enum LayoutManagerType {
         GRID_LAYOUT_MANAGER,
@@ -53,7 +53,6 @@ public class ActionItemsFragment extends Fragment implements ActionItemContract.
         View rootView = inflater.inflate(R.layout.fragment_action_items, container, false);
         rootView.setTag(TAG);
 
-        actionsListener = new ActionItemPresenter(this);
         adapter = new ActionItemAdapter(new ArrayList<ActionItem>(0), itemListener);
 
         recyclerView = (RecyclerView) rootView.findViewById(R.id.action_items_recyclerview);
@@ -66,9 +65,14 @@ public class ActionItemsFragment extends Fragment implements ActionItemContract.
     }
 
     @Override
+    public void setPresenter(ActionItemContract.Presenter presenter) {
+        this.presenter = presenter;
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
-        actionsListener.loadActionItems(false);
+        presenter.start();
     }
 
     /**
@@ -110,7 +114,7 @@ public class ActionItemsFragment extends Fragment implements ActionItemContract.
     ActionItemListener itemListener = new ActionItemListener() {
         @Override
         public void onActionItemClicked(ActionItem actionItem) {
-            actionsListener.openActionItemDetail(actionItem);
+            presenter.openActionItemDetail(actionItem);
         }
     };
 

@@ -9,6 +9,7 @@ public class SurveyOverview {
     private String date;
     private String time;
     private int progress = 0;
+    private long surveyId = 0L;
 
     public SurveyOverview(String title){
         this.title = title;
@@ -42,6 +43,14 @@ public class SurveyOverview {
 
     public void setTime(String time) {
         this.time = time;
+    }
+
+    public long getSurveyId() {
+        return surveyId;
+    }
+
+    public void setSurveyId(long surveyId) {
+        this.surveyId = surveyId;
     }
 
     public boolean isInProgress() {

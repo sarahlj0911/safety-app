@@ -14,7 +14,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.plusmobileapps.safetyapp.MainActivity;
+import com.plusmobileapps.safetyapp.main.MainActivity;
 import com.plusmobileapps.safetyapp.PrefManager;
 import com.plusmobileapps.safetyapp.R;
 

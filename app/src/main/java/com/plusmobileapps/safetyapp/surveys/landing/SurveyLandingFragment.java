@@ -1,14 +1,19 @@
 package com.plusmobileapps.safetyapp.surveys.landing;
 
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.RelativeLayout;
 
 import com.github.amlcurran.showcaseview.OnShowcaseEventListener;
@@ -16,29 +21,22 @@ import com.github.amlcurran.showcaseview.ShowcaseView;
 import com.github.amlcurran.showcaseview.targets.ViewTarget;
 import com.plusmobileapps.safetyapp.PrefManager;
 import com.plusmobileapps.safetyapp.R;
+import com.plusmobileapps.safetyapp.surveys.location.LocationFragment;
 
 import java.util.ArrayList;
 
-import jp.wasabeef.recyclerview.animators.SlideInRightAnimator;
-
-public class SurveyLandingFragment extends Fragment implements OnShowcaseEventListener {
+public class SurveyLandingFragment extends Fragment
+        implements OnShowcaseEventListener, SurveyLandingContract.View {
     private static ShowcaseView showcaseView;
     private static final String TAG = "SurveyLandingFragment";
-    private static final String KEY_LAYOUT_MANAGER = "layoutManager";
     private PrefManager prefManager;
     private View overlay;
     private FloatingActionButton fab;
     private RecyclerView recyclerView;
-    private RecyclerView.LayoutManager layoutManager;
-    private SurveyLandingFragment.LayoutManagerType currentLayoutManagerType;
     private SurveyLandingAdapter adapter;
-
     private ArrayList<SurveyOverview> surveys;
 
-    private enum LayoutManagerType {
-        GRID_LAYOUT_MANAGER,
-        LINEAR_LAYOUT_MANAGER
-    }
+    private SurveyLandingContract.Presenter presenter;
 
     public SurveyLandingFragment() {
         // Required empty public constructor
@@ -63,27 +61,17 @@ public class SurveyLandingFragment extends Fragment implements OnShowcaseEventLi
         recyclerView = rootView.findViewById(R.id.landing_survey_recyclerview);
         overlay = rootView.findViewById(R.id.overlay);
         fab = rootView.findViewById(R.id.floatingActionButton);
-        layoutManager = new LinearLayoutManager(getActivity());
-        currentLayoutManagerType = LayoutManagerType.LINEAR_LAYOUT_MANAGER;
-        populateSurveyItems();
-        recyclerView.setLayoutManager(layoutManager);
-        adapter = new SurveyLandingAdapter(surveys);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        adapter = new SurveyLandingAdapter(new ArrayList<SurveyOverview>(0), itemListener);
         recyclerView.setAdapter(adapter);
-        recyclerView.setItemAnimator(new SlideInRightAnimator());
-        for (int i = 0; i < surveys.size(); i++) {
-            adapter.notifyItemInserted(i);
-        }
+        fab.setOnClickListener(fabListener);
 
         return rootView;
     }
 
-    public boolean isSurveyInProgress(){
-        for (SurveyOverview survey : surveys) {
-            if (survey.isInProgress()){
-                return true;
-            }
-        }
-        return false;
+    @Override
+    public void setPresenter(SurveyLandingContract.Presenter presenter) {
+        this.presenter = presenter;
     }
 
     @Override
@@ -91,11 +79,39 @@ public class SurveyLandingFragment extends Fragment implements OnShowcaseEventLi
         super.onResume();
         prefManager = new PrefManager(getContext());
         if (prefManager.isFirstTimeLaunch()) {
-            initShowcaseTutorial();
+            presenter.firstAppLaunch();
+        } else {
+            presenter.start();
         }
     }
 
-    private void initShowcaseTutorial() {
+    @Override
+    public void onPause() {
+        super.onPause();
+    }
+
+    @Override
+    public void showSurveys(ArrayList<SurveyOverview> surveys) {
+        fab.setVisibility(View.VISIBLE);
+        adapter.replaceData(surveys);
+    }
+
+    @Override
+    public void openSurvey(long id) {
+        fab.setVisibility(View.GONE);
+        LocationFragment locationFragment = LocationFragment.newInstance();
+        Bundle bundle = new Bundle();
+        bundle.putLong("id", id);
+        locationFragment.setArguments(bundle);
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        transaction.replace(R.id.fragment_survey_landing, locationFragment)
+                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                .addToBackStack("survey")
+                .commit();
+    }
+
+    @Override
+    public void showTutorial() {
         fab.setClickable(false);
         overlay.setVisibility(View.VISIBLE);
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -119,12 +135,56 @@ public class SurveyLandingFragment extends Fragment implements OnShowcaseEventLi
         showcaseView.setButtonPosition(params);
     }
 
-    public String getSurveyTitle(int position) {
-        if (position > 2){
-            return surveys.get(position-2).getTitle();
-        } else {
-            return surveys.get(position-1).getTitle();
-        }
+    @Override
+    public void showConfirmationDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setMessage(getString(R.string.survey_dialog_message))
+                .setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        presenter.createNewSurveyConfirmed();
+                    }
+                })
+                .setNegativeButton(getString(R.string.no), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                });
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    @Override
+    public void showCreateSurveyDialog() {
+        final LocationFragment locationFragment = LocationFragment.newInstance();
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setTitle(getString(R.string.tutorial_title))
+                .setView(getLayoutInflater().inflate(R.layout.dialog_create_survey, null))
+                .setPositiveButton(getString(R.string.create), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Dialog dialogObj = Dialog.class.cast(dialog);
+                        EditText editText = dialogObj.findViewById(R.id.edittext_create_survey);
+                        String surveyTitle = editText.getText().toString();
+                        Bundle bundle = new Bundle();
+                        bundle.putString("title", surveyTitle);
+                        locationFragment.setArguments(bundle);
+                        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                        transaction.replace(R.id.root_frame, locationFragment)
+                                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                                .addToBackStack("survey")
+                                .commit();
+                    }
+                })
+                .setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //user clicked cancel
+                    }
+                });
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
     /**
@@ -137,6 +197,27 @@ public class SurveyLandingFragment extends Fragment implements OnShowcaseEventLi
             showcaseView.hide();
         }
     };
+
+    private View.OnClickListener fabListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            presenter.createNewSurveyClicked();
+        }
+    };
+
+    /**
+     * Handle Recyclerview clicks
+     */
+    private SurveyLandingItemListener itemListener = new SurveyLandingItemListener() {
+        @Override
+        public void onSurveyClicked(int position) {
+            presenter.surveyClicked(position);
+        }
+    };
+
+    public interface SurveyLandingItemListener {
+        void onSurveyClicked(int position);
+    }
 
     /**
      * Callbacks for the showcase view
@@ -158,24 +239,6 @@ public class SurveyLandingFragment extends Fragment implements OnShowcaseEventLi
     @Override
     public void onShowcaseViewTouchBlocked(MotionEvent motionEvent) {
 
-    }
-
-
-    /**
-     * Create mock data
-     */
-    private void populateSurveyItems() {
-        surveys = new ArrayList<>();
-
-        //SurveyOverview survey1 = new SurveyOverview("Spring 2017");
-        SurveyOverview survey2 = new SurveyOverview("Fall 2017");
-        SurveyOverview survey3 = new SurveyOverview("Summer 2017");
-
-        SurveyOverview survey1 = new SurveyOverview("Fall 2017", "Dec 12, 2017", "3:33 p.m.");
-        survey1.setProgress(50);
-        surveys.add(survey1);
-        surveys.add(survey2);
-        surveys.add(survey3);
     }
 
 }

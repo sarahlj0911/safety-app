@@ -3,12 +3,18 @@ package com.plusmobileapps.safetyapp.actionitems.landing;
 
 import java.util.ArrayList;
 
-public class ActionItemPresenter implements ActionItemContract.UserActionsListener {
+public class ActionItemPresenter implements ActionItemContract.Presenter {
 
     private final ActionItemContract.View actionItemView;
 
     public ActionItemPresenter(ActionItemContract.View actionItemView) {
         this.actionItemView = actionItemView;
+        actionItemView.setPresenter(this);
+    }
+
+    @Override
+    public void start() {
+        loadActionItems(false);
     }
 
     /**

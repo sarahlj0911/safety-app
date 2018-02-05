@@ -4,12 +4,18 @@ import com.plusmobileapps.safetyapp.surveys.landing.SurveyOverview;
 
 import java.util.ArrayList;
 
-public class SummaryPresenter implements SummaryContract.UserActionsListener {
+public class SummaryPresenter implements SummaryContract.Presenter {
 
     private final SummaryContract.View summaryView;
 
     public SummaryPresenter(SummaryContract.View summaryView) {
         this.summaryView = summaryView;
+        summaryView.setPresenter(this);
+    }
+
+    @Override
+    public void start() {
+        loadSummaries(false);
     }
 
     @Override
