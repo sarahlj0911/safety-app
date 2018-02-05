@@ -70,9 +70,9 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHo
         public ViewHolder(View view) {
             super (view);
             context = itemView.getContext();
-            surveyTitle = view.findViewById(R.id.viewholder_title_survey);
-            progressBar = view.findViewById(R.id.viewholder_progressbar_survey);
-            checkmark = view.findViewById(R.id.viewholder_check_survey);
+            surveyTitle = view.findViewById(R.id.viewholder_title_location);
+            progressBar = view.findViewById(R.id.viewholder_progressbar_location);
+            checkmark = view.findViewById(R.id.viewholder_check_location);
 
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
