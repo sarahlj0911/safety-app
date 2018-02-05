@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.plusmobileapps.safetyapp.surveys.location.LocationFragment"
+    tools:context="com.plusmobileapps.safetyapp.walkthrough.location.LocationFragment"
     android:orientation="vertical"
     android:background="@android:color/background_light"
     android:id="@+id/fragment_survey_location">

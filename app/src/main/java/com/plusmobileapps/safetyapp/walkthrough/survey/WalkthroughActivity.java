@@ -1,4 +1,4 @@
-package com.plusmobileapps.safetyapp.surveys.survey;
+package com.plusmobileapps.safetyapp.walkthrough.survey;
 
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;

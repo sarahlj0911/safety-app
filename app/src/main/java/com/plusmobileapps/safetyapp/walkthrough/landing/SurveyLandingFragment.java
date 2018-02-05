@@ -1,4 +1,4 @@
-package com.plusmobileapps.safetyapp.surveys.landing;
+package com.plusmobileapps.safetyapp.walkthrough.landing;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -21,7 +21,7 @@ import com.github.amlcurran.showcaseview.ShowcaseView;
 import com.github.amlcurran.showcaseview.targets.ViewTarget;
 import com.plusmobileapps.safetyapp.PrefManager;
 import com.plusmobileapps.safetyapp.R;
-import com.plusmobileapps.safetyapp.surveys.location.LocationFragment;
+import com.plusmobileapps.safetyapp.walkthrough.location.LocationFragment;
 
 import java.util.ArrayList;
 

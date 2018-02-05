@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 
 import com.plusmobileapps.safetyapp.R;
 import com.plusmobileapps.safetyapp.summary.detail.SummaryDetailActivity;
-import com.plusmobileapps.safetyapp.surveys.landing.SurveyOverview;
+import com.plusmobileapps.safetyapp.walkthrough.landing.SurveyOverview;
 
 import java.util.ArrayList;
 

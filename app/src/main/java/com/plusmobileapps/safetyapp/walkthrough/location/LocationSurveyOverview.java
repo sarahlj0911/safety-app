@@ -1,4 +1,4 @@
-package com.plusmobileapps.safetyapp.surveys.location;
+package com.plusmobileapps.safetyapp.walkthrough.location;
 
 /**
  * Crea

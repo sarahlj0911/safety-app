@@ -14,10 +14,7 @@ import com.plusmobileapps.safetyapp.FragmentFactory;
 import com.plusmobileapps.safetyapp.R;
 import com.plusmobileapps.safetyapp.actionitems.landing.ActionItemPresenter;
 import com.plusmobileapps.safetyapp.summary.landing.SummaryPresenter;
-import com.plusmobileapps.safetyapp.surveys.landing.SurveyLandingPresenter;
-
-import java.util.ArrayList;
-import java.util.Arrays;
+import com.plusmobileapps.safetyapp.walkthrough.landing.SurveyLandingPresenter;
 
 public class MainActivity extends AppCompatActivity implements MainActivityContract.View {
 

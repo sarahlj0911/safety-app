@@ -1,4 +1,4 @@
-package com.plusmobileapps.safetyapp.surveys.landing;
+package com.plusmobileapps.safetyapp.walkthrough.landing;
 
 import com.plusmobileapps.safetyapp.BasePresenter;
 import com.plusmobileapps.safetyapp.BaseView;

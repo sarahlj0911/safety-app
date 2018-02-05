@@ -1,4 +1,4 @@
-package com.plusmobileapps.safetyapp.surveys.location;
+package com.plusmobileapps.safetyapp.walkthrough.location;
 
 import android.content.Context;
 import android.content.Intent;
@@ -12,7 +12,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.plusmobileapps.safetyapp.R;
-import com.plusmobileapps.safetyapp.surveys.survey.WalkthroughActivity;
+import com.plusmobileapps.safetyapp.walkthrough.survey.WalkthroughActivity;
 
 import java.util.ArrayList;
 
