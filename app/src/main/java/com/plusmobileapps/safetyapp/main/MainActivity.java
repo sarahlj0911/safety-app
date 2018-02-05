@@ -24,9 +24,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
     private BottomNavigationView navigation;
     private String surveyFragmentTitle = "";
     private MainActivityPresenter presenter;
-    private SurveyLandingPresenter surveyLandingPresenter;
-    private ActionItemPresenter actionItemPresenter;
-    private SummaryPresenter summaryPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,9 +44,9 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
     }
 
     private void setUpPresenters() {
-        surveyLandingPresenter = new SurveyLandingPresenter(FragmentFactory.getInstance().getSurveyLandingFragment());
-        actionItemPresenter = new ActionItemPresenter(FragmentFactory.getInstance().getActionItemsFragment());
-        summaryPresenter = new SummaryPresenter(FragmentFactory.getInstance().getSummaryFragment());
+        new SurveyLandingPresenter(FragmentFactory.getInstance().getSurveyLandingFragment());
+        new ActionItemPresenter(FragmentFactory.getInstance().getActionItemsFragment());
+        new SummaryPresenter(FragmentFactory.getInstance().getSummaryFragment());
     }
 
     private void findViewsById() {

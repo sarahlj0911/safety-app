@@ -10,6 +10,7 @@ public interface SurveyLandingContract {
     interface View extends BaseView<Presenter>{
         void showSurveys(ArrayList<SurveyOverview> surveys);
         void openSurvey(long id);
+        void createNewWalkthrough();
         void showTutorial();
         void showConfirmationDialog();
         void showCreateSurveyDialog();
@@ -21,5 +22,6 @@ public interface SurveyLandingContract {
         void firstAppLaunch();
         void loadSurveys();
         void createNewSurveyConfirmed();
+        void confirmCreateSurveyClicked(String title);
     }
 }

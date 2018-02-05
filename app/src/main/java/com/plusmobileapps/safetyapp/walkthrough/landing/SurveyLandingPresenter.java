@@ -49,6 +49,11 @@ public class SurveyLandingPresenter implements SurveyLandingContract.Presenter {
     }
 
     @Override
+    public void confirmCreateSurveyClicked(String title) {
+        view.createNewWalkthrough();
+    }
+
+    @Override
     public void firstAppLaunch() {
         view.showTutorial();
     }
