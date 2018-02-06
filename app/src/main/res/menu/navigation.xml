@@ -4,7 +4,7 @@
     <item
         android:id="@+id/navigation_survey"
         android:icon="@drawable/ic_comment_black_24dp"
-        android:title="@string/title_survey" />
+        android:title="@string/walk_throughs" />
 
     <item
         android:id="@+id/navigation_dashboard"

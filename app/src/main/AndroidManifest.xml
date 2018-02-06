@@ -26,16 +26,27 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".surveys.survey.SurveyActivity"
+            android:name=".surveys.survey.WalkthroughActivity"
             android:label="@string/title_activity_survey"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".MainActivity" />
+        <activity android:name=".main.MainActivity" />
         <activity
-            android:name=".summary.SummaryDetailActivity"
+            android:name=".summary.detail.SummaryDetailActivity"
             android:label="SummaryDetailActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".actionitems.detail.ActionItemDetailActivity"
             android:windowSoftInputMode="adjustPan"/>
+        <!-- FileProvider for picture files -->
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="com.plusmobileapps.safetyapp.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths"></meta-data>
+        </provider>
+
     </application>
 
 </manifest>

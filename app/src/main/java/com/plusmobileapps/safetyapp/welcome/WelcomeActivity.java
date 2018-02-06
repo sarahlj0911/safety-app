@@ -14,7 +14,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.plusmobileapps.safetyapp.MainActivity;
+import com.plusmobileapps.safetyapp.main.MainActivity;
 import com.plusmobileapps.safetyapp.PrefManager;
 import com.plusmobileapps.safetyapp.R;
 
@@ -127,11 +127,11 @@ public class WelcomeActivity extends AppCompatActivity {
                 btnBack.setVisibility(View.GONE);
             } else if (position == layouts.length - 1) {
                 // On last page, change NEXT to GOT IT
-                btnNext.setText(getString(R.string.welcome_gotit));
+                btnNext.setText(getString(R.string.got_it));
                 //btnBack.setVisibility(View.GONE);
             } else {
                 // Neither first nor last page, so show BACK and NEXT
-                btnNext.setText(getString(R.string.welcome_next));
+                btnNext.setText(getString(R.string.next));
                 btnBack.setVisibility(View.VISIBLE);
             }
         }

@@ -7,6 +7,7 @@ import com.plusmobileapps.safetyapp.data.entity.Response;
 import com.plusmobileapps.safetyapp.data.dao.ResponseDao;
 import com.plusmobileapps.safetyapp.data.AppDatabase;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class LoadActionItemTask extends AsyncTask<Void, Void, List<Response>> {
@@ -21,8 +22,8 @@ public class LoadActionItemTask extends AsyncTask<Void, Void, List<Response>> {
     protected List<Response> doInBackground(Void... voids) {
         db = AppDatabase.getAppDatabase(MyApplication.getAppContext());
         ResponseDao responseDao = db.responseDao();
-        int walkthroughId = 0; //mocked survey id
-        return responseDao.getAllActionItems(walkthroughId);
+        List<Response> actionItems = responseDao.getAllActionItems(1);
+        return actionItems;
     }
 
     @Override

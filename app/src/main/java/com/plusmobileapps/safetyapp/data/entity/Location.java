@@ -18,14 +18,14 @@ public class Location {
     @ColumnInfo(name = "name")
     private String name;
 
-    @ColumnInfo(name = "walkthroughID")
-    private int walkthroughID;
+    @ColumnInfo(name = "locationInstruction")
+    private String locationInstruction;
 
-    public Location(int locationId, String type, String name, int walkthroughID) {
+    public Location(int locationId, String type, String name, String locationInstruction) {
         this.locationId = locationId;
         this.type = type;
         this.name = name;
-        this.walkthroughID = walkthroughID;
+        this.locationInstruction = locationInstruction;
     }
 
     //Getters
@@ -41,8 +41,8 @@ public class Location {
         return this.name;
     }
 
-    public int getWalkthroughID() {
-        return this.walkthroughID;
+    public String getLocationInstruction() {
+        return this.locationInstruction;
     }
 
     //Setters
@@ -58,7 +58,7 @@ public class Location {
         this.name = name;
     }
 
-    public void setWalkthroughID(int walkthroughID) {
-        this.walkthroughID = walkthroughID;
+    public void setLocationInstruction(String locationInstruction) {
+        this.locationInstruction = locationInstruction;
     }
 }

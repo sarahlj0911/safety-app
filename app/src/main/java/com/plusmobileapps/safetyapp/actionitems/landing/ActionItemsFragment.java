@@ -12,7 +12,6 @@ import android.view.ViewGroup;
 import com.plusmobileapps.safetyapp.R;
 import com.plusmobileapps.safetyapp.actionitems.detail.ActionItemDetailActivity;
 import com.plusmobileapps.safetyapp.data.entity.Response;
-//import com.plusmobileapps.safetyapp.data.ActionItem;
 
 
 import java.util.ArrayList;
@@ -29,7 +28,7 @@ public class ActionItemsFragment extends Fragment implements ActionItemContract.
     protected ActionItemAdapter adapter;
     private ArrayList<Response> actionItems;
 
-    private ActionItemContract.UserActionsListener actionsListener;
+    private ActionItemContract.Presenter presenter;
 
     private enum LayoutManagerType {
         GRID_LAYOUT_MANAGER,
@@ -57,7 +56,6 @@ public class ActionItemsFragment extends Fragment implements ActionItemContract.
         View rootView = inflater.inflate(R.layout.fragment_action_items, container, false);
         rootView.setTag(TAG);
 
-        actionsListener = new ActionItemPresenter(this);
         adapter = new ActionItemAdapter(new ArrayList<Response>(0), itemListener);
 
         recyclerView = (RecyclerView) rootView.findViewById(R.id.action_items_recyclerview);
@@ -70,9 +68,14 @@ public class ActionItemsFragment extends Fragment implements ActionItemContract.
     }
 
     @Override
+    public void setPresenter(ActionItemContract.Presenter presenter) {
+        this.presenter = presenter;
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
-        actionsListener.loadActionItems(false);
+        presenter.start();
     }
 
     /**
@@ -114,7 +117,7 @@ public class ActionItemsFragment extends Fragment implements ActionItemContract.
     ActionItemListener itemListener = new ActionItemListener() {
         @Override
         public void onActionItemClicked(Response actionItem) {
-            actionsListener.openActionItemDetail(actionItem);
+            presenter.openActionItemDetail(actionItem);
         }
     };
 

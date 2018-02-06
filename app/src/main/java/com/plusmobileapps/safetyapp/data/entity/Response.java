@@ -15,15 +15,11 @@ public class Response {
     @PrimaryKey(autoGenerate = false)
     private int responseId;
 
-    @ColumnInfo(name = "walkthroughId")
-    private int walkthroughId;
-
     @ColumnInfo(name = "isActionItem")
-    private boolean isActionItem;
+    private int isActionItem;
 
-    //Not a column in the database. Stored somewhere in the file manager.
-//    //TODO: figure this out.
-//    private Image image;
+    @ColumnInfo(name = "image", typeAffinity = ColumnInfo.BLOB)
+    private byte[] image;
 
     @ColumnInfo(name = "locationId")
     private int locationId;
@@ -46,9 +42,8 @@ public class Response {
     @ColumnInfo(name = "Title")
     private String title;
 
-    public Response(int responseId, int walkthroughId, boolean isActionItem, int locationId, String timeStamp, String rating, String priority, String actionPlan, int questionId, String title) {
+    public Response(int responseId, int isActionItem, int locationId, String timeStamp, String rating, String priority, String actionPlan, int questionId, String title, byte[] image) {
         this.responseId = responseId;
-        this.walkthroughId = walkthroughId;
         this.isActionItem = isActionItem;
         this.locationId = locationId;
         this.timeStamp = timeStamp;
@@ -57,6 +52,7 @@ public class Response {
         this.actionPlan = actionPlan;
         this.questionId = questionId;
         this.title = title;
+        this.image = image;
     }
 
     //Getters
@@ -64,17 +60,13 @@ public class Response {
         return this.responseId;
     }
 
-    public int getWalkthroughId() {
-        return this.walkthroughId;
-    }
-
-    public boolean getIsActionItem() {
+    public int getIsActionItem() {
         return this.isActionItem;
     }
 
-//    public Image getImage() {
-//        return this.image;
-//    }
+    public byte[] getImage() {
+        return this.image;
+    }
 
     public int getLocationId() {
         return this.locationId;
@@ -107,17 +99,13 @@ public class Response {
         this.responseId = responseId;
     }
 
-    public void setWalkthroughId(int walkthroughId) {
-        this.walkthroughId = walkthroughId;
-    }
-
-    public void setIsActionItem(boolean isActionItem) {
+    public void setIsActionItem(int isActionItem) {
         this.isActionItem = isActionItem;
     }
 
-//    public void setImage(Image image) {
-//        this.image = image;
-//    }
+    public void setImage(byte[] image) {
+        this.image = image;
+    }
 
     public void setLocationId(int locationId) {
         this.locationId = locationId;

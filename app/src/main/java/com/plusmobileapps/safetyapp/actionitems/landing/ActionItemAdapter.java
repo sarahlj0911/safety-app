@@ -11,7 +11,6 @@ import java.util.List;
 
 import com.plusmobileapps.safetyapp.R;
 import com.plusmobileapps.safetyapp.data.entity.Response;
-//import com.plusmobileapps.safetyapp.data.ActionItem;
 
 public class ActionItemAdapter extends RecyclerView.Adapter<ActionItemAdapter.ViewHolder> {
 
@@ -72,7 +71,6 @@ public class ActionItemAdapter extends RecyclerView.Adapter<ActionItemAdapter.Vi
 
         private final TextView location = itemView.findViewById(R.id.action_item_location);
         //TODO: figure out how to add image to persistence
-        //        private final ImageView picture = itemView.findViewById(R.id.action_item_image);
 
         public ViewHolder(View view) {
             super(view);
@@ -101,9 +99,6 @@ public class ActionItemAdapter extends RecyclerView.Adapter<ActionItemAdapter.Vi
             return description;
         }
 
-//        public ImageView getPicture() {
-//            return picture;
-//        }
     }
 
 

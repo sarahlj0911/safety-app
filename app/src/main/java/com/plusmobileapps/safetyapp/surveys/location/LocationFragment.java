@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +12,14 @@ import com.plusmobileapps.safetyapp.R;
 
 import java.util.ArrayList;
 
+
+/**
+ * A simple {@link Fragment} subclass.
+ * Activities that contain this fragment must implement the
+ * to handle interaction events.
+ * Use the {@link LocationFragment#newInstance} factory method to
+ * create an instance of this fragment.
+ */
 public class LocationFragment extends Fragment {
     private static final String TAG = "SurveyViewFragment";    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String KEY_LAYOUT_MANAGER = "layoutManager";
@@ -21,6 +28,8 @@ public class LocationFragment extends Fragment {
     protected RecyclerView.LayoutManager layoutManager;
     protected LayoutManagerType currentLayoutManagerType;
     protected LocationAdapter adapter;
+    private long surveyId = -1L;
+    private String title = "";
     ArrayList<LocationSurveyOverview> surveys = new ArrayList<>();
     ArrayList<String> titles = new ArrayList<>();
 
@@ -59,6 +68,18 @@ public class LocationFragment extends Fragment {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_survey, container, false);
         rootView.setTag(TAG);
+
+        //retrieve the id from surveylandingfragment
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            //TODO: Distinguish between which extra is coming in the bundle
+            //surveyId is for when a previous survey is opened
+            //title is for when a new survey is created
+            surveyId = bundle.getLong("id");
+            title = bundle.getString("title");
+        }
+
+
         recyclerView = (RecyclerView) rootView.findViewById(R.id.survey_recycler_view);
         layoutManager = new LinearLayoutManager(getActivity());
         currentLayoutManagerType = LayoutManagerType.LINEAR_LAYOUT_MANAGER;

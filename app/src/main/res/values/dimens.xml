@@ -5,6 +5,8 @@
     <dimen name="fab_margin">16dp</dimen>
 
     <dimen name="actionItemSize">36dp</dimen>
+    <dimen name="priority_dot_unselected">36dp</dimen>
+    <dimen name="priority_dot_selected">52dp</dimen>
 
     <dimen name="welcome_img_width_height">120dp</dimen>
     <dimen name="welcome_desc_padding">40dp</dimen>

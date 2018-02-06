@@ -17,17 +17,31 @@ public class Question {
     @ColumnInfo(name = "questionText")
     private String questionText;
 
-    @ColumnInfo(name = "ratingOptions")
-    private String ratingOptions;
+    @ColumnInfo(name = "ratingOption1")
+    private String ratingOption1;
 
-    @ColumnInfo(name = "locationID")
-    private int locationID;
+    @ColumnInfo(name = "ratingOption2")
+    private String ratingOption2;
 
-    public Question(int questionId, String questionText, String ratingOptions, int locationID) {
+    @ColumnInfo(name = "ratingOption3")
+    private String ratingOption3;
+
+    @ColumnInfo(name = "ratingOption4")
+    private String ratingOption4;
+
+    @ColumnInfo(name = "shordDesc")
+    private String shortDescription;
+
+
+
+    public Question(int questionId, String questionText, String shortDescription, String ratingOption1, String ratingOption2, String ratingOption3, String ratingOption4) {
         this.questionId = questionId;
         this.questionText = questionText;
-        this.ratingOptions = ratingOptions;
-        this.locationID = locationID;
+        this.shortDescription = shortDescription;
+        this.ratingOption1 = ratingOption1;
+        this.ratingOption2 = ratingOption2;
+        this.ratingOption3 = ratingOption3;
+        this.ratingOption4 = ratingOption4;
     }
 
     //Getters
@@ -39,13 +53,15 @@ public class Question {
         return questionText;
     }
 
-    public String getRatingOptions() {
-        return ratingOptions;
-    }
+    public String getShortDescription() { return shortDescription; }
 
-    public int getLocationID() {
-        return locationID;
-    }
+    public String getRatingOption1() { return ratingOption1; }
+
+    public String getRatingOption2() { return ratingOption2; }
+
+    public String getRatingOption3() { return ratingOption3; }
+
+    public String getRatingOption4() { return ratingOption4; }
 
     //Setters
     public void setQuestionId(int id) {
@@ -56,12 +72,24 @@ public class Question {
         this.questionText = questionText;
     }
 
-    public void setRatingOptions(String ratingOptions) {
-        this.ratingOptions = ratingOptions;
+    public void setShortDescription(String shortDescription) {
+        this.shortDescription = shortDescription;
     }
 
-    public void setLocationID(int locationID) {
-        this.locationID = locationID;
+    public void setRatingOption1(String ratingOption1) {
+        this.ratingOption1 = ratingOption1;
+    }
+
+    public void setRatingOption2(String ratingOption2) {
+        this.ratingOption2 = ratingOption2;
+    }
+
+    public void setRatingOption3(String ratingOption3) {
+        this.ratingOption3 = ratingOption3;
+    }
+
+    public void setRatingOption4(String ratingOption4) {
+        this.ratingOption4 = ratingOption4;
     }
 }
 
