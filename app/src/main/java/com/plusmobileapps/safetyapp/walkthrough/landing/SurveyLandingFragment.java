@@ -30,6 +30,7 @@ public class SurveyLandingFragment extends Fragment
         implements OnShowcaseEventListener, SurveyLandingContract.View {
 
     public static String EXTRA_REQUESTED_WALKTHROUGH = "requested_walkthrough";
+    public static String EXTRA_WALKTHROUGH_NAME = "walkthrough_name";
 
     private static ShowcaseView showcaseView;
     private static final String TAG = "SurveyLandingFragment";
@@ -101,16 +102,18 @@ public class SurveyLandingFragment extends Fragment
     }
 
     @Override
-    public void openSurvey(long id) {
+    public void openSurvey(long id, String title) {
         fab.setVisibility(View.GONE);
         Intent intent = new Intent(getContext(), LocationActivity.class);
         intent.putExtra(EXTRA_REQUESTED_WALKTHROUGH, id);
+        intent.putExtra(EXTRA_WALKTHROUGH_NAME, title);
         startActivity(intent);
     }
 
     @Override
-    public void createNewWalkthrough() {
+    public void createNewWalkthrough(String title) {
         Intent intent = new Intent(getContext(), LocationActivity.class);
+        intent.putExtra(EXTRA_WALKTHROUGH_NAME, title);
         startActivity(intent);
     }
 

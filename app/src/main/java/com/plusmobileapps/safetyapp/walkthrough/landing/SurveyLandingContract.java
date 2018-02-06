@@ -9,8 +9,8 @@ public interface SurveyLandingContract {
 
     interface View extends BaseView<Presenter>{
         void showSurveys(ArrayList<SurveyOverview> surveys);
-        void openSurvey(long id);
-        void createNewWalkthrough();
+        void openSurvey(long id, String title);
+        void createNewWalkthrough(String title);
         void showTutorial();
         void showConfirmationDialog();
         void showCreateSurveyDialog();

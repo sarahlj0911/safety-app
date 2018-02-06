@@ -20,7 +20,8 @@ public class SurveyLandingPresenter implements SurveyLandingContract.Presenter {
 
     @Override
     public void surveyClicked(int position) {
-        view.openSurvey(surveys.get(position).getSurveyId());
+        final SurveyOverview survey = surveys.get(position);
+        view.openSurvey(survey.getSurveyId(), survey.getTitle());
     }
 
     @Override
@@ -50,7 +51,7 @@ public class SurveyLandingPresenter implements SurveyLandingContract.Presenter {
 
     @Override
     public void confirmCreateSurveyClicked(String title) {
-        view.createNewWalkthrough();
+        view.createNewWalkthrough(title);
     }
 
     @Override

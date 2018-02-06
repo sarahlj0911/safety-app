@@ -9,6 +9,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import com.plusmobileapps.safetyapp.R;
+import com.plusmobileapps.safetyapp.walkthrough.landing.SurveyLandingFragment;
 import com.plusmobileapps.safetyapp.walkthrough.walkthrough.WalkthroughActivity;
 
 import java.util.ArrayList;
@@ -26,11 +27,14 @@ public class LocationActivity extends AppCompatActivity implements LocationContr
         setContentView(R.layout.activity_location);
         new LocationPresenter(this);
 
-        //TODO: Retrieve the id from the intent
+        Intent intent = getIntent();
+        String title = intent.getStringExtra(SurveyLandingFragment.EXTRA_WALKTHROUGH_NAME);
+        Long id = intent.getLongExtra(SurveyLandingFragment.EXTRA_REQUESTED_WALKTHROUGH, -1L);
+
 
         Toolbar toolbar = findViewById(R.id.location_toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle(getString(R.string.title_locations));
+        getSupportActionBar().setTitle(title);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);  //will make the back button appear on toolbar
 
         adapter = new LocationAdapter(new ArrayList<Location>(0), itemListener);
