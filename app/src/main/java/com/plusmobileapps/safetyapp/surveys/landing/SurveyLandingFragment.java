@@ -80,9 +80,10 @@ public class SurveyLandingFragment extends Fragment
         prefManager = new PrefManager(getContext());
         if (prefManager.isFirstTimeLaunch()) {
             presenter.firstAppLaunch();
-        } else {
-            presenter.start();
         }
+
+        // presenter has to be started in either case
+        presenter.start();
     }
 
     @Override
