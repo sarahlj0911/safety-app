@@ -19,7 +19,7 @@ import com.plusmobileapps.safetyapp.data.entity.Response;
 import com.plusmobileapps.safetyapp.data.entity.User;
 import com.plusmobileapps.safetyapp.data.entity.Walkthrough;
 
-@Database(entities = {Location.class, Question.class, Response.class, User.class, Walkthrough.class}, version = 2)
+@Database(entities = {Location.class, Question.class, Response.class, School.class, User.class, Walkthrough.class}, version = 2)
 public abstract class AppDatabase extends RoomDatabase {
 
     private static AppDatabase INSTANCE;

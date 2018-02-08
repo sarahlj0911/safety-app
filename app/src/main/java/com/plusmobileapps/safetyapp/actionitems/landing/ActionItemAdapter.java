@@ -41,7 +41,6 @@ public class ActionItemAdapter extends RecyclerView.Adapter<ActionItemAdapter.Vi
         holder.getDescription().setText(actionItem.getActionPlan());
         holder.getLocation().setText(actionItem.getLocationId());
 //        holder.getPicture().setImageBitmap(actionItem.getPhoto());
-        holder.getTitle().setText(actionItem.getTitle());
 
         //TODO handle the changing of statuses and bind the corresponding colors to status value
     }

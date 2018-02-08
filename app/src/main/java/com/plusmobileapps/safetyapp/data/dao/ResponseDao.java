@@ -14,13 +14,13 @@ import java.util.*;
 
 @Dao
 public interface ResponseDao {
-    @Query("SELECT * FROM response")
+    @Query("SELECT * FROM responses")
     List<Response> getAll();
 
-    @Query("SELECT * FROM response where responseId LIKE :responseId")
+    @Query("SELECT * FROM responses where responseId LIKE :responseId")
     Response getByResponseId(String responseId);
 
-    @Query("SELECT * FROM response")
+    @Query("SELECT * FROM responses")
     List<Response> getAllActionItems();
 
     @Insert

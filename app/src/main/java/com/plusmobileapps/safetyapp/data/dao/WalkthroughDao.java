@@ -15,10 +15,10 @@ import java.util.List;
 
 @Dao
 public interface WalkthroughDao {
-    @Query("SELECT * FROM walkthrough")
+    @Query("SELECT * FROM walkthroughs")
     List<Walkthrough> getAll();
 
-    @Query("SELECT * FROM walkthrough where walkthroughId LIKE :walkthroughId")
+    @Query("SELECT * FROM walkthroughs where walkthroughId LIKE :walkthroughId")
     Walkthrough getByWalkthroughId(String walkthroughId);
 
     @Insert

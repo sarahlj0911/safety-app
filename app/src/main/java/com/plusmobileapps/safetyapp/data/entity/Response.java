@@ -1,16 +1,30 @@
 package com.plusmobileapps.safetyapp.data.entity;
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.ForeignKey;
 import android.arch.persistence.room.PrimaryKey;
 import android.graphics.Bitmap;
 import android.graphics.Picture;
 import android.media.Image;
 
+import static android.arch.persistence.room.ForeignKey.CASCADE;
+
 /**
  * Created by aaronmusengo on 1/23/18.
  */
 
-@Entity(tableName = "response")
+@Entity(tableName = "responses",
+        foreignKeys =  {
+            @ForeignKey(entity = User.class,
+                        parentColumns = "userId",
+                        childColumns = "userId"),
+            @ForeignKey(entity = Location.class,
+                        parentColumns = "locationId",
+                        childColumns = "locationId"),
+            @ForeignKey(entity = Question.class,
+                        parentColumns = "questionId",
+                        childColumns = "questionId")
+        })
 public class Response {
     @PrimaryKey(autoGenerate = false)
     private int responseId;
@@ -24,7 +38,7 @@ public class Response {
     @ColumnInfo(name = "locationId")
     private int locationId;
 
-    @ColumnInfo(name = "timeStamp")
+    @ColumnInfo(name = "timestamp")
     private String timeStamp; //TODO Convert to time stamp object
 
     @ColumnInfo(name = "rating")
@@ -39,13 +53,10 @@ public class Response {
     @ColumnInfo(name = "questionId")
     private int questionId;
 
-    @ColumnInfo(name = "Title")
-    private String title;
-
     @ColumnInfo(name = "userId")
     private int userId;
 
-    public Response(int responseId, int isActionItem, int locationId, String timeStamp, int rating, int priority, String actionPlan, int questionId, String title, byte[] image, int userId) {
+    public Response(int responseId, int isActionItem, int locationId, String timeStamp, int rating, int priority, String actionPlan, int questionId, byte[] image, int userId) {
         this.responseId = responseId;
         this.isActionItem = isActionItem;
         this.locationId = locationId;
@@ -54,7 +65,6 @@ public class Response {
         this.priority = priority;
         this.actionPlan = actionPlan;
         this.questionId = questionId;
-        this.title = title;
         this.image = image;
         this.userId = userId;
     }
@@ -96,7 +106,6 @@ public class Response {
         return this.questionId;
     }
 
-    public String getTitle() { return this.title; }
 
     public int getUserId() { return this.userId; }
 
@@ -137,7 +146,6 @@ public class Response {
         this.questionId = questionId;
     }
 
-    public void setTitle(String title) { this.title = title; }
 }
 
 

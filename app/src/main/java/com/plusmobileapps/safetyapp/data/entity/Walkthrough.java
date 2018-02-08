@@ -2,6 +2,7 @@ package com.plusmobileapps.safetyapp.data.entity;
 
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.ForeignKey;
 import android.arch.persistence.room.PrimaryKey;
 
 import java.util.Date;
@@ -10,7 +11,10 @@ import java.util.Date;
  * Created by aaronmusengo on 1/23/18.
  */
 
-@Entity(tableName = "walkthrough")
+@Entity(tableName = "walkthroughs",
+        foreignKeys = @ForeignKey(entity = School.class,
+                                  parentColumns = "schoolId",
+                                  childColumns = "schoolId"))
 public class Walkthrough {
     @PrimaryKey(autoGenerate = false)
     private int walkthroughId;
