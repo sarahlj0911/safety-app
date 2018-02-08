@@ -22,7 +22,8 @@ public class LoadActionItemTask extends AsyncTask<Void, Void, List<Response>> {
     protected List<Response> doInBackground(Void... voids) {
         db = AppDatabase.getAppDatabase(MyApplication.getAppContext());
         ResponseDao responseDao = db.responseDao();
-        List<Response> actionItems = responseDao.getAllActionItems(1);
+        List<Response> actionItems = responseDao.getAllActionItems();
+
         return actionItems;
     }
 

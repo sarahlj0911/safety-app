@@ -15,11 +15,14 @@ public class Walkthrough {
     @PrimaryKey(autoGenerate = false)
     private int walkthroughId;
 
+    @ColumnInfo(name = "schoolId")
+    private int schoolId;
+
     @ColumnInfo(name = "name")
     private String name;
 
     @ColumnInfo(name = "percentComplete")
-    private int percentComplete;
+    private double percentComplete;
 
     @ColumnInfo(name = "createdDate")
     private String createdDate;
@@ -27,11 +30,12 @@ public class Walkthrough {
     @ColumnInfo(name = "lastUpdatedDate")
     private String lastUpdatedDate;
 
-    public Walkthrough(int walkthroughId, String name, int percentComplete, String createdDate, String lastUpdatedDate) {
+    public Walkthrough(int walkthroughId, String name, double percentComplete, String createdDate, String lastUpdatedDate, int schoolId) {
         this.walkthroughId = walkthroughId;
         this.name = name;
         this.createdDate = createdDate;
         this.lastUpdatedDate = lastUpdatedDate;
+        this.schoolId = schoolId;
     }
 
     //Getters
@@ -39,11 +43,13 @@ public class Walkthrough {
 
     public String getName() { return this.name; }
 
-    public int getPercentComplete() { return this.percentComplete; }
+    public double getPercentComplete() { return this.percentComplete; }
 
     public String getCreatedDate() { return this.createdDate; }
 
     public String  getLastUpdatedDate() { return this.lastUpdatedDate; }
+
+    public int getSchoolId() { return this.schoolId; }
 
     //Setters
     public void setWalkthroughId(int walkthroughId) {
@@ -54,7 +60,7 @@ public class Walkthrough {
         this.name = name;
     }
 
-    public void setPercentComplete(int percentComplete) {
+    public void setPercentComplete(double percentComplete) {
         this.percentComplete = percentComplete;
     }
 
@@ -64,6 +70,10 @@ public class Walkthrough {
 
     public void setLastUpdatedDate(String lastUpdatedDate) {
         this.lastUpdatedDate = lastUpdatedDate;
+    }
+
+    public void setSchoolId(int schoolId) {
+        this.schoolId = schoolId;
     }
 }
 

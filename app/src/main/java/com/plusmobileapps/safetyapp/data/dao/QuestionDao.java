@@ -17,7 +17,5 @@ public interface QuestionDao {
     @Query("SELECT * FROM question WHERE questionId like :questionId")
     Question getByQuestionID(int questionId);
 
-    @Query("SELECT * FROM question WHERE locationId like :locationId")
-    List<Question> getAllForLocation(int locationId);
 }
 

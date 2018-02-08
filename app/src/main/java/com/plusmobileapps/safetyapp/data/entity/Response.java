@@ -18,7 +18,7 @@ public class Response {
     @ColumnInfo(name = "isActionItem")
     private int isActionItem;
 
-    @ColumnInfo(name = "image", typeAffinity = ColumnInfo.BLOB)
+    @ColumnInfo(name = "image")//, typeAffinity = ColumnInfo.BLOB)
     private byte[] image;
 
     @ColumnInfo(name = "locationId")
@@ -28,10 +28,10 @@ public class Response {
     private String timeStamp; //TODO Convert to time stamp object
 
     @ColumnInfo(name = "rating")
-    private String rating;
+    private int rating;
 
     @ColumnInfo(name = "priority")
-    private String priority;
+    private int priority;
 
     @ColumnInfo(name = "actionPlan")
     private String actionPlan;
@@ -42,7 +42,10 @@ public class Response {
     @ColumnInfo(name = "Title")
     private String title;
 
-    public Response(int responseId, int isActionItem, int locationId, String timeStamp, String rating, String priority, String actionPlan, int questionId, String title, byte[] image) {
+    @ColumnInfo(name = "userId")
+    private int userId;
+
+    public Response(int responseId, int isActionItem, int locationId, String timeStamp, int rating, int priority, String actionPlan, int questionId, String title, byte[] image, int userId) {
         this.responseId = responseId;
         this.isActionItem = isActionItem;
         this.locationId = locationId;
@@ -53,6 +56,7 @@ public class Response {
         this.questionId = questionId;
         this.title = title;
         this.image = image;
+        this.userId = userId;
     }
 
     //Getters
@@ -76,11 +80,11 @@ public class Response {
         return this.timeStamp;
     }
 
-    public String getRating() {
+    public int getRating() {
         return this.rating;
     }
 
-    public String getPriority() {
+    public int getPriority() {
         return this.priority;
     }
 
@@ -93,6 +97,8 @@ public class Response {
     }
 
     public String getTitle() { return this.title; }
+
+    public int getUserId() { return this.userId; }
 
     //Setters
     public void setResponseId(int responseId) {
@@ -115,11 +121,11 @@ public class Response {
         this.timeStamp = timeStamp;
     }
 
-    public void setRating(String rating) {
+    public void setRating(int rating) {
         this.rating = rating;
     }
 
-    public void setPriority(String priority) {
+    public void setPriority(int priority) {
         this.priority = priority;
     }
 

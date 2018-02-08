@@ -3,14 +3,18 @@ import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
 import android.graphics.Bitmap;
+import android.support.annotation.Nullable;
+
+import org.jetbrains.annotations.NotNull;
+
 /**
  * Created by aaronmusengo on 1/23/18.
  */
 
 @Entity(tableName = "location")
 public class Location {
-    @PrimaryKey(autoGenerate = false)
-    private int locationId;
+    @PrimaryKey()
+    int locationId;
 
     @ColumnInfo(name = "type")
     private String type; //TODO Create Type Enum

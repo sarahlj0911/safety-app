@@ -29,7 +29,7 @@ public class Question {
     @ColumnInfo(name = "ratingOption4")
     private String ratingOption4;
 
-    @ColumnInfo(name = "shordDesc")
+    @ColumnInfo(name = "shortDesc")
     private String shortDescription;
 
 

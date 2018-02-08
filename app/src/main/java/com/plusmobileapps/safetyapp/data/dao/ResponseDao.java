@@ -20,11 +20,8 @@ public interface ResponseDao {
     @Query("SELECT * FROM response where responseId LIKE :responseId")
     Response getByResponseId(String responseId);
 
-    @Query("SELECT * FROM response where walkthroughId like :walkthroughId")
-    List<Response> getAllForWalkthrough(int walkthroughId);
-
-    @Query("SELECT * FROM response where isActionItem like :actionItem")
-    List<Response> getAllActionItems(int actionItem);
+    @Query("SELECT * FROM response")
+    List<Response> getAllActionItems();
 
     @Insert
     void insertAll(Response... responses);
