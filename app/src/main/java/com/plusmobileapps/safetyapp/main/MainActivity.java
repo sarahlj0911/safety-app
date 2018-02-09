@@ -14,10 +14,7 @@ import com.plusmobileapps.safetyapp.FragmentFactory;
 import com.plusmobileapps.safetyapp.R;
 import com.plusmobileapps.safetyapp.actionitems.landing.ActionItemPresenter;
 import com.plusmobileapps.safetyapp.summary.landing.SummaryPresenter;
-import com.plusmobileapps.safetyapp.surveys.landing.SurveyLandingPresenter;
-
-import java.util.ArrayList;
-import java.util.Arrays;
+import com.plusmobileapps.safetyapp.walkthrough.landing.SurveyLandingPresenter;
 
 public class MainActivity extends AppCompatActivity implements MainActivityContract.View {
 
@@ -27,9 +24,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
     private BottomNavigationView navigation;
     private String surveyFragmentTitle = "";
     private MainActivityPresenter presenter;
-    private SurveyLandingPresenter surveyLandingPresenter;
-    private ActionItemPresenter actionItemPresenter;
-    private SummaryPresenter summaryPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,9 +44,9 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
     }
 
     private void setUpPresenters() {
-        surveyLandingPresenter = new SurveyLandingPresenter(FragmentFactory.getInstance().getSurveyLandingFragment());
-        actionItemPresenter = new ActionItemPresenter(FragmentFactory.getInstance().getActionItemsFragment());
-        summaryPresenter = new SummaryPresenter(FragmentFactory.getInstance().getSummaryFragment());
+        new SurveyLandingPresenter(FragmentFactory.getInstance().getSurveyLandingFragment());
+        new ActionItemPresenter(FragmentFactory.getInstance().getActionItemsFragment());
+        new SummaryPresenter(FragmentFactory.getInstance().getSummaryFragment());
     }
 
     private void findViewsById() {

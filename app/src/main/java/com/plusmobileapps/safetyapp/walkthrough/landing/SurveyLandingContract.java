@@ -1,4 +1,4 @@
-package com.plusmobileapps.safetyapp.surveys.landing;
+package com.plusmobileapps.safetyapp.walkthrough.landing;
 
 import com.plusmobileapps.safetyapp.BasePresenter;
 import com.plusmobileapps.safetyapp.BaseView;
@@ -9,7 +9,8 @@ public interface SurveyLandingContract {
 
     interface View extends BaseView<Presenter>{
         void showSurveys(ArrayList<SurveyOverview> surveys);
-        void openSurvey(long id);
+        void openSurvey(long id, String title);
+        void createNewWalkthrough(String title);
         void showTutorial();
         void showConfirmationDialog();
         void showCreateSurveyDialog();
@@ -21,5 +22,6 @@ public interface SurveyLandingContract {
         void firstAppLaunch();
         void loadSurveys();
         void createNewSurveyConfirmed();
+        void confirmCreateSurveyClicked(String title);
     }
 }

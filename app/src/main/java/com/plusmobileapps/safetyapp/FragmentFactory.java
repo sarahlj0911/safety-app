@@ -2,7 +2,7 @@ package com.plusmobileapps.safetyapp;
 
 import com.plusmobileapps.safetyapp.actionitems.landing.ActionItemsFragment;
 import com.plusmobileapps.safetyapp.summary.landing.SummaryFragment;
-import com.plusmobileapps.safetyapp.surveys.landing.SurveyLandingFragment;
+import com.plusmobileapps.safetyapp.walkthrough.landing.SurveyLandingFragment;
 
 public class FragmentFactory {
     private static FragmentFactory instance = null;

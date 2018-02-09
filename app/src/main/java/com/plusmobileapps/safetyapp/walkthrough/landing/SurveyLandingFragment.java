@@ -1,7 +1,8 @@
-package com.plusmobileapps.safetyapp.surveys.landing;
+package com.plusmobileapps.safetyapp.walkthrough.landing;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -21,12 +22,16 @@ import com.github.amlcurran.showcaseview.ShowcaseView;
 import com.github.amlcurran.showcaseview.targets.ViewTarget;
 import com.plusmobileapps.safetyapp.PrefManager;
 import com.plusmobileapps.safetyapp.R;
-import com.plusmobileapps.safetyapp.surveys.location.LocationFragment;
+import com.plusmobileapps.safetyapp.walkthrough.location.LocationActivity;
 
 import java.util.ArrayList;
 
 public class SurveyLandingFragment extends Fragment
         implements OnShowcaseEventListener, SurveyLandingContract.View {
+
+    public static String EXTRA_REQUESTED_WALKTHROUGH = "requested_walkthrough";
+    public static String EXTRA_WALKTHROUGH_NAME = "walkthrough_name";
+
     private static ShowcaseView showcaseView;
     private static final String TAG = "SurveyLandingFragment";
     private PrefManager prefManager;
@@ -98,17 +103,19 @@ public class SurveyLandingFragment extends Fragment
     }
 
     @Override
-    public void openSurvey(long id) {
+    public void openSurvey(long id, String title) {
         fab.setVisibility(View.GONE);
-        LocationFragment locationFragment = LocationFragment.newInstance();
-        Bundle bundle = new Bundle();
-        bundle.putLong("id", id);
-        locationFragment.setArguments(bundle);
-        FragmentTransaction transaction = getFragmentManager().beginTransaction();
-        transaction.replace(R.id.fragment_survey_landing, locationFragment)
-                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-                .addToBackStack("survey")
-                .commit();
+        Intent intent = new Intent(getContext(), LocationActivity.class);
+        intent.putExtra(EXTRA_REQUESTED_WALKTHROUGH, id);
+        intent.putExtra(EXTRA_WALKTHROUGH_NAME, title);
+        startActivity(intent);
+    }
+
+    @Override
+    public void createNewWalkthrough(String title) {
+        Intent intent = new Intent(getContext(), LocationActivity.class);
+        intent.putExtra(EXTRA_WALKTHROUGH_NAME, title);
+        startActivity(intent);
     }
 
     @Override
@@ -158,7 +165,6 @@ public class SurveyLandingFragment extends Fragment
 
     @Override
     public void showCreateSurveyDialog() {
-        final LocationFragment locationFragment = LocationFragment.newInstance();
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setTitle(getString(R.string.tutorial_title))
                 .setView(getLayoutInflater().inflate(R.layout.dialog_create_survey, null))
@@ -168,14 +174,7 @@ public class SurveyLandingFragment extends Fragment
                         Dialog dialogObj = Dialog.class.cast(dialog);
                         EditText editText = dialogObj.findViewById(R.id.edittext_create_survey);
                         String surveyTitle = editText.getText().toString();
-                        Bundle bundle = new Bundle();
-                        bundle.putString("title", surveyTitle);
-                        locationFragment.setArguments(bundle);
-                        FragmentTransaction transaction = getFragmentManager().beginTransaction();
-                        transaction.replace(R.id.root_frame, locationFragment)
-                                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-                                .addToBackStack("survey")
-                                .commit();
+                        presenter.confirmCreateSurveyClicked(surveyTitle);
                     }
                 })
                 .setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
