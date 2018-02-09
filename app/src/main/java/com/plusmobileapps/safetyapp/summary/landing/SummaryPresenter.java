@@ -1,6 +1,6 @@
 package com.plusmobileapps.safetyapp.summary.landing;
 
-import com.plusmobileapps.safetyapp.surveys.landing.SurveyOverview;
+import com.plusmobileapps.safetyapp.walkthrough.landing.SurveyOverview;
 
 import java.util.ArrayList;
 

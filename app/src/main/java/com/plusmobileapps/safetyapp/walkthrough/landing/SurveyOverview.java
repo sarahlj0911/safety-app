@@ -1,4 +1,4 @@
-package com.plusmobileapps.safetyapp.surveys.landing;
+package com.plusmobileapps.safetyapp.walkthrough.landing;
 
 /**
  * Created by Andrew on 11/13/2017.

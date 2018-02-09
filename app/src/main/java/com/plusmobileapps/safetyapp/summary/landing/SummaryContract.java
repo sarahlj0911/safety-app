@@ -2,7 +2,7 @@ package com.plusmobileapps.safetyapp.summary.landing;
 
 import com.plusmobileapps.safetyapp.BasePresenter;
 import com.plusmobileapps.safetyapp.BaseView;
-import com.plusmobileapps.safetyapp.surveys.landing.SurveyOverview;
+import com.plusmobileapps.safetyapp.walkthrough.landing.SurveyOverview;
 
 import java.util.ArrayList;
 
