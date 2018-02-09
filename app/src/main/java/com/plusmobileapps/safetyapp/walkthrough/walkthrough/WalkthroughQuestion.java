@@ -1,4 +1,4 @@
-package com.plusmobileapps.safetyapp.surveys.survey;
+package com.plusmobileapps.safetyapp.walkthrough.walkthrough;
 
 import android.graphics.Bitmap;
 

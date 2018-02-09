@@ -1,4 +1,4 @@
-package com.plusmobileapps.safetyapp.surveys.landing;
+package com.plusmobileapps.safetyapp.walkthrough.landing;
 
 import java.util.ArrayList;
 
@@ -20,7 +20,8 @@ public class SurveyLandingPresenter implements SurveyLandingContract.Presenter {
 
     @Override
     public void surveyClicked(int position) {
-        view.openSurvey(surveys.get(position).getSurveyId());
+        final SurveyOverview survey = surveys.get(position);
+        view.openSurvey(survey.getSurveyId(), survey.getTitle());
     }
 
     @Override
@@ -46,6 +47,11 @@ public class SurveyLandingPresenter implements SurveyLandingContract.Presenter {
         SurveyFakeModel model = new SurveyFakeModel();
         surveys = model.getSurveys();
         view.showSurveys(surveys);
+    }
+
+    @Override
+    public void confirmCreateSurveyClicked(String title) {
+        view.createNewWalkthrough(title);
     }
 
     @Override
