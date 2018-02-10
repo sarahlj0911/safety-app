@@ -32,10 +32,7 @@ public class QuestionMapping {
     public int getQuestionId() { return this.questionId; }
 
     // setters
-    public void setMappingId(int mappingId) {
-        this.mappingId = mappingId;
-    }
-
+    public void setMappingId(int mappingId) { this.mappingId = mappingId; }
     public void setLocationId(int locationId) { this.locationId = locationId; }
     public void setQuestionId(int questionId) {  this.questionId = questionId; }
 }
