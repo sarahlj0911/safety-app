@@ -17,5 +17,9 @@ public interface QuestionDao {
     @Query("SELECT * FROM question WHERE questionId like :questionId")
     Question getByQuestionID(int questionId);
 
+    @Query("SELECT * " +
+            "FROM question INNER JOIN question_mapping on question.questionId = question_mapping.questionId WHERE locationId like :locationId")
+    List<Question> getQuestionsForLocationType(int locationId);
+
 }
 
