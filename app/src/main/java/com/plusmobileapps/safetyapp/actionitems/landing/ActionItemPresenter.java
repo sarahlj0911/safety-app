@@ -1,7 +1,8 @@
 package com.plusmobileapps.safetyapp.actionitems.landing;
 
 
-import java.util.ArrayList;
+//import com.plusmobileapps.safetyapp.data.ActionItem;
+import com.plusmobileapps.safetyapp.data.entity.Response;
 
 public class ActionItemPresenter implements ActionItemContract.Presenter {
 
@@ -30,10 +31,10 @@ public class ActionItemPresenter implements ActionItemContract.Presenter {
         }
 
         //this is where you would grab the data asynchronously
-        ArrayList<ActionItem> actionItems = new FakeModel().getActionItems();
+        new LoadActionItemTask(actionItemView).execute();
         //wrapping these next two lines in the onLoadComplete callback
-        actionItemView.setProgressIndicator(false);
-        actionItemView.showActionItems(actionItems);
+        //actionItemView.setProgressIndicator(false);
+        //actionItemView.showActionItems(actionItems);
     }
 
     /**
@@ -42,7 +43,7 @@ public class ActionItemPresenter implements ActionItemContract.Presenter {
      * @param requestedActionItem
      */
     @Override
-    public void openActionItemDetail(ActionItem requestedActionItem) {
-        actionItemView.showActionItemDetailUi(requestedActionItem.getId());
+    public void openActionItemDetail(Response requestedActionItem) {
+        actionItemView.showActionItemDetailUi("2");
     }
 }

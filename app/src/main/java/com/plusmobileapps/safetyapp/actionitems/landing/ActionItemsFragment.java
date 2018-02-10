@@ -11,8 +11,11 @@ import android.view.ViewGroup;
 
 import com.plusmobileapps.safetyapp.R;
 import com.plusmobileapps.safetyapp.actionitems.detail.ActionItemDetailActivity;
+import com.plusmobileapps.safetyapp.data.entity.Response;
+
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class ActionItemsFragment extends Fragment implements ActionItemContract.View {
@@ -23,7 +26,7 @@ public class ActionItemsFragment extends Fragment implements ActionItemContract.
     protected RecyclerView.LayoutManager layoutManager;
     protected ActionItemsFragment.LayoutManagerType currentLayoutManagerType;
     protected ActionItemAdapter adapter;
-    private ArrayList<ActionItem> actionItems;
+    private ArrayList<Response> actionItems;
 
     private ActionItemContract.Presenter presenter;
 
@@ -53,7 +56,7 @@ public class ActionItemsFragment extends Fragment implements ActionItemContract.
         View rootView = inflater.inflate(R.layout.fragment_action_items, container, false);
         rootView.setTag(TAG);
 
-        adapter = new ActionItemAdapter(new ArrayList<ActionItem>(0), itemListener);
+        adapter = new ActionItemAdapter(new ArrayList<Response>(0), itemListener);
 
         recyclerView = (RecyclerView) rootView.findViewById(R.id.action_items_recyclerview);
         layoutManager = new LinearLayoutManager(getActivity());
@@ -81,7 +84,7 @@ public class ActionItemsFragment extends Fragment implements ActionItemContract.
      * @param actionItems   list of all action items to pass to adapter
      */
     @Override
-    public void showActionItems(ArrayList<ActionItem> actionItems) {
+    public void showActionItems(List<Response> actionItems) {
         adapter.replaceData(actionItems);
     }
 
@@ -113,7 +116,7 @@ public class ActionItemsFragment extends Fragment implements ActionItemContract.
      */
     ActionItemListener itemListener = new ActionItemListener() {
         @Override
-        public void onActionItemClicked(ActionItem actionItem) {
+        public void onActionItemClicked(Response actionItem) {
             presenter.openActionItemDetail(actionItem);
         }
     };
@@ -122,7 +125,7 @@ public class ActionItemsFragment extends Fragment implements ActionItemContract.
      * Interface for the recyclerview items being clicked
      */
     public interface ActionItemListener {
-        void onActionItemClicked(ActionItem actionItem);
+        void onActionItemClicked(Response actionItem);
     }
 
 }
