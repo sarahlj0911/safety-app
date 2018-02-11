@@ -4,18 +4,18 @@ package com.plusmobileapps.safetyapp.walkthrough.landing;
  * Created by Andrew on 11/13/2017.
  */
 
-public class SurveyOverview {
+public class WalkthroughOverview {
     private String title;
     private String date;
     private String time;
     private int progress = 0;
-    private long surveyId = 0L;
+    private long walkthroughId = 0L;
 
-    public SurveyOverview(String title){
+    public WalkthroughOverview(String title){
         this.title = title;
     }
 
-    public SurveyOverview(String title, String date, String time) {
+    public WalkthroughOverview(String title, String date, String time) {
         this.title = title;
         this.date = date;
         this.time = time;
@@ -45,12 +45,12 @@ public class SurveyOverview {
         this.time = time;
     }
 
-    public long getSurveyId() {
-        return surveyId;
+    public long getWalkthroughId() {
+        return walkthroughId;
     }
 
-    public void setSurveyId(long surveyId) {
-        this.surveyId = surveyId;
+    public void setWalkthroughId(long walkthroughId) {
+        this.walkthroughId = walkthroughId;
     }
 
     public boolean isInProgress() {

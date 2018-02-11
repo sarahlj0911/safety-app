@@ -12,7 +12,7 @@
         android:layout_height="match_parent">
 
         <TextView
-            android:id="@+id/survey_green_count"
+            android:id="@+id/walkthrough_green_count"
             android:layout_width="28dp"
             android:layout_height="36dp"
             android:layout_marginBottom="8dp"
@@ -20,30 +20,30 @@
             android:text="x9"
             android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/survey_green_image" />
+            app:layout_constraintStart_toEndOf="@+id/walkthrough_green_image" />
 
         <View
-            android:id="@+id/survey_green_image"
+            android:id="@+id/walkthrough_green_image"
             android:layout_width="@dimen/actionItemSize"
             android:layout_height="@dimen/actionItemSize"
             android:layout_marginBottom="8dp"
             android:layout_marginStart="16dp"
             android:background="@drawable/circle_green"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/survey_yellow_count" />
+            app:layout_constraintStart_toEndOf="@+id/walkthrough_yellow_count" />
 
         <View
-            android:id="@+id/survey_yellow_image"
+            android:id="@+id/walkthrough_yellow_image"
             android:layout_width="@dimen/actionItemSize"
             android:layout_height="@dimen/actionItemSize"
             android:layout_marginBottom="8dp"
             android:layout_marginStart="16dp"
             android:background="@drawable/circle_yellow"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/survey_red_count" />
+            app:layout_constraintStart_toEndOf="@+id/walkthrough_red_count" />
 
         <View
-            android:id="@+id/survey_red_image"
+            android:id="@+id/walkthrough_red_image"
             android:layout_width="@dimen/actionItemSize"
             android:layout_height="@dimen/actionItemSize"
             android:layout_marginBottom="8dp"
@@ -53,7 +53,7 @@
             app:layout_constraintStart_toStartOf="parent" />
 
         <TextView
-            android:id="@+id/survey_title"
+            android:id="@+id/walkthrough_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -65,7 +65,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/survey_red_count"
+            android:id="@+id/walkthrough_red_count"
             android:layout_width="28dp"
             android:layout_height="36dp"
             android:layout_marginBottom="8dp"
@@ -73,10 +73,10 @@
             android:text="x4"
             android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/survey_red_image" />
+            app:layout_constraintStart_toEndOf="@+id/walkthrough_red_image" />
 
         <TextView
-            android:id="@+id/survey_yellow_count"
+            android:id="@+id/walkthrough_yellow_count"
             android:layout_width="28dp"
             android:layout_height="36dp"
             android:layout_marginBottom="8dp"
@@ -84,7 +84,7 @@
             android:text="x6"
             android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/survey_yellow_image" />
+            app:layout_constraintStart_toEndOf="@+id/walkthrough_yellow_image" />
 
         <TextView
             android:id="@+id/date_time"

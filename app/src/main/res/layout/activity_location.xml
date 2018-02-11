@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:background="@android:color/background_light"
-    android:id="@+id/fragment_survey_location">
+    android:id="@+id/fragment_walkthrough_location">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/toolbar"

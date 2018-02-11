@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">SAfETy App</string>
-    <string name="title_walkthrough">Walk Throughs</string>
+    <string name="title_walkthrough">Walkthroughs</string>
     <string name="title_action_items">Action Items</string>
     <string name="title_action_item_detail">Action Item Detail</string>
     <string name="title_summary">Summary</string>
@@ -11,7 +11,7 @@
     <string name="no">No</string>
     <string name="create">Create</string>
     <string name="cancel">Cancel</string>
-    <string name="walk_throughs">"Walk Throughs"</string>
+    <string name="walkthroughs">"Walkthroughs"</string>
 
 
     <!-- Priority descriptions. Can be used anywhere in the app that they might be useful -->
@@ -24,18 +24,18 @@
 
     <!-- Welcome pages text -->
     <string name="welcome1_title">The SAfETy App</string>
-    <string name="welcome1_message">A Walk-through Tool for Administrators</string>
+    <string name="welcome1_message">A Walkthrough Tool for Administrators</string>
     <string name="welcome2_item1">Our goal is to help you gather data about your school climate through observation and social interaction.</string>
     <string name="welcome2_item2">This tool can then be used to create an action plan focusing on locations and/or indicators.</string>
     <string name="welcome3_title">General Instructions</string>
-    <string name="welcome3_item1">1. Once you\'ve created a new walk through, you can scroll through and select from a list of locations where observations will be conducted.</string>
+    <string name="welcome3_item1">1. Once you\'ve created a new walkthrough, you can scroll through and select from a list of locations where observations will be conducted.</string>
     <string name="welcome3_item2">2. Once you\'ve chosen a location, rank and prioritize each environmental indicator or observed behavior.</string>
     <string name="welcome3_item3">3. Use the Action Plan space to note possible actions to resolve specific issues.</string>
     <string name="welcome3_item4">4. It is best to conduct the observations when students and staff are using the space as they normally would.</string>
-    <string name="welcome3_item5">5. Ideally, the walk-through will be completed in one day by the same person or persons. If this is not possible, try and complete the walk-
+    <string name="welcome3_item5">5. Ideally, the walkthrough will be completed in one day by the same person or persons. If this is not possible, try and complete the walk-
 through during one week.</string>
     <string name="welcome4_title">Prioritization Guide</string>
-    <string name="prioritization_tip_text">You may set a priority level for each item in the walk-through to help determine how soon action items need to be addressed. Only items with a red or yellow priority will be shown in your list of action items.</string>
+    <string name="prioritization_tip_text">You may set a priority level for each item in the walkthrough to help determine how soon action items need to be addressed. Only items with a red or yellow priority will be shown in your list of action items.</string>
 
     <string name="back">BACK</string>
     <string name="next">NEXT</string>
@@ -45,18 +45,18 @@ through during one week.</string>
     <string name="label_take_photo">Take a Photo:</string>
     <string name="hint_action_plan">Tap to enter action plan here</string>
 
-    <string name="tutorial_title">Create a new walk through</string>
-    <string name="tutorial_content">Click on the add button to start a new walk through.</string>
+    <string name="tutorial_title">Create a new walkthrough</string>
+    <string name="tutorial_content">Click on the add button to start a new walkthrough.</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="title_activity_survey">SurveyActivity</string>
+    <string name="title_activity_walkthrough">WalkthroughActivity</string>
     <string name="action_settings">Settings</string>
     <string name="undo_string">Undo</string>
     <string name="title_edit_priority_dialog">Select a priority:</string>
 
-    <!--survey landing text-->
-    <string name="viewholder_header_completed">In Progress</string>
-    <string name="viewholder_header_inprogress">Completed</string>
-    <string name="survey_dialog_message">You have an unfinished walk through. Creating a new walk through will delete the unfinished one. Are you sure you want to create a new walk through?</string>
+    <!--walkthrough landing text-->
+    <string name="viewholder_header_completed">Completed</string>
+    <string name="viewholder_header_inprogress">In Progress</string>
+    <string name="walkthrough_dialog_message">You have an unfinished walkthrough. Creating a new walkthrough will delete the unfinished one. Are you sure you want to create a new walkthrough?</string>
 </resources>

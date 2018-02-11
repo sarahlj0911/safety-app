@@ -9,7 +9,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import com.plusmobileapps.safetyapp.R;
-import com.plusmobileapps.safetyapp.walkthrough.landing.SurveyLandingFragment;
+import com.plusmobileapps.safetyapp.walkthrough.landing.WalkthroughLandingFragment;
 import com.plusmobileapps.safetyapp.walkthrough.walkthrough.WalkthroughActivity;
 
 import java.util.ArrayList;
@@ -28,8 +28,8 @@ public class LocationActivity extends AppCompatActivity implements LocationContr
         new LocationPresenter(this);
 
         Intent intent = getIntent();
-        String title = intent.getStringExtra(SurveyLandingFragment.EXTRA_WALKTHROUGH_NAME);
-        Long id = intent.getLongExtra(SurveyLandingFragment.EXTRA_REQUESTED_WALKTHROUGH, -1L);
+        String title = intent.getStringExtra(WalkthroughLandingFragment.EXTRA_WALKTHROUGH_NAME);
+        Long id = intent.getLongExtra(WalkthroughLandingFragment.EXTRA_REQUESTED_WALKTHROUGH, -1L);
 
 
         Toolbar toolbar = findViewById(R.id.location_toolbar);

@@ -17,7 +17,7 @@ import java.util.ArrayList;
 public class WalkthroughActivity extends AppCompatActivity {
 
     static final String TAG = "WalkthroughActivity";
-    public static final String EXTRA_LOCATION = "com.plusmobileapps.safetyapp.survey.overview.LOCATION";
+    public static final String EXTRA_LOCATION = "com.plusmobileapps.safetyapp.walkthrough.overview.LOCATION";
     FragmentManager fragmentManager;
     WalkthroughQuestion walkthroughQuestion;
 
@@ -36,7 +36,7 @@ public class WalkthroughActivity extends AppCompatActivity {
         WalkthroughContentFragment fragment = WalkthroughContentFragment.newInstance(walkthroughQuestion);
         FragmentTransaction initialTransaction = fragmentManager.beginTransaction();
         initialTransaction
-                .add(R.id.suvey_container, fragment, "0")
+                .add(R.id.walkthrough_container, fragment, "0")
                 .commit();
     }
 
@@ -84,7 +84,7 @@ public class WalkthroughActivity extends AppCompatActivity {
                         R.animator.slide_out_left,
                         R.animator.slide_in_right,
                         R.animator.slide_out_right)
-                .replace(R.id.suvey_container, newInstance)
+                .replace(R.id.walkthrough_container, newInstance)
                 .addToBackStack("walkthroughQuestion")
                 .commit();
     }
