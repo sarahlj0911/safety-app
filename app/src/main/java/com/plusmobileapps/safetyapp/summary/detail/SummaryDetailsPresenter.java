@@ -6,11 +6,11 @@ package com.plusmobileapps.safetyapp.summary.detail;
 
 public class SummaryDetailsPresenter implements SummaryDetailsContract.Presenter {
     private static final String TAG = "SummaryDetailsPresenter";
-    private SummaryDetailsContract.View summaryDetailsView;
+    private SummaryDetailsContract.View view;
 
-    public SummaryDetailsPresenter(SummaryDetailsContract.View summaryDetailsView) {
-        this.summaryDetailsView = summaryDetailsView;
-        summaryDetailsView.setPresenter(this);
+    public SummaryDetailsPresenter(SummaryDetailsContract.View view) {
+        this.view = view;
+        view.setPresenter(this);
     }
 
     @Override

@@ -32,14 +32,7 @@ public class SummaryOverviewFragment extends Fragment implements SummaryOverview
     @Override
     public void onResume() {
         super.onResume();
-
-        if (presenter == null) {
-            Log.d(TAG, "presenter is null");
-        } else {
-            Log.d(TAG, "presenter is NOT null");
-        }
-
-        this.presenter.start();
+        //this.presenter.start();
     }
 
     @Override
@@ -51,7 +44,6 @@ public class SummaryOverviewFragment extends Fragment implements SummaryOverview
 
     @Override
     public void setPresenter(SummaryOverviewContract.Presenter presenter) {
-        Log.d(TAG, "Setting presenter: " + presenter.getClass().toString());
         this.presenter = presenter;
     }
 

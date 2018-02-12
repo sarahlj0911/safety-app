@@ -12,10 +12,10 @@ import com.plusmobileapps.safetyapp.R;
 public class SummaryDetailsFragment extends Fragment implements SummaryDetailsContract.View {
     private static final String TAG = "SummaryDetailsFragment";
     private SummaryDetailsContract.Presenter presenter;
+
     public SummaryDetailsFragment() {
         // Required empty public constructor
     }
-
 
     public static SummaryDetailsFragment newInstance() {
         SummaryDetailsFragment fragment = new SummaryDetailsFragment();
@@ -30,7 +30,7 @@ public class SummaryDetailsFragment extends Fragment implements SummaryDetailsCo
     @Override
     public void onResume() {
         super.onResume();
-        presenter.start();
+        //this.presenter.start();
     }
 
     @Override

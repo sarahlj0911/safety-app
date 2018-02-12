@@ -1,11 +1,11 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.plusmobileapps.safetyapp.summary.detail.SummaryOverviewDetailsActivity">
+    tools:context="com.plusmobileapps.safetyapp.summary.detail.SummaryOverviewFragment">
 
     <FrameLayout
-        android:id="@+id/fragment_tab_summary_overview"
+        android:id="@+id/fragment_tab_summary_overview_old"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -17,4 +17,4 @@
 
     </FrameLayout>
 
-</LinearLayout>
+</ScrollView>

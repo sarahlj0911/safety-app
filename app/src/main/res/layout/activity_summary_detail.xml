@@ -20,26 +20,52 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <android.support.design.widget.TabLayout
-        android:id="@+id/summary_detail_tabs"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/summary_appbar">
-        <android.support.design.widget.TabItem
-            android:layout_width="wrap_content"
+        <android.support.design.widget.TabLayout
+            android:id="@+id/summary_detail_tabs"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Overview"/>
-        <android.support.design.widget.TabItem
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Details" />
+            android:layout_below="@id/summary_appbar">
+            <android.support.design.widget.TabItem
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Overview"/>
+            <android.support.design.widget.TabItem
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Details" />
 
-    </android.support.design.widget.TabLayout>
+        </android.support.design.widget.TabLayout>
 
     <android.support.v4.view.ViewPager
         android:id="@+id/summary_view_pager"
         android:layout_width="match_parent"
         android:layout_height="fill_parent"
         android:layout_below="@id/summary_detail_tabs"/>
+
+    <FrameLayout
+        android:id="@+id/fragment_tab_summary_overview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/summary_overview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="@string/tab_summary" />
+
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/fragment_tab_summary_details"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/summary_details"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="@string/tab_summary" />
+
+    </FrameLayout>
 
 </RelativeLayout>

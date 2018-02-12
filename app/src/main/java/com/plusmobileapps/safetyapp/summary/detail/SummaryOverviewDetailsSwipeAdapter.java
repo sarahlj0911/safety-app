@@ -7,28 +7,24 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 public class SummaryOverviewDetailsSwipeAdapter extends FragmentPagerAdapter {
-    private SummaryDetailsFragment summaryDetailsFragment;
-    private SummaryOverviewFragment summaryOverviewFragment;
+    //private SummaryDetailsFragment summaryDetailsFragment;
+    //private SummaryOverviewFragment summaryOverviewFragment;
 
-    /*public SummaryOverviewDetailsSwipeAdapter(FragmentManager fm) {
+    public SummaryOverviewDetailsSwipeAdapter(FragmentManager fm) {
         super(fm);
-        summaryDetailsFragment = new SummaryDetailsFragment();
-        summaryOverviewFragment = new SummaryOverviewFragment();
-    }*/
-
-    public SummaryOverviewDetailsSwipeAdapter(FragmentManager fm, SummaryOverviewFragment overviewFragment, SummaryDetailsFragment detailsFragment) {
-        super(fm);
-        summaryOverviewFragment = overviewFragment;
-        summaryDetailsFragment = detailsFragment;
+        //summaryDetailsFragment = new SummaryDetailsFragment();
+        //summaryOverviewFragment = new SummaryOverviewFragment();
     }
 
     @Override
     public Fragment getItem(int position) {
         switch (position) {
             case 0:
-                return summaryOverviewFragment;
+                //return summaryOverviewFragment;
+                return new SummaryOverviewFragment();
             case 1:
-                return summaryDetailsFragment;
+                //return summaryDetailsFragment;
+                return new SummaryDetailsFragment();
             default:
                 break;
         }
@@ -39,4 +35,5 @@ public class SummaryOverviewDetailsSwipeAdapter extends FragmentPagerAdapter {
     public int getCount() {
         return 2;
     }
+
 }
