@@ -34,7 +34,10 @@ public class LoadActionItemTask extends AsyncTask<Void, Void, List<Response>> {
     @Override
     protected void onPostExecute(List<Response> actionItems) {
         super.onPostExecute(actionItems);
-        view.showActionItems(actionItems);
+//        view.showActionItems(actionItems);
+        List<Response> items = new ArrayList<>(0);
+        items.add(new Response(0,1,1,"11:34pm",3, 2, "Fix it", 2, null,1));
+        view.showActionItems(items);
         db.close();
     }
 }
