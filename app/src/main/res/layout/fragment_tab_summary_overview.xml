@@ -1,0 +1,20 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.plusmobileapps.safetyapp.summary.detail.SummaryOverviewDetailsActivity">
+
+    <FrameLayout
+        android:id="@+id/fragment_tab_summary_overview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/summary_overview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="@string/tab_summary" />
+
+    </FrameLayout>
+
+</LinearLayout>

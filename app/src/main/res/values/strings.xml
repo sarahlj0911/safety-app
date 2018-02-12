@@ -48,6 +48,10 @@ through during one week.</string>
     <string name="tutorial_title">Create a new walk through</string>
     <string name="tutorial_content">Click on the add button to start a new walk through.</string>
 
+    <!-- Summary strings -->
+    <string name="tab_summary">Overview Tab</string>
+    <string name="tab_detail">Detail Tab</string>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_survey">SurveyActivity</string>

@@ -32,7 +32,7 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".main.MainActivity" />
         <activity
-            android:name=".summary.detail.SummaryDetailActivity"
+            android:name=".summary.detail.SummaryOverviewDetailsActivity"
             android:label="SummaryDetailActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
