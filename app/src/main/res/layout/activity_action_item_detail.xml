@@ -81,7 +81,6 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_marginStart="8dp"
-            android:onClick="showEditPriorityDialog"
             android:text="Edit Priority"
             app:layout_constraintBottom_toBottomOf="@+id/action_item_status"
             app:layout_constraintStart_toEndOf="@+id/action_item_status"
