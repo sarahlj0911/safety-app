@@ -130,7 +130,7 @@
         android:paddingLeft="8dp"
         android:paddingRight="8dp"
         android:scrollbars="vertical"
-        android:text="The boys got a hold of some sharpies and really did a number on the bathroom stall. There was some profanity written that needs to be removed immediately. I don't know what kind of monster would write such a thing. asdflas;ffmaweffimasmffawoemfpoasmdf'apowmff'oasmdf'o;ams'dof omdf'a osmdf' aosdfm oa'smdffoa ms'fdomas 'dfoma"
+        android:text="aosdfm oa'smdffoa ms'fdomas 'dfoma"
         android:textColor="@android:color/black"
         android:textSize="14sp" />
 

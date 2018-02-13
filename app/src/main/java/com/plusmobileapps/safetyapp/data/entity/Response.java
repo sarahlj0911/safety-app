@@ -56,6 +56,7 @@ public class Response {
     @ColumnInfo(name = "userId")
     private int userId;
 
+
     public Response(int responseId, int isActionItem, int locationId, String timeStamp, int rating, int priority, String actionPlan, int questionId, byte[] image, int userId) {
         this.responseId = responseId;
         this.isActionItem = isActionItem;

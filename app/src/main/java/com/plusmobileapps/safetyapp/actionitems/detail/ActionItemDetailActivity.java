@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 
 import com.plusmobileapps.safetyapp.R;
 import com.plusmobileapps.safetyapp.data.entity.Response;
@@ -25,6 +26,7 @@ public class ActionItemDetailActivity extends AppCompatActivity
     private Button editPriorityBtn;
     private View statusDot;
     private Button saveButton;
+    private EditText actionPlanText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,38 +42,32 @@ public class ActionItemDetailActivity extends AppCompatActivity
         editPriorityBtn = findViewById(R.id.edit_priority_btn);
         editPriorityBtn.setOnClickListener(editPriorityClickListener);
         saveButton = findViewById(R.id.save_action_item_detail);
+        actionPlanText = findViewById(R.id.editTextActionPlan);
         saveButton.setOnClickListener(saveListener);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        presenter.start();
+        Bundle bundle = getIntent().getExtras();
+        if (bundle != null) {
+            String id = bundle.getString(EXTRA_ACTION_ITEM_ID);
+            presenter.start(id);
+        } else {
+            presenter.startError();
+        }
     }
 
     @Override
     public void onItemSelected(DialogFragment dialog, CharSequence selectedItem) {
         EditPriorityDialogFragment priorityDialog = (EditPriorityDialogFragment) dialog;
         String selectedPriority = priorityDialog.getSelectedItem().toString();
-
-        switch (selectedPriority) {
-            case "High":
-                statusDot.setBackgroundResource(R.drawable.circle_red);
-                break;
-            case "Medium":
-                statusDot.setBackgroundResource(R.drawable.circle_yellow);
-                break;
-            case "Low":
-                statusDot.setBackgroundResource(R.drawable.circle_green);
-                break;
-            default:
-                break;
-        }
+        presenter.editPriorityPicked(selectedPriority);
     }
 
     @Override
     public void showActionItem(Response response) {
-
+        actionPlanText.setText(response.getActionPlan());
     }
 
     @Override
@@ -81,15 +77,29 @@ public class ActionItemDetailActivity extends AppCompatActivity
     }
 
     @Override
-    public Response getActionItemDetails() {
-        return null;
+    public void changeStatusDot(int drawableId) {
+        statusDot.setBackgroundResource(drawableId);
+    }
+
+    @Override
+    public void onBackPressed() {
+        presenter.backButtonClicked();
+    }
+
+    @Override
+    public void finishActivity() {
+        finish();
+    }
+
+    @Override
+    public String getActionItemPlan() {
+        return actionPlanText.getText().toString();
     }
 
     private View.OnClickListener saveListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            //TODO: save the data for any changes made to the action item
-            finish(); //destroy the activity for prototype sake
+            presenter.saveButtonClicked();
         }
     };
 

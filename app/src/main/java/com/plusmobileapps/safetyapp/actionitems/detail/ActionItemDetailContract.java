@@ -1,6 +1,5 @@
 package com.plusmobileapps.safetyapp.actionitems.detail;
 
-import com.plusmobileapps.safetyapp.BasePresenter;
 import com.plusmobileapps.safetyapp.data.entity.Response;
 
 public interface ActionItemDetailContract {
@@ -13,10 +12,18 @@ public interface ActionItemDetailContract {
         void showPriorityDialog();
 
         //grab all editable fields from the ui
-        Response getActionItemDetails();
+        String getActionItemPlan();
+
+        void changeStatusDot(int drawableId);
+
+        //finish the activity
+        void finishActivity();
     }
 
-    interface Presenter extends BasePresenter {
+    //not extending BasePresenter to pass an id to load initially
+    interface Presenter {
+
+        void start(String id);
 
         //respond to back button press or arrow in the action bar
         void backButtonClicked();
@@ -26,6 +33,12 @@ public interface ActionItemDetailContract {
 
         //user clicked the save button
         void saveButtonClicked();
+
+        //user edited the priority
+        void editPriorityPicked(String selectedPriority);
+
+        //error retrieving action item id
+        void startError();
     }
 
 }
