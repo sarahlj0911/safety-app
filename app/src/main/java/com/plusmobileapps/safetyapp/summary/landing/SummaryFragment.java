@@ -70,7 +70,6 @@ public class SummaryFragment extends Fragment implements SummaryContract.View {
 
     @Override
     public void showSummaryDetailUi(WalkthroughOverview summary) {
-        Log.d(TAG, "Walkthrough title: " + summary.getTitle());
         Intent intent = new Intent(getContext(), SummaryOverviewDetailsActivity.class);
         intent.putExtra("walkthroughTitle", summary.getTitle());
         startActivity(intent);

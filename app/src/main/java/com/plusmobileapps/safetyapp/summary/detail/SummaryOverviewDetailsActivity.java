@@ -35,8 +35,6 @@ public class SummaryOverviewDetailsActivity extends AppCompatActivity {
         getSupportActionBar().setTitle(walkthroughTitle);
         viewPager = findViewById(R.id.summary_view_pager);
         tabLayout = findViewById(R.id.summary_detail_tabs);
-        final SummaryOverviewDetailsSwipeAdapter swipeAdapter = new SummaryOverviewDetailsSwipeAdapter(getSupportFragmentManager());
-        viewPager.setAdapter(swipeAdapter);
 
         SummaryOverviewFragment summaryOverviewFragment = (SummaryOverviewFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_tab_summary_overview);
 
@@ -61,28 +59,17 @@ public class SummaryOverviewDetailsActivity extends AppCompatActivity {
         SummaryOverviewContract.Presenter summaryOverviewPresenter = new SummaryOverviewPresenter(summaryOverviewFragment, walkthroughTitle);
         SummaryDetailsContract.Presenter summaryDetailsPresenter = new SummaryDetailsPresenter(summaryDetailsFragment);
 
-        /*final SummaryOverviewDetailsSwipeAdapter swipeAdapter = new SummaryOverviewDetailsSwipeAdapter(getSupportFragmentManager());
-        viewPager.setAdapter(swipeAdapter);*/
+        summaryOverviewPresenter.start();
+        summaryDetailsPresenter.start();
 
-        /*swipeAdapter.setSummaryOverviewFragment(summaryOverviewFragment);
-        swipeAdapter.setSummaryDetailsFragment(summaryDetailsFragment);*/
+        final SummaryOverviewDetailsSwipeAdapter swipeAdapter = new SummaryOverviewDetailsSwipeAdapter(getSupportFragmentManager());
+        viewPager.setAdapter(swipeAdapter);
 
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                int selectedTab = tab.getPosition();
+                viewPager.setCurrentItem(tab.getPosition(), true);
 
-                Log.d(TAG, "Selected Tab: " + selectedTab);
-                switch (selectedTab) {
-                    case 0:
-                        viewPager.setCurrentItem(0, true);
-                        break;
-                    case 1:
-                        viewPager.setCurrentItem(1, true);
-                        break;
-                    default:
-                        break;
-                }
             }
 
             @Override
@@ -97,5 +84,6 @@ public class SummaryOverviewDetailsActivity extends AppCompatActivity {
         });
 
     }
+
 }
 
