@@ -20,7 +20,7 @@ public class MainActivityPresenter implements MainActivityContract.Presenter {
     public void pageSwipedTo(int position) {
         switch (position) {
             case 0:
-                view.changeNavHighlight(R.id.navigation_survey);
+                view.changeNavHighlight(R.id.navigation_walkthrough);
                 break;
             case 1:
                 view.changeNavHighlight(R.id.navigation_dashboard);

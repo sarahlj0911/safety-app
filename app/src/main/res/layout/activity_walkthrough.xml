@@ -23,7 +23,7 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="fill_parent"
-        android:id="@+id/suvey_container"
+        android:id="@+id/walkthrough_container"
         android:layout_above="@id/navbar_bottom"
         android:layout_marginTop="50dp"/>
 

@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -26,30 +25,30 @@ import com.plusmobileapps.safetyapp.walkthrough.location.LocationActivity;
 
 import java.util.ArrayList;
 
-public class SurveyLandingFragment extends Fragment
-        implements OnShowcaseEventListener, SurveyLandingContract.View {
+public class WalkthroughLandingFragment extends Fragment
+        implements OnShowcaseEventListener, WalkthroughLandingContract.View {
 
     public static String EXTRA_REQUESTED_WALKTHROUGH = "requested_walkthrough";
     public static String EXTRA_WALKTHROUGH_NAME = "walkthrough_name";
 
     private static ShowcaseView showcaseView;
-    private static final String TAG = "SurveyLandingFragment";
+    private static final String TAG = "WalkthroughLandingFragment";
     private PrefManager prefManager;
     private View overlay;
     private FloatingActionButton fab;
     private RecyclerView recyclerView;
-    private SurveyLandingAdapter adapter;
-    private ArrayList<SurveyOverview> surveys;
+    private WalkthroughLandingAdapter adapter;
+    private ArrayList<WalkthroughOverview> walkthroughs;
 
-    private SurveyLandingContract.Presenter presenter;
+    private WalkthroughLandingContract.Presenter presenter;
 
-    public SurveyLandingFragment() {
+    public WalkthroughLandingFragment() {
         // Required empty public constructor
     }
 
 
-    public static SurveyLandingFragment newInstance() {
-        SurveyLandingFragment fragment = new SurveyLandingFragment();
+    public static WalkthroughLandingFragment newInstance() {
+        WalkthroughLandingFragment fragment = new WalkthroughLandingFragment();
         return fragment;
     }
 
@@ -61,13 +60,13 @@ public class SurveyLandingFragment extends Fragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_survey_landing, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_walkthrough_landing, container, false);
         rootView.setTag(TAG);
-        recyclerView = rootView.findViewById(R.id.landing_survey_recyclerview);
+        recyclerView = rootView.findViewById(R.id.landing_walkthrough_recyclerview);
         overlay = rootView.findViewById(R.id.overlay);
         fab = rootView.findViewById(R.id.floatingActionButton);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapter = new SurveyLandingAdapter(new ArrayList<SurveyOverview>(0), itemListener);
+        adapter = new WalkthroughLandingAdapter(new ArrayList<WalkthroughOverview>(0), itemListener);
         recyclerView.setAdapter(adapter);
         fab.setOnClickListener(fabListener);
 
@@ -75,7 +74,7 @@ public class SurveyLandingFragment extends Fragment
     }
 
     @Override
-    public void setPresenter(SurveyLandingContract.Presenter presenter) {
+    public void setPresenter(WalkthroughLandingContract.Presenter presenter) {
         this.presenter = presenter;
     }
 
@@ -97,13 +96,13 @@ public class SurveyLandingFragment extends Fragment
     }
 
     @Override
-    public void showSurveys(ArrayList<SurveyOverview> surveys) {
+    public void showWalkthroughs(ArrayList<WalkthroughOverview> walkthroughs) {
         fab.setVisibility(View.VISIBLE);
-        adapter.replaceData(surveys);
+        adapter.replaceData(walkthroughs);
     }
 
     @Override
-    public void openSurvey(long id, String title) {
+    public void openWalkthrough(long id, String title) {
         fab.setVisibility(View.GONE);
         Intent intent = new Intent(getContext(), LocationActivity.class);
         intent.putExtra(EXTRA_REQUESTED_WALKTHROUGH, id);
@@ -146,11 +145,11 @@ public class SurveyLandingFragment extends Fragment
     @Override
     public void showConfirmationDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setMessage(getString(R.string.survey_dialog_message))
+        builder.setMessage(getString(R.string.walkthrough_dialog_message))
                 .setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        presenter.createNewSurveyConfirmed();
+                        presenter.createNewWalkthroughConfirmed();
                     }
                 })
                 .setNegativeButton(getString(R.string.no), new DialogInterface.OnClickListener() {
@@ -164,17 +163,17 @@ public class SurveyLandingFragment extends Fragment
     }
 
     @Override
-    public void showCreateSurveyDialog() {
+    public void showCreateWalkthroughDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setTitle(getString(R.string.tutorial_title))
-                .setView(getLayoutInflater().inflate(R.layout.dialog_create_survey, null))
+                .setView(getLayoutInflater().inflate(R.layout.dialog_create_walkthrough, null))
                 .setPositiveButton(getString(R.string.create), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         Dialog dialogObj = Dialog.class.cast(dialog);
-                        EditText editText = dialogObj.findViewById(R.id.edittext_create_survey);
-                        String surveyTitle = editText.getText().toString();
-                        presenter.confirmCreateSurveyClicked(surveyTitle);
+                        EditText editText = dialogObj.findViewById(R.id.edittext_create_walkthrough);
+                        String walkthroughTitle = editText.getText().toString();
+                        presenter.confirmCreateWalkthroughClicked(walkthroughTitle);
                     }
                 })
                 .setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
@@ -201,22 +200,22 @@ public class SurveyLandingFragment extends Fragment
     private View.OnClickListener fabListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            presenter.createNewSurveyClicked();
+            presenter.createNewWalkthroughClicked();
         }
     };
 
     /**
      * Handle Recyclerview clicks
      */
-    private SurveyLandingItemListener itemListener = new SurveyLandingItemListener() {
+    private WalkthroughLandingItemListener itemListener = new WalkthroughLandingItemListener() {
         @Override
-        public void onSurveyClicked(int position) {
-            presenter.surveyClicked(position);
+        public void onWalkthroughClicked(int position) {
+            presenter.walkthroughClicked(position);
         }
     };
 
-    public interface SurveyLandingItemListener {
-        void onSurveyClicked(int position);
+    public interface WalkthroughLandingItemListener {
+        void onWalkthroughClicked(int position);
     }
 
     /**

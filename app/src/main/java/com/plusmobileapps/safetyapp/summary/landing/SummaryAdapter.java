@@ -7,7 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.plusmobileapps.safetyapp.walkthrough.landing.SurveyOverview;
+import com.plusmobileapps.safetyapp.walkthrough.landing.WalkthroughOverview;
 
 import java.util.ArrayList;
 
@@ -16,20 +16,20 @@ import com.plusmobileapps.safetyapp.R;
 public class SummaryAdapter extends RecyclerView.Adapter<SummaryAdapter.ViewHolder> {
 
     private static final String TAG = "SummaryAdapter";
-    private SurveyOverview survey;
-    private ArrayList<SurveyOverview> summaries;
+    private WalkthroughOverview walkthrough;
+    private ArrayList<WalkthroughOverview> summaries;
 
     private SummaryFragment.SummaryItemListener itemListener;
 
-    public SummaryAdapter(ArrayList<SurveyOverview> surveys, SummaryFragment.SummaryItemListener itemListener){
-        this.summaries = surveys;
+    public SummaryAdapter(ArrayList<WalkthroughOverview> walkthroughs, SummaryFragment.SummaryItemListener itemListener){
+        this.summaries = walkthroughs;
         this.itemListener = itemListener;
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.viewholder_summary_survey, parent, false);
+                .inflate(R.layout.viewholder_summary_walkthrough, parent, false);
 
         return new ViewHolder(view);
     }
@@ -37,10 +37,10 @@ public class SummaryAdapter extends RecyclerView.Adapter<SummaryAdapter.ViewHold
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         Log.d(TAG, "onBindViewHolder: " + position);
-        survey = summaries.get(position);
+        walkthrough = summaries.get(position);
 
-        holder.getDateTime().setText(survey.getDate());
-        holder.getTitle().setText(survey.getTitle());
+        holder.getDateTime().setText(walkthrough.getDate());
+        holder.getTitle().setText(walkthrough.getTitle());
 
         //TODO: Refactor model to have these data points
         holder.getRedCount().setText("2");
@@ -53,21 +53,21 @@ public class SummaryAdapter extends RecyclerView.Adapter<SummaryAdapter.ViewHold
         return summaries.size();
     }
 
-    public void replaceData(ArrayList<SurveyOverview> summaries) {
+    public void replaceData(ArrayList<WalkthroughOverview> summaries) {
         this.summaries = summaries;
         notifyDataSetChanged();
     }
 
-    private SurveyOverview getSummary(int position) {
+    private WalkthroughOverview getSummary(int position) {
         return summaries.get(position);
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        private final TextView title = itemView.findViewById(R.id.survey_title);
+        private final TextView title = itemView.findViewById(R.id.walkthrough_title);
         private final TextView dateTime = itemView.findViewById(R.id.date_time);
-        private final TextView redCount = itemView.findViewById(R.id.survey_red_count);
-        private final TextView greenCount = itemView.findViewById(R.id.survey_green_count);
-        private final TextView yellowCount = itemView.findViewById(R.id.survey_yellow_count);
+        private final TextView redCount = itemView.findViewById(R.id.walkthrough_red_count);
+        private final TextView greenCount = itemView.findViewById(R.id.walkthrough_green_count);
+        private final TextView yellowCount = itemView.findViewById(R.id.walkthrough_yellow_count);
 
         public ViewHolder(View view) {
             super(view);
@@ -76,7 +76,7 @@ public class SummaryAdapter extends RecyclerView.Adapter<SummaryAdapter.ViewHold
 
         @Override
         public void onClick(View v) {
-            SurveyOverview summary = getSummary(getAdapterPosition());
+            WalkthroughOverview summary = getSummary(getAdapterPosition());
             itemListener.onSummaryItemClicked(summary);
         }
 
