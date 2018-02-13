@@ -5,15 +5,14 @@
     tools:context="com.plusmobileapps.safetyapp.summary.detail.SummaryOverviewFragment">
 
     <FrameLayout
-        android:id="@+id/fragment_tab_summary_overview_old"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
         <TextView
-            android:id="@+id/summary_overview"
+            android:id="@+id/textview_summary_overview"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="@string/tab_summary" />
+            android:text="@string/tab_overview" />
 
     </FrameLayout>
 

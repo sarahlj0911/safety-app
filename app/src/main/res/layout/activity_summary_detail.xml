@@ -48,10 +48,10 @@
         android:layout_height="match_parent">
 
         <TextView
-            android:id="@+id/summary_overview"
+            android:id="@+id/textview_summary_overview"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="@string/tab_summary" />
+            android:text="@string/tab_overview" />
 
     </FrameLayout>
 
@@ -61,10 +61,10 @@
         android:layout_height="match_parent">
 
         <TextView
-            android:id="@+id/summary_details"
+            android:id="@+id/textview_summary_details"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="@string/tab_summary" />
+            android:text="@string/tab_overview" />
 
     </FrameLayout>
 

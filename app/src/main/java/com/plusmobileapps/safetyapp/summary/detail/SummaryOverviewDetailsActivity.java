@@ -71,6 +71,8 @@ public class SummaryOverviewDetailsActivity extends AppCompatActivity {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 int selectedTab = tab.getPosition();
+
+                Log.d(TAG, "Selected Tab: " + selectedTab);
                 switch (selectedTab) {
                     case 0:
                         viewPager.setCurrentItem(0, true);
