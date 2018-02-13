@@ -28,7 +28,7 @@
         </activity>
         <activity
             android:name=".walkthrough.walkthrough.WalkthroughActivity"
-            android:label="@string/title_activity_survey"
+            android:label="@string/title_activity_walkthrough"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".main.MainActivity" />
         <activity

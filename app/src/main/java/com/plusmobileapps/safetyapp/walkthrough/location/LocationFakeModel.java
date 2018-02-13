@@ -10,7 +10,7 @@ public class LocationFakeModel {
 
     public LocationFakeModel() {
         createTitles();
-        createNewSurvey();
+        createNewWalkthrough();
     }
 
     private void createTitles(){
@@ -30,7 +30,7 @@ public class LocationFakeModel {
         titles.add("Classroom 2");
     }
 
-    private void createNewSurvey() {
+    private void createNewWalkthrough() {
         for (String title : titles) {
             locations.add(new Location(title));
         }

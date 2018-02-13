@@ -14,7 +14,7 @@ import com.plusmobileapps.safetyapp.FragmentFactory;
 import com.plusmobileapps.safetyapp.R;
 import com.plusmobileapps.safetyapp.actionitems.landing.ActionItemPresenter;
 import com.plusmobileapps.safetyapp.summary.landing.SummaryPresenter;
-import com.plusmobileapps.safetyapp.walkthrough.landing.SurveyLandingPresenter;
+import com.plusmobileapps.safetyapp.walkthrough.landing.WalkthroughLandingPresenter;
 
 public class MainActivity extends AppCompatActivity implements MainActivityContract.View {
 
@@ -22,7 +22,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
 
     private ViewPager viewPager;
     private BottomNavigationView navigation;
-    private String surveyFragmentTitle = "";
+    private String walkthroughFragmentTitle = "";
     private MainActivityPresenter presenter;
 
     @Override
@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
     }
 
     private void setUpPresenters() {
-        new SurveyLandingPresenter(FragmentFactory.getInstance().getSurveyLandingFragment());
+        new WalkthroughLandingPresenter(FragmentFactory.getInstance().getWalkthroughLandingFragment());
         new ActionItemPresenter(FragmentFactory.getInstance().getActionItemsFragment());
         new SummaryPresenter(FragmentFactory.getInstance().getSummaryFragment());
     }
@@ -104,7 +104,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
-                case R.id.navigation_survey:
+                case R.id.navigation_walkthrough:
                     presenter.navButtonClicked(0);
                     return true;
                 case R.id.navigation_dashboard:

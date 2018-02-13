@@ -22,15 +22,15 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHo
     private LocationActivity.LocationItemListener itemListener;
     private ArrayList<Location> locations;
 
-    public LocationAdapter(ArrayList<Location> surveys, LocationActivity.LocationItemListener itemListener){
-        this.locations = surveys;
+    public LocationAdapter(ArrayList<Location> walkthroughs, LocationActivity.LocationItemListener itemListener){
+        this.locations = walkthroughs;
         this.itemListener = itemListener;
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.viewholder_survey, parent, false);
+                .inflate(R.layout.viewholder_walkthrough, parent, false);
 
         return new ViewHolder(v);
     }
@@ -39,7 +39,7 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHo
     public void onBindViewHolder(ViewHolder holder, int position) {
         location = locations.get(position);
 
-        holder.getSurveyTitle().setText(location.getTitle());
+        holder.getWalkthroughTitle().setText(location.getTitle());
         holder.getCheckmark().setVisibility(location.isFinished() ? View.VISIBLE : View.INVISIBLE);
         if (location.getProgress() > 0){
             holder.getProgressBar().setVisibility(View.VISIBLE);
@@ -60,7 +60,7 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHo
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        private final TextView surveyTitle;
+        private final TextView walkthroughTitle;
         private final ProgressBar progressBar;
         private final ImageView checkmark;
         private final boolean finished = false;
@@ -70,7 +70,7 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHo
         public ViewHolder(View view) {
             super (view);
             context = itemView.getContext();
-            surveyTitle = view.findViewById(R.id.viewholder_title_location);
+            walkthroughTitle = view.findViewById(R.id.viewholder_title_location);
             progressBar = view.findViewById(R.id.viewholder_progressbar_location);
             checkmark = view.findViewById(R.id.viewholder_check_location);
 
@@ -81,8 +81,8 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHo
                 }
             });
         }
-        public TextView getSurveyTitle() {
-            return surveyTitle;
+        public TextView getWalkthroughTitle() {
+            return walkthroughTitle;
         }
 
         public ProgressBar getProgressBar() {

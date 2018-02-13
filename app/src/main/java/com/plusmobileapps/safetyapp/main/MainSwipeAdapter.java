@@ -16,7 +16,7 @@ public class MainSwipeAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         switch (position){
             case 0:
-                return FragmentFactory.getInstance().getSurveyLandingFragment();
+                return FragmentFactory.getInstance().getWalkthroughLandingFragment();
             case 1:
                 return FragmentFactory.getInstance().getActionItemsFragment();
             case 2:
