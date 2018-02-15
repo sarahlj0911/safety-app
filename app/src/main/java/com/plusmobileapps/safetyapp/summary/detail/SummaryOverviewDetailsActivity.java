@@ -20,9 +20,9 @@ public class SummaryOverviewDetailsActivity extends AppCompatActivity {
     private TabLayout tabLayout;
     private String walkthroughTitle;
 
-    /*private SummaryOverviewContract.Presenter summaryOverviewPresenter;
-    private SummaryDetailsContract.Presenter summaryDetailsPresenter;*/
-
+    private SummaryOverviewContract.Presenter summaryOverviewPresenter;
+    private SummaryDetailsContract.Presenter summaryDetailsPresenter;
+    private SummaryOverviewContract.View summaryOverviewFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,15 +36,24 @@ public class SummaryOverviewDetailsActivity extends AppCompatActivity {
         viewPager = findViewById(R.id.summary_view_pager);
         tabLayout = findViewById(R.id.summary_detail_tabs);
 
-        SummaryOverviewFragment summaryOverviewFragment = (SummaryOverviewFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_tab_summary_overview);
+        summaryOverviewPresenter = new SummaryOverviewPresenter(this);
+        //SummaryDetailsContract.Presenter summaryDetailsPresenter = new SummaryDetailsPresenter();
+
+        /*SummaryOverviewFragment summaryOverviewFragment = (SummaryOverviewFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_tab_summary_overview);
 
         if (summaryOverviewFragment == null) {
             summaryOverviewFragment = SummaryOverviewFragment.newInstance();
 
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-            transaction.add(R.id.fragment_tab_summary_overview, summaryOverviewFragment);
+            transaction.add(R.id.fragment_tab_summary_overview, summaryOverviewFragment, "overview");
             transaction.commit();
-        }
+        }*/
+
+
+
+
+        /*summaryOverviewPresenter.setFragment(summaryOverviewFragment);*/
+        //summaryOverviewFragment.setPresenter(summaryOverviewPresenter);
 
         SummaryDetailsFragment summaryDetailsFragment = (SummaryDetailsFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_tab_summary_details);
 
@@ -52,16 +61,14 @@ public class SummaryOverviewDetailsActivity extends AppCompatActivity {
             summaryDetailsFragment = SummaryDetailsFragment.newInstance();
 
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-            transaction.add(R.id.fragment_tab_summary_details, summaryDetailsFragment);
+            transaction.add(R.id.fragment_tab_summary_details, summaryDetailsFragment, "details");
             transaction.commit();
         }
 
-        SummaryOverviewContract.Presenter summaryOverviewPresenter = new SummaryOverviewPresenter(summaryOverviewFragment, walkthroughTitle);
+        //SummaryOverviewContract.Presenter summaryOverviewPresenter = new SummaryOverviewPresenter(summaryOverviewFragment, walkthroughTitle);
         SummaryDetailsContract.Presenter summaryDetailsPresenter = new SummaryDetailsPresenter(summaryDetailsFragment);
 
-        summaryOverviewPresenter.start();
-        summaryDetailsPresenter.start();
-
+        /*final SummaryOverviewDetailsSwipeAdapter swipeAdapter = new SummaryOverviewDetailsSwipeAdapter(getSupportFragmentManager());*/
         final SummaryOverviewDetailsSwipeAdapter swipeAdapter = new SummaryOverviewDetailsSwipeAdapter(getSupportFragmentManager());
         viewPager.setAdapter(swipeAdapter);
 
@@ -82,7 +89,22 @@ public class SummaryOverviewDetailsActivity extends AppCompatActivity {
 
             }
         });
+    }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        //summaryOverviewPresenter.start();
+        //summaryDetailsPresenter.start();
+        SummaryOverviewFragment summaryOverviewFragment = (SummaryOverviewFragment)  getSupportFragmentManager().findFragmentById(R.id.fragment_tab_summary_overview);
+
+        if (summaryOverviewFragment != null) {
+            Log.d(TAG, "summaryOverviewFragment: " + summaryOverviewFragment.toString());
+            summaryOverviewPresenter.setFragment(summaryOverviewFragment);
+        } else {
+            Log.d(TAG, "summaryOverviewFragment is null!!!");
+        }
+        summaryOverviewPresenter.setTitle("Overview Tab");
     }
 
 }
