@@ -25,8 +25,11 @@ public class SummaryOverviewDetailsActivity extends AppCompatActivity {
         int walkthroughId;
 
         String walkthroughTitle;
-        walkthroughTitle = getIntent().getExtras().getString("walkthroughTitle");
+
         walkthroughId = getIntent().getExtras().getInt("walkthroughId");
+
+        // TODO Change to have presenter get the walkthroughTitle by walkthroughId once the data layer's wired up
+        walkthroughTitle = getIntent().getExtras().getString("walkthroughTitle");
 
         Toolbar toolbar = findViewById(R.id.summary_toolbar);
         setSupportActionBar(toolbar);
@@ -76,4 +79,3 @@ public class SummaryOverviewDetailsActivity extends AppCompatActivity {
         }
     }
 }
-

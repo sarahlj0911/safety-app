@@ -8,13 +8,14 @@ public class SummaryDetailsPresenter implements SummaryDetailsContract.Presenter
     private static final String TAG = "SummaryDetailsPresenter";
     private SummaryDetailsContract.View view;
 
-    public SummaryDetailsPresenter(SummaryDetailsContract.View view) {
+    SummaryDetailsPresenter(SummaryDetailsContract.View view) {
         this.view = view;
         view.setPresenter(this);
     }
 
     @Override
     public void start() {
+        // TODO Remove this call if not needed. It's just here for testing.
         setTitle("Testing Details Title");
     }
 

@@ -10,7 +10,6 @@ import android.widget.TextView;
 
 import com.plusmobileapps.safetyapp.R;
 
-
 public class SummaryDetailsFragment extends Fragment implements SummaryDetailsContract.View {
     private static final String TAG = "SummaryDetailsFragment";
     private SummaryDetailsContract.Presenter presenter;
@@ -47,7 +46,6 @@ public class SummaryDetailsFragment extends Fragment implements SummaryDetailsCo
         return view;
     }
 
-    @Override
     public void setPresenter(SummaryDetailsContract.Presenter presenter) {
         this.presenter = presenter;
     }
