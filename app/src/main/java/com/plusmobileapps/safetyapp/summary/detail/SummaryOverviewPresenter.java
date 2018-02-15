@@ -10,13 +10,13 @@ import android.content.Context;
 public class SummaryOverviewPresenter implements SummaryOverviewContract.Presenter {
     private static final String TAG = "SummaryOverviewPresenter";
     private SummaryOverviewContract.View view;
-    Context context;
+    //Context context;
 
-    public SummaryOverviewPresenter(Context context) {
+    /*public SummaryOverviewPresenter(Context context) {
         this.context = context;
-    }
+    }*/
 
-    public SummaryOverviewPresenter(SummaryOverviewContract.View view, String walkthroughId) {
+    public SummaryOverviewPresenter(SummaryOverviewContract.View view) {
         this.view = view;
         view.setPresenter(this);
     }

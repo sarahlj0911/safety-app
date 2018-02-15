@@ -1,11 +1,10 @@
 package com.plusmobileapps.safetyapp.summary.detail;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -23,8 +22,7 @@ public class SummaryOverviewFragment extends Fragment implements SummaryOverview
     }
 
     public static SummaryOverviewFragment newInstance() {
-        SummaryOverviewFragment fragment = new SummaryOverviewFragment();
-        return fragment;
+        return new SummaryOverviewFragment();
     }
 
     @Override
@@ -35,21 +33,19 @@ public class SummaryOverviewFragment extends Fragment implements SummaryOverview
     @Override
     public void onResume() {
         super.onResume();
-        //this.presenter.start();
+        this.presenter.start();
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_tab_summary_overview, container, false);
 
         if (view != null) {
-            Log.d(TAG, "View is not null!!!");
-            titleTextView = (TextView) view.findViewById(R.id.textview_summary_overview);
+            titleTextView = view.findViewById(R.id.textview_summary_overview);
         }
+
         return view;
-        // Inflate the layout for this fragment
-        //return inflater.inflate(R.layout.fragment_tab_summary_overview, container, false);
     }
 
     public void setPresenter(SummaryOverviewContract.Presenter presenter) {
@@ -57,9 +53,6 @@ public class SummaryOverviewFragment extends Fragment implements SummaryOverview
     }
 
     public void showTitle(String title) {
-        Log.d(TAG, "Showing title: " + title);
-
         titleTextView.setText(title);
-
     }
 }

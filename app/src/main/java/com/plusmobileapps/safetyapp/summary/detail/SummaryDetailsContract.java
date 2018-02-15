@@ -10,11 +10,12 @@ import com.plusmobileapps.safetyapp.BaseView;
 public interface SummaryDetailsContract {
 
     interface View extends BaseView<Presenter> {
-
+        void showTitle(String title);
     }
 
     interface Presenter extends BasePresenter {
-
+        void loadDetails();
+        void setTitle(String title);
     }
 
 }

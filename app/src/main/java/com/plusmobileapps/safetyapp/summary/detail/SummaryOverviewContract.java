@@ -16,6 +16,6 @@ public interface SummaryOverviewContract {
     interface Presenter extends BasePresenter {
         void loadWalkthroughs();
         void setTitle(String title);
-        void setFragment(SummaryOverviewFragment summaryOverviewFragment);
+        //void setFragment(SummaryOverviewFragment summaryOverviewFragment);
     }
 }

@@ -72,6 +72,7 @@ public class SummaryFragment extends Fragment implements SummaryContract.View {
     public void showSummaryDetailUi(WalkthroughOverview summary) {
         Intent intent = new Intent(getContext(), SummaryOverviewDetailsActivity.class);
         intent.putExtra("walkthroughTitle", summary.getTitle());
+        intent.putExtra("walkthroughId", summary.getWalkthroughId());
         startActivity(intent);
     }
 

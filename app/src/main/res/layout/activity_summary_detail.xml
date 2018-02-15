@@ -41,30 +41,4 @@
         android:layout_height="fill_parent"
         android:layout_below="@id/summary_detail_tabs"/>
 
-    <LinearLayout
-        android:id="@+id/fragment_tab_summary_overview"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <TextView
-            android:id="@+id/textview_summary_overview"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="@string/tab_overview" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/fragment_tab_summary_details"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <TextView
-            android:id="@+id/textview_summary_details"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="@string/tab_details" />
-
-    </LinearLayout>
-
 </RelativeLayout>

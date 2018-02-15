@@ -15,6 +15,14 @@ public class SummaryDetailsPresenter implements SummaryDetailsContract.Presenter
 
     @Override
     public void start() {
+        setTitle("Testing Details Title");
+    }
+
+    public void setTitle(String title) {
+        view.showTitle(title);
+    }
+
+    public void loadDetails() {
 
     }
 }

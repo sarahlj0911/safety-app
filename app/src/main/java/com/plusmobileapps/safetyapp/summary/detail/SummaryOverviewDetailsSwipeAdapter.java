@@ -10,7 +10,7 @@ import android.util.Log;
 
 public class SummaryOverviewDetailsSwipeAdapter extends FragmentStatePagerAdapter {
 
-    private static final String TAG = "SwipeAdapter";
+    private static final String TAG = "SODSwipeAdapter";
 
     public SummaryOverviewDetailsSwipeAdapter(FragmentManager fm) {
         super(fm);
@@ -23,7 +23,8 @@ public class SummaryOverviewDetailsSwipeAdapter extends FragmentStatePagerAdapte
                 //return new SummaryOverviewFragment();
                 return SummaryOverviewFragment.newInstance();
             case 1:
-                return new SummaryDetailsFragment();
+                //return new SummaryDetailsFragment();
+                return SummaryDetailsFragment.newInstance();
             default:
                 return null;
         }
