@@ -22,7 +22,7 @@ public class SummaryOverviewDetailsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_summary_detail);
         TabLayout tabLayout;
-        int walkthroughId;
+        long walkthroughId;
 
         String walkthroughTitle;
 
@@ -66,6 +66,7 @@ public class SummaryOverviewDetailsActivity extends AppCompatActivity {
             @Override
             public void onFragmentActivityCreated(FragmentManager fm, Fragment f, Bundle savedInstanceState) {
                 super.onFragmentActivityCreated(fm, f, savedInstanceState);
+                Log.d(TAG, "Fragment recreated");
                 createPresenter(f);
             }
         }, false);

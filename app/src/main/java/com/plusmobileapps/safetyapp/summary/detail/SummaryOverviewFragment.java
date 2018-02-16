@@ -3,6 +3,7 @@ package com.plusmobileapps.safetyapp.summary.detail;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +21,7 @@ public class SummaryOverviewFragment extends Fragment implements SummaryOverview
     }
 
     public static SummaryOverviewFragment newInstance() {
+        Log.d(TAG, "Creating new instance of SummaryOverviewFragment");
         return new SummaryOverviewFragment();
     }
 
