@@ -30,6 +30,7 @@
             android:id="@+id/welcome5_textView2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
             android:fontFamily="sans-serif"
             android:lineSpacingExtra="5sp"
             android:paddingBottom="@dimen/welcome3_bot_margins"
@@ -48,6 +49,7 @@
             android:paddingBottom="@dimen/welcome3_bot_margins"
             android:paddingTop="@dimen/welcome3_top_margins"
             android:text="@string/welcome5_footer"
+            android:textAlignment="center"
             android:textColor="@android:color/black"
             android:textSize="@dimen/welcome_titles_text_size" />
     </LinearLayout>
