@@ -13,11 +13,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class LoadActionItemTask extends AsyncTask<Void, Void, List<Response>> {
-    ActionItemContract.View view;
-    AppDatabase db;
+    private ActionItemContract.View view;
+    private AppDatabase db;
+    private List<Response> actionItems;
 
-    public LoadActionItemTask(ActionItemContract.View view) {
+    public LoadActionItemTask(ActionItemContract.View view, List<Response> actionItems) {
         this.view = view;
+        this.actionItems = actionItems;
     }
 
     @Override
@@ -25,8 +27,20 @@ public class LoadActionItemTask extends AsyncTask<Void, Void, List<Response>> {
         db = AppDatabase.getAppDatabase(MyApplication.getAppContext());
         ResponseDao responseDao = db.responseDao();
         QuestionDao questionDao = db.questionDao();
-        List<Response> actionItems = responseDao.getAllActionItems();
-        List<Question> questions = questionDao.getAll();
+        actionItems = responseDao.getAllActionItems();
+        //List<Question> questions = questionDao.getAll();
+        Response response = new Response(0,
+                1,
+                1,
+                "11:34pm",
+                3,
+                2,
+                "Fix it",
+                2,
+                null,
+                1);
+        actionItems.add(response);
+
 
         return actionItems;
     }

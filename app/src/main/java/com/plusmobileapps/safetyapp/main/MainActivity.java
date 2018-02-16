@@ -37,6 +37,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
         final MainSwipeAdapter swipeAdapter = new MainSwipeAdapter(getSupportFragmentManager());
         viewPager.setAdapter(swipeAdapter);
         viewPager.addOnPageChangeListener(pageChangeListener);
+        viewPager.setOffscreenPageLimit(3);
 
         Toolbar toolbar = findViewById(R.id.main_toolbar);
         setSupportActionBar(toolbar);
