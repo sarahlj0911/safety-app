@@ -10,7 +10,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
-import com.plusmobileapps.safetyapp.FragmentFactory;
 import com.plusmobileapps.safetyapp.R;
 import com.plusmobileapps.safetyapp.actionitems.landing.ActionItemPresenter;
 import com.plusmobileapps.safetyapp.summary.landing.SummaryPresenter;
@@ -24,6 +23,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
     private BottomNavigationView navigation;
     private String walkthroughFragmentTitle = "";
     private MainActivityPresenter presenter;
+    private MainActivityFragmentFactory factory;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
         presenter = new MainActivityPresenter(this);
 
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-        final MainSwipeAdapter swipeAdapter = new MainSwipeAdapter(getSupportFragmentManager());
+        final MainSwipeAdapter swipeAdapter = new MainSwipeAdapter(getSupportFragmentManager(), factory);
         viewPager.setAdapter(swipeAdapter);
         viewPager.addOnPageChangeListener(pageChangeListener);
 
@@ -44,9 +44,10 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
     }
 
     private void setUpPresenters() {
-        new WalkthroughLandingPresenter(FragmentFactory.getInstance().getWalkthroughLandingFragment());
-        new ActionItemPresenter(FragmentFactory.getInstance().getActionItemsFragment());
-        new SummaryPresenter(FragmentFactory.getInstance().getSummaryFragment());
+        factory = new MainActivityFragmentFactory();
+        new WalkthroughLandingPresenter(factory.getWalkthroughLandingFragment());
+        new ActionItemPresenter(factory.getActionItemsFragment());
+        new SummaryPresenter(factory.getSummaryFragment());
     }
 
     private void findViewsById() {
