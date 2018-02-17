@@ -1,5 +1,7 @@
 package com.plusmobileapps.safetyapp.data.dao;
 import android.arch.persistence.room.Dao;
+import android.arch.persistence.room.Delete;
+import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
 
 import com.plusmobileapps.safetyapp.data.entity.Question;
@@ -20,6 +22,15 @@ public interface QuestionDao {
     @Query("SELECT * " +
             "FROM question INNER JOIN question_mapping on question.questionId = question_mapping.questionId WHERE locationId like :locationId")
     List<Question> getQuestionsForLocationType(int locationId);
+
+    @Insert
+    void insert(Question question);
+
+    @Insert
+    void insertAll(Question... questions);
+
+    @Delete
+    void delete(Question question);
 
 }
 
