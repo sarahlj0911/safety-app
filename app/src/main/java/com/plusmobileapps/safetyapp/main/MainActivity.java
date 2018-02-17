@@ -89,12 +89,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
         }
     }
 
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        findViewById(R.id.floatingActionButton).setVisibility(View.VISIBLE);
-    }
-
     /**
      * Handle clicks of the bottom navigation
      */
