@@ -15,7 +15,7 @@
         android:layout_marginTop="32dp"
         android:text="@string/welcome4_title"
         android:textColor="@android:color/black"
-        android:textSize="24sp"
+        android:textSize="@dimen/welcome_titles_text_size"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.503"
         app:layout_constraintStart_toStartOf="parent"

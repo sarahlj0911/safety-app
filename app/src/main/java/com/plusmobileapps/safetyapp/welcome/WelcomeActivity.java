@@ -2,11 +2,16 @@ package com.plusmobileapps.safetyapp.welcome;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
+import android.text.style.ImageSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,7 +55,8 @@ public class WelcomeActivity extends AppCompatActivity {
                 R.layout.welcome_slide1,
                 R.layout.welcome_slide2,
                 R.layout.welcome_slide3,
-                R.layout.welcome_slide4
+                R.layout.welcome_slide4,
+                R.layout.welcome_slide5
         };
 
         // adding bottom dots
@@ -128,7 +134,6 @@ public class WelcomeActivity extends AppCompatActivity {
             } else if (position == layouts.length - 1) {
                 // On last page, change NEXT to GOT IT
                 btnNext.setText(getString(R.string.got_it));
-                //btnBack.setVisibility(View.GONE);
             } else {
                 // Neither first nor last page, so show BACK and NEXT
                 btnNext.setText(getString(R.string.next));
@@ -162,6 +167,15 @@ public class WelcomeActivity extends AppCompatActivity {
 
             View view = layoutInflater.inflate(layouts[position], container, false);
             container.addView(view);
+
+            if (position == 2) {
+                TextView welcome2textView4 = findViewById(R.id.welcome3_textView4);
+                String textToSpan = getResources().getText(R.string.welcome3_item4).toString();
+                SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(textToSpan);
+                Bitmap clearIcon = BitmapFactory.decodeResource(getResources(), R.drawable.ic_clear_black_trimmed_24dp);
+                spannableStringBuilder.setSpan(new ImageSpan(container.getContext(), clearIcon), 71, 72, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+                welcome2textView4.setText(spannableStringBuilder, TextView.BufferType.SPANNABLE);
+            }
 
             return view;
         }

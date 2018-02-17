@@ -15,34 +15,34 @@ import java.util.ArrayList;
  * Created by Andrew on 11/13/2017.
  */
 
-public class SurveyLandingAdapter extends RecyclerView.Adapter<SurveyLandingAdapter.CardViewHolder> {
+public class WalkthroughLandingAdapter extends RecyclerView.Adapter<WalkthroughLandingAdapter.CardViewHolder> {
 
-    private static final String TAG = "SurveyLandingAdapter";
-    public static final String EXTRA_SURVEY = "com.plusmobileapps.safetyapp.survey.landing.SURVEY";
+    private static final String TAG = "WalkthroughLandingAdapter";
+    public static final String EXTRA_WALKTHROUGH = "com.plusmobileapps.safetyapp.walkthrough.landing.WALKTHROUGH";
     public static final int ITEM_TYPE_NORMAL = 1;
     public static final int ITEM_TYPE_HEADER = 0;
-    private SurveyOverview survey;
-    private int surveyCount = 0;
-    private SurveyLandingFragment.SurveyLandingItemListener itemListener;
+    private WalkthroughOverview walkthrough;
+    private int walkthroughCount = 0;
+    private WalkthroughLandingFragment.WalkthroughLandingItemListener itemListener;
 
-    private ArrayList<SurveyOverview> surveys;
+    private ArrayList<WalkthroughOverview> walkthroughs;
 
-    public SurveyLandingAdapter(ArrayList<SurveyOverview> surveys, SurveyLandingFragment.SurveyLandingItemListener itemListener) {
-        this.surveys = surveys;
+    public WalkthroughLandingAdapter(ArrayList<WalkthroughOverview> walkthroughs, WalkthroughLandingFragment.WalkthroughLandingItemListener itemListener) {
+        this.walkthroughs = walkthroughs;
         this.itemListener = itemListener;
     }
 
     @Override
     public CardViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.viewholder_landing_survey, parent, false);
+                .inflate(R.layout.viewholder_landing_walkthrough, parent, false);
         return new CardViewHolder(view);
     }
 
 
     @Override
     public void onBindViewHolder(final CardViewHolder holder, int position) {
-        survey = surveys.get(position);
+        walkthrough = walkthroughs.get(position);
         TextView header = holder.getHeader();
 
         //handle the header visibility
@@ -57,28 +57,28 @@ public class SurveyLandingAdapter extends RecyclerView.Adapter<SurveyLandingAdap
             header.setVisibility(View.GONE);
         }
 
-        holder.getDate().setText(survey.getDate());
-        holder.getTime().setText(survey.getTime());
-        holder.getTitle().setText(survey.getTitle());
+        holder.getDate().setText(walkthrough.getDate());
+        holder.getTime().setText(walkthrough.getTime());
+        holder.getTitle().setText(walkthrough.getTitle());
 
         //handle progress bar
-        if (survey.isInProgress()) {
-            holder.getModified().setText(survey.getModified());
+        if (walkthrough.isInProgress()) {
+            holder.getModified().setText(walkthrough.getModified());
             holder.getProgressBar().setVisibility(View.VISIBLE);
-            holder.getProgressBar().setProgress(survey.getProgress());
+            holder.getProgressBar().setProgress(walkthrough.getProgress());
         } else {
             holder.getProgressBar().setVisibility(View.INVISIBLE);
-            holder.getModified().setText(survey.getModified());
+            holder.getModified().setText(walkthrough.getModified());
         }
     }
 
     @Override
     public int getItemCount() {
-        return surveys.size();
+        return walkthroughs.size();
     }
 
-    public void replaceData(ArrayList<SurveyOverview> surveys) {
-        this.surveys = surveys;
+    public void replaceData(ArrayList<WalkthroughOverview> walkthroughs) {
+        this.walkthroughs = walkthroughs;
     }
 
     public class CardViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -103,7 +103,7 @@ public class SurveyLandingAdapter extends RecyclerView.Adapter<SurveyLandingAdap
 
         @Override
         public void onClick(View view) {
-            itemListener.onSurveyClicked(getAdapterPosition());
+            itemListener.onWalkthroughClicked(getAdapterPosition());
         }
 
         public TextView getTime() {

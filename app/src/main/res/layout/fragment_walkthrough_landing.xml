@@ -1,10 +1,10 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/lib/com.plusmobileapps.safetyapp.surveys.landing"
+    xmlns:app="http://schemas.android.com/apk/lib/com.plusmobileapps.safetyapp.walkthroughs.landing"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.plusmobileapps.safetyapp.walkthrough.landing.SurveyLandingFragment"
-    android:id="@+id/fragment_survey_landing"
+    tools:context="com.plusmobileapps.safetyapp.walkthrough.landing.WalkthroughLandingFragment"
+    android:id="@+id/fragment_walkthrough_landing"
     android:clickable="false">
 
     <android.support.design.widget.FloatingActionButton
@@ -18,7 +18,7 @@
         android:foreground="@drawable/plus" />
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/landing_survey_recyclerview"
+        android:id="@+id/landing_walkthrough_recyclerview"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
     <View
