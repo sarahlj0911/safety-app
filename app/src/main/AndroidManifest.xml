@@ -25,7 +25,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".surveys.survey.WalkthroughActivity"
+            android:name=".surveys.walkthrough.WalkthroughActivity"
             android:label="@string/title_activity_survey"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".main.MainActivity" />

@@ -12,7 +12,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.plusmobileapps.safetyapp.R;
-import com.plusmobileapps.safetyapp.surveys.survey.WalkthroughActivity;
+import com.plusmobileapps.safetyapp.surveys.walkthrough.WalkthroughActivity;
 
 import java.util.ArrayList;
 
