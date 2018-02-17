@@ -14,6 +14,8 @@ public interface ActionItemDetailContract {
         //grab all editable fields from the ui
         String getActionItemPlan();
 
+        void showConfirmationExitDialog();
+
         void changeStatusDot(int drawableId);
 
         //finish the activity

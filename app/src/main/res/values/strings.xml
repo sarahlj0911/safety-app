@@ -59,4 +59,8 @@ through during one week.</string>
     <string name="viewholder_header_completed">In Progress</string>
     <string name="viewholder_header_inprogress">Completed</string>
     <string name="survey_dialog_message">You have an unfinished walk through. Creating a new walk through will delete the unfinished one. Are you sure you want to create a new walk through?</string>
+
+    <!--actionitem detail page-->
+    <string name="exit_confirmation">Are you sure you want to exit without saving your changes?</string>
+    <string name="confirmation">Confirmation</string>
 </resources>

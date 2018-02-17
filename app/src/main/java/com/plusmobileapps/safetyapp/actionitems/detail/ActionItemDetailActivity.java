@@ -1,9 +1,12 @@
 package com.plusmobileapps.safetyapp.actionitems.detail;
 
+import android.content.DialogInterface;
 import android.support.v4.app.DialogFragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -37,6 +40,7 @@ public class ActionItemDetailActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.action_item_detail_toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(R.string.title_action_item_detail);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         statusDot = findViewById(R.id.action_item_status);
         editPriorityBtn = findViewById(R.id.edit_priority_btn);
@@ -56,6 +60,30 @@ public class ActionItemDetailActivity extends AppCompatActivity
         } else {
             presenter.startError();
         }
+    }
+
+    @Override
+    public void showConfirmationExitDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this)
+                .setMessage(getString(R.string.exit_confirmation))
+                .setTitle(getString(R.string.confirmation))
+                .setPositiveButton(getString(R.string.yes), confirmationListener)
+                .setNegativeButton(getString(R.string.cancel), confirmationListener);
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                presenter.backButtonClicked();
+                break;
+            default:
+                break;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -107,6 +135,22 @@ public class ActionItemDetailActivity extends AppCompatActivity
         @Override
         public void onClick(View v) {
             presenter.editPriorityButtonClicked();
+        }
+    };
+
+    private DialogInterface.OnClickListener confirmationListener = new DialogInterface.OnClickListener() {
+        @Override
+        public void onClick(DialogInterface dialog, int which) {
+            switch (which) {
+                case DialogInterface.BUTTON_POSITIVE:
+                    finishActivity();
+                    break;
+                case DialogInterface.BUTTON_NEGATIVE:
+                    dialog.dismiss();
+                    break;
+                default:
+                    break;
+            }
         }
     };
 }

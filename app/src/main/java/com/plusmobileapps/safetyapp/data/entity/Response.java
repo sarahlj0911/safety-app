@@ -147,6 +147,25 @@ public class Response {
         this.questionId = questionId;
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Response) {
+            Response response = (Response) obj;
+            if (response.getActionPlan().equals(actionPlan) &&
+                    response.getImage() == image &&
+                    response.getIsActionItem() == isActionItem &&
+                    response.getLocationId() == locationId &&
+                    response.getTimeStamp().equals(timeStamp) &&
+                    response.getPriority() == priority &&
+                    response.getQuestionId() == questionId &&
+                    response.getRating() == rating &&
+                    response.getUserId() == userId
+                    ) {
+                return true;
+            }
+        }
+        return false;
+    }
 }
 
 

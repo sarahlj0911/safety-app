@@ -1,6 +1,7 @@
 package com.plusmobileapps.safetyapp.actionitems.detail;
 
 import android.os.AsyncTask;
+import android.widget.Switch;
 
 import com.plusmobileapps.safetyapp.MyApplication;
 import com.plusmobileapps.safetyapp.R;
@@ -11,7 +12,8 @@ import com.plusmobileapps.safetyapp.data.entity.Response;
 public class ActionItemDetailPresenter implements ActionItemDetailContract.Presenter {
 
     private ActionItemDetailContract.View view;
-    private Response response;
+    private Response originalResponse;
+    private Response editedResponse;
 
     public ActionItemDetailPresenter(ActionItemDetailContract.View view) {
         this.view = view;
@@ -19,12 +21,16 @@ public class ActionItemDetailPresenter implements ActionItemDetailContract.Prese
 
     @Override
     public void start(String id) {
-        new LoadActionItemDetailTask(id, view).execute();
+        new LoadActionItemDetailTask(id, listener).execute();
     }
 
     @Override
     public void backButtonClicked() {
-        view.finishActivity();
+        if(isActionItemEdited()) {
+            view.showConfirmationExitDialog();
+        } else {
+            view.finishActivity();
+        }
     }
 
     @Override
@@ -35,21 +41,41 @@ public class ActionItemDetailPresenter implements ActionItemDetailContract.Prese
     @Override
     public void editPriorityPicked(String selectedPriority) {
         int drawable = getStatusColorDrawable(selectedPriority);
-        //TODO: Update the priority on the response object
         view.changeStatusDot(drawable);
     }
 
     private int getStatusColorDrawable(String selectedPriority) {
         switch (selectedPriority) {
             case "High":
+                editedResponse.setPriority(3);
                 return R.drawable.circle_red;
             case "Medium":
+                editedResponse.setPriority(2);
                 return R.drawable.circle_yellow;
             case "Low":
+                editedResponse.setPriority(1);
                 return R.drawable.circle_green;
             default:
                 return -1;
         }
+    }
+
+    private int getStatusColorDrawable(int priority) {
+        switch (priority) {
+            case 1:
+                return R.drawable.circle_green;
+            case 2:
+                return R.drawable.circle_yellow;
+            case 3:
+                return R.drawable.circle_red;
+            default:
+                return -1;
+        }
+    }
+
+    private void setupUi() {
+        view.showActionItem(originalResponse);
+        view.changeStatusDot(getStatusColorDrawable(originalResponse.getPriority()));
     }
 
     @Override
@@ -60,64 +86,40 @@ public class ActionItemDetailPresenter implements ActionItemDetailContract.Prese
     @Override
     public void saveButtonClicked() {
         String actionItemPlan = view.getActionItemPlan();
-        //TODO: uncomment and delete finish activity once we get a valid response object
-        //response.setActionPlan(actionItemPlan);
-        //new SaveActionItemDetailTask(response, view).execute();
-        view.finishActivity();
-    }
-
-    static private class LoadActionItemDetailTask extends AsyncTask<Void, Void, Response> {
-
-        private AppDatabase db;
-        private String actionItemId;
-        private ActionItemDetailContract.View view;
-
-        public LoadActionItemDetailTask(String id, ActionItemDetailContract.View view) {
-            actionItemId = id;
-            this.view = view;
-        }
-
-        @Override
-        protected Response doInBackground(Void... voids) {
-            db = AppDatabase.getAppDatabase(MyApplication.getAppContext());
-            ResponseDao dao = db.responseDao();
-            Response response = dao.getByResponseId(actionItemId);
-            //TODO: verify that response if not null
-            //return response;
-            return new Response(0,1,1,"11:34pm",3, 2, "Fix it", 2, null,1);
-        }
-
-        @Override
-        protected void onPostExecute(Response response) {
-            view.showActionItem(response);
-            db.close();
-        }
-    }
-
-    static private class SaveActionItemDetailTask extends  AsyncTask<Void, Void, Void> {
-
-        private AppDatabase db;
-        private Response response;
-        private ActionItemDetailContract.View view;
-
-        public SaveActionItemDetailTask(Response response, ActionItemDetailContract.View view) {
-            this.response = response;
-            this.view = view;
-        }
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-            db = AppDatabase.getAppDatabase(MyApplication.getAppContext());
-            ResponseDao dao = db.responseDao();
-            dao.insertAll(response);
-            //TODO: Verify that the response edits were saved
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            db.close();
+        editedResponse.setActionPlan(actionItemPlan);
+        if(isActionItemEdited()) {
+            new SaveActionItemDetailTask(editedResponse, view).execute();
+        } else {
             view.finishActivity();
         }
     }
+
+    private boolean isActionItemEdited() {
+        return !editedResponse.equals(originalResponse);
+    }
+
+    private ResponseLoadingListener listener = new ResponseLoadingListener() {
+        @Override
+        public void onResponseLoaded(Response response) {
+            originalResponse = response;
+            editedResponse = new Response(
+                    response.getResponseId(),
+                    response.getIsActionItem(),
+                    response.getLocationId(),
+                    response.getTimeStamp(),
+                    response.getRating(),
+                    response.getPriority(),
+                    response.getActionPlan(),
+                    response.getQuestionId(),
+                    response.getImage(),
+                    response.getUserId());
+            setupUi();
+        }
+    };
+
+    interface ResponseLoadingListener {
+        void onResponseLoaded(Response response);
+    }
+
+
 }
