@@ -23,14 +23,14 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
     private BottomNavigationView navigation;
     private String walkthroughFragmentTitle = "";
     private MainActivityPresenter presenter;
-    private MainActivityFragmentFactory factory;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         findViewsById();
-        setUpPresenters();
+        MainActivityFragmentFactory factory = new MainActivityFragmentFactory();
+        setUpPresenters(factory);
         presenter = new MainActivityPresenter(this);
 
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
@@ -43,8 +43,8 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
         setAppBarTitle(0);
     }
 
-    private void setUpPresenters() {
-        factory = new MainActivityFragmentFactory();
+    private void setUpPresenters(MainActivityFragmentFactory factory) {
+
         new WalkthroughLandingPresenter(factory.getWalkthroughLandingFragment());
         new ActionItemPresenter(factory.getActionItemsFragment());
         new SummaryPresenter(factory.getSummaryFragment());
