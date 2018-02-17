@@ -85,8 +85,7 @@ public class ActionItemDetailPresenter implements ActionItemDetailContract.Prese
 
     @Override
     public void saveButtonClicked() {
-        String actionItemPlan = view.getActionItemPlan();
-        editedResponse.setActionPlan(actionItemPlan);
+
         if(isActionItemEdited()) {
             new SaveActionItemDetailTask(editedResponse, view).execute();
         } else {
@@ -95,6 +94,8 @@ public class ActionItemDetailPresenter implements ActionItemDetailContract.Prese
     }
 
     private boolean isActionItemEdited() {
+        String actionItemPlan = view.getActionItemPlan();
+        editedResponse.setActionPlan(actionItemPlan);
         return !editedResponse.equals(originalResponse);
     }
 
