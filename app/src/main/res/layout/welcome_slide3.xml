@@ -7,14 +7,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:layout_marginLeft="@dimen/welcome3_left_margins"
-        android:layout_marginRight="@dimen/welcome3_right_margins"
+        android:layout_marginStart="@dimen/welcome3_left_margins"
+        android:layout_marginEnd="@dimen/welcome3_right_margins"
         android:gravity="center_horizontal"
         android:orientation="vertical"
         android:id="@+id/linearLayout">
 
         <TextView
-            android:id="@+id/welcome2_textView1"
+            android:id="@+id/welcome3_textView1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif"
@@ -26,7 +26,7 @@
             android:textSize="@dimen/welcome3_text_size" />
 
         <TextView
-            android:id="@+id/welcome2_textView2"
+            android:id="@+id/welcome3_textView2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif"
@@ -38,7 +38,7 @@
             android:textSize="@dimen/welcome3_text_size" />
 
         <TextView
-            android:id="@+id/welcome2_textView3"
+            android:id="@+id/welcome3_textView3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif"
@@ -50,7 +50,7 @@
             android:textSize="@dimen/welcome3_text_size" />
 
         <TextView
-            android:id="@+id/welcome2_textView4"
+            android:id="@+id/welcome3_textView4"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif"
@@ -62,7 +62,7 @@
             android:textSize="@dimen/welcome3_text_size" />
 
         <TextView
-            android:id="@+id/welcome2_textView5"
+            android:id="@+id/welcome3_textView5"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif"
@@ -70,6 +70,18 @@
             android:paddingBottom="@dimen/welcome3_bot_margins"
             android:paddingTop="@dimen/welcome3_top_margins"
             android:text="@string/welcome3_item5"
+            android:textColor="@android:color/black"
+            android:textSize="@dimen/welcome3_text_size" />
+
+        <TextView
+            android:id="@+id/welcome3_textView6"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif"
+            android:lineSpacingExtra="5sp"
+            android:paddingBottom="@dimen/welcome3_bot_margins"
+            android:paddingTop="@dimen/welcome3_top_margins"
+            android:text="@string/welcome3_item6"
             android:textColor="@android:color/black"
             android:textSize="@dimen/welcome3_text_size" />
     </LinearLayout>
@@ -83,6 +95,6 @@
         android:layout_marginBottom="21dp"
         android:text="@string/welcome3_title"
         android:textColor="@android:color/black"
-        android:textSize="24sp" />
+        android:textSize="@dimen/welcome_titles_text_size" />
 
 </RelativeLayout>
