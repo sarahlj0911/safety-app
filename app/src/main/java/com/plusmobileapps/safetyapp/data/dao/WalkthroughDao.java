@@ -22,10 +22,10 @@ public interface WalkthroughDao {
     Walkthrough getByWalkthroughId(String walkthroughId);
 
     @Insert
-    void insertAll(Walkthrough... walkthroughs);
+    void insert(Walkthrough walkthrough);
 
     @Insert
-    void insert(Walkthrough walkthrough);
+    void insertAll(Walkthrough... walkthroughs);
 
     @Delete
     void delete(Walkthrough walkthrough);

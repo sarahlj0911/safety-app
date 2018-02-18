@@ -7,6 +7,8 @@ import android.graphics.Bitmap;
 import android.graphics.Picture;
 import android.media.Image;
 
+import java.util.zip.CheckedOutputStream;
+
 import static android.arch.persistence.room.ForeignKey.CASCADE;
 
 /**
@@ -15,6 +17,9 @@ import static android.arch.persistence.room.ForeignKey.CASCADE;
 
 @Entity(tableName = "responses",
         foreignKeys =  {
+            @ForeignKey(entity = Walkthrough.class,
+                        parentColumns = "walkthroughId",
+                        childColumns = "walkthroughId"),
             @ForeignKey(entity = User.class,
                         parentColumns = "userId",
                         childColumns = "userId"),
@@ -23,7 +28,7 @@ import static android.arch.persistence.room.ForeignKey.CASCADE;
                         childColumns = "locationId"),
             @ForeignKey(entity = Question.class,
                         parentColumns = "questionId",
-                        childColumns = "questionId")
+                        childColumns = "questionId"),
         })
 public class Response {
     @PrimaryKey(autoGenerate = false)
@@ -32,8 +37,8 @@ public class Response {
     @ColumnInfo(name = "isActionItem")
     private int isActionItem;
 
-    @ColumnInfo(name = "image")//, typeAffinity = ColumnInfo.BLOB)
-    private byte[] image;
+    @ColumnInfo(name = "image")
+    private String imagePath;
 
     @ColumnInfo(name = "locationId")
     private int locationId;
@@ -56,7 +61,10 @@ public class Response {
     @ColumnInfo(name = "userId")
     private int userId;
 
-    public Response(int responseId, int isActionItem, int locationId, String timeStamp, int rating, int priority, String actionPlan, int questionId, byte[] image, int userId) {
+    @ColumnInfo(name = "walkthroughId")
+    private int walkthroughId;
+
+    public Response(int responseId, int isActionItem, int locationId, String timeStamp, int rating, int priority, String actionPlan, int questionId, String imagePath, int userId, int walkthroughId) {
         this.responseId = responseId;
         this.isActionItem = isActionItem;
         this.locationId = locationId;
@@ -65,8 +73,9 @@ public class Response {
         this.priority = priority;
         this.actionPlan = actionPlan;
         this.questionId = questionId;
-        this.image = image;
+        this.imagePath = imagePath;
         this.userId = userId;
+        this.walkthroughId = walkthroughId;
     }
 
     //Getters
@@ -78,8 +87,8 @@ public class Response {
         return this.isActionItem;
     }
 
-    public byte[] getImage() {
-        return this.image;
+    public String getImagePath() {
+        return this.imagePath;
     }
 
     public int getLocationId() {
@@ -109,6 +118,8 @@ public class Response {
 
     public int getUserId() { return this.userId; }
 
+    public int getWalkthroughId() { return this.walkthroughId; }
+
     //Setters
     public void setResponseId(int responseId) {
         this.responseId = responseId;
@@ -118,8 +129,8 @@ public class Response {
         this.isActionItem = isActionItem;
     }
 
-    public void setImage(byte[] image) {
-        this.image = image;
+    public void setImage(String image) {
+        this.imagePath = imagePath;
     }
 
     public void setLocationId(int locationId) {
@@ -145,6 +156,8 @@ public class Response {
     public void setQuestionId(int questionId) {
         this.questionId = questionId;
     }
+
+    public void setWalkthroughId(int walkthroughId) { this.walkthroughId = walkthroughId; }
 
 }
 

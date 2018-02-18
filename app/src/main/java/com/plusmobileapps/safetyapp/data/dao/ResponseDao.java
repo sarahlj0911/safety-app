@@ -24,6 +24,9 @@ public interface ResponseDao {
     List<Response> getAllActionItems();
 
     @Insert
+    void insert(Response response);
+
+    @Insert
     void insertAll(Response... responses);
 
     @Delete

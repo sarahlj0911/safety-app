@@ -39,10 +39,13 @@ public class ActionItemAdapter extends RecyclerView.Adapter<ActionItemAdapter.Vi
         actionItem = actionItems.get(position);
 
         holder.getDescription().setText(actionItem.getActionPlan());
-        holder.getLocation().setText(actionItem.getLocationId());
-//        holder.getPicture().setImageBitmap(actionItem.getPhoto());
 
-        //TODO handle the changing of statuses and bind the corresponding colors to status value
+        //TODO: Figure out how to the best way to get the location name from Id
+        //Since you have to run Room on a background thread. This may be worth doing
+        //at the begining of the app.
+        String locationText = Integer.toString(actionItem.getLocationId());
+        holder.getLocation().setText(locationText);
+
     }
 
     @Override
