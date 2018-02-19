@@ -4,23 +4,24 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import com.plusmobileapps.safetyapp.FragmentFactory;
-
 public class MainSwipeAdapter extends FragmentPagerAdapter {
 
-    public MainSwipeAdapter(FragmentManager fm) {
+    private MainActivityFragmentFactory factory;
+
+    public MainSwipeAdapter(FragmentManager fm, MainActivityFragmentFactory factory) {
         super(fm);
+        this.factory = factory;
     }
 
     @Override
     public Fragment getItem(int position) {
         switch (position){
             case 0:
-                return FragmentFactory.getInstance().getWalkthroughLandingFragment();
+                return factory.getWalkthroughLandingFragment();
             case 1:
-                return FragmentFactory.getInstance().getActionItemsFragment();
+                return factory.getActionItemsFragment();
             case 2:
-                return FragmentFactory.getInstance().getSummaryFragment();
+                return factory.getSummaryFragment();
             default:
                 break;
         }
