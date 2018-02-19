@@ -4,9 +4,14 @@ package com.plusmobileapps.safetyapp.actionitems.landing;
 //import com.plusmobileapps.safetyapp.data.ActionItem;
 import com.plusmobileapps.safetyapp.data.entity.Response;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ActionItemPresenter implements ActionItemContract.Presenter {
 
     private final ActionItemContract.View actionItemView;
+    private List<Response> actionItems = new ArrayList<>(0);
+    private boolean isFirstLaunch = true;
 
     public ActionItemPresenter(ActionItemContract.View actionItemView) {
         this.actionItemView = actionItemView;
@@ -15,7 +20,7 @@ public class ActionItemPresenter implements ActionItemContract.Presenter {
 
     @Override
     public void start() {
-        loadActionItems(false);
+        loadActionItems(isFirstLaunch);
     }
 
     /**
@@ -27,14 +32,12 @@ public class ActionItemPresenter implements ActionItemContract.Presenter {
     public void loadActionItems(boolean forceUpdate) {
         actionItemView.setProgressIndicator(true);
         if (forceUpdate) {
-            //force a refresh of the data here
+            isFirstLaunch = false;
+            new LoadActionItemTask(actionItemView, actionItems).execute();
+        } else if (actionItems != null) {
+            actionItemView.showActionItems(actionItems);
         }
 
-        //this is where you would grab the data asynchronously
-        new LoadActionItemTask(actionItemView).execute();
-        //wrapping these next two lines in the onLoadComplete callback
-        //actionItemView.setProgressIndicator(false);
-        //actionItemView.showActionItems(actionItems);
     }
 
     /**
