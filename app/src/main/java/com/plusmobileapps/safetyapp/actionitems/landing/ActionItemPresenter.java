@@ -10,7 +10,7 @@ import java.util.List;
 public class ActionItemPresenter implements ActionItemContract.Presenter {
 
     private final ActionItemContract.View actionItemView;
-    private List<Response> actionItems;
+    private List<Response> actionItems = new ArrayList<>(0);
     private boolean isFirstLaunch = true;
 
     public ActionItemPresenter(ActionItemContract.View actionItemView) {

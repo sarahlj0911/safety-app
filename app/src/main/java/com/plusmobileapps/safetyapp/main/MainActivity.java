@@ -1,5 +1,6 @@
 package com.plusmobileapps.safetyapp.main;
 
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -9,8 +10,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.plusmobileapps.safetyapp.FragmentFactory;
 import com.plusmobileapps.safetyapp.R;
 import com.plusmobileapps.safetyapp.actionitems.landing.ActionItemPresenter;
 import com.plusmobileapps.safetyapp.summary.landing.SummaryPresenter;
@@ -30,11 +31,12 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         findViewsById();
-        setUpPresenters();
+        MainActivityFragmentFactory factory = new MainActivityFragmentFactory();
+        setUpPresenters(factory);
         presenter = new MainActivityPresenter(this);
 
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-        final MainSwipeAdapter swipeAdapter = new MainSwipeAdapter(getSupportFragmentManager());
+        final MainSwipeAdapter swipeAdapter = new MainSwipeAdapter(getSupportFragmentManager(), factory);
         viewPager.setAdapter(swipeAdapter);
         viewPager.addOnPageChangeListener(pageChangeListener);
         viewPager.setOffscreenPageLimit(3);
@@ -44,10 +46,11 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
         setAppBarTitle(0);
     }
 
-    private void setUpPresenters() {
-        new WalkthroughLandingPresenter(FragmentFactory.getInstance().getWalkthroughLandingFragment());
-        new ActionItemPresenter(FragmentFactory.getInstance().getActionItemsFragment());
-        new SummaryPresenter(FragmentFactory.getInstance().getSummaryFragment());
+    private void setUpPresenters(MainActivityFragmentFactory factory) {
+
+        new WalkthroughLandingPresenter(factory.getWalkthroughLandingFragment());
+        new ActionItemPresenter(factory.getActionItemsFragment());
+        new SummaryPresenter(factory.getSummaryFragment());
     }
 
     private void findViewsById() {
@@ -90,12 +93,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
         }
     }
 
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        findViewById(R.id.floatingActionButton).setVisibility(View.VISIBLE);
-    }
-
     /**
      * Handle clicks of the bottom navigation
      */
@@ -120,6 +117,17 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
 
     };
 
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+
+        // Checks the orientation of the screen
+        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            Toast.makeText(this, "landscape", Toast.LENGTH_SHORT).show();
+        } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT){
+            Toast.makeText(this, "portrait", Toast.LENGTH_SHORT).show();
+        }
+    }
 
     /**
      * Handle ViewPager page change events

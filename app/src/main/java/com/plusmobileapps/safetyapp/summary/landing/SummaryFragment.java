@@ -5,12 +5,13 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.plusmobileapps.safetyapp.R;
-import com.plusmobileapps.safetyapp.summary.detail.SummaryDetailActivity;
+import com.plusmobileapps.safetyapp.summary.detail.SummaryOverviewDetailsActivity;
 import com.plusmobileapps.safetyapp.walkthrough.landing.WalkthroughOverview;
 
 import java.util.ArrayList;
@@ -69,7 +70,9 @@ public class SummaryFragment extends Fragment implements SummaryContract.View {
 
     @Override
     public void showSummaryDetailUi(WalkthroughOverview summary) {
-        Intent intent = new Intent(getContext(), SummaryDetailActivity.class);
+        Intent intent = new Intent(getContext(), SummaryOverviewDetailsActivity.class);
+        intent.putExtra("walkthroughTitle", summary.getTitle());
+        intent.putExtra("walkthroughId", summary.getWalkthroughId());
         startActivity(intent);
     }
 
