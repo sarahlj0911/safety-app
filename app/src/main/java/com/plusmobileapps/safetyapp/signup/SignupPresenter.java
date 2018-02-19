@@ -5,7 +5,6 @@ import android.content.Context;
 
 import com.plusmobileapps.safetyapp.data.AppDatabase;
 import com.plusmobileapps.safetyapp.data.dao.UserDao;
-import com.plusmobileapps.safetyapp.data.dao.UserDao_Impl;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -52,7 +51,7 @@ public class SignupPresenter implements SignupContract.Presenter {
             }
 
             // Validate email format
-            if (value.equals("Email") && isValid && !value.contains("@")){
+            if (entry.getKey().equals("Email") && isValid && !value.contains("@")){
                 isValid = false;
                 errorMessages.add("Invalid email format");
             }
