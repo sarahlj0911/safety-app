@@ -14,8 +14,11 @@ import android.arch.persistence.room.PrimaryKey;
                     parentColumns = "schoolId",
                     childColumns = "schoolId"))
 public class User {
-    @PrimaryKey(autoGenerate = false)
+    @PrimaryKey(autoGenerate = true)
     private int userId;
+
+    @ColumnInfo(name = "userName")
+    private String userName;
 
     @ColumnInfo(name = "schoolId")
     private int schoolId;
@@ -23,7 +26,7 @@ public class User {
     @ColumnInfo(name = "emailAddress")
     private String emailAddress;
 
-    public User(int userId, int schoolId, String emailAddress) {
+    public User(int userId, int schoolId, String emailAddress, String userName) {
         this.userId = userId;
         this.schoolId = schoolId;
         this.emailAddress = emailAddress;
@@ -42,6 +45,10 @@ public class User {
         return this.emailAddress;
     }
 
+    public String getUserName() {
+        return userName;
+    }
+
     //Setters
     public void setUserId(int userId) {
         this.userId = userId;
@@ -55,4 +62,7 @@ public class User {
         this.emailAddress = emailAddress;
     }
 
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
 }
