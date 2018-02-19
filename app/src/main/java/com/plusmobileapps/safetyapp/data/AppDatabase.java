@@ -34,6 +34,10 @@ public abstract class AppDatabase extends RoomDatabase {
 
     public abstract WalkthroughDao walkthroughDao();
 
+    public abstract SchoolDao schoolDao();
+
+    public abstract QuestionMappingDao questionMappingDao();
+
     public static AppDatabase getAppDatabase(Context context) {
         if(INSTANCE == null) {
             INSTANCE =

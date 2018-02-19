@@ -1,27 +1,19 @@
-package com.plusmobileapps.safetyapp;
+package com.plusmobileapps.safetyapp.main;
 
 import com.plusmobileapps.safetyapp.actionitems.landing.ActionItemsFragment;
 import com.plusmobileapps.safetyapp.summary.landing.SummaryFragment;
 import com.plusmobileapps.safetyapp.walkthrough.landing.WalkthroughLandingFragment;
 
-public class FragmentFactory {
-    private static FragmentFactory instance = null;
+public class MainActivityFragmentFactory {
+    private static MainActivityFragmentFactory instance = null;
     private WalkthroughLandingFragment walkthroughLandingFragment;
     private ActionItemsFragment actionItemsFragment;
     private SummaryFragment summaryFragment;
 
-    private FragmentFactory() {
+    public MainActivityFragmentFactory() {
         walkthroughLandingFragment = WalkthroughLandingFragment.newInstance();
         actionItemsFragment = ActionItemsFragment.newInstance();
         summaryFragment = SummaryFragment.newInstance();
-    }
-
-    public static FragmentFactory getInstance(){
-        if(instance == null) {
-            instance = new FragmentFactory();
-        }
-
-        return instance;
     }
 
     public WalkthroughLandingFragment getWalkthroughLandingFragment() {
