@@ -28,7 +28,7 @@ public class LoadActionItemDetailTask extends AsyncTask<Void, Void, Response> {
         Response response = dao.getByResponseId(actionItemId);
         //TODO: verify that response if not null
         //return response;
-        return new Response(0,1,1,"11:34pm",3, 2, "Fix it", 2, null,1);
+        return new Response(0,1,1,"11:34pm",3, 2, "Fix it", 2, "",1, 1);
     }
 
     @Override

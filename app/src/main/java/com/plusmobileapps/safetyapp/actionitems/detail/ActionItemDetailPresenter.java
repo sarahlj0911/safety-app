@@ -112,8 +112,9 @@ public class ActionItemDetailPresenter implements ActionItemDetailContract.Prese
                     response.getPriority(),
                     response.getActionPlan(),
                     response.getQuestionId(),
-                    response.getImage(),
-                    response.getUserId());
+                    response.getImagePath(),
+                    response.getUserId(),
+                    response.getWalkthroughId());
             setupUi();
         }
     };
