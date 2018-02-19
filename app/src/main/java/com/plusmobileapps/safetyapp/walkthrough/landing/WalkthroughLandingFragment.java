@@ -82,7 +82,8 @@ public class WalkthroughLandingFragment extends Fragment
     public void onResume() {
         super.onResume();
         prefManager = new PrefManager(getContext());
-        if (prefManager.isFirstTimeLaunch()) {
+        //if (prefManager.isFirstTimeLaunch()) {
+        if (!prefManager.isUserSignedUp()) {
             presenter.firstAppLaunch();
         }
 
@@ -192,7 +193,8 @@ public class WalkthroughLandingFragment extends Fragment
     private View.OnClickListener tutorialClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            prefManager.setFirstTimeLaunch(false);
+            //prefManager.setFirstTimeLaunch(false);
+            prefManager.setIsUserSignedUp(true);
             showcaseView.hide();
         }
     };

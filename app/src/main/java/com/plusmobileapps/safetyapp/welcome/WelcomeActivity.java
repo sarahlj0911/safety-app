@@ -22,6 +22,7 @@ import android.widget.TextView;
 import com.plusmobileapps.safetyapp.main.MainActivity;
 import com.plusmobileapps.safetyapp.PrefManager;
 import com.plusmobileapps.safetyapp.R;
+import com.plusmobileapps.safetyapp.signup.SignupActivity;
 
 public class WelcomeActivity extends AppCompatActivity {
 
@@ -40,7 +41,8 @@ public class WelcomeActivity extends AppCompatActivity {
         // Checking for first time launch - before calling setContentView()
         prefManager = new PrefManager(this);
         if (!prefManager.isFirstTimeLaunch()) {
-            launchHomeScreen();
+            //launchHomeScreen();
+            launchSignupScreen();
             finish();
         }
 
@@ -87,7 +89,8 @@ public class WelcomeActivity extends AppCompatActivity {
                     // move to next screen
                     welcomeViewPager.setCurrentItem(current);
                 } else {
-                    launchHomeScreen();
+                    //launchHomeScreen();
+                    launchSignupScreen();
                 }
             }
         });
@@ -116,10 +119,15 @@ public class WelcomeActivity extends AppCompatActivity {
         return welcomeViewPager.getCurrentItem() + i;
     }
 
-    private void launchHomeScreen() {
-        startActivity(new Intent(WelcomeActivity.this, MainActivity.class));
+    private void launchSignupScreen() {
+        startActivity(new Intent(WelcomeActivity.this, SignupActivity.class));
         finish();
     }
+
+    /*private void launchHomeScreen() {
+        startActivity(new Intent(WelcomeActivity.this, MainActivity.class));
+        finish();
+    }*/
 
     //  viewpager change listener
     ViewPager.OnPageChangeListener viewPagerPageChangeListener = new ViewPager.OnPageChangeListener() {

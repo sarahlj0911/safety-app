@@ -40,10 +40,26 @@
     <string name="welcome4_title">Prioritization Guide</string>
     <string name="prioritization_tip_text">You may set a priority level for each item in the walkthrough to help determine how soon action items need to be addressed. Only items with a red or yellow priority will be shown in your list of action items.</string>
 
-    <string name="welcome5_title">A couple final tips...</string>
+    <string name="welcome5_title">A couple final tips&#8230;</string>
     <string name="welcome5_item1">It is best to conduct the observations when students and staff are using the space as they normally would.</string>
     <string name="welcome5_item2">Ideally the walk-through will be completed in one day by the same person or persons. If this is not possible, try to complete the walk-through during one week.</string>
-    <string name="welcome5_footer">Next, we need some information about you and your school...</string>
+    <string name="welcome5_footer">Next, we need some information about you and your school&#8230;</string>
+
+    <!-- Signup page strings -->
+    <string name="title_signup">SAfETy Walkthrough Sign Up</string>
+    <string name="hint_name">Name</string>
+    <string name="hint_email">Email</string>
+    <string name="hint_school_name">School Name</string>
+    <string name="label_signup_role">Role</string>
+    <string name="btn_signup">Let\'s get started!</string>
+    <string name="signup_role_prompt">Choose a role</string>
+
+    <string-array name="signup_roles">
+        <item>Administrator</item>
+        <item>Teacher</item>
+        <item>Student Services</item>
+        <item>Other</item>
+    </string-array>
 
     <string name="back">BACK</string>
     <string name="next">NEXT</string>
