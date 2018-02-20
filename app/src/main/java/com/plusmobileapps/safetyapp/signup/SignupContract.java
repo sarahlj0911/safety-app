@@ -13,7 +13,7 @@ import java.util.Map;
 public interface SignupContract {
 
     interface View extends BaseView<Presenter> {
-        void displayErrors(List<String> errorMessages);
+        void displayError(String errorMessage);
     }
 
     interface Presenter extends BasePresenter {

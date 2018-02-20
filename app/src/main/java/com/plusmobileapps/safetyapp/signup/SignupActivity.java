@@ -1,9 +1,10 @@
 package com.plusmobileapps.safetyapp.signup;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -14,7 +15,6 @@ import com.plusmobileapps.safetyapp.R;
 import com.plusmobileapps.safetyapp.main.MainActivity;
 
 import java.util.HashMap;
-import java.util.List;
 
 public class SignupActivity extends AppCompatActivity implements SignupContract.View {
 
@@ -84,11 +84,18 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
     };
 
     @Override
-    public void displayErrors(List<String> errorMessages) {
-        Log.d(TAG, "Errors to display...");
+    public void displayError(String errorMessage) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(errorMessage)
+                .setIcon(getResources().getDrawable(R.drawable.ic_warning_gray_24dp))
+                .setTitle("Form error")
+                .setNeutralButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
 
-        for (String error : errorMessages) {
-            Log.d(TAG, error);
-        }
+                    }
+                });
+        AlertDialog errorDialog = builder.create();
+        errorDialog.show();
     }
 }

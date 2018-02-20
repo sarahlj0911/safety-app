@@ -6,9 +6,7 @@ import android.util.Log;
 import com.plusmobileapps.safetyapp.data.entity.School;
 import com.plusmobileapps.safetyapp.data.entity.User;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
@@ -21,11 +19,12 @@ public class SignupPresenter implements SignupContract.Presenter {
     private static final String TAG = "SignupPresenter";
     private SignupContract.View view;
     private boolean isSaved;
-    private List<String> errorMessages;
+    private String errorMessage;
 
     SignupPresenter(SignupContract.View view) {
         this.view = view;
         view.setPresenter(this);
+        errorMessage = "";
     }
 
     @Override
@@ -36,12 +35,12 @@ public class SignupPresenter implements SignupContract.Presenter {
     @Override
     public boolean processFormInput(Map<String, String> formInput) {
         if (!validateForm(formInput)) {
-            view.displayErrors(errorMessages);
+            view.displayError(errorMessage);
             return false;
         }
 
         if (!saveSignupData(formInput)) {
-            view.displayErrors(errorMessages);
+            view.displayError(errorMessage);
             return false;
         }
 
@@ -50,24 +49,22 @@ public class SignupPresenter implements SignupContract.Presenter {
 
     @Override
     public boolean validateForm(Map<String, String> formInput) {
-        boolean isValid = true;
-        errorMessages = new ArrayList<>();
 
         for (HashMap.Entry<String, String> entry : formInput.entrySet()) {
             String value = entry.getValue();
             if (value.isEmpty() || value.trim().equals("") || value.length() <= 2) {
-                isValid = false;
-                errorMessages.add(entry.getKey() + " is required");
+                errorMessage = entry.getKey() + " is required";
+                return false;
             }
 
             // Validate email format
-            if (entry.getKey().equals("Email") && isValid && !value.contains("@")){
-                isValid = false;
-                errorMessages.add("Invalid email format");
+            if (entry.getKey().equals("Email") && !value.contains("@")){
+                errorMessage = "Invalid email format";
+                return false;
             }
         }
 
-        return isValid;
+        return true;
     }
 
     @Override
@@ -82,6 +79,7 @@ public class SignupPresenter implements SignupContract.Presenter {
         } catch (InterruptedException | ExecutionException e) {
             Log.d(TAG, "Problem saving school");
             Log.d(TAG, e.getMessage());
+            errorMessage = "Unable to save input";
         }
 
         Log.d(TAG, "School saved!");
@@ -99,6 +97,7 @@ public class SignupPresenter implements SignupContract.Presenter {
         } catch (InterruptedException | ExecutionException e) {
             Log.d(TAG, "Problem saving user");
             Log.d(TAG, e.getMessage());
+            errorMessage = "Unable to save input";
         }
 
         return isSaved;
