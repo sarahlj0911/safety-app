@@ -19,6 +19,8 @@ import com.plusmobileapps.safetyapp.data.entity.Response;
 import java.util.ArrayList;
 import java.util.List;
 
+import jp.wasabeef.recyclerview.animators.SlideInRightAnimator;
+
 
 public class ActionItemsFragment extends Fragment implements ActionItemContract.View {
 
@@ -65,6 +67,7 @@ public class ActionItemsFragment extends Fragment implements ActionItemContract.
         currentLayoutManagerType = LayoutManagerType.LINEAR_LAYOUT_MANAGER;
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
+        recyclerView.setItemAnimator(new SlideInRightAnimator());
 
         return rootView;
     }
@@ -123,6 +126,7 @@ public class ActionItemsFragment extends Fragment implements ActionItemContract.
     @Override
     public void restoreActionItem(int position, Response response) {
         adapter.restoreActionItem(position, response);
+        recyclerView.smoothScrollToPosition(position);
     }
 
     /**

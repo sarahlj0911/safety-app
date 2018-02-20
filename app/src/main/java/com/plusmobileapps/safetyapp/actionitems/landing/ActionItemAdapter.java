@@ -63,12 +63,12 @@ public class ActionItemAdapter extends RecyclerView.Adapter<ActionItemAdapter.Vi
 
     public void dismissActionItem(int position) {
         actionItems.remove(position);
-        notifyDataSetChanged();
+        notifyItemRemoved(position);
     }
 
     public void restoreActionItem(int position, Response response) {
         actionItems.add(position, response);
-        notifyDataSetChanged();
+        notifyItemInserted(position);
     }
 
     private void setList(List<Response> actionItems) {
