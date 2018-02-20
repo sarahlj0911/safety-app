@@ -1,15 +1,16 @@
 package com.plusmobileapps.safetyapp.signup;
 
-import android.arch.persistence.room.Room;
-import android.content.Context;
+import android.os.AsyncTask;
+import android.util.Log;
 
-import com.plusmobileapps.safetyapp.data.AppDatabase;
-import com.plusmobileapps.safetyapp.data.dao.UserDao;
+import com.plusmobileapps.safetyapp.data.entity.School;
+import com.plusmobileapps.safetyapp.data.entity.User;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
 
 /**
  * Created by Robert Beerman on 2/17/2018.
@@ -19,12 +20,8 @@ public class SignupPresenter implements SignupContract.Presenter {
 
     private static final String TAG = "SignupPresenter";
     private SignupContract.View view;
-    private boolean isValid;
     private boolean isSaved;
     private List<String> errorMessages;
-    private UserDao userDao;
-    private AppDatabase appDb;
-
 
     SignupPresenter(SignupContract.View view) {
         this.view = view;
@@ -33,14 +30,27 @@ public class SignupPresenter implements SignupContract.Presenter {
 
     @Override
     public void start() {
-        //appDb = Room.inMemoryDatabaseBuilder();
-        //userDao = new UserDao();
         isSaved = true;
     }
 
     @Override
-    public void validateForm(Map<String, String> formInput) {
-        isValid = true;
+    public boolean processFormInput(Map<String, String> formInput) {
+        if (!validateForm(formInput)) {
+            view.displayErrors(errorMessages);
+            return false;
+        }
+
+        if (!saveSignupData(formInput)) {
+            view.displayErrors(errorMessages);
+            return false;
+        }
+
+        return true;
+    }
+
+    @Override
+    public boolean validateForm(Map<String, String> formInput) {
+        boolean isValid = true;
         errorMessages = new ArrayList<>();
 
         for (HashMap.Entry<String, String> entry : formInput.entrySet()) {
@@ -57,23 +67,40 @@ public class SignupPresenter implements SignupContract.Presenter {
             }
         }
 
-        if (!isValid) {
-            view.displayErrors(errorMessages);
-        }
-    }
-
-    @Override
-    public boolean isValid() {
         return isValid;
     }
 
     @Override
-    public void saveSignupData(Map<String, String> formInput) {
+    public boolean saveSignupData(Map<String, String> formInput) {
+        String schoolName = formInput.get("School Name");
+        School school = new School(1, schoolName);
 
-    }
+        AsyncTask<Void, Void, Boolean> saveSchoolTask = new SaveSchoolTask(school).execute();
 
-    @Override
-    public boolean isSaved() {
+        try {
+            saveSchoolTask.get();
+        } catch (InterruptedException | ExecutionException e) {
+            Log.d(TAG, "Problem saving school");
+            Log.d(TAG, e.getMessage());
+        }
+
+        Log.d(TAG, "School saved!");
+
+        String userName = formInput.get("Name");
+        String email = formInput.get("Email");
+        String role = formInput.get("Role");
+
+        User user = new User(1, 1, email, userName, role);
+
+        AsyncTask<Void, Void, Boolean> saveUserTask = new SaveUserTask(user).execute();
+
+        try {
+            isSaved = saveUserTask.get();
+        } catch (InterruptedException | ExecutionException e) {
+            Log.d(TAG, "Problem saving user");
+            Log.d(TAG, e.getMessage());
+        }
+
         return isSaved;
     }
 }

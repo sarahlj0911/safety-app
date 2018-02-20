@@ -13,16 +13,13 @@ import com.plusmobileapps.safetyapp.PrefManager;
 import com.plusmobileapps.safetyapp.R;
 import com.plusmobileapps.safetyapp.main.MainActivity;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 public class SignupActivity extends AppCompatActivity implements SignupContract.View {
 
     public static final String TAG = "SignupActivity";
-    private PrefManager prefManager;
     private SignupContract.Presenter presenter;
-    private Button saveSignupBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +27,7 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
 
         setContentView(R.layout.activity_signup);
         presenter = new SignupPresenter(this);
-        saveSignupBtn = findViewById(R.id.button_save_signup);
+        Button saveSignupBtn = findViewById(R.id.button_save_signup);
         saveSignupBtn.setOnClickListener(saveSignupClickListener);
     }
 
@@ -39,7 +36,7 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
         super.onResume();
 
         // Checking if user has already signed up
-        prefManager = new PrefManager(this);
+        PrefManager prefManager = new PrefManager(this);
         prefManager.setFirstTimeLaunch(false);
 
         if (prefManager.isUserSignedUp()) {
@@ -64,8 +61,6 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
 
         @Override
         public void onClick(View v) {
-            // TODO Validate form input
-            // TODO Save user and school input
             HashMap<String, String> formInput = new HashMap<>();
             EditText nameInput = findViewById(R.id.signup_name);
             EditText emailInput = findViewById(R.id.signup_email);
@@ -77,16 +72,12 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
             String school = schoolNameInput.getText().toString();
             String role = roleInput.getSelectedItem().toString();
 
-            Log.d(TAG, "Inputs entered: " + name + ", " + email + ", " + school + ", " + role);
-
             formInput.put("Name", name);
             formInput.put("Email", email);
             formInput.put("School Name", school);
             formInput.put("Role", role);
 
-            presenter.validateForm(formInput);
-
-            if (presenter.isValid() && presenter.isSaved()) {
+            if (presenter.processFormInput(formInput)) {
                 launchHomeScreen();
             }
         }

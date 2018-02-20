@@ -22,7 +22,7 @@ import com.plusmobileapps.safetyapp.data.entity.Response;
 import com.plusmobileapps.safetyapp.data.entity.User;
 import com.plusmobileapps.safetyapp.data.entity.Walkthrough;
 
-@Database(entities = {Location.class, Question.class, QuestionMapping.class, Response.class, School.class, User.class, Walkthrough.class}, version = 1)
+@Database(entities = {Location.class, Question.class, QuestionMapping.class, Response.class, School.class, User.class, Walkthrough.class}, version = 2)
 public abstract class AppDatabase extends RoomDatabase {
 
     private static AppDatabase INSTANCE;
@@ -57,12 +57,4 @@ public abstract class AppDatabase extends RoomDatabase {
     public static void destroyInstance() {
         INSTANCE = null;
     }
-
-    /*@VisibleForTesting
-    static final Migration MIGRATION_2_3 = new Migration(2, 3) {
-        @Override
-        public void migrate(SupportSQLiteDatabase database) {
-            database.execSQL("ALTER TABLE user ADD COLUMN userName TEXT");
-        }
-    };*/
 }

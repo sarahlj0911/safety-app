@@ -10,7 +10,7 @@ import android.arch.persistence.room.PrimaryKey;
 
 @Entity(tableName = "schools")
 public class School {
-    @PrimaryKey(autoGenerate = false)
+    @PrimaryKey
     private int schoolId;
 
     @ColumnInfo(name = "schoolName")

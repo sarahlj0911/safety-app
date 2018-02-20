@@ -17,11 +17,8 @@ public interface SignupContract {
     }
 
     interface Presenter extends BasePresenter {
-        void validateForm(Map<String, String> formInput);
-        //void setIsValid(boolean isValid);
-        boolean isValid();
-        void saveSignupData(Map<String, String> formInput);
-        //void setIsSaved(boolean isSaved);
-        boolean isSaved();
+        boolean validateForm(Map<String, String> formInput);
+        boolean saveSignupData(Map<String, String> formInput);
+        boolean processFormInput(Map<String, String> formInput);
     }
 }
