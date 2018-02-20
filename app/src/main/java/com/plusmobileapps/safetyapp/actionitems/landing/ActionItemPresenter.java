@@ -51,6 +51,9 @@ public class ActionItemPresenter implements ActionItemContract.Presenter {
 
     @Override
     public void dismissButtonClicked(int position) {
+        if(lastDismissedResponse != null) {
+            updateLastResponse();
+        }
         lastDismissedResponse = actionItems.get(position);
         lastDismissedResponseIndex = position;
         actionItems.remove(position);
@@ -61,5 +64,16 @@ public class ActionItemPresenter implements ActionItemContract.Presenter {
     public void undoDismissal() {
         actionItems.add(lastDismissedResponseIndex, lastDismissedResponse);
         actionItemView.restoreActionItem(lastDismissedResponseIndex, lastDismissedResponse);
+        lastDismissedResponse = null;
+    }
+
+    @Override
+    public void onDestroy() {
+        updateLastResponse();
+    }
+
+    private void updateLastResponse() {
+        //TODO: update response to not be action item in database
+        lastDismissedResponse.setIsActionItem(0);
     }
 }

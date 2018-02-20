@@ -155,6 +155,12 @@ public class ActionItemsFragment extends Fragment implements ActionItemContract.
         }
     };
 
+    @Override
+    public void onDestroy() {
+        presenter.onDestroy();
+        super.onDestroy();
+    }
+
     /**
      * Interface for the recyclerview items being clicked
      */
