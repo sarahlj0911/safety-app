@@ -27,18 +27,12 @@ public class LoadActionItemTask extends AsyncTask<Void, Void, List<Response>> {
         ResponseDao responseDao = db.responseDao();
 //        actionItems = responseDao.getAllActionItems();
         //List<Question> questions = questionDao.getAll();
-        Response response = new Response(0,
-                1,
-                1,
-                "11:34pm",
-                3,
-                2,
-                "Fix it",
-                2,
-                "",
-                1,
-                1);
-        actionItems.add(response);
+        actionItems.add(new Response(0,1,1,"11:34pm",3, 2, "Fix it", 2, "",1,1));
+        actionItems.add(new Response(1,1,2,"11:34pm",3, 2, "second one", 2, "",1,1));
+        actionItems.add(new Response(1,1,3,"11:34pm",3, 2, "second one", 2, "",1,1));
+        actionItems.add(new Response(1,1,4,"11:34pm",3, 2, "second one", 2, "",1,1));
+        actionItems.add(new Response(1,1,5,"11:34pm",3, 2, "second one", 2, "",1,1));
+        actionItems.add(new Response(1,1,6,"11:34pm",3, 2, "second one", 2, "",1,1));
 
         return actionItems;
     }
@@ -46,10 +40,16 @@ public class LoadActionItemTask extends AsyncTask<Void, Void, List<Response>> {
     @Override
     protected void onPostExecute(List<Response> actionItems) {
         super.onPostExecute(actionItems);
-//        view.showActionItems(actionItems);
-        List<Response> items = new ArrayList<>(0);
-        items.add(new Response(0,1,1,"11:34pm",3, 2, "Fix it", 2, "",1,1));
-        view.showActionItems(items);
+        //need to copy list so this reference isn't passed to the view
+        view.showActionItems(copyList(actionItems));
         db.close();
+    }
+
+    private List<Response> copyList(List<Response> responses) {
+        List<Response> tempList = new ArrayList<>(0);
+        for(Response response : responses) {
+            tempList.add(response);
+        }
+        return tempList;
     }
 }
