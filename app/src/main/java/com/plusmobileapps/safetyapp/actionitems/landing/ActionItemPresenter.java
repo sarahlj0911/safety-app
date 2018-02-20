@@ -3,10 +3,10 @@ package com.plusmobileapps.safetyapp.actionitems.landing;
 
 //import com.plusmobileapps.safetyapp.data.ActionItem;
 import com.plusmobileapps.safetyapp.data.entity.Response;
+import com.plusmobileapps.safetyapp.util.CopyListUtil;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Stack;
 
 public class ActionItemPresenter implements ActionItemContract.Presenter {
 
@@ -38,7 +38,7 @@ public class ActionItemPresenter implements ActionItemContract.Presenter {
             isFirstLaunch = false;
             new LoadActionItemTask(actionItemView, actionItems).execute();
         } else if (actionItems != null) {
-            actionItemView.showActionItems(actionItems);
+            actionItemView.showActionItems(CopyListUtil.copyResponseList(actionItems));
         }
 
     }

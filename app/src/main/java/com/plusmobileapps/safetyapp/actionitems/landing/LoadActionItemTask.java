@@ -7,8 +7,8 @@ import com.plusmobileapps.safetyapp.MyApplication;
 import com.plusmobileapps.safetyapp.data.entity.Response;
 import com.plusmobileapps.safetyapp.data.dao.ResponseDao;
 import com.plusmobileapps.safetyapp.data.AppDatabase;
+import com.plusmobileapps.safetyapp.util.CopyListUtil;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class LoadActionItemTask extends AsyncTask<Void, Void, List<Response>> {
@@ -41,15 +41,7 @@ public class LoadActionItemTask extends AsyncTask<Void, Void, List<Response>> {
     protected void onPostExecute(List<Response> actionItems) {
         super.onPostExecute(actionItems);
         //need to copy list so this reference isn't passed to the view
-        view.showActionItems(copyList(actionItems));
+        view.showActionItems(CopyListUtil.copyResponseList(actionItems));
         db.close();
-    }
-
-    private List<Response> copyList(List<Response> responses) {
-        List<Response> tempList = new ArrayList<>(0);
-        for(Response response : responses) {
-            tempList.add(response);
-        }
-        return tempList;
     }
 }
