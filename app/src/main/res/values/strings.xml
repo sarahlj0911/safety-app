@@ -67,6 +67,9 @@
     <string name="undo_string">Undo</string>
     <string name="title_edit_priority_dialog">Select a priority:</string>
 
+    <!--actionitem detail page-->
+    <string name="exit_confirmation">Are you sure you want to exit without saving your changes?</string>
+    <string name="confirmation">Confirmation</string>
     <!--walkthrough landing text-->
     <string name="viewholder_header_completed">Completed</string>
     <string name="viewholder_header_inprogress">In Progress</string>

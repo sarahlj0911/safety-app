@@ -159,6 +159,27 @@ public class Response {
 
     public void setWalkthroughId(int walkthroughId) { this.walkthroughId = walkthroughId; }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Response) {
+            Response response = (Response) obj;
+            if (response.getActionPlan().equals(actionPlan) &&
+                    response.getImagePath().equals(imagePath) &&
+                    response.getIsActionItem() == isActionItem &&
+                    response.getLocationId() == locationId &&
+                    response.getTimeStamp().equals(timeStamp) &&
+                    response.getPriority() == priority &&
+                    response.getQuestionId() == questionId &&
+                    response.getRating() == rating &&
+                    response.getUserId() == userId &&
+                    response.getWalkthroughId() == walkthroughId
+                    ) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 }
 
 
