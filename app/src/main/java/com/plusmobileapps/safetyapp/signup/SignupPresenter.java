@@ -16,6 +16,11 @@ import java.util.concurrent.ExecutionException;
 
 public class SignupPresenter implements SignupContract.Presenter {
 
+    public static final String NAME_INPUT = "name";
+    public static final String EMAIL_INPUT = "email";
+    public static final String SCHOOL_NAME_INPUT = "school_name";
+    public static final String ROLE_INPUT = "role";
+
     private static final String TAG = "SignupPresenter";
     private SignupContract.View view;
     private boolean isSaved;
@@ -33,42 +38,46 @@ public class SignupPresenter implements SignupContract.Presenter {
     }
 
     @Override
-    public boolean processFormInput(Map<String, String> formInput) {
-        if (!validateForm(formInput)) {
-            view.displayError(errorMessage);
-            return false;
+    public void processFormInput(Map<String, String> formInput) {
+        boolean isValidInput = true;
+        String name = formInput.get(NAME_INPUT);
+        if (isEmpty(name)) {
+            view.displayNoNameError(true);
+            isValidInput = false;
+        } else {
+            view.displayNoNameError(false);
         }
 
-        if (!saveSignupData(formInput)) {
-            view.displayError(errorMessage);
-            return false;
+        String schoolName = formInput.get(SCHOOL_NAME_INPUT);
+        if(isEmpty(schoolName)) {
+            view.displayNoSchoolError(true);
+            isValidInput = false;
+        } else {
+            view.displayNoSchoolError(false);
         }
 
-        return true;
+        String email = formInput.get(EMAIL_INPUT);
+        if(isEmpty(email)) {
+            view.displayNoEmailError(true);
+            isValidInput = false;
+        } else if (!email.contains("@")){
+            view.displayInvalidEmailError(true);
+            isValidInput = false;
+        } else {
+            view.displayNoEmailError(false);
+        }
+
+        if(isValidInput) {
+            saveSignupData(formInput);
+            view.launchHomeScreen();
+        }
     }
 
-    @Override
-    public boolean validateForm(Map<String, String> formInput) {
-
-        for (HashMap.Entry<String, String> entry : formInput.entrySet()) {
-            String value = entry.getValue();
-            if (value.isEmpty() || value.trim().equals("") || value.length() <= 2) {
-                errorMessage = entry.getKey() + " is required";
-                return false;
-            }
-
-            // Validate email format
-            if (entry.getKey().equals("Email") && !value.contains("@")){
-                errorMessage = "Invalid email format";
-                return false;
-            }
-        }
-
-        return true;
+    private boolean isEmpty(String input) {
+        return input.isEmpty() || input.trim().equals("") || input.length() <= 2;
     }
 
-    @Override
-    public boolean saveSignupData(Map<String, String> formInput) {
+    private void saveSignupData(Map<String, String> formInput) {
         String schoolName = formInput.get("School Name");
         School school = new School(1, schoolName);
 
@@ -99,7 +108,20 @@ public class SignupPresenter implements SignupContract.Presenter {
             Log.d(TAG, e.getMessage());
             errorMessage = "Unable to save input";
         }
+    }
 
-        return isSaved;
+    @Override
+    public void nameTextAdded() {
+        view.displayNoNameError(false);
+    }
+
+    @Override
+    public void emailTextAdded() {
+        view.displayNoEmailError(false);
+    }
+
+    @Override
+    public void schoolNameTextAdded() {
+        view.displayNoSchoolError(false);
     }
 }

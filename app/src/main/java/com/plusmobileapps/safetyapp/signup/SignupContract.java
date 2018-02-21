@@ -13,12 +13,17 @@ import java.util.Map;
 public interface SignupContract {
 
     interface View extends BaseView<Presenter> {
-        void displayError(String errorMessage);
+        void displayInvalidEmailError(boolean show);
+        void displayNoEmailError(boolean show);
+        void displayNoNameError(boolean show);
+        void displayNoSchoolError(boolean show);
+        void launchHomeScreen();
     }
 
     interface Presenter extends BasePresenter {
-        boolean validateForm(Map<String, String> formInput);
-        boolean saveSignupData(Map<String, String> formInput);
-        boolean processFormInput(Map<String, String> formInput);
+        void processFormInput(Map<String, String> formInput);
+        void nameTextAdded();
+        void emailTextAdded();
+        void schoolNameTextAdded();
     }
 }
