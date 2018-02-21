@@ -3,7 +3,6 @@ package com.plusmobileapps.safetyapp.actionitems.landing;
 
 //import com.plusmobileapps.safetyapp.data.ActionItem;
 import com.plusmobileapps.safetyapp.data.entity.Response;
-import com.plusmobileapps.safetyapp.util.CopyListUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +37,9 @@ public class ActionItemPresenter implements ActionItemContract.Presenter {
             isFirstLaunch = false;
             new LoadActionItemTask(actionItemView, actionItems).execute();
         } else if (actionItems != null) {
-            actionItemView.showActionItems(CopyListUtil.copyResponseList(actionItems));
+            List<Response> responses = new ArrayList<>(0);
+            responses.addAll(actionItems);
+            actionItemView.showActionItems(responses);
         }
 
     }
