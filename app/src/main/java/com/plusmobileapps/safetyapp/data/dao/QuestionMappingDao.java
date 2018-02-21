@@ -2,6 +2,8 @@ package com.plusmobileapps.safetyapp.data.dao;
 
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Insert;
+import android.arch.persistence.room.OnConflictStrategy;
+
 import com.plusmobileapps.safetyapp.data.entity.QuestionMapping;
 
 /**
@@ -10,7 +12,7 @@ import com.plusmobileapps.safetyapp.data.entity.QuestionMapping;
 
 @Dao
 public interface QuestionMappingDao {
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insert(QuestionMapping questionMapping);
 }
 

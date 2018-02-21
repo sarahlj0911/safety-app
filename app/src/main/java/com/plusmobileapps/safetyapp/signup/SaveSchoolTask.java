@@ -32,7 +32,6 @@ public class SaveSchoolTask extends AsyncTask<Void, Void, Boolean> {
 
     @Override
     protected void onPostExecute(Boolean finished) {
-        super.onPostExecute(finished);
-        db.close();
+
     }
 }
