@@ -22,9 +22,7 @@ public class SaveActionItemDetailTask extends AsyncTask<Void, Void, Void> {
     protected Void doInBackground(Void... voids) {
         db = AppDatabase.getAppDatabase(MyApplication.getAppContext());
         ResponseDao dao = db.responseDao();
-        //TODO: uncomment once the dao insert statement is working
-//        dao.insertAll(response);
-        //TODO: Verify that the response edits were saved
+        dao.insert(response);
         return null;
     }
 
