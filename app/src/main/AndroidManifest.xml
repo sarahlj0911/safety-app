@@ -59,7 +59,8 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
-        <activity android:name=".signup.SignupActivity" />
+        <activity android:name=".signup.SignupActivity"
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>
