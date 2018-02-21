@@ -2,6 +2,7 @@ package com.plusmobileapps.safetyapp.actionitems.landing;
 
 
 //import com.plusmobileapps.safetyapp.data.ActionItem;
+import com.plusmobileapps.safetyapp.actionitems.detail.SaveActionItemDetailTask;
 import com.plusmobileapps.safetyapp.data.entity.Response;
 
 import java.util.ArrayList;
@@ -52,11 +53,9 @@ public class ActionItemPresenter implements ActionItemContract.Presenter {
 
     @Override
     public void dismissButtonClicked(int position) {
-        if(lastDismissedResponse != null) {
-            updateLastResponse();
-        }
         lastDismissedResponse = actionItems.get(position);
         lastDismissedResponseIndex = position;
+        updateLastResponse(0);
         actionItems.remove(position);
         actionItemView.dismissActionItem(position);
     }
@@ -65,16 +64,11 @@ public class ActionItemPresenter implements ActionItemContract.Presenter {
     public void undoDismissal() {
         actionItems.add(lastDismissedResponseIndex, lastDismissedResponse);
         actionItemView.restoreActionItem(lastDismissedResponseIndex, lastDismissedResponse);
-        lastDismissedResponse = null;
+        updateLastResponse(1);
     }
 
-    @Override
-    public void onDestroy() {
-        updateLastResponse();
-    }
-
-    private void updateLastResponse() {
-        //TODO: Create UpdateActionItemTask
-        lastDismissedResponse.setIsActionItem(0);
+    private void updateLastResponse(int isActionItem) {
+        lastDismissedResponse.setIsActionItem(isActionItem);
+        new DismissActionItemTask(lastDismissedResponse).execute();
     }
 }
