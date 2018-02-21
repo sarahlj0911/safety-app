@@ -24,35 +24,55 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <EditText
+    <android.support.design.widget.TextInputLayout
         android:id="@+id/signup_name"
-        android:layout_width="300dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/toolbar"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="56dp"
-        android:hint="@string/hint_name"
-        android:inputType="text" />
+        android:layout_centerInParent="true"
+        android:layout_marginTop="56dp">
 
-    <EditText
+        <EditText
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:hint="@string/hint_name"
+            android:inputType="text" />
+
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
         android:id="@+id/signup_email"
-        android:layout_width="300dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/signup_name"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="24dp"
-        android:hint="@string/hint_email"
-        android:inputType="text|textEmailAddress" />
+        android:layout_centerInParent="true"
+        android:layout_marginTop="8dp">
 
-    <EditText
+        <EditText
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:hint="@string/hint_email"
+            android:inputType="text|textEmailAddress" />
+
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
         android:id="@+id/signup_school_name"
-        android:layout_width="300dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignStart="@+id/signup_email"
         android:layout_below="@+id/signup_email"
-        android:layout_marginTop="24dp"
-        android:hint="@string/hint_school_name"
-        android:inputType="text" />
+        android:layout_centerInParent="true"
+        android:layout_marginTop="8dp">
+
+        <EditText
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:hint="@string/hint_school_name"
+            android:inputType="text" />
+    </android.support.design.widget.TextInputLayout>
 
     <TextView
         android:id="@+id/label_signup_role"
@@ -63,7 +83,8 @@
         android:layout_marginTop="30sp"
         android:text="@string/label_signup_role"
         android:textColor="@android:color/black"
-        android:textSize="18sp" />
+        android:textSize="18sp"
+        />
 
     <Spinner
         android:id="@+id/spinner_signup_role"
@@ -74,7 +95,8 @@
         android:defaultFocusHighlightEnabled="false"
         android:entries="@array/signup_roles"
         android:fadingEdge="vertical"
-        android:prompt="@string/signup_role_prompt" />
+        android:prompt="@string/signup_role_prompt"
+        android:paddingTop="7dp"/>
 
     <Button
         android:id="@+id/button_save_signup"

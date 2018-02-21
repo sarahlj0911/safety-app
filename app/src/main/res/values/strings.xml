@@ -49,8 +49,12 @@
     <!-- Signup page strings -->
     <string name="title_signup">SAfETy Walkthrough Sign Up</string>
     <string name="hint_name">Name</string>
+    <string name="error_name">Name is required</string>
     <string name="hint_email">Email</string>
+    <string name="error_email_none">Email is required</string>
+    <string name="error_email_invalid">Invalid email</string>
     <string name="hint_school_name">School Name</string>
+    <string name="error_school_name">School name is required</string>
     <string name="label_signup_role">Role</string>
     <string name="btn_signup">Let\'s get started!</string>
     <string name="signup_role_prompt">Choose a role</string>
