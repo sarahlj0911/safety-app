@@ -73,7 +73,7 @@ public class ActionItemPresenter implements ActionItemContract.Presenter {
     }
 
     private void updateLastResponse() {
-        //TODO: update response to not be action item in database
+        //TODO: Create UpdateActionItemTask
         lastDismissedResponse.setIsActionItem(0);
     }
 }
