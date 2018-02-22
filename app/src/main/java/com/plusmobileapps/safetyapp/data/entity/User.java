@@ -7,6 +7,8 @@ import android.arch.persistence.room.PrimaryKey;
 
 /**
  * Created by aaronmusengo on 1/23/18.
+ *
+ * Updated by Robert Beerman on 2/19/18.
  */
 
 @Entity(tableName = "user",
@@ -14,8 +16,11 @@ import android.arch.persistence.room.PrimaryKey;
                     parentColumns = "schoolId",
                     childColumns = "schoolId"))
 public class User {
-    @PrimaryKey(autoGenerate = false)
+    @PrimaryKey
     private int userId;
+
+    @ColumnInfo(name = "userName")
+    private String userName;
 
     @ColumnInfo(name = "schoolId")
     private int schoolId;
@@ -23,10 +28,15 @@ public class User {
     @ColumnInfo(name = "emailAddress")
     private String emailAddress;
 
-    public User(int userId, int schoolId, String emailAddress) {
+    @ColumnInfo(name = "role")
+    private String role;
+
+    public User(int userId, int schoolId, String emailAddress, String userName, String role) {
         this.userId = userId;
         this.schoolId = schoolId;
         this.emailAddress = emailAddress;
+        this.role = role;
+        this.userName = userName;
     }
 
     //Getters
@@ -42,6 +52,14 @@ public class User {
         return this.emailAddress;
     }
 
+    public String getUserName() {
+        return userName;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
     //Setters
     public void setUserId(int userId) {
         this.userId = userId;
@@ -55,4 +73,11 @@ public class User {
         this.emailAddress = emailAddress;
     }
 
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
 }

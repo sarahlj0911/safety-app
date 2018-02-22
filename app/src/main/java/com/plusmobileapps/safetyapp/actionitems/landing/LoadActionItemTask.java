@@ -50,6 +50,5 @@ public class LoadActionItemTask extends AsyncTask<Void, Void, List<Response>> {
         List<Response> items = new ArrayList<>(0);
         items.add(new Response(0,1,1,"11:34pm",3, 2, "Fix it", 2, "",1,1));
         view.showActionItems(items);
-        db.close();
     }
 }
