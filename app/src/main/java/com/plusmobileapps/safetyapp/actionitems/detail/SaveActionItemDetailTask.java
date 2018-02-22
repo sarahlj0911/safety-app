@@ -28,7 +28,6 @@ public class SaveActionItemDetailTask extends AsyncTask<Void, Void, Void> {
 
     @Override
     protected void onPostExecute(Void aVoid) {
-        db.close();
         view.finishActivity();
     }
 }

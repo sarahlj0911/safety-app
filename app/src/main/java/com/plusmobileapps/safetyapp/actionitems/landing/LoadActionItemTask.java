@@ -40,7 +40,5 @@ public class LoadActionItemTask extends AsyncTask<Void, Void, List<Response>> {
 
         this.actionItems.addAll(filteredList);
         view.showActionItems(filteredList);
-        //TODO: running into crashing for db not being opened?
-//        db.close();
     }
 }

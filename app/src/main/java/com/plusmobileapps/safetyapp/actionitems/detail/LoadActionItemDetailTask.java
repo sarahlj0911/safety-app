@@ -28,6 +28,5 @@ public class LoadActionItemDetailTask extends AsyncTask<Void, Void, Response> {
     @Override
     protected void onPostExecute(Response response) {
         listener.onResponseLoaded(response);
-        db.close();
     }
 }
