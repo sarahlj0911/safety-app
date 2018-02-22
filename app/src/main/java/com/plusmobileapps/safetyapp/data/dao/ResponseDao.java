@@ -27,7 +27,7 @@ public interface ResponseDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insert(Response response);
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertAll(Response... responses);
 
     @Delete

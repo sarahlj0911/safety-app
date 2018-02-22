@@ -1,8 +1,11 @@
 package com.plusmobileapps.safetyapp.data;
 
+import android.arch.persistence.db.SupportSQLiteDatabase;
 import android.arch.persistence.room.Database;
 import android.arch.persistence.room.RoomDatabase;
+import android.arch.persistence.room.migration.Migration;
 import android.content.Context;
+import android.support.annotation.VisibleForTesting;
 
 
 import com.plusmobileapps.safetyapp.data.dao.*;
@@ -38,13 +41,17 @@ public abstract class AppDatabase extends RoomDatabase {
 
     public abstract QuestionMappingDao questionMappingDao();
 
+    private static final Object sLock = new Object();
+
     public static AppDatabase getAppDatabase(Context context) {
-        if(INSTANCE == null) {
-            INSTANCE =
-                    RoomAsset.databaseBuilder(context.getApplicationContext(), AppDatabase.class, "appDB.db")
-                    .build();
+        synchronized (sLock) {
+            if (INSTANCE == null) {
+                INSTANCE =
+                        RoomAsset.databaseBuilder(context.getApplicationContext(), AppDatabase.class, "appDB.db")
+                                .build();
+            }
+            return INSTANCE;
         }
-        return INSTANCE;
     }
 
     public static void destroyInstance() {
