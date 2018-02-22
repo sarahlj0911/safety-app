@@ -78,7 +78,7 @@ public class SignupPresenter implements SignupContract.Presenter {
     }
 
     private void saveSignupData(Map<String, String> formInput) {
-        String schoolName = formInput.get("School Name");
+        String schoolName = formInput.get(SCHOOL_NAME_INPUT);
         School school = new School(1, schoolName);
 
         AsyncTask<Void, Void, Boolean> saveSchoolTask = new SaveSchoolTask(school).execute();
@@ -93,9 +93,11 @@ public class SignupPresenter implements SignupContract.Presenter {
 
         Log.d(TAG, "School saved!");
 
-        String userName = formInput.get("Name");
-        String email = formInput.get("Email");
-        String role = formInput.get("Role");
+        String userName = formInput.get(NAME_INPUT);
+        String email = formInput.get(EMAIL_INPUT);
+        String role = formInput.get(ROLE_INPUT);
+
+
 
         User user = new User(1, 1, email, userName, role);
 
