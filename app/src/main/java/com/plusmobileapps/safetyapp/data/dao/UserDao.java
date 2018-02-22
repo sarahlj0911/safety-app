@@ -7,6 +7,8 @@ import android.arch.persistence.room.Query;
 
 import com.plusmobileapps.safetyapp.data.entity.User;
 
+import java.util.List;
+
 /**
  * Created by aaronmusengo on 1/23/18.
  */
@@ -14,7 +16,7 @@ import com.plusmobileapps.safetyapp.data.entity.User;
 @Dao
 public interface UserDao {
     @Query("SELECT * FROM user")
-    User getUser();
+    List<User> getAllUsers();
 
     @Insert
     void insert(User user);
