@@ -2,6 +2,8 @@ package com.plusmobileapps.safetyapp.actionitems.landing;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -16,6 +18,8 @@ import com.plusmobileapps.safetyapp.data.entity.Response;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import jp.wasabeef.recyclerview.animators.SlideInRightAnimator;
 
 
 public class ActionItemsFragment extends Fragment implements ActionItemContract.View {
@@ -63,6 +67,7 @@ public class ActionItemsFragment extends Fragment implements ActionItemContract.
         currentLayoutManagerType = LayoutManagerType.LINEAR_LAYOUT_MANAGER;
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
+        recyclerView.setItemAnimator(new SlideInRightAnimator());
 
         return rootView;
     }
@@ -100,6 +105,30 @@ public class ActionItemsFragment extends Fragment implements ActionItemContract.
         startActivity(intent);
     }
 
+    @Override
+    public void dismissActionItem(int position) {
+        adapter.dismissActionItem(position);
+        CoordinatorLayout coordinatorLayout = getView().findViewById(R.id.action_item_coordinator);
+        if (coordinatorLayout != null) {
+            Snackbar snackbar = Snackbar
+                    .make(coordinatorLayout, getString(R.string.dismiss_action_item), Snackbar.LENGTH_LONG)
+                    .setAction(getString(R.string.action_undo), new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                           presenter.undoDismissal();
+                        }
+                    });
+
+            snackbar.show();
+        }
+    }
+
+    @Override
+    public void restoreActionItem(int position, Response response) {
+        adapter.restoreActionItem(position, response);
+        recyclerView.smoothScrollToPosition(position);
+    }
+
     /**
      * called from the presenter to toggle the loading state of the view
      *
@@ -116,8 +145,13 @@ public class ActionItemsFragment extends Fragment implements ActionItemContract.
      */
     ActionItemListener itemListener = new ActionItemListener() {
         @Override
-        public void onActionItemClicked(Response actionItem) {
-            presenter.openActionItemDetail(actionItem);
+        public void onActionItemClicked(int position) {
+            presenter.openActionItemDetail(position);
+        }
+
+        @Override
+        public void onDismissButtonClicked(int position) {
+            presenter.dismissButtonClicked(position);
         }
     };
 
@@ -125,7 +159,8 @@ public class ActionItemsFragment extends Fragment implements ActionItemContract.
      * Interface for the recyclerview items being clicked
      */
     public interface ActionItemListener {
-        void onActionItemClicked(Response actionItem);
+        void onActionItemClicked(int position);
+        void onDismissButtonClicked(int position);
     }
 
 }

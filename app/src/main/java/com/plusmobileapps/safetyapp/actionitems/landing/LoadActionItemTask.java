@@ -25,30 +25,20 @@ public class LoadActionItemTask extends AsyncTask<Void, Void, List<Response>> {
     protected List<Response> doInBackground(Void... voids) {
         db = AppDatabase.getAppDatabase(MyApplication.getAppContext());
         ResponseDao responseDao = db.responseDao();
-//        actionItems = responseDao.getAllActionItems();
-        //List<Question> questions = questionDao.getAll();
-        Response response = new Response(0,
-                1,
-                1,
-                "11:34pm",
-                3,
-                2,
-                "Fix it",
-                2,
-                "",
-                1,
-                1);
-        actionItems.add(response);
-
-        return actionItems;
+        return responseDao.getAllActionItems();
     }
 
     @Override
     protected void onPostExecute(List<Response> actionItems) {
         super.onPostExecute(actionItems);
-//        view.showActionItems(actionItems);
-        List<Response> items = new ArrayList<>(0);
-        items.add(new Response(0,1,1,"11:34pm",3, 2, "Fix it", 2, "",1,1));
-        view.showActionItems(items);
+        List<Response> filteredList = new ArrayList<>(0);
+        for (Response response : actionItems) {
+            if(response.isActionItem()) {
+                filteredList.add(response);
+            }
+        }
+
+        this.actionItems.addAll(filteredList);
+        view.showActionItems(filteredList);
     }
 }
