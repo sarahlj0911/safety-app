@@ -34,5 +34,5 @@ public class LocationModel extends AsyncTask<Void, Void, List<Location>> {
     protected void onPostExecute(List<Location> locations) {
         this.locations = locations;
     }
-    
+
 }
