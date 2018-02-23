@@ -18,11 +18,9 @@ public class LocationModel extends AsyncTask<Void, Void, List<Location>> {
     private List<Location> locations = new ArrayList<>();
     private AppDatabase db;
 
-
     public LocationModel() {
         //Empty Constructor
     }
-
 
     @Override
     protected List<Location> doInBackground(Void... voids) {
@@ -40,6 +38,5 @@ public class LocationModel extends AsyncTask<Void, Void, List<Location>> {
     public List<Location> getLocations() {
         return this.locations;
     }
-
 
 }

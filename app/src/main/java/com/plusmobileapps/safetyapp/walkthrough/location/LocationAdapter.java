@@ -15,7 +15,6 @@ import com.plusmobileapps.safetyapp.data.entity.Location;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHolder> {
 
     private static final String TAG = "LocationAdapter";
