@@ -15,10 +15,14 @@ public interface ActionItemContract {
         void setProgressIndicator(boolean active);
         void showActionItems(List<Response> actionItems);
         void showActionItemDetailUi(String actionItemId);
+        void dismissActionItem(int position);
+        void restoreActionItem(int position, Response response);
     }
 
     interface Presenter extends BasePresenter {
         void loadActionItems(boolean forceUpdate);
-        void openActionItemDetail(Response requestedActionItem);
+        void openActionItemDetail(int position);
+        void dismissButtonClicked(int position);
+        void undoDismissal();
     }
 }

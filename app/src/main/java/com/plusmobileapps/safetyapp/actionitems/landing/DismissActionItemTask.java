@@ -1,21 +1,23 @@
-package com.plusmobileapps.safetyapp.actionitems.detail;
+package com.plusmobileapps.safetyapp.actionitems.landing;
 
 import android.os.AsyncTask;
 
 import com.plusmobileapps.safetyapp.MyApplication;
+import com.plusmobileapps.safetyapp.actionitems.detail.ActionItemDetailContract;
 import com.plusmobileapps.safetyapp.data.AppDatabase;
 import com.plusmobileapps.safetyapp.data.dao.ResponseDao;
 import com.plusmobileapps.safetyapp.data.entity.Response;
 
-public class SaveActionItemDetailTask extends AsyncTask<Void, Void, Void> {
+/**
+ * Created by asteinme on 2/21/18.
+ */
 
+public class DismissActionItemTask extends AsyncTask<Void, Void, Void> {
     private AppDatabase db;
     private Response response;
-    private ActionItemDetailContract.View view;
 
-    public SaveActionItemDetailTask(Response response, ActionItemDetailContract.View view) {
+    public DismissActionItemTask(Response response) {
         this.response = response;
-        this.view = view;
     }
 
     @Override
@@ -28,6 +30,6 @@ public class SaveActionItemDetailTask extends AsyncTask<Void, Void, Void> {
 
     @Override
     protected void onPostExecute(Void aVoid) {
-        view.finishActivity();
+
     }
 }

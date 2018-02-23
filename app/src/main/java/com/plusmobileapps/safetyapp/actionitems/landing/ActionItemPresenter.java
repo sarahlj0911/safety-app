@@ -2,6 +2,7 @@ package com.plusmobileapps.safetyapp.actionitems.landing;
 
 
 //import com.plusmobileapps.safetyapp.data.ActionItem;
+import com.plusmobileapps.safetyapp.actionitems.detail.SaveActionItemDetailTask;
 import com.plusmobileapps.safetyapp.data.entity.Response;
 
 import java.util.ArrayList;
@@ -12,6 +13,8 @@ public class ActionItemPresenter implements ActionItemContract.Presenter {
     private final ActionItemContract.View actionItemView;
     private List<Response> actionItems = new ArrayList<>(0);
     private boolean isFirstLaunch = true;
+    private Response lastDismissedResponse;
+    private int lastDismissedResponseIndex;
 
     public ActionItemPresenter(ActionItemContract.View actionItemView) {
         this.actionItemView = actionItemView;
@@ -35,18 +38,37 @@ public class ActionItemPresenter implements ActionItemContract.Presenter {
             isFirstLaunch = false;
             new LoadActionItemTask(actionItemView, actionItems).execute();
         } else if (actionItems != null) {
-            actionItemView.showActionItems(actionItems);
+            List<Response> responses = new ArrayList<>(0);
+            responses.addAll(actionItems);
+            actionItemView.showActionItems(responses);
         }
 
     }
 
-    /**
-     * load requested action item that user clicks in ActionItemDetailActivity
-     *
-     * @param requestedActionItem
-     */
     @Override
-    public void openActionItemDetail(Response requestedActionItem) {
-        actionItemView.showActionItemDetailUi("2");
+    public void openActionItemDetail(int position) {
+        String responseId = Integer.toString(actionItems.get(position).getResponseId());
+        actionItemView.showActionItemDetailUi(responseId);
+    }
+
+    @Override
+    public void dismissButtonClicked(int position) {
+        lastDismissedResponse = actionItems.get(position);
+        lastDismissedResponseIndex = position;
+        updateLastResponse(0);
+        actionItems.remove(position);
+        actionItemView.dismissActionItem(position);
+    }
+
+    @Override
+    public void undoDismissal() {
+        actionItems.add(lastDismissedResponseIndex, lastDismissedResponse);
+        actionItemView.restoreActionItem(lastDismissedResponseIndex, lastDismissedResponse);
+        updateLastResponse(1);
+    }
+
+    private void updateLastResponse(int isActionItem) {
+        lastDismissedResponse.setIsActionItem(isActionItem);
+        new DismissActionItemTask(lastDismissedResponse).execute();
     }
 }

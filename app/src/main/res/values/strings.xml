@@ -13,6 +13,7 @@
     <string name="create">Create</string>
     <string name="cancel">Cancel</string>
     <string name="walkthroughs">"Walkthroughs"</string>
+    <string name="action_undo">UNDO</string>
 
 
     <!-- Priority descriptions. Can be used anywhere in the app that they might be useful -->
@@ -95,4 +96,8 @@
     <string name="viewholder_header_completed">Completed</string>
     <string name="viewholder_header_inprogress">In Progress</string>
     <string name="walkthrough_dialog_message">You have an unfinished walkthrough. Creating a new walkthrough will delete the unfinished one. Are you sure you want to create a new walkthrough?</string>
+
+    <!--action item landing-->
+    <string name="dismiss_action_item">Action item was dismissed</string>
 </resources>
+

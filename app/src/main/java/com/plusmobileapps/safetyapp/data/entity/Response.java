@@ -130,7 +130,11 @@ public class Response {
     }
 
     public void setImage(String image) {
-        this.imagePath = imagePath;
+        if(image == null) {
+            this.imagePath = "";
+        } else {
+            this.imagePath = imagePath;
+        }
     }
 
     public void setLocationId(int locationId) {
@@ -159,12 +163,18 @@ public class Response {
 
     public void setWalkthroughId(int walkthroughId) { this.walkthroughId = walkthroughId; }
 
+    public boolean isActionItem() {
+        if(isActionItem == 0) {
+            return false;
+        }
+        return true;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof Response) {
             Response response = (Response) obj;
             if (response.getActionPlan().equals(actionPlan) &&
-                    response.getImagePath().equals(imagePath) &&
                     response.getIsActionItem() == isActionItem &&
                     response.getLocationId() == locationId &&
                     response.getTimeStamp().equals(timeStamp) &&
