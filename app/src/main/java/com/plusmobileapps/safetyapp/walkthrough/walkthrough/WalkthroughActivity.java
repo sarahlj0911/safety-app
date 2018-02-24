@@ -3,7 +3,9 @@ package com.plusmobileapps.safetyapp.walkthrough.walkthrough;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -11,21 +13,42 @@ import android.view.View;
 import android.widget.RadioButton;
 
 import com.plusmobileapps.safetyapp.R;
+import com.plusmobileapps.safetyapp.data.entity.Question;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
 
-public class WalkthroughActivity extends AppCompatActivity {
+//Look at SummaryOverviewDetailsActivity
+public class WalkthroughActivity extends AppCompatActivity  {
 
     static final String TAG = "WalkthroughActivity";
     public static final String EXTRA_LOCATION = "com.plusmobileapps.safetyapp.walkthrough.overview.LOCATION";
     FragmentManager fragmentManager;
-    WalkthroughQuestion walkthroughQuestion;
+    Question walkthroughQuestion;
+    int currentPosition;
+    WalkthroughPresenter presenter;
+    List<Question> questions;
+    WalkthroughActivityModel model;
+    private AsyncTask<Void, Void, List<Question>> loadQuestions;
+
+    //Use array list of fragments.
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Intent intent = getIntent();
-        String location = intent.getExtras().getString(EXTRA_LOCATION);
+        int locationId = intent.getExtras().getInt(EXTRA_LOCATION);
+        model = new WalkthroughActivityModel(locationId);
+        loadQuestions = model.execute();
+
+        try {
+            this.questions = model.get();
+        } catch (InterruptedException | ExecutionException e)  {
+            e.printStackTrace();
+        }
+
+
         setContentView(R.layout.activity_walkthrough);
         Toolbar toolbar = (Toolbar) findViewById(R.id.walkthrough_toolbar);
         setSupportActionBar(toolbar);
@@ -34,7 +57,12 @@ public class WalkthroughActivity extends AppCompatActivity {
 
         populateWalkthroughQuestion(location);
         WalkthroughContentFragment fragment = WalkthroughContentFragment.newInstance(walkthroughQuestion);
+
         FragmentTransaction initialTransaction = fragmentManager.beginTransaction();
+
+        //CREATE ALL FRAGMENTS in list/array/hashmap.
+
+        //launch the first fragment.
         initialTransaction
                 .add(R.id.walkthrough_container, fragment, "0")
                 .commit();
@@ -46,7 +74,9 @@ public class WalkthroughActivity extends AppCompatActivity {
      * @param view  radiobutton from the walkthroughQuestion
      */
     public void onRadioButtonClicked(View view) {
-        walkthroughQuestion.setRating(((RadioButton) view).getText().toString());
+        String rating = ((RadioButton) view).getText().toString();
+
+        walkthroughQuestion.setRating(rating);
 
         Log.d(TAG, "New rating: " + walkthroughQuestion.getRating());
     }
@@ -57,6 +87,9 @@ public class WalkthroughActivity extends AppCompatActivity {
      * @param view  back button
      */
     public void onBackButtonPress(View view) {
+        //decrement position
+        //launch framgment.
+
         final int count = fragmentManager.getBackStackEntryCount();
 
         if (count < 1) {
@@ -72,6 +105,10 @@ public class WalkthroughActivity extends AppCompatActivity {
      * @param view  next button
      */
     public void onNextButtonPressed(View view) {
+
+        //increpement position
+        //launch fragement
+
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         String currentFragmentTag = Integer.toString(fragmentManager.getBackStackEntryCount());
         //int id = fragmentManager.findFragmentByTag(currentFragmentTag);
@@ -90,15 +127,7 @@ public class WalkthroughActivity extends AppCompatActivity {
     }
 
     private void populateWalkthroughQuestion(String location) {
-        ArrayList<String> options = new ArrayList<>();
-        options.add("None");
-        options.add("1-2");
-        options.add("3-5");
-        options.add("6-10");
-        walkthroughQuestion = new WalkthroughQuestion(
-                location,
-                "This is what you should be looking for in the boys bathroom while you are walking through the bathroom",
-                options,
-                null);
+        walkthroughQuestion = new Question(1,"This is fake", "this is fake", "None",
+                "1-2", "3-5", "6-10");
     }
 }

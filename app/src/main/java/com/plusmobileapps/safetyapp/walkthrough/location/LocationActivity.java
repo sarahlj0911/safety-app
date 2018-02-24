@@ -76,9 +76,10 @@ public class LocationActivity extends AppCompatActivity implements LocationContr
     }
 
     @Override
-    public void openRequestedLocation(String location) {
+    public void openRequestedLocation(int locationId) {
+        //TODO refactor to use locationId.
         Intent intent = new Intent(this, WalkthroughActivity.class);
-        intent.putExtra(WalkthroughActivity.EXTRA_LOCATION, location);
+        intent.putExtra(WalkthroughActivity.EXTRA_LOCATION, locationId);
         startActivity(intent);
     }
 

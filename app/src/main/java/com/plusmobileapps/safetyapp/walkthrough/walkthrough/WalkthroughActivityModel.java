@@ -24,6 +24,10 @@ public class WalkthroughActivityModel extends AsyncTask<Void, Void, List<Questio
         this.locationId = locationId;
     }
 
+    public void setLocationId(int locationId) {
+        this.locationId = locationId;
+    }
+
     @Override
     protected List<Question> doInBackground(Void... voids) {
         db = AppDatabase.getAppDatabase(MyApplication.getAppContext());

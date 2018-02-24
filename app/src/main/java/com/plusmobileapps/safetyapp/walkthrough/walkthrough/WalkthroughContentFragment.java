@@ -23,6 +23,8 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
+import com.plusmobileapps.safetyapp.data.entity.Question;
+import com.plusmobileapps.safetyapp.data.entity.Response;
 import com.plusmobileapps.safetyapp.model.Priority;
 import com.plusmobileapps.safetyapp.R;
 
@@ -35,11 +37,12 @@ import static android.app.Activity.RESULT_OK;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class WalkthroughContentFragment extends Fragment implements View.OnClickListener {
+public class WalkthroughContentFragment extends Fragment implements View.OnClickListener, WalkthroughContract.View {
 
     static final String TAG = "WalkthruContentFragment";
     private static final int REQUEST_IMAGE_CAPTURE = 1;
-    private WalkthroughQuestion walkthroughQuestion;
+    private Question walkthroughQuestion;
+    private Response response;
     private TextView descriptionTextView;
     private String description;
     private ImageButton cameraButton;
@@ -57,8 +60,9 @@ public class WalkthroughContentFragment extends Fragment implements View.OnClick
     private String actionPlan;
     private String photoPath;
     private PackageManager packageManager;
+    private WalkthroughPresenter presenter;
 
-    public static WalkthroughContentFragment newInstance(WalkthroughQuestion walkthroughQuestion) {
+    public static WalkthroughContentFragment newInstance(Question walkthroughQuestion) {
         WalkthroughContentFragment fragment = new WalkthroughContentFragment();
         Bundle bundle = new Bundle(1);
         bundle.putString("walkthroughQuestion", new Gson().toJson(walkthroughQuestion));
@@ -189,6 +193,8 @@ public class WalkthroughContentFragment extends Fragment implements View.OnClick
             default:
                 break;
         }
+
+
 
         walkthroughQuestion.setPriority(priority);
     }
