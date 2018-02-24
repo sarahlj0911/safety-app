@@ -1,8 +1,14 @@
-<android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/action_items_recyclerview"
-    android:background="@color/paper"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.plusmobileapps.safetyapp.actionitems.landing.ActionItemsFragment" />
+    android:id="@+id/action_item_coordinator">
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/action_items_recyclerview"
+        android:background="@color/paper"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+</android.support.design.widget.CoordinatorLayout>
+
 

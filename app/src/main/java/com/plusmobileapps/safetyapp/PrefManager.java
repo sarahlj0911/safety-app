@@ -20,6 +20,7 @@ public class PrefManager {
     private static final String PREF_NAME = "safetyapp-welcome";
 
     private static final String IS_FIRST_TIME_LAUNCH = "IsFirstTimeLaunch";
+    private static final String IS_USER_SIGNED_UP = "IsUserSignedUp";
 
     public PrefManager(Context context) {
         this.context = context;
@@ -34,5 +35,14 @@ public class PrefManager {
 
     public boolean isFirstTimeLaunch() {
         return pref.getBoolean(IS_FIRST_TIME_LAUNCH, true);
+    }
+
+    public void setIsUserSignedUp(boolean isUserSignedUp) {
+        editor.putBoolean(IS_USER_SIGNED_UP, isUserSignedUp);
+        editor.commit();
+    }
+
+    public boolean isUserSignedUp() {
+        return pref.getBoolean(IS_USER_SIGNED_UP, false);
     }
 }

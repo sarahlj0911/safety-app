@@ -1,6 +1,6 @@
 package com.plusmobileapps.safetyapp.summary.landing;
 
-import com.plusmobileapps.safetyapp.surveys.landing.SurveyOverview;
+import com.plusmobileapps.safetyapp.walkthrough.landing.WalkthroughOverview;
 
 import java.util.ArrayList;
 
@@ -21,12 +21,12 @@ public class SummaryPresenter implements SummaryContract.Presenter {
     @Override
     public void loadSummaries(boolean forceUpdate) {
         FakeSummaryModel summaryModel = new FakeSummaryModel();
-        ArrayList<SurveyOverview> summaries = summaryModel.getSummaries();
+        ArrayList<WalkthroughOverview> summaries = summaryModel.getSummaries();
         summaryView.showSummaries(summaries);
     }
 
     @Override
-    public void openSummary(SurveyOverview requestedSummary) {
+    public void openSummary(WalkthroughOverview requestedSummary) {
         summaryView.showSummaryDetailUi(requestedSummary);
     }
 }

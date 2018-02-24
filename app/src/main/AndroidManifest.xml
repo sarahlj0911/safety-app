@@ -8,8 +8,10 @@
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
+    <!-- TODO: Change allowBackup to true when the db is finalized -->
     <application
-        android:allowBackup="true"
+        android:name="com.plusmobileapps.safetyapp.MyApplication"
+        android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
@@ -17,7 +19,8 @@
         android:theme="@style/AppTheme.NoActionBar">
         <activity
             android:name=".welcome.WelcomeActivity"
-            android:label="@string/app_name">
+            android:label="@string/app_name"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -25,16 +28,26 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".surveys.walkthrough.WalkthroughActivity"
-            android:label="@string/title_activity_survey"
+            android:name=".walkthrough.walkthrough.WalkthroughActivity"
+            android:label="@string/title_activity_walkthrough"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".main.MainActivity" />
+        <activity android:name=".main.MainActivity"
+            android:screenOrientation="portrait"/>
         <activity
-            android:name=".summary.detail.SummaryDetailActivity"
+            android:name=".summary.detail.SummaryOverviewDetailsActivity"
             android:label="SummaryDetailActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".actionitems.detail.ActionItemDetailActivity"
-            android:windowSoftInputMode="adjustPan"/>
+        <activity
+            android:name=".actionitems.detail.ActionItemDetailActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" />
+
+        <activity
+        android:name=".walkthrough.location.LocationActivity"
+        android:screenOrientation="portrait" />
+
         <!-- FileProvider for picture files -->
         <provider
             android:name="android.support.v4.content.FileProvider"
@@ -43,9 +56,11 @@
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_paths"></meta-data>
+                android:resource="@xml/file_paths" />
         </provider>
 
+        <activity android:name=".signup.SignupActivity"
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>

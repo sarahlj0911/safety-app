@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.plusmobileapps.safetyapp.surveys.walkthrough.WalkthroughActivity">
+    tools:context="com.plusmobileapps.safetyapp.walkthrough.walkthrough.WalkthroughActivity">
+
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -23,7 +24,7 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="fill_parent"
-        android:id="@+id/suvey_container"
+        android:id="@+id/walkthrough_container"
         android:layout_above="@id/navbar_bottom"
         android:layout_marginTop="50dp"/>
 

@@ -2,9 +2,9 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/navigation_survey"
+        android:id="@+id/navigation_walkthrough"
         android:icon="@drawable/ic_comment_black_24dp"
-        android:title="@string/walk_throughs" />
+        android:title="@string/walkthroughs" />
 
     <item
         android:id="@+id/navigation_dashboard"

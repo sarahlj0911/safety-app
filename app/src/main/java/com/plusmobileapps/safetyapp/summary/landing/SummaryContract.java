@@ -2,19 +2,19 @@ package com.plusmobileapps.safetyapp.summary.landing;
 
 import com.plusmobileapps.safetyapp.BasePresenter;
 import com.plusmobileapps.safetyapp.BaseView;
-import com.plusmobileapps.safetyapp.surveys.landing.SurveyOverview;
+import com.plusmobileapps.safetyapp.walkthrough.landing.WalkthroughOverview;
 
 import java.util.ArrayList;
 
 public interface SummaryContract {
 
     interface View extends BaseView<Presenter> {
-        void showSummaries(ArrayList<SurveyOverview> summaries);
-        void showSummaryDetailUi(SurveyOverview summary);
+        void showSummaries(ArrayList<WalkthroughOverview> summaries);
+        void showSummaryDetailUi(WalkthroughOverview summary);
     }
 
     interface Presenter extends BasePresenter {
         void loadSummaries(boolean forceUpdate);
-        void openSummary(SurveyOverview requestedSummary);
+        void openSummary(WalkthroughOverview requestedSummary);
     }
 }

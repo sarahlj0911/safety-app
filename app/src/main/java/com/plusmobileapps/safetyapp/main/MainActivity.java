@@ -1,5 +1,6 @@
 package com.plusmobileapps.safetyapp.main;
 
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -9,15 +10,12 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.plusmobileapps.safetyapp.FragmentFactory;
 import com.plusmobileapps.safetyapp.R;
 import com.plusmobileapps.safetyapp.actionitems.landing.ActionItemPresenter;
 import com.plusmobileapps.safetyapp.summary.landing.SummaryPresenter;
-import com.plusmobileapps.safetyapp.surveys.landing.SurveyLandingPresenter;
-
-import java.util.ArrayList;
-import java.util.Arrays;
+import com.plusmobileapps.safetyapp.walkthrough.landing.WalkthroughLandingPresenter;
 
 public class MainActivity extends AppCompatActivity implements MainActivityContract.View {
 
@@ -25,34 +23,34 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
 
     private ViewPager viewPager;
     private BottomNavigationView navigation;
-    private String surveyFragmentTitle = "";
+    private String walkthroughFragmentTitle = "";
     private MainActivityPresenter presenter;
-    private SurveyLandingPresenter surveyLandingPresenter;
-    private ActionItemPresenter actionItemPresenter;
-    private SummaryPresenter summaryPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         findViewsById();
-        setUpPresenters();
+        MainActivityFragmentFactory factory = new MainActivityFragmentFactory();
+        setUpPresenters(factory);
         presenter = new MainActivityPresenter(this);
 
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-        final MainSwipeAdapter swipeAdapter = new MainSwipeAdapter(getSupportFragmentManager());
+        final MainSwipeAdapter swipeAdapter = new MainSwipeAdapter(getSupportFragmentManager(), factory);
         viewPager.setAdapter(swipeAdapter);
         viewPager.addOnPageChangeListener(pageChangeListener);
+        viewPager.setOffscreenPageLimit(3);
 
         Toolbar toolbar = findViewById(R.id.main_toolbar);
         setSupportActionBar(toolbar);
         setAppBarTitle(0);
     }
 
-    private void setUpPresenters() {
-        surveyLandingPresenter = new SurveyLandingPresenter(FragmentFactory.getInstance().getSurveyLandingFragment());
-        actionItemPresenter = new ActionItemPresenter(FragmentFactory.getInstance().getActionItemsFragment());
-        summaryPresenter = new SummaryPresenter(FragmentFactory.getInstance().getSummaryFragment());
+    private void setUpPresenters(MainActivityFragmentFactory factory) {
+
+        new WalkthroughLandingPresenter(factory.getWalkthroughLandingFragment());
+        new ActionItemPresenter(factory.getActionItemsFragment());
+        new SummaryPresenter(factory.getSummaryFragment());
     }
 
     private void findViewsById() {
@@ -95,12 +93,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
         }
     }
 
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        findViewById(R.id.floatingActionButton).setVisibility(View.VISIBLE);
-    }
-
     /**
      * Handle clicks of the bottom navigation
      */
@@ -110,7 +102,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
-                case R.id.navigation_survey:
+                case R.id.navigation_walkthrough:
                     presenter.navButtonClicked(0);
                     return true;
                 case R.id.navigation_dashboard:
@@ -125,6 +117,17 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
 
     };
 
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+
+        // Checks the orientation of the screen
+        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            Toast.makeText(this, "landscape", Toast.LENGTH_SHORT).show();
+        } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT){
+            Toast.makeText(this, "portrait", Toast.LENGTH_SHORT).show();
+        }
+    }
 
     /**
      * Handle ViewPager page change events

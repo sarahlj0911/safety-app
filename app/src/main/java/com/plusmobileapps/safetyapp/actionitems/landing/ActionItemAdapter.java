@@ -1,29 +1,26 @@
 package com.plusmobileapps.safetyapp.actionitems.landing;
 
-import android.content.Context;
-import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import com.plusmobileapps.safetyapp.R;
-import com.plusmobileapps.safetyapp.actionitems.detail.ActionItemDetailActivity;
+import com.plusmobileapps.safetyapp.data.entity.Response;
 
 public class ActionItemAdapter extends RecyclerView.Adapter<ActionItemAdapter.ViewHolder> {
 
     private static final String TAG = "ActionItemAdapter";
-    private ActionItem actionItem;
     private ActionItemsFragment.ActionItemListener itemListener;
 
-    private ArrayList<ActionItem> actionItems;
+    private List<Response> actionItems;
 
-    public ActionItemAdapter(ArrayList<ActionItem> actionItems, ActionItemsFragment.ActionItemListener itemListener){
+    public ActionItemAdapter(List<Response> actionItems, ActionItemsFragment.ActionItemListener itemListener){
         this.actionItems = actionItems;
         this.itemListener = itemListener;
     }
@@ -39,14 +36,19 @@ public class ActionItemAdapter extends RecyclerView.Adapter<ActionItemAdapter.Vi
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         Log.d(TAG, "onBindViewHolder: " + position);
-        actionItem = actionItems.get(position);
+        Response actionItem = actionItems.get(position);
 
-        holder.getDescription().setText(actionItem.getDescription());
-        holder.getLocation().setText(actionItem.getLocation());
-        holder.getPicture().setImageBitmap(actionItem.getPhoto());
-        holder.getTitle().setText(actionItem.getTitle());
+        holder.getDescription().setText(actionItem.getActionPlan());
+        holder.getLocation().setText(Integer.toString(actionItem.getLocationId()));
+//        holder.getPicture().setImageBitmap(actionItem.getPhoto());
 
-        //TODO handle the changing of statuses and bind the corresponding colors to status value
+
+        //TODO: Figure out how to the best way to get the location name from Id
+        //Since you have to run Room on a background thread. This may be worth doing
+        //at the begining of the app.
+        String locationText = Integer.toString(actionItem.getLocationId());
+        holder.getLocation().setText(locationText);
+
     }
 
     @Override
@@ -54,36 +56,51 @@ public class ActionItemAdapter extends RecyclerView.Adapter<ActionItemAdapter.Vi
         return actionItems.size();
     }
 
-    public void replaceData(ArrayList<ActionItem> actionItems) {
+    public void replaceData(List<Response> actionItems) {
         setList(actionItems);
         notifyDataSetChanged();
     }
 
-    private void setList(ArrayList<ActionItem> actionItems) {
-        this.actionItems = actionItems;
+    public void dismissActionItem(int position) {
+        actionItems.remove(position);
+        notifyItemRemoved(position);
     }
 
-    private ActionItem getActionItem(int position) {
-        return actionItems.get(position);
+    public void restoreActionItem(int position, Response response) {
+        actionItems.add(position, response);
+        notifyItemInserted(position);
+    }
+
+    private void setList(List<Response> actionItems) {
+        this.actionItems = actionItems;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private final View status = itemView.findViewById(R.id.action_item_status);
         private final TextView title = itemView.findViewById(R.id.action_item_title);
-        private final TextView location = itemView.findViewById(R.id.action_item_location);
         private final TextView description = itemView.findViewById(R.id.action_item_description);
-        private final ImageView picture = itemView.findViewById(R.id.action_item_image);
+
+        private final TextView location = itemView.findViewById(R.id.action_item_location);
+        private final ImageButton dismissButton = itemView.findViewById(R.id.dismiss_action_item_button);
+        //TODO: figure out how to add image to persistence
 
         public ViewHolder(View view) {
             super(view);
             itemView.setOnClickListener(this);
+            dismissButton.setOnClickListener(dismissListener);
         }
 
         @Override
         public void onClick(View v) {
-            ActionItem actionItem = getActionItem(getAdapterPosition());
-            itemListener.onActionItemClicked(actionItem);
+            itemListener.onActionItemClicked(getAdapterPosition());
         }
+
+        private View.OnClickListener dismissListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                itemListener.onDismissButtonClicked(getAdapterPosition());
+            }
+        };
 
         public View getStatus() {
             return status;
@@ -101,9 +118,6 @@ public class ActionItemAdapter extends RecyclerView.Adapter<ActionItemAdapter.Vi
             return description;
         }
 
-        public ImageView getPicture() {
-            return picture;
-        }
     }
 
 

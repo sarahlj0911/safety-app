@@ -5,13 +5,14 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.plusmobileapps.safetyapp.R;
-import com.plusmobileapps.safetyapp.summary.detail.SummaryDetailActivity;
-import com.plusmobileapps.safetyapp.surveys.landing.SurveyOverview;
+import com.plusmobileapps.safetyapp.summary.detail.SummaryOverviewDetailsActivity;
+import com.plusmobileapps.safetyapp.walkthrough.landing.WalkthroughOverview;
 
 import java.util.ArrayList;
 
@@ -19,7 +20,7 @@ public class SummaryFragment extends Fragment implements SummaryContract.View {
     private static final String TAG = "SummaryFragment";
     protected RecyclerView recyclerView;
     protected SummaryAdapter adapter;
-    private ArrayList<SurveyOverview> surveys;
+    private ArrayList<WalkthroughOverview> walkthroughs;
 
     private SummaryContract.Presenter presenter;
 
@@ -45,7 +46,7 @@ public class SummaryFragment extends Fragment implements SummaryContract.View {
         recyclerView = (RecyclerView) rootView.findViewById(R.id.summary_recyclerview);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
-        adapter = new SummaryAdapter(new ArrayList<SurveyOverview>(0), itemListener);
+        adapter = new SummaryAdapter(new ArrayList<WalkthroughOverview>(0), itemListener);
         recyclerView.setAdapter(adapter);
 
         return rootView;
@@ -63,13 +64,15 @@ public class SummaryFragment extends Fragment implements SummaryContract.View {
     }
 
     @Override
-    public void showSummaries(ArrayList<SurveyOverview> summaries) {
+    public void showSummaries(ArrayList<WalkthroughOverview> summaries) {
         adapter.replaceData(summaries);
     }
 
     @Override
-    public void showSummaryDetailUi(SurveyOverview summary) {
-        Intent intent = new Intent(getContext(), SummaryDetailActivity.class);
+    public void showSummaryDetailUi(WalkthroughOverview summary) {
+        Intent intent = new Intent(getContext(), SummaryOverviewDetailsActivity.class);
+        intent.putExtra("walkthroughTitle", summary.getTitle());
+        intent.putExtra("walkthroughId", summary.getWalkthroughId());
         startActivity(intent);
     }
 
@@ -78,7 +81,7 @@ public class SummaryFragment extends Fragment implements SummaryContract.View {
      */
     SummaryItemListener itemListener = new SummaryItemListener() {
         @Override
-        public void onSummaryItemClicked(SurveyOverview summary) {
+        public void onSummaryItemClicked(WalkthroughOverview summary) {
             presenter.openSummary(summary);
         }
     };
@@ -87,7 +90,7 @@ public class SummaryFragment extends Fragment implements SummaryContract.View {
      * Interface for summary items being clicked in recyclerview
      */
     public interface SummaryItemListener {
-        void onSummaryItemClicked(SurveyOverview summary);
+        void onSummaryItemClicked(WalkthroughOverview summary);
     }
 
 }
