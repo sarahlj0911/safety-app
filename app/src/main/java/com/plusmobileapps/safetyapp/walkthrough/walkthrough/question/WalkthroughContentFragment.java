@@ -1,7 +1,6 @@
-package com.plusmobileapps.safetyapp.walkthrough.walkthrough;
+package com.plusmobileapps.safetyapp.walkthrough.walkthrough.question;
 
 
-import android.app.Fragment;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -11,6 +10,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.v4.app.Fragment;
 import android.support.v4.content.FileProvider;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -27,6 +27,8 @@ import com.plusmobileapps.safetyapp.data.entity.Question;
 import com.plusmobileapps.safetyapp.data.entity.Response;
 import com.plusmobileapps.safetyapp.model.Priority;
 import com.plusmobileapps.safetyapp.R;
+import com.plusmobileapps.safetyapp.walkthrough.walkthrough.WalkthroughContract;
+import com.plusmobileapps.safetyapp.walkthrough.walkthrough.WalkthroughPresenter;
 
 import java.io.File;
 import java.io.IOException;
@@ -37,7 +39,7 @@ import static android.app.Activity.RESULT_OK;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class WalkthroughContentFragment extends Fragment implements View.OnClickListener, WalkthroughContract.View {
+public class WalkthroughContentFragment extends Fragment implements View.OnClickListener, WalkthroughFragmentContract.View {
 
     static final String TAG = "WalkthruContentFragment";
     private static final int REQUEST_IMAGE_CAPTURE = 1;
@@ -60,12 +62,12 @@ public class WalkthroughContentFragment extends Fragment implements View.OnClick
     private String actionPlan;
     private String photoPath;
     private PackageManager packageManager;
-    private WalkthroughPresenter presenter;
+    private WalkthroughFragmentContract.Presenter presenter;
 
-    public static WalkthroughContentFragment newInstance(Question walkthroughQuestion) {
+    public static WalkthroughContentFragment newInstance(Question question) {
         WalkthroughContentFragment fragment = new WalkthroughContentFragment();
         Bundle bundle = new Bundle(1);
-        bundle.putString("walkthroughQuestion", new Gson().toJson(walkthroughQuestion));
+        bundle.putString("walkthroughQuestion", new Gson().toJson(question));
         fragment.setArguments(bundle);
 
         return fragment;
@@ -78,7 +80,49 @@ public class WalkthroughContentFragment extends Fragment implements View.OnClick
         View view = inflater.inflate(R.layout.fragment_walkthrough_question, container, false);
         String walkthroughJsonObject = getArguments().getString("walkthroughQuestion");
 
-        walkthroughQuestion = new Gson().fromJson(walkthroughJsonObject, WalkthroughQuestion.class);
+        walkthroughQuestion = new Gson().fromJson(walkthroughJsonObject, Question.class);
+        initViews(view);
+        generateQuestionView(view, walkthroughQuestion);
+
+        loadPriority();
+
+        if (packageManager.hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
+            cameraButton.setOnClickListener(this);
+        } else {
+            cameraButton.setVisibility(View.GONE);
+        }
+
+        return view;
+    }
+
+    private View generateQuestionView(View view, Question question) {
+        RadioGroup radioGroup = view.findViewById(R.id.radioGroup);
+        if (question.getRatingOption1() != null) {
+            radioGroup.addView(generateRadioButton(question.getRatingOption1(), question.getQuestionId()));
+        }
+        if(question.getRatingOption2() != null) {
+            radioGroup.addView(generateRadioButton(question.getRatingOption2(), question.getQuestionId()));
+        }
+        if(question.getRatingOption3() != null) {
+            radioGroup.addView(generateRadioButton(question.getRatingOption3(), question.getQuestionId()));
+        }
+        if(question.getRatingOption4() != null) {
+            radioGroup.addView(generateRadioButton(question.getRatingOption4(), question.getQuestionId()));
+        }
+
+        descriptionTextView.setText(question.getQuestionText());
+
+        return view;
+    }
+
+    private RadioButton generateRadioButton(String content, int id) {
+        RadioButton radioButton = new RadioButton(getContext());
+        radioButton.setId(id);
+        radioButton.setText(content);
+        return radioButton;
+    }
+
+    private void initViews(View view) {
         descriptionTextView = view.findViewById(R.id.question_description);
         actionPlanLabel = view.findViewById(R.id.title_action_plan);
         actionPlanEditText = view.findViewById(R.id.actionPlanEditText);
@@ -92,21 +136,12 @@ public class WalkthroughContentFragment extends Fragment implements View.OnClick
         priorityYellowSelected = view.findViewById(R.id.priority_btn_yellow_selected);
         priorityGreenSelected = view.findViewById(R.id.priority_btn_green_selected);
         cameraButton = view.findViewById(R.id.button_take_photo);
+    }
 
-        descriptionTextView.setText(walkthroughQuestion.getDescription());
-        options = walkthroughQuestion.getOptions();
-        priority = walkthroughQuestion.getPriority();
-
-        populateOptionRadioButtons(view);
-        loadPriority();
-
-        if (packageManager.hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
-            cameraButton.setOnClickListener(this);
-        } else {
-            cameraButton.setVisibility(View.GONE);
-        }
-
-        return view;
+    @Override
+    public void onResume() {
+        super.onResume();
+        presenter.start();
     }
 
     @Override
@@ -125,7 +160,13 @@ public class WalkthroughContentFragment extends Fragment implements View.OnClick
         savedInstanceState.putString("photoPath", photoPath);
     }
 
-     /**
+
+    @Override
+    public void setPresenter(WalkthroughFragmentContract.Presenter presenter) {
+        this.presenter = presenter;
+    }
+
+    /**
      * Handle all click events here within the fragment
      * @param view
      */
@@ -265,27 +306,24 @@ public class WalkthroughContentFragment extends Fragment implements View.OnClick
         }
     }
 
-    private void populateOptionRadioButtons(View view) {
-        RadioGroup radioGroup = view.findViewById(R.id.radioGroup);
-
-        for (int i = 0; i < options.size(); i++) {
-            View v = radioGroup.getChildAt(i);
-            if (v instanceof RadioButton) {
-                if (options.get(i) != null && !options.get(i).equals("")) {
-                    ((RadioButton) v).setText(options.get(i));
-                    v.setVisibility(View.VISIBLE);
-                } else {
-                    v.setVisibility(View.GONE);
-                }
-            }
-        }
-    }
-
     private File createImageFile() throws IOException {
         String imageFileName = "JPEG_" + walkthroughQuestion.getLocation() + "_";
         File storageDir = this.getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         File image = File.createTempFile(imageFileName, ".jpg", storageDir);
         photoPath = image.getAbsolutePath();
         return image;
+    }
+
+    /**
+     * handle the click events of the radio button group
+     *
+     * @param view  radiobutton from the walkthroughQuestion
+     */
+    public void onRadioButtonClicked(View view) {
+        String rating = ((RadioButton) view).getText().toString();
+
+        walkthroughQuestion.setRatingOption1(rating);
+
+        Log.d(TAG, "New rating: " + walkthroughQuestion.getRating());
     }
 }
