@@ -1,13 +1,7 @@
 package com.plusmobileapps.safetyapp.walkthrough.walkthrough.question;
 
-import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
-
-import com.plusmobileapps.safetyapp.R;
-import com.plusmobileapps.safetyapp.data.entity.Question;
 import com.plusmobileapps.safetyapp.data.entity.Response;
+import com.plusmobileapps.safetyapp.model.Priority;
 
 /**
  * Created by asteinme on 2/24/18.
@@ -17,7 +11,6 @@ public class WalkthroughContentPresenter implements WalkthroughFragmentContract.
 
 
     private WalkthroughFragmentContract.View view;
-    private Response response;
 
     public WalkthroughContentPresenter(WalkthroughFragmentContract.View view ) {
         this.view = view;
@@ -30,8 +23,32 @@ public class WalkthroughContentPresenter implements WalkthroughFragmentContract.
 
 
     @Override
+    public void priorityClicked(Priority priority) {
+        switch (priority) {
+            case HIGH:
+                view.enableActionPlan(true);
+                view.showPriority(priority);
+                break;
+            case MEDIUM:
+                view.enableActionPlan(true);
+                view.showPriority(priority);
+                break;
+            case NONE:
+                view.enableActionPlan(false);
+                view.showPriority(priority);
+                break;
+            default:
+                break;
+        }
+    }
+
+    @Override
+    public void photoTaken() {
+
+    }
+
+    @Override
     public Response getResponse() {
-        //TODO: get all the values of the priority, action plan
-        return response;
+        return view.getResponse();
     }
 }

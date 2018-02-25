@@ -1,12 +1,12 @@
 package com.plusmobileapps.safetyapp.walkthrough.walkthrough;
 
 import android.app.AlertDialog;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -51,7 +51,7 @@ public class WalkthroughActivity extends AppCompatActivity implements Walkthroug
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(locationName);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);  //will make the back button appear on toolbar
-        fragmentManager = getFragmentManager();
+        fragmentManager = getSupportFragmentManager();
 
         Button previousButton = findViewById(R.id.previous_question);
         previousButton.setOnClickListener(previousButtonListener);

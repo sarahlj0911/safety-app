@@ -13,11 +13,13 @@ import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.FileProvider;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -27,8 +29,6 @@ import com.plusmobileapps.safetyapp.data.entity.Question;
 import com.plusmobileapps.safetyapp.data.entity.Response;
 import com.plusmobileapps.safetyapp.model.Priority;
 import com.plusmobileapps.safetyapp.R;
-import com.plusmobileapps.safetyapp.walkthrough.walkthrough.WalkthroughContract;
-import com.plusmobileapps.safetyapp.walkthrough.walkthrough.WalkthroughPresenter;
 
 import java.io.File;
 import java.io.IOException;
@@ -84,8 +84,6 @@ public class WalkthroughContentFragment extends Fragment implements View.OnClick
         initViews(view);
         generateQuestionView(view, walkthroughQuestion);
 
-        loadPriority();
-
         if (packageManager.hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
             cameraButton.setOnClickListener(this);
         } else {
@@ -100,13 +98,13 @@ public class WalkthroughContentFragment extends Fragment implements View.OnClick
         if (question.getRatingOption1() != null) {
             radioGroup.addView(generateRadioButton(question.getRatingOption1(), question.getQuestionId()));
         }
-        if(question.getRatingOption2() != null) {
+        if (question.getRatingOption2() != null) {
             radioGroup.addView(generateRadioButton(question.getRatingOption2(), question.getQuestionId()));
         }
-        if(question.getRatingOption3() != null) {
+        if (question.getRatingOption3() != null) {
             radioGroup.addView(generateRadioButton(question.getRatingOption3(), question.getQuestionId()));
         }
-        if(question.getRatingOption4() != null) {
+        if (question.getRatingOption4() != null) {
             radioGroup.addView(generateRadioButton(question.getRatingOption4(), question.getQuestionId()));
         }
 
@@ -119,6 +117,11 @@ public class WalkthroughContentFragment extends Fragment implements View.OnClick
         RadioButton radioButton = new RadioButton(getContext());
         radioButton.setId(id);
         radioButton.setText(content);
+
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        layoutParams.weight = 1;
+        layoutParams.gravity = Gravity.CENTER_HORIZONTAL | Gravity.BOTTOM;
+        radioButton.setLayoutParams(layoutParams);
         return radioButton;
     }
 
@@ -166,8 +169,53 @@ public class WalkthroughContentFragment extends Fragment implements View.OnClick
         this.presenter = presenter;
     }
 
+    @Override
+    public void showPriority(Priority priority) {
+        switch (priority) {
+            case HIGH:
+                priorityRed.setVisibility(View.GONE);
+                priorityRedSelected.setVisibility(View.VISIBLE);
+                priorityYellow.setVisibility(View.VISIBLE);
+                priorityYellowSelected.setVisibility(View.GONE);
+                priorityGreen.setVisibility(View.VISIBLE);
+                priorityGreenSelected.setVisibility(View.GONE);
+                break;
+            case MEDIUM:
+                priorityYellow.setVisibility(View.GONE);
+                priorityYellowSelected.setVisibility(View.VISIBLE);
+                priorityRed.setVisibility(View.VISIBLE);
+                priorityRedSelected.setVisibility(View.GONE);
+                priorityGreen.setVisibility(View.VISIBLE);
+                priorityGreenSelected.setVisibility(View.GONE);
+                break;
+            case NONE:
+                priorityGreen.setVisibility(View.GONE);
+                priorityGreenSelected.setVisibility(View.VISIBLE);
+                priorityYellow.setVisibility(View.VISIBLE);
+                priorityYellowSelected.setVisibility(View.GONE);
+                priorityRed.setVisibility(View.VISIBLE);
+                priorityRedSelected.setVisibility(View.GONE);
+                break;
+            default:
+                Log.d(TAG, "WalkthroughQuestion has unrecognized priority!");
+                break;
+        }
+    }
+
+    @Override
+    public void enableActionPlan(boolean show) {
+        actionPlanLabel.setEnabled(show);
+        actionPlanEditText.setEnabled(show);
+    }
+
+    @Override
+    public Response getResponse() {
+        return null;
+    }
+
     /**
      * Handle all click events here within the fragment
+     *
      * @param view
      */
     @Override
@@ -197,47 +245,19 @@ public class WalkthroughContentFragment extends Fragment implements View.OnClick
                 break;
             case R.id.priority_btn_red:
                 priority = Priority.HIGH;
-                walkthroughQuestion.setActionItem(true);
-                priorityRed.setVisibility(View.GONE);
-                priorityRedSelected.setVisibility(View.VISIBLE);
-                priorityYellowSelected.setVisibility(View.GONE);
-                priorityYellow.setVisibility(View.VISIBLE);
-                priorityGreenSelected.setVisibility(View.GONE);
-                priorityGreen.setVisibility(View.VISIBLE);
-                actionPlanLabel.setEnabled(true);
-                actionPlanEditText.setEnabled(true);
+                presenter.priorityClicked(priority);
                 break;
             case R.id.priority_btn_yellow:
                 priority = Priority.MEDIUM;
-                walkthroughQuestion.setActionItem(true);
-                priorityYellow.setVisibility(View.GONE);
-                priorityYellowSelected.setVisibility(View.VISIBLE);
-                priorityRedSelected.setVisibility(View.GONE);
-                priorityRed.setVisibility(View.VISIBLE);
-                priorityGreenSelected.setVisibility(View.GONE);
-                priorityGreen.setVisibility(View.VISIBLE);
-                actionPlanLabel.setEnabled(true);
-                actionPlanEditText.setEnabled(true);
+                presenter.priorityClicked(priority);
                 break;
             case R.id.priority_btn_green:
                 priority = Priority.NONE;
-                walkthroughQuestion.setActionItem(false);
-                priorityGreen.setVisibility(View.GONE);
-                priorityGreenSelected.setVisibility(View.VISIBLE);
-                priorityYellowSelected.setVisibility(View.GONE);
-                priorityYellow.setVisibility(View.VISIBLE);
-                priorityRedSelected.setVisibility(View.GONE);
-                priorityRed.setVisibility(View.VISIBLE);
-                actionPlanLabel.setEnabled(false);
-                actionPlanEditText.setEnabled(false);
+                presenter.priorityClicked(priority);
                 break;
             default:
                 break;
         }
-
-
-
-        walkthroughQuestion.setPriority(priority);
     }
 
     @Override
@@ -252,7 +272,7 @@ public class WalkthroughContentFragment extends Fragment implements View.OnClick
             int photoHeight = bmOptions.outHeight;
 
             // Determine how much to scale down the image
-            int scaleFactor = Math.min(photoWidth/targetWidth, photoHeight/targetHeight);
+            int scaleFactor = Math.min(photoWidth / targetWidth, photoHeight / targetHeight);
 
             // Decode the image file into a Bitmap sized to fit the View
             bmOptions.inJustDecodeBounds = false;
@@ -278,52 +298,12 @@ public class WalkthroughContentFragment extends Fragment implements View.OnClick
         }
     }
 
-    private void loadPriority() {
-        if (priority != null) {
-            switch (priority) {
-                case HIGH:
-                    priorityRed.setVisibility(View.GONE);
-                    priorityRedSelected.setVisibility(View.VISIBLE);
-                    actionPlanLabel.setEnabled(true);
-                    actionPlanEditText.setEnabled(true);
-                    break;
-                case MEDIUM:
-                    priorityYellow.setVisibility(View.GONE);
-                    priorityYellowSelected.setVisibility(View.VISIBLE);
-                    actionPlanLabel.setEnabled(true);
-                    actionPlanEditText.setEnabled(true);
-                    break;
-                case NONE:
-                    priorityGreen.setVisibility(View.GONE);
-                    priorityGreenSelected.setVisibility(View.VISIBLE);
-                    actionPlanLabel.setEnabled(false);
-                    actionPlanEditText.setEnabled(false);
-                    break;
-                default:
-                    Log.d(TAG, "WalkthroughQuestion has unrecognized priority!");
-                    break;
-            }
-        }
-    }
-
     private File createImageFile() throws IOException {
-        String imageFileName = "JPEG_" + walkthroughQuestion.getLocation() + "_";
+        String imageFileName = "JPEG_" + walkthroughQuestion.getRatingOption4() + "_";
         File storageDir = this.getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         File image = File.createTempFile(imageFileName, ".jpg", storageDir);
         photoPath = image.getAbsolutePath();
         return image;
     }
 
-    /**
-     * handle the click events of the radio button group
-     *
-     * @param view  radiobutton from the walkthroughQuestion
-     */
-    public void onRadioButtonClicked(View view) {
-        String rating = ((RadioButton) view).getText().toString();
-
-        walkthroughQuestion.setRatingOption1(rating);
-
-        Log.d(TAG, "New rating: " + walkthroughQuestion.getRating());
-    }
 }
