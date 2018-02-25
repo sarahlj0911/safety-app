@@ -90,7 +90,7 @@
     <string name="title_edit_priority_dialog">Select a priority:</string>
 
     <!--actionitem detail page-->
-    <string name="exit_confirmation">Are you sure you want to exit without saving your changes?</string>
+    <string name="exit_confirmation_no_save">Are you sure you want to exit without saving your changes?</string>
     <string name="confirmation">Confirmation</string>
     <!--walkthrough landing text-->
     <string name="viewholder_header_completed">Completed</string>
@@ -99,5 +99,10 @@
 
     <!--action item landing-->
     <string name="dismiss_action_item">Action item was dismissed</string>
+
+    <!--walkthrough-->
+    <string name="exit_confirmation_save">Are you sure you want to exit walkthrough?</string>
+    <string name="exit_confirmation_save_message">Your responses will be saved.</string>
+
 </resources>
 

@@ -37,7 +37,7 @@ public class LocationPresenter implements LocationContract.Presenter {
 
     @Override
     public void locationClicked(Location location) {
-        view.openRequestedLocation(location.getLocationId());
+        view.openRequestedLocation(location.getLocationId(), location.getName());
     }
 
     @Override

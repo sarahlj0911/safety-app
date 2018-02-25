@@ -1,36 +1,42 @@
 package com.plusmobileapps.safetyapp.walkthrough.walkthrough;
 
+import android.app.AlertDialog;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.RadioButton;
 
 import com.plusmobileapps.safetyapp.R;
 import com.plusmobileapps.safetyapp.data.entity.Question;
+import com.plusmobileapps.safetyapp.data.entity.Response;
+import com.plusmobileapps.safetyapp.walkthrough.location.LocationActivity;
+import com.plusmobileapps.safetyapp.walkthrough.walkthrough.question.WalkthroughContentFragment;
+import com.plusmobileapps.safetyapp.walkthrough.walkthrough.question.WalkthroughContentPresenter;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 //Look at SummaryOverviewDetailsActivity
-public class WalkthroughActivity extends AppCompatActivity  {
+public class WalkthroughActivity extends AppCompatActivity implements WalkthroughContract.View {
 
     static final String TAG = "WalkthroughActivity";
-    public static final String EXTRA_LOCATION = "com.plusmobileapps.safetyapp.walkthrough.overview.LOCATION";
+    public static final String EXTRA_LOCATION_ID = "com.plusmobileapps.safetyapp.walkthrough.overview.LOCATION";
     FragmentManager fragmentManager;
     Question walkthroughQuestion;
     int currentPosition;
-    WalkthroughPresenter presenter;
+    WalkthroughPresenter presenter = new WalkthroughPresenter(this);;
     List<Question> questions;
-    WalkthroughActivityModel model;
     private AsyncTask<Void, Void, List<Question>> loadQuestions;
+    private int locationId;
+    private WalkthroughContentPresenter currentContentPresenter;
 
     //Use array list of fragments.
 
@@ -38,82 +44,68 @@ public class WalkthroughActivity extends AppCompatActivity  {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Intent intent = getIntent();
-        int locationId = intent.getExtras().getInt(EXTRA_LOCATION);
-        model = new WalkthroughActivityModel(locationId);
-        loadQuestions = model.execute();
-
-        try {
-            this.questions = model.get();
-        } catch (InterruptedException | ExecutionException e)  {
-            e.printStackTrace();
-        }
-
-
+        locationId = intent.getExtras().getInt(EXTRA_LOCATION_ID);
+        String locationName = intent.getExtras().getString(LocationActivity.EXTRA_WALKTHROUGH_LOCATION_NAME);
         setContentView(R.layout.activity_walkthrough);
         Toolbar toolbar = (Toolbar) findViewById(R.id.walkthrough_toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle(location);
+        getSupportActionBar().setTitle(locationName);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);  //will make the back button appear on toolbar
         fragmentManager = getFragmentManager();
 
-        populateWalkthroughQuestion(location);
-        WalkthroughContentFragment fragment = WalkthroughContentFragment.newInstance(walkthroughQuestion);
-
-        FragmentTransaction initialTransaction = fragmentManager.beginTransaction();
-
-        //CREATE ALL FRAGMENTS in list/array/hashmap.
-
-        //launch the first fragment.
-        initialTransaction
-                .add(R.id.walkthrough_container, fragment, "0")
-                .commit();
+        Button previousButton = findViewById(R.id.previous_question);
+        previousButton.setOnClickListener(previousButtonListener);
+        Button nextButton = findViewById(R.id.next_question);
+        nextButton.setOnClickListener(nextButtonListener);
     }
 
-    /**
-     * handle the click events of the radio button group
-     *
-     * @param view  radiobutton from the walkthroughQuestion
-     */
-    public void onRadioButtonClicked(View view) {
-        String rating = ((RadioButton) view).getText().toString();
-
-        walkthroughQuestion.setRating(rating);
-
-        Log.d(TAG, "New rating: " + walkthroughQuestion.getRating());
+    @Override
+    protected void onResume() {
+        super.onResume();
+        presenter.start(locationId);
     }
 
-    /**
-     * handle click event of the back button
-     *
-     * @param view  back button
-     */
-    public void onBackButtonPress(View view) {
-        //decrement position
-        //launch framgment.
-
-        final int count = fragmentManager.getBackStackEntryCount();
-
-        if (count < 1) {
-            finish();   //finish whole activity if nothing on backstack
-        } else {
-            fragmentManager.popBackStack();     //move back one on fragment transaction backstack
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                presenter.backButtonPressed();
+                break;
+            default:
+                break;
         }
+
+        return super.onOptionsItemSelected(item);
     }
 
-    /**
-     * handle click event of next button
-     *
-     * @param view  next button
-     */
-    public void onNextButtonPressed(View view) {
 
-        //increpement position
-        //launch fragement
+    @Override
+    public void showConfirmationDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(R.string.exit_confirmation_save_message)
+                .setTitle(R.string.exit_confirmation_save)
+                .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        presenter.confirmationExitClicked();
+                    }
+                })
+                .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                });
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    @Override
+    public void showNextQuestion(Question question) {
+        WalkthroughContentFragment fragment = WalkthroughContentFragment.newInstance(question);
+        currentContentPresenter = new WalkthroughContentPresenter(fragment);
 
         FragmentTransaction transaction = fragmentManager.beginTransaction();
-        String currentFragmentTag = Integer.toString(fragmentManager.getBackStackEntryCount());
-        //int id = fragmentManager.findFragmentByTag(currentFragmentTag);
-
-        WalkthroughContentFragment newInstance = WalkthroughContentFragment.newInstance(walkthroughQuestion);
 
         transaction
                 .setCustomAnimations(
@@ -121,13 +113,42 @@ public class WalkthroughActivity extends AppCompatActivity  {
                         R.animator.slide_out_left,
                         R.animator.slide_in_right,
                         R.animator.slide_out_right)
-                .replace(R.id.walkthrough_container, newInstance)
+                .replace(R.id.walkthrough_container, fragment)
                 .addToBackStack("walkthroughQuestion")
                 .commit();
     }
 
-    private void populateWalkthroughQuestion(String location) {
-        walkthroughQuestion = new Question(1,"This is fake", "this is fake", "None",
-                "1-2", "3-5", "6-10");
+    @Override
+    public void showPreviousQuestion() {
+        fragmentManager.popBackStack();
     }
+
+    @Override
+    public Response getCurrentResponse() {
+        return currentContentPresenter.getResponse();
+    }
+
+    @Override
+    public void closeWalkthrough() {
+        finish();
+    }
+
+    @Override
+    public void onBackPressed() {
+        presenter.backButtonPressed();
+    }
+
+    View.OnClickListener previousButtonListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            presenter.previousQuestionClicked();
+        }
+    };
+
+    View.OnClickListener nextButtonListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            presenter.nextQuestionClicked();
+        }
+    };
 }

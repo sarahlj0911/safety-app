@@ -37,11 +37,11 @@
         android:orientation="horizontal">
 
         <Button
+            android:id="@+id/previous_question"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="@string/back"
-            android:onClick="onBackButtonPress"/>
+            android:text="@string/back" />
 
         <Button
             android:id="@+id/next_question"
@@ -49,8 +49,7 @@
             android:layout_height="match_parent"
             android:layout_gravity="bottom"
             android:layout_weight="1"
-            android:text="@string/next"
-            android:onClick="onNextButtonPressed"/>
+            android:text="@string/next" />
 
 
     </LinearLayout>

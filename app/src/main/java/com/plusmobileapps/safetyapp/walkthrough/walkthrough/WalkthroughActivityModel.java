@@ -17,11 +17,15 @@ import java.util.List;
 public class WalkthroughActivityModel extends AsyncTask<Void, Void, List<Question>> {
 
     private List<Question> questions = new ArrayList<>();
+    private WalkthroughContract.View view;
+    private WalkthroughPresenter presenter;
     AppDatabase db;
     private int locationId;
 
-    public WalkthroughActivityModel(int locationId) {
+    public WalkthroughActivityModel(int locationId, WalkthroughContract.View view, WalkthroughPresenter presenter) {
         this.locationId = locationId;
+        this.view = view;
+        this.presenter = presenter;
     }
 
     public void setLocationId(int locationId) {
@@ -38,9 +42,9 @@ public class WalkthroughActivityModel extends AsyncTask<Void, Void, List<Questio
 
     @Override
     protected void onPostExecute(List<Question> questions) {
-        this.questions = questions;
-        //DO I NEED THIS?
+        super.onPostExecute(questions);
+        presenter.setQuestions(questions);
+        view.showNextQuestion(questions.get(0));
     }
-
 }
 

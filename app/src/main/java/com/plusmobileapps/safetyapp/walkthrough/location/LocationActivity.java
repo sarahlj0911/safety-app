@@ -18,6 +18,8 @@ import java.util.List;
 
 public class LocationActivity extends AppCompatActivity implements LocationContract.View{
 
+    public static final String EXTRA_WALKTHROUGH_LOCATION_NAME = "walkthrough_name";
+
     private LocationContract.Presenter presenter;
     private RecyclerView recyclerView;
     private LocationAdapter adapter;
@@ -76,10 +78,11 @@ public class LocationActivity extends AppCompatActivity implements LocationContr
     }
 
     @Override
-    public void openRequestedLocation(int locationId) {
+    public void openRequestedLocation(int locationId, String locationName) {
         //TODO refactor to use locationId.
         Intent intent = new Intent(this, WalkthroughActivity.class);
-        intent.putExtra(WalkthroughActivity.EXTRA_LOCATION, locationId);
+        intent.putExtra(WalkthroughActivity.EXTRA_LOCATION_ID, locationId);
+        intent.putExtra(EXTRA_WALKTHROUGH_LOCATION_NAME, locationName);
         startActivity(intent);
     }
 

@@ -1,23 +1,30 @@
 package com.plusmobileapps.safetyapp.walkthrough.walkthrough;
-
-import com.plusmobileapps.safetyapp.BasePresenter;
-import com.plusmobileapps.safetyapp.BaseView;
-
-/**
- * Created by ehanna2 on 2/24/2018.
- */
+import com.plusmobileapps.safetyapp.data.entity.Question;
+import com.plusmobileapps.safetyapp.data.entity.Response;
 
 public interface WalkthroughContract {
 
 
-    interface View extends BaseView<Presenter> {
-        //TODO implement view methods.
+    interface View {
+        void showConfirmationDialog();
+        void showNextQuestion(Question question);
+        void showPreviousQuestion();
+        Response getCurrentResponse();
+        void closeWalkthrough();
 
     }
 
 
-    interface Presenter extends BasePresenter {
-        //TODO implement click events
+    interface Presenter {
+
+        void start(int locationId);
+
+        void loadQuestions(int locationId);
+        void previousQuestionClicked();
+        void nextQuestionClicked();
+
+        void confirmationExitClicked();
+        void backButtonPressed();
 
     }
 
