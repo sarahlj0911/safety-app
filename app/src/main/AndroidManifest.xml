@@ -69,6 +69,11 @@
                 android:name="android.accounts.AccountAuthenticator"
                 android:resource="@xml/authenticator" />
         </service>
+        <provider
+            android:name="com.plusmobileapps.safetyapp.sync.StubProvider"
+            android:authorities="com.plusmobileapps.safetyapp.provider"
+            android:exported="false"
+            android:syncable="true" />
     </application>
 
 </manifest>
