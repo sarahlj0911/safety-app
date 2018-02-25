@@ -10,9 +10,10 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.plusmobileapps.safetyapp.R;
+import com.plusmobileapps.safetyapp.data.entity.Location;
 
 import java.util.ArrayList;
-
+import java.util.List;
 
 public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHolder> {
 
@@ -20,7 +21,7 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHo
     public static final String EXTRA_LOCATION = "com.plusmobileapps.safetyapp.location.overview.LOCATION";
     private Location location;
     private LocationActivity.LocationItemListener itemListener;
-    private ArrayList<Location> locations;
+    private List<Location> locations;
 
     public LocationAdapter(ArrayList<Location> walkthroughs, LocationActivity.LocationItemListener itemListener){
         this.locations = walkthroughs;
@@ -39,7 +40,7 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHo
     public void onBindViewHolder(ViewHolder holder, int position) {
         location = locations.get(position);
 
-        holder.getWalkthroughTitle().setText(location.getTitle());
+        holder.getWalkthroughTitle().setText(location.getName());
         holder.getCheckmark().setVisibility(location.isFinished() ? View.VISIBLE : View.INVISIBLE);
         if (location.getProgress() > 0){
             holder.getProgressBar().setVisibility(View.VISIBLE);
@@ -54,7 +55,7 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHo
         return locations.size();
     }
 
-    public void setData(ArrayList<Location> locations) {
+    public void setData(List<Location> locations) {
         this.locations = locations;
         notifyDataSetChanged();
     }

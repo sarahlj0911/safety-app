@@ -9,17 +9,19 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import com.plusmobileapps.safetyapp.R;
+import com.plusmobileapps.safetyapp.data.entity.Location;
 import com.plusmobileapps.safetyapp.walkthrough.landing.WalkthroughLandingFragment;
 import com.plusmobileapps.safetyapp.walkthrough.walkthrough.WalkthroughActivity;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class LocationActivity extends AppCompatActivity implements LocationContract.View{
 
     private LocationContract.Presenter presenter;
     private RecyclerView recyclerView;
     private LocationAdapter adapter;
-    private ArrayList<Location> locations;
+    private List<Location> locations;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,7 +70,7 @@ public class LocationActivity extends AppCompatActivity implements LocationContr
     }
 
     @Override
-    public void showLocations(ArrayList<Location> locations) {
+    public void showLocations(List<Location> locations) {
         this.locations = locations;
         adapter.setData(locations);
     }
