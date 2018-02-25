@@ -1,6 +1,7 @@
 package com.plusmobileapps.safetyapp.data.entity;
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 import android.graphics.Bitmap;
 import android.support.annotation.Nullable;
@@ -24,6 +25,12 @@ public class Location {
 
     @ColumnInfo(name = "locationInstruction")
     private String locationInstruction;
+
+    @Ignore
+    private boolean isFinished;
+
+    @Ignore
+    private int progess;
 
     public Location(int locationId, String type, String name, String locationInstruction) {
         this.locationId = locationId;
@@ -49,6 +56,10 @@ public class Location {
         return this.locationInstruction;
     }
 
+    public boolean isFinished() { return this.isFinished; }
+
+    public int getProgress() { return this.progess; }
+
     //Setters
     public void setId(int id) {
         this.locationId = id;
@@ -64,5 +75,13 @@ public class Location {
 
     public void setLocationInstruction(String locationInstruction) {
         this.locationInstruction = locationInstruction;
+    }
+
+    public void setFinished(boolean isFinished) {
+        this.isFinished = isFinished;
+    }
+
+    public void setProgess(int progess) {
+        this.progess = progess;
     }
 }
