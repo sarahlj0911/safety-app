@@ -19,6 +19,7 @@ public class WalkthroughPresenter implements WalkthroughContract.Presenter {
     private List<Response> responses = new ArrayList<>(0);
     private int currentIndex = 0;
 
+
     public WalkthroughPresenter(WalkthroughContract.View view) {
         this.view = view;
     }
@@ -35,14 +36,15 @@ public class WalkthroughPresenter implements WalkthroughContract.Presenter {
 
     @Override
     public void previousQuestionClicked() {
-        Response lastResponse = view.getCurrentResponse();
-        responses.set(currentIndex, lastResponse);
-        currentIndex--;
-
-        if(currentIndex < 0) {
+        if(currentIndex == 0) {
             saveResponses();
             return;
         }
+
+        Response lastResponse = view.getCurrentResponse();
+        responses.set(currentIndex-1, lastResponse);
+        currentIndex--;
+
 
         view.showPreviousQuestion();
     }
@@ -50,13 +52,19 @@ public class WalkthroughPresenter implements WalkthroughContract.Presenter {
     @Override
     public void nextQuestionClicked() {
         //if youre at the last question
-        if(currentIndex == questions.size()) {
+        if(currentIndex + 1 == questions.size()) {
             saveResponses();
             return;
         }
 
         Response response = view.getCurrentResponse();
-        responses.set(currentIndex, response);
+
+        //check if the next question has already been started
+        if(currentIndex == responses.size()) {
+            responses.add(response);
+        } else {
+            responses.set(currentIndex, response);
+        }
         currentIndex++;
         view.showNextQuestion(questions.get(currentIndex));
 
@@ -78,5 +86,6 @@ public class WalkthroughPresenter implements WalkthroughContract.Presenter {
 
     private void saveResponses() {
         //TODO create async task to save responses
+        view.closeWalkthrough();
     }
 }
