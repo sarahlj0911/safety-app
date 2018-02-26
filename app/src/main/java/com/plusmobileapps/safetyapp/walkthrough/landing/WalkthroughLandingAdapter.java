@@ -57,7 +57,8 @@ public class WalkthroughLandingAdapter extends RecyclerView.Adapter<WalkthroughL
 
             //TODO: Labels missing
             holder.getDate().setText(walkthrough.getDate(walkthrough.getCreatedDate()));
-            holder.getTime().setText(walkthrough.getTime(walkthrough.getLastUpdatedDate()));
+            //            this is not in the db which is why its throwing an error
+            //            holder.getTime().setText(walkthrough.getTime(walkthrough.getLastUpdatedDate()));
             holder.getTitle().setText(walkthrough.getName());
 
             //handle progress bar

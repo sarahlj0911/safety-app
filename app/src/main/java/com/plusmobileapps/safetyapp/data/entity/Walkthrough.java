@@ -57,8 +57,9 @@ public class Walkthrough {
     public int getSchoolId() { return this.schoolId; }
 
     public String getDate(String date) {
-        String[] tmp = date.split(" ");
-        return tmp[1] + " " + tmp[2] + ", " + tmp[tmp.length - 1];
+        String[] tmp = date.split("-");
+        String temp = tmp[1] + " " + tmp[2] + ", " + tmp[tmp.length - 1];
+        return temp;
     }
 
     public String getTime(String date) {
