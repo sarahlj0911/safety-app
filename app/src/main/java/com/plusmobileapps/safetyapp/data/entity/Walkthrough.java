@@ -16,7 +16,7 @@ import java.util.Date;
                                   parentColumns = "schoolId",
                                   childColumns = "schoolId"))
 public class Walkthrough {
-    @PrimaryKey(autoGenerate = false)
+    @PrimaryKey(autoGenerate = true)
     private int walkthroughId;
 
     @ColumnInfo(name = "schoolId")
@@ -34,8 +34,7 @@ public class Walkthrough {
     @ColumnInfo(name = "lastUpdatedDate")
     private String lastUpdatedDate;
 
-    public Walkthrough(int walkthroughId, String name, double percentComplete, String createdDate, String lastUpdatedDate, int schoolId) {
-        this.walkthroughId = walkthroughId;
+    public Walkthrough( String name, double percentComplete, String createdDate, String lastUpdatedDate, int schoolId) {
         this.name = name;
         this.createdDate = createdDate;
         this.lastUpdatedDate = lastUpdatedDate;

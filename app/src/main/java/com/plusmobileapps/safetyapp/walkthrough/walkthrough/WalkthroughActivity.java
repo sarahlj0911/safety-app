@@ -30,12 +30,9 @@ public class WalkthroughActivity extends AppCompatActivity implements Walkthroug
     static final String TAG = "WalkthroughActivity";
     public static final String EXTRA_LOCATION_ID = "com.plusmobileapps.safetyapp.walkthrough.overview.LOCATION";
     FragmentManager fragmentManager;
-    Question walkthroughQuestion;
-    int currentPosition;
     WalkthroughPresenter presenter = new WalkthroughPresenter(this);;
-    List<Question> questions;
-    private AsyncTask<Void, Void, List<Question>> loadQuestions;
     private int locationId;
+    private int walkthroughId;
     private WalkthroughContentPresenter currentContentPresenter;
 
     //Use array list of fragments.
@@ -45,6 +42,8 @@ public class WalkthroughActivity extends AppCompatActivity implements Walkthroug
         super.onCreate(savedInstanceState);
         Intent intent = getIntent();
         locationId = intent.getExtras().getInt(EXTRA_LOCATION_ID);
+        walkthroughId = intent.getExtras().getInt(LocationActivity.EXTRA_WALKTHROUGH_ID);
+
         String locationName = intent.getExtras().getString(LocationActivity.EXTRA_WALKTHROUGH_LOCATION_NAME);
         setContentView(R.layout.activity_walkthrough);
         Toolbar toolbar = (Toolbar) findViewById(R.id.walkthrough_toolbar);
@@ -62,7 +61,7 @@ public class WalkthroughActivity extends AppCompatActivity implements Walkthroug
     @Override
     protected void onResume() {
         super.onResume();
-        presenter.start(locationId);
+        presenter.start(locationId, walkthroughId);
     }
 
     @Override

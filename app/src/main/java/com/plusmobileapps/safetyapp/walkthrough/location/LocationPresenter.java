@@ -14,9 +14,11 @@ public class LocationPresenter implements LocationContract.Presenter {
     private LocationContract.View view;
     private AsyncTask<Void, Void, List<Location>> loadLocations = new LocationModel().execute();
     private List<Location> locations;
+    private int walkthroughId;
 
-    public LocationPresenter(LocationContract.View view) {
+    public LocationPresenter(LocationContract.View view, int walkthroughId) {
         this.view = view;
+        this.walkthroughId = walkthroughId;
         try {
             this.locations = loadLocations.get();
         } catch (InterruptedException | ExecutionException e)  {
@@ -37,7 +39,7 @@ public class LocationPresenter implements LocationContract.Presenter {
 
     @Override
     public void locationClicked(Location location) {
-        view.openRequestedLocation(location.getLocationId(), location.getName());
+        view.openRequestedLocation(location.getLocationId(), location.getName(), walkthroughId);
     }
 
     @Override

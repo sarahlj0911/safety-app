@@ -4,7 +4,6 @@ import com.plusmobileapps.safetyapp.data.entity.Response;
 
 public interface WalkthroughContract {
 
-
     interface View {
         void showConfirmationDialog();
         void showNextQuestion(Question question);
@@ -14,12 +13,12 @@ public interface WalkthroughContract {
 
     }
 
-
     interface Presenter {
 
-        void start(int locationId);
+        void start(int locationId, int walkthroughId);
 
         void loadQuestions(int locationId);
+        void loadResponses(int locationId, int walkthroughId);
         void previousQuestionClicked();
         void nextQuestionClicked();
 
