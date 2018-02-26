@@ -19,7 +19,8 @@ import static android.arch.persistence.room.ForeignKey.CASCADE;
         foreignKeys =  {
             @ForeignKey(entity = Walkthrough.class,
                         parentColumns = "walkthroughId",
-                        childColumns = "walkthroughId"),
+                        childColumns = "walkthroughId",
+                        onDelete = ForeignKey.CASCADE),
             @ForeignKey(entity = User.class,
                         parentColumns = "userId",
                         childColumns = "userId"),

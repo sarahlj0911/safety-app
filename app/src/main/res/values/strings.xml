@@ -26,26 +26,26 @@
 
     <!-- Welcome pages text -->
     <string name="welcome1_title">The SAfETy App</string>
-    <string name="welcome1_message">A Walk-through Tool for Administrators</string>
+    <string name="welcome1_message">A Walkthrough Tool for Administrators</string>
 
     <string name="welcome2_item1">This tool will help you gather data about physical and social conditions in your school through standardized observations in non-classroom and classroom locations. You will be able to use this data to create an action plan to improve school climate.</string>
     <string name="welcome2_item2">You will be able to use this data to create an action plan to improve school climate.</string>
 
     <string name="welcome3_title">General Instructions and Tips</string>
-    <string name="welcome3_item1">1. Once you have created a new walk-through, you can scroll through and select from a list of locations where observations will be conducted.</string>
+    <string name="welcome3_item1">1. Once you have created a new walkthrough, you can scroll through and select from a list of locations where observations will be conducted.</string>
     <string name="welcome3_item2">2. Once you\’ve chosen a location, complete the rating and prioritize each environmental indicator or observed behavior.</string>
     <string name="welcome3_item3">3. Use the Action Plan space to note possible actions to resolve the issue observed. You may access all Action Items under the Action Items tab.</string>
     <string name="welcome3_item4">4. When Action Items are complete you may dismiss them by tapping the ( ) icon.</string>
     <string name="welcome3_item5">5. Take a picture to document the issue or share with others. Please be careful not to have students in the picture.</string>
-    <string name="welcome3_item6">6. Use the Summary tab to compare the results of walk-throughs. In particular this tab allows you to see the number and priority of different action items.</string>
+    <string name="welcome3_item6">6. Use the Summary tab to compare the results of walkthroughs. In particular this tab allows you to see the number and priority of different action items.</string>
 
     <string name="welcome4_title">Prioritization Guide</string>
     <string name="prioritization_tip_text">You may set a priority level for each item in the walkthrough to help determine how soon action items need to be addressed. Only items with a red or yellow priority will be shown in your list of action items.</string>
 
     <string name="welcome5_title">A couple final tips&#8230;</string>
     <string name="welcome5_item1">It is best to conduct the observations when students and staff are using the space as they normally would.</string>
-    <string name="welcome5_item2">Ideally the walk-through will be completed in one day by the same person or persons. If this is not possible, try to complete the walk-through during one week.</string>
-    <string name="welcome5_footer">Next, we need some information about you and your school&#8230;</string>
+    <string name="welcome5_item2">Ideally the walkthrough will be completed in one day by the same person or persons. If this is not possible, try to complete the walkthrough during one week.</string>
+    <string name="welcome5_footer">Next, we need some information about you and your school...</string>
 
     <!-- Signup page strings -->
     <string name="title_signup">SAfETy Walkthrough Sign Up</string>
@@ -95,9 +95,11 @@
     <!--walkthrough landing text-->
     <string name="viewholder_header_completed">Completed</string>
     <string name="viewholder_header_inprogress">In Progress</string>
-    <string name="walkthrough_dialog_message">You have an unfinished walkthrough. Creating a new walkthrough will delete the unfinished one. Are you sure you want to create a new walkthrough?</string>
+    <string name="walkthrough_in_progress_dialog_message">You have an unfinished walkthrough. Creating a new walkthrough will delete the unfinished one. Are you sure you want to create a new walkthrough?</string>
 
     <!--action item landing-->
     <string name="dismiss_action_item">Action item was dismissed</string>
+    <string name="last_modified">Last Modified:</string>
+    <string name="walkthrough_last_modified">Last Modified:</string>
 </resources>
 
