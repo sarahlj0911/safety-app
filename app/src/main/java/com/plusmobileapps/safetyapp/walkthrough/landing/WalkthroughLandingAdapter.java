@@ -8,12 +8,9 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.plusmobileapps.safetyapp.R;
+import com.plusmobileapps.safetyapp.data.entity.Walkthrough;
 
 import java.util.ArrayList;
-
-/**
- * Created by Andrew on 11/13/2017.
- */
 
 public class WalkthroughLandingAdapter extends RecyclerView.Adapter<WalkthroughLandingAdapter.CardViewHolder> {
 
@@ -21,13 +18,13 @@ public class WalkthroughLandingAdapter extends RecyclerView.Adapter<WalkthroughL
     public static final String EXTRA_WALKTHROUGH = "com.plusmobileapps.safetyapp.walkthrough.landing.WALKTHROUGH";
     public static final int ITEM_TYPE_NORMAL = 1;
     public static final int ITEM_TYPE_HEADER = 0;
-    private WalkthroughOverview walkthrough;
+    private Walkthrough walkthrough;
     private int walkthroughCount = 0;
     private WalkthroughLandingFragment.WalkthroughLandingItemListener itemListener;
 
-    private ArrayList<WalkthroughOverview> walkthroughs;
+    private ArrayList<Walkthrough> walkthroughs;
 
-    public WalkthroughLandingAdapter(ArrayList<WalkthroughOverview> walkthroughs, WalkthroughLandingFragment.WalkthroughLandingItemListener itemListener) {
+    public WalkthroughLandingAdapter(ArrayList<Walkthrough> walkthroughs, WalkthroughLandingFragment.WalkthroughLandingItemListener itemListener) {
         this.walkthroughs = walkthroughs;
         this.itemListener = itemListener;
     }
@@ -42,34 +39,38 @@ public class WalkthroughLandingAdapter extends RecyclerView.Adapter<WalkthroughL
 
     @Override
     public void onBindViewHolder(final CardViewHolder holder, int position) {
-        walkthrough = walkthroughs.get(position);
-        TextView header = holder.getHeader();
+        if(walkthroughs.size() > 0) {
+            walkthrough = walkthroughs.get(position);
+            TextView header = holder.getHeader();
 
-        //handle the header visibility
-        if (position <= 1) {
-            header.setVisibility(View.VISIBLE);
-            if (position == 1) {
-                header.setText(R.string.viewholder_header_completed);
+            //handle the header visibility
+            if (position <= 1) {
+                header.setVisibility(View.VISIBLE);
+                if (position == 1) {
+                    header.setText(R.string.viewholder_header_completed);
+                } else {
+                    header.setText(R.string.viewholder_header_inprogress);
+                }
             } else {
-                header.setText(R.string.viewholder_header_inprogress);
+                header.setVisibility(View.GONE);
             }
-        } else {
-            header.setVisibility(View.GONE);
+
+            //TODO: Labels missing
+            holder.getDate().setText(walkthrough.getDate(walkthrough.getCreatedDate()));
+            holder.getTime().setText(walkthrough.getTime(walkthrough.getLastUpdatedDate()));
+            holder.getTitle().setText(walkthrough.getName());
+
+            //handle progress bar
+            if (walkthrough.isInProgress()) {
+                holder.getModified().setText(walkthrough.getDate(walkthrough.getLastUpdatedDate()));
+                holder.getProgressBar().setVisibility(View.VISIBLE);
+                holder.getProgressBar().setProgress((int)walkthrough.getPercentComplete());
+            } else {
+                holder.getProgressBar().setVisibility(View.INVISIBLE);
+                holder.getModified().setText(walkthrough.getDate(walkthrough.getLastUpdatedDate()));
+            }
         }
 
-        holder.getDate().setText(walkthrough.getDate());
-        holder.getTime().setText(walkthrough.getTime());
-        holder.getTitle().setText(walkthrough.getTitle());
-
-        //handle progress bar
-        if (walkthrough.isInProgress()) {
-            holder.getModified().setText(walkthrough.getModified());
-            holder.getProgressBar().setVisibility(View.VISIBLE);
-            holder.getProgressBar().setProgress(walkthrough.getProgress());
-        } else {
-            holder.getProgressBar().setVisibility(View.INVISIBLE);
-            holder.getModified().setText(walkthrough.getModified());
-        }
     }
 
     @Override
@@ -77,7 +78,7 @@ public class WalkthroughLandingAdapter extends RecyclerView.Adapter<WalkthroughL
         return walkthroughs.size();
     }
 
-    public void replaceData(ArrayList<WalkthroughOverview> walkthroughs) {
+    public void replaceData(ArrayList<Walkthrough> walkthroughs) {
         this.walkthroughs = walkthroughs;
     }
 

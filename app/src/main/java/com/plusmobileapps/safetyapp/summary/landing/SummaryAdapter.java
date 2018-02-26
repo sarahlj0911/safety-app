@@ -7,7 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.plusmobileapps.safetyapp.walkthrough.landing.WalkthroughOverview;
+import com.plusmobileapps.safetyapp.data.entity.Walkthrough;
 
 import java.util.ArrayList;
 
@@ -16,12 +16,12 @@ import com.plusmobileapps.safetyapp.R;
 public class SummaryAdapter extends RecyclerView.Adapter<SummaryAdapter.ViewHolder> {
 
     private static final String TAG = "SummaryAdapter";
-    private WalkthroughOverview walkthrough;
-    private ArrayList<WalkthroughOverview> summaries;
+    private Walkthrough walkthrough;
+    private ArrayList<Walkthrough> summaries;
 
     private SummaryFragment.SummaryItemListener itemListener;
 
-    public SummaryAdapter(ArrayList<WalkthroughOverview> walkthroughs, SummaryFragment.SummaryItemListener itemListener){
+    public SummaryAdapter(ArrayList<Walkthrough> walkthroughs, SummaryFragment.SummaryItemListener itemListener){
         this.summaries = walkthroughs;
         this.itemListener = itemListener;
     }
@@ -39,8 +39,8 @@ public class SummaryAdapter extends RecyclerView.Adapter<SummaryAdapter.ViewHold
         Log.d(TAG, "onBindViewHolder: " + position);
         walkthrough = summaries.get(position);
 
-        holder.getDateTime().setText(walkthrough.getDate());
-        holder.getTitle().setText(walkthrough.getTitle());
+        holder.getDateTime().setText(walkthrough.getLastUpdatedDate());
+        holder.getTitle().setText(walkthrough.getName());
 
         //TODO: Refactor model to have these data points
         holder.getRedCount().setText("2");
@@ -53,12 +53,12 @@ public class SummaryAdapter extends RecyclerView.Adapter<SummaryAdapter.ViewHold
         return summaries.size();
     }
 
-    public void replaceData(ArrayList<WalkthroughOverview> summaries) {
+    public void replaceData(ArrayList<Walkthrough> summaries) {
         this.summaries = summaries;
         notifyDataSetChanged();
     }
 
-    private WalkthroughOverview getSummary(int position) {
+    private Walkthrough getSummary(int position) {
         return summaries.get(position);
     }
 
@@ -76,7 +76,7 @@ public class SummaryAdapter extends RecyclerView.Adapter<SummaryAdapter.ViewHold
 
         @Override
         public void onClick(View v) {
-            WalkthroughOverview summary = getSummary(getAdapterPosition());
+            Walkthrough summary = getSummary(getAdapterPosition());
             itemListener.onSummaryItemClicked(summary);
         }
 

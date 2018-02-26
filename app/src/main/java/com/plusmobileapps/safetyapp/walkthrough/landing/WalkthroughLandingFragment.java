@@ -22,6 +22,7 @@ import com.github.amlcurran.showcaseview.targets.ViewTarget;
 import com.plusmobileapps.safetyapp.PrefManager;
 import com.plusmobileapps.safetyapp.R;
 import com.plusmobileapps.safetyapp.walkthrough.location.LocationActivity;
+import com.plusmobileapps.safetyapp.data.entity.Walkthrough;
 
 import java.util.ArrayList;
 
@@ -38,7 +39,6 @@ public class WalkthroughLandingFragment extends Fragment
     private FloatingActionButton fab;
     private RecyclerView recyclerView;
     private WalkthroughLandingAdapter adapter;
-    private ArrayList<WalkthroughOverview> walkthroughs;
 
     private WalkthroughLandingContract.Presenter presenter;
 
@@ -66,7 +66,7 @@ public class WalkthroughLandingFragment extends Fragment
         overlay = rootView.findViewById(R.id.overlay);
         fab = rootView.findViewById(R.id.floatingActionButton);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapter = new WalkthroughLandingAdapter(new ArrayList<WalkthroughOverview>(0), itemListener);
+        adapter = new WalkthroughLandingAdapter(presenter.getWalkthoughs(), itemListener);
         recyclerView.setAdapter(adapter);
         fab.setOnClickListener(fabListener);
 
@@ -97,7 +97,7 @@ public class WalkthroughLandingFragment extends Fragment
     }
 
     @Override
-    public void showWalkthroughs(ArrayList<WalkthroughOverview> walkthroughs) {
+    public void showWalkthroughs(ArrayList<Walkthrough> walkthroughs) {
         fab.setVisibility(View.VISIBLE);
         adapter.replaceData(walkthroughs);
     }
@@ -144,13 +144,13 @@ public class WalkthroughLandingFragment extends Fragment
     }
 
     @Override
-    public void showConfirmationDialog() {
+    public void showInProcessConfirmationDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setMessage(getString(R.string.walkthrough_dialog_message))
+        builder.setMessage(getString(R.string.walkthrough_in_progress_dialog_message))
                 .setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        presenter.createNewWalkthroughConfirmed();
+                        presenter.deleteInProgressWalkthroughConfirmed();
                     }
                 })
                 .setNegativeButton(getString(R.string.no), new DialogInterface.OnClickListener() {
@@ -202,7 +202,7 @@ public class WalkthroughLandingFragment extends Fragment
     private View.OnClickListener fabListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            presenter.createNewWalkthroughClicked();
+            presenter.createNewWalkthroughIconClicked();
         }
     };
 
