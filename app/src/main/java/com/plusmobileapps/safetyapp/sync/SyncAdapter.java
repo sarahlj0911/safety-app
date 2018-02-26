@@ -36,8 +36,8 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
     Connection conn;
     private AppDatabase db;
 
-    //private static final String url = "jdbc:mysql://10.0.2.2:3306/safetywalkthrough";
-    private static final String url = "jdbc:mysql://safetymysqlinstance.cbcumohyescr.us-west-2.rds.amazonaws.com:3306/safetywalkthrough";
+    private static final String url = "jdbc:mysql://10.0.2.2:3306/safetywalkthrough";
+    //private static final String url = "jdbc:mysql://safetymysqlinstance.cbcumohyescr.us-west-2.rds.amazonaws.com:3306/safetywalkthrough";
     private static final String dbName = "safetywalkthrough";
     private static final String user = "safety_app";
     private static final String pass = "";
@@ -126,20 +126,20 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
             SchoolDao schoolDao = db.schoolDao();
             List<School> schoolList = schoolDao.getAll();
-            int schoolId = 0;
+            //int schoolId = 0;
             String schoolName = "";
 
             if (schoolList != null && !schoolList.isEmpty()) {
                 School school = schoolList.get(0);
-                schoolId = school.getSchoolId();
+                //schoolId = school.getSchoolId();
                 schoolName = school.getSchoolName();
             }
 
             PreparedStatement insertSchool = null;
-            String insertSchoolString = "REPLACE INTO " + dbName + ".schools VALUES (?, ?)";
+            String insertSchoolString = "REPLACE INTO " + dbName + ".schools VALUES (?)";
             insertSchool = conn.prepareStatement(insertSchoolString);
-            insertSchool.setInt(1, schoolId);
-            insertSchool.setString(2, schoolName);
+            //insertSchool.setInt(1, schoolId);
+            insertSchool.setString(1, schoolName);
 
             if (insertSchool.execute()) {
                 Log.d(TAG, "Insert successful!");

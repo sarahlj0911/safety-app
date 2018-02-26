@@ -18,9 +18,8 @@ USE `safetywalkthrough` ;
 -- Table `safetywalkthrough`.`schools`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `safetywalkthrough`.`schools` (
-  `schoolId` INT NOT NULL AUTO_INCREMENT,
   `schoolName` VARCHAR(100) NOT NULL,
-  PRIMARY KEY (`schoolId`))
+  PRIMARY KEY (`schoolName`))
 ENGINE = InnoDB;
 
 
@@ -32,12 +31,12 @@ CREATE TABLE IF NOT EXISTS `safetywalkthrough`.`user` (
   `userName` VARCHAR(100) NOT NULL,
   `emailAddress` VARCHAR(100) NOT NULL,
   `role` VARCHAR(20) NOT NULL,
-  `schoolId` INT NOT NULL,
-  PRIMARY KEY (`userId`, `schoolId`),
-  INDEX `fk_user_schools_idx` (`schoolId` ASC),
+  `schoolName` VARCHAR(100) NOT NULL,
+  PRIMARY KEY (`userId`, `schoolName`),
+  INDEX `fk_user_schools_idx` (`schoolName` ASC),
   CONSTRAINT `fk_user_schools`
-    FOREIGN KEY (`schoolId`)
-    REFERENCES `safetywalkthrough`.`schools` (`schoolId`)
+    FOREIGN KEY (`schoolName`)
+    REFERENCES `safetywalkthrough`.`schools` (`schoolName`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
@@ -51,12 +50,12 @@ CREATE TABLE IF NOT EXISTS `safetywalkthrough`.`location` (
   `name` VARCHAR(45) NOT NULL,
   `type` VARCHAR(45) NOT NULL,
   `locationInstruction` VARCHAR(100) NOT NULL,
-  `schoolId` INT NOT NULL,
-  PRIMARY KEY (`locationId`, `schoolId`),
-  INDEX `fk_location_schools1_idx` (`schoolId` ASC),
+  `schoolName` VARCHAR(100) NOT NULL,
+  PRIMARY KEY (`locationId`, `schoolName`),
+  INDEX `fk_location_schools1_idx` (`schoolName` ASC),
   CONSTRAINT `fk_location_schools1`
-    FOREIGN KEY (`schoolId`)
-    REFERENCES `safetywalkthrough`.`schools` (`schoolId`)
+    FOREIGN KEY (`schoolName`)
+    REFERENCES `safetywalkthrough`.`schools` (`schoolName`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
@@ -82,16 +81,16 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `safetywalkthrough`.`question_mapping` (
   `mappingId` INT NOT NULL,
-  `schoolId` INT NOT NULL,
+  `schoolName` VARCHAR(100) NOT NULL,
   `locationId` INT NOT NULL,
   `questionId` INT NOT NULL,
-  PRIMARY KEY (`mappingId`, `schoolId`),
-  INDEX `fk_question_mapping_schools1_idx` (`schoolId` ASC),
+  PRIMARY KEY (`mappingId`, `schoolName`),
+  INDEX `fk_question_mapping_schools1_idx` (`schoolName` ASC),
   INDEX `fk_question_mapping_location1_idx` (`locationId` ASC),
   INDEX `fk_question_mapping_question1_idx` (`questionId` ASC),
   CONSTRAINT `fk_question_mapping_schools1`
-    FOREIGN KEY (`schoolId`)
-    REFERENCES `safetywalkthrough`.`schools` (`schoolId`)
+    FOREIGN KEY (`schoolName`)
+    REFERENCES `safetywalkthrough`.`schools` (`schoolName`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_question_mapping_location1`
@@ -116,12 +115,12 @@ CREATE TABLE IF NOT EXISTS `safetywalkthrough`.`walkthroughs` (
   `lastUpdatedDate` VARCHAR(32) NULL,
   `createdDate` VARCHAR(32) NULL,
   `percentComplete` DECIMAL(5,2) NULL,
-  `schoolId` INT NOT NULL,
-  PRIMARY KEY (`walkthroughId`, `schoolId`),
-  INDEX `fk_walkthroughs_schools1_idx` (`schoolId` ASC),
+  `schoolName` VARCHAR(100) NOT NULL,
+  PRIMARY KEY (`walkthroughId`, `schoolName`),
+  INDEX `fk_walkthroughs_schools1_idx` (`schoolName` ASC),
   CONSTRAINT `fk_walkthroughs_schools1`
-    FOREIGN KEY (`schoolId`)
-    REFERENCES `safetywalkthrough`.`schools` (`schoolId`)
+    FOREIGN KEY (`schoolName`)
+    REFERENCES `safetywalkthrough`.`schools` (`schoolName`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
@@ -140,12 +139,12 @@ CREATE TABLE IF NOT EXISTS `safetywalkthrough`.`responses` (
   `questionId` INT NOT NULL,
   `walkthroughId` INT NOT NULL,
   `locationId` INT NOT NULL,
-  `schoolId` INT NOT NULL,
-  PRIMARY KEY (`responseId`, `questionId`, `walkthroughId`, `locationId`, `schoolId`),
+  `schoolName` VARCHAR(100) NOT NULL,
+  PRIMARY KEY (`responseId`, `questionId`, `walkthroughId`, `locationId`, `schoolName`),
   INDEX `fk_responses_question1_idx` (`questionId` ASC),
   INDEX `fk_responses_walkthroughs1_idx` (`walkthroughId` ASC),
   INDEX `fk_responses_location1_idx` (`locationId` ASC),
-  INDEX `fk_responses_schools1_idx` (`schoolId` ASC),
+  INDEX `fk_responses_schools1_idx` (`schoolName` ASC),
   CONSTRAINT `fk_responses_question1`
     FOREIGN KEY (`questionId`)
     REFERENCES `safetywalkthrough`.`question` (`questionId`)
@@ -162,8 +161,8 @@ CREATE TABLE IF NOT EXISTS `safetywalkthrough`.`responses` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_responses_schools1`
-    FOREIGN KEY (`schoolId`)
-    REFERENCES `safetywalkthrough`.`schools` (`schoolId`)
+    FOREIGN KEY (`schoolName`)
+    REFERENCES `safetywalkthrough`.`schools` (`schoolName`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
