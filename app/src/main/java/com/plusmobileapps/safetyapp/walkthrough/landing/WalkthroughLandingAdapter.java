@@ -1,6 +1,8 @@
 package com.plusmobileapps.safetyapp.walkthrough.landing;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +17,7 @@ import java.util.List;
 
 public class WalkthroughLandingAdapter extends RecyclerView.Adapter<WalkthroughLandingAdapter.CardViewHolder> {
 
-    private static final String TAG = "WalkthroughLandingAdapter";
+    private static final String TAG = "WalkthruLandingAdapter";
     public static final String EXTRA_WALKTHROUGH = "com.plusmobileapps.safetyapp.walkthrough.landing.WALKTHROUGH";
     public static final int ITEM_TYPE_NORMAL = 1;
     public static final int ITEM_TYPE_HEADER = 0;
@@ -32,6 +34,7 @@ public class WalkthroughLandingAdapter extends RecyclerView.Adapter<WalkthroughL
 
     @Override
     public CardViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        Log.d(TAG, "In onCreateViewHolder");
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.viewholder_landing_walkthrough, parent, false);
         return new CardViewHolder(view);
@@ -40,6 +43,7 @@ public class WalkthroughLandingAdapter extends RecyclerView.Adapter<WalkthroughL
 
     @Override
     public void onBindViewHolder(final CardViewHolder holder, int position) {
+        Log.d(TAG, "In onBindViewHolder");
         if(walkthroughs.size() > 0) {
             walkthrough = walkthroughs.get(position);
             TextView header = holder.getHeader();
@@ -56,20 +60,17 @@ public class WalkthroughLandingAdapter extends RecyclerView.Adapter<WalkthroughL
                 header.setVisibility(View.GONE);
             }
 
-            //TODO: Labels missing
-            holder.getDate().setText(walkthrough.getDate(walkthrough.getCreatedDate()));
-            //            this is not in the db which is why its throwing an error
-            //            holder.getTime().setText(walkthrough.getTime(walkthrough.getLastUpdatedDate()));
+            holder.getModified().setText(R.string.walkthrough_last_modified);
+            holder.getDate().setText(walkthrough.getDate(walkthrough.getLastUpdatedDate()));
+            holder.getTime().setText(walkthrough.getTime(walkthrough.getLastUpdatedDate()));
             holder.getTitle().setText(walkthrough.getName());
 
             //handle progress bar
             if (walkthrough.isInProgress()) {
-                holder.getModified().setText(walkthrough.getDate(walkthrough.getLastUpdatedDate()));
                 holder.getProgressBar().setVisibility(View.VISIBLE);
                 holder.getProgressBar().setProgress((int)walkthrough.getPercentComplete());
             } else {
                 holder.getProgressBar().setVisibility(View.INVISIBLE);
-                holder.getModified().setText(walkthrough.getDate(walkthrough.getLastUpdatedDate()));
             }
         }
 

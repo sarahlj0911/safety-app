@@ -37,15 +37,14 @@
             android:layout_gravity="end|top"
             android:layout_marginRight="@dimen/clearRightMargin"
             android:layout_marginTop="8dp"
-            android:text="Last Modified:" />
+            android:text="@string/last_modified" />
 
         <TextView
             android:id="@+id/viewholder_landing_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end|center"
-            android:layout_marginRight="@dimen/clearRightMargin"
-            android:text="11:00 a.m." />
+            android:layout_marginRight="@dimen/clearRightMargin" />
 
         <TextView
             android:id="@+id/viewholder_landing_date"
@@ -53,8 +52,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="end|bottom"
             android:layout_marginBottom="8dp"
-            android:layout_marginRight="@dimen/clearRightMargin"
-            android:text="Nov 11, 2017" />
+            android:layout_marginRight="@dimen/clearRightMargin" />
 
         <TextView
             android:id="@+id/viewholder_landing_title"

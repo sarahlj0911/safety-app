@@ -9,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -34,7 +35,7 @@ public class WalkthroughLandingFragment extends Fragment
     public static String EXTRA_WALKTHROUGH_NAME = "walkthrough_name";
 
     private static ShowcaseView showcaseView;
-    private static final String TAG = "WalkthroughLandingFragment";
+    private static final String TAG = "WalkthruLandingFragment";
     private PrefManager prefManager;
     private View overlay;
     private FloatingActionButton fab;
@@ -83,7 +84,7 @@ public class WalkthroughLandingFragment extends Fragment
     public void onResume() {
         super.onResume();
         prefManager = new PrefManager(getContext());
-        //if (prefManager.isFirstTimeLaunch()) {
+
         if (!prefManager.isUserSignedUp()) {
             presenter.firstAppLaunch();
         }
@@ -99,8 +100,10 @@ public class WalkthroughLandingFragment extends Fragment
 
     @Override
     public void showWalkthroughs(List<Walkthrough> walkthroughs) {
+        Log.d(TAG, "In showWalkthroughs. walkthroughs.size = " + walkthroughs.size());
         fab.setVisibility(View.VISIBLE);
         adapter.replaceData(walkthroughs);
+        adapter.notifyDataSetChanged();
     }
 
     @Override

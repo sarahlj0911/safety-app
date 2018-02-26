@@ -1,10 +1,13 @@
 package com.plusmobileapps.safetyapp.walkthrough.landing;
 
+import android.os.AsyncTask;
+
 import java.util.ArrayList;
 
 import com.plusmobileapps.safetyapp.data.entity.Walkthrough;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 public class WalkthroughLandingPresenter implements WalkthroughLandingContract.Presenter {
 
@@ -38,12 +41,6 @@ public class WalkthroughLandingPresenter implements WalkthroughLandingContract.P
     @Override
     public void createNewWalkthroughIconClicked() {
         if(walkthroughs.size() > 0) {
-            // Walkthrough in db doesn't align to how I set these up. This corrects it until we
-            // add walkthroughs that conform. Changed it to 80% complete to test logic.
-            Date d = new Date();
-            walkthroughs.get(0).setCreatedDate(d.toString());
-            walkthroughs.get(0).setLastUpdatedDate(d.toString());
-            walkthroughs.get(0).setPercentComplete(80.0);
             if(walkthroughs.get(0).isInProgress()) {
                 view.showInProcessConfirmationDialog();
             } else {
@@ -66,7 +63,7 @@ public class WalkthroughLandingPresenter implements WalkthroughLandingContract.P
     @Override
     public void confirmCreateWalkthroughClicked(String title) {
         walkthrough = new Walkthrough(title);
-        new SaveNewWalkthrough(walkthrough, view);
+        new SaveNewWalkthrough(walkthrough, view).execute();
     }
 
 
