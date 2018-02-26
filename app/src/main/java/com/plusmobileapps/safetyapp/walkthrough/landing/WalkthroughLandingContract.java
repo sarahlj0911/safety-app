@@ -5,11 +5,12 @@ import com.plusmobileapps.safetyapp.BaseView;
 import com.plusmobileapps.safetyapp.data.entity.Walkthrough;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public interface WalkthroughLandingContract {
 
     interface View extends BaseView<Presenter>{
-        void showWalkthroughs(ArrayList<Walkthrough> walkthroughs);
+        void showWalkthroughs(List<Walkthrough> walkthroughs);
         void openWalkthrough(long id, String title);
         void createNewWalkthrough(String title);
         void showTutorial();
@@ -23,6 +24,5 @@ public interface WalkthroughLandingContract {
         void firstAppLaunch();
         void deleteInProgressWalkthroughConfirmed();
         void confirmCreateWalkthroughClicked(String title);
-        ArrayList getWalkthoughs();
     }
 }

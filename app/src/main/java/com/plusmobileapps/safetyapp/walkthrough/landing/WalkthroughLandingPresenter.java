@@ -4,11 +4,12 @@ import java.util.ArrayList;
 
 import com.plusmobileapps.safetyapp.data.entity.Walkthrough;
 import java.util.Date;
+import java.util.List;
 
 public class WalkthroughLandingPresenter implements WalkthroughLandingContract.Presenter {
 
     private WalkthroughLandingContract.View view;
-    private ArrayList<Walkthrough> walkthroughs;
+    private List<Walkthrough> walkthroughs;
     private Walkthrough walkthrough;
 
     public WalkthroughLandingPresenter(WalkthroughLandingContract.View view) {
@@ -58,7 +59,7 @@ public class WalkthroughLandingPresenter implements WalkthroughLandingContract.P
     }
 
 
-    public void setupLandingUi(ArrayList walkthroughs) {
+    private void setupLandingUi(List<Walkthrough> walkthroughs) {
         view.showWalkthroughs(walkthroughs);
     }
 
@@ -68,10 +69,6 @@ public class WalkthroughLandingPresenter implements WalkthroughLandingContract.P
         new SaveNewWalkthrough(walkthrough, view);
     }
 
-    @Override
-    public ArrayList getWalkthoughs() {
-        return walkthroughs;
-    }
 
     @Override
     public void firstAppLaunch() {
@@ -80,7 +77,7 @@ public class WalkthroughLandingPresenter implements WalkthroughLandingContract.P
 
     private WalkthroughListLoadingListener listener = new WalkthroughListLoadingListener() {
         @Override
-        public void onWalkthroughListLoaded(ArrayList<Walkthrough> allWalkthroughs) {
+        public void onWalkthroughListLoaded(List<Walkthrough> allWalkthroughs) {
             walkthroughs = allWalkthroughs;
             setupLandingUi(walkthroughs);
 
@@ -88,6 +85,6 @@ public class WalkthroughLandingPresenter implements WalkthroughLandingContract.P
     };
 
     interface WalkthroughListLoadingListener {
-        void onWalkthroughListLoaded(ArrayList<Walkthrough> allWalkthroughs);
+        void onWalkthroughListLoaded(List<Walkthrough> allWalkthroughs);
     }
 }

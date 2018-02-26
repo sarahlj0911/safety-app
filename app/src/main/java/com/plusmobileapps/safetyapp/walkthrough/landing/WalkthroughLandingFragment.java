@@ -25,6 +25,7 @@ import com.plusmobileapps.safetyapp.walkthrough.location.LocationActivity;
 import com.plusmobileapps.safetyapp.data.entity.Walkthrough;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class WalkthroughLandingFragment extends Fragment
         implements OnShowcaseEventListener, WalkthroughLandingContract.View {
@@ -66,7 +67,7 @@ public class WalkthroughLandingFragment extends Fragment
         overlay = rootView.findViewById(R.id.overlay);
         fab = rootView.findViewById(R.id.floatingActionButton);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapter = new WalkthroughLandingAdapter(presenter.getWalkthoughs(), itemListener);
+        adapter = new WalkthroughLandingAdapter(new ArrayList<Walkthrough>(0), itemListener);
         recyclerView.setAdapter(adapter);
         fab.setOnClickListener(fabListener);
 
@@ -97,7 +98,7 @@ public class WalkthroughLandingFragment extends Fragment
     }
 
     @Override
-    public void showWalkthroughs(ArrayList<Walkthrough> walkthroughs) {
+    public void showWalkthroughs(List<Walkthrough> walkthroughs) {
         fab.setVisibility(View.VISIBLE);
         adapter.replaceData(walkthroughs);
     }

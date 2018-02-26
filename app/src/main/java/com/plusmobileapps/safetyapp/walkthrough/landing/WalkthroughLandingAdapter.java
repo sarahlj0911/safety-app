@@ -11,6 +11,7 @@ import com.plusmobileapps.safetyapp.R;
 import com.plusmobileapps.safetyapp.data.entity.Walkthrough;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class WalkthroughLandingAdapter extends RecyclerView.Adapter<WalkthroughLandingAdapter.CardViewHolder> {
 
@@ -22,7 +23,7 @@ public class WalkthroughLandingAdapter extends RecyclerView.Adapter<WalkthroughL
     private int walkthroughCount = 0;
     private WalkthroughLandingFragment.WalkthroughLandingItemListener itemListener;
 
-    private ArrayList<Walkthrough> walkthroughs;
+    private List<Walkthrough> walkthroughs;
 
     public WalkthroughLandingAdapter(ArrayList<Walkthrough> walkthroughs, WalkthroughLandingFragment.WalkthroughLandingItemListener itemListener) {
         this.walkthroughs = walkthroughs;
@@ -79,7 +80,7 @@ public class WalkthroughLandingAdapter extends RecyclerView.Adapter<WalkthroughL
         return walkthroughs.size();
     }
 
-    public void replaceData(ArrayList<Walkthrough> walkthroughs) {
+    public void replaceData(List<Walkthrough> walkthroughs) {
         this.walkthroughs = walkthroughs;
     }
 

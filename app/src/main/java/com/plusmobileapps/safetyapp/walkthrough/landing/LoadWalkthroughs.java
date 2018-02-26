@@ -8,15 +8,16 @@ import com.plusmobileapps.safetyapp.data.dao.WalkthroughDao;
 import com.plusmobileapps.safetyapp.data.entity.Walkthrough;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by kneil on 2/21/2018.
  */
 
-public class LoadWalkthroughs extends AsyncTask<Void, Void, ArrayList<com.plusmobileapps.safetyapp.data.entity.Walkthrough>> {
+public class LoadWalkthroughs extends AsyncTask<Void, Void, List<Walkthrough>> {
 
     private AppDatabase db;
-    private ArrayList<Walkthrough> walkthroughs;
+    private List<Walkthrough> walkthroughs;
     private WalkthroughLandingContract.View view;
     private WalkthroughLandingPresenter.WalkthroughListLoadingListener listener;
 
@@ -25,14 +26,14 @@ public class LoadWalkthroughs extends AsyncTask<Void, Void, ArrayList<com.plusmo
     }
 
     @Override
-    protected ArrayList<Walkthrough> doInBackground(Void... voids) {
+    protected List<Walkthrough> doInBackground(Void... voids) {
         db = AppDatabase.getAppDatabase((MyApplication.getAppContext()));
         WalkthroughDao dao = db.walkthroughDao();
-        walkthroughs = (ArrayList)dao.getAll();
+        walkthroughs = dao.getAll();
         return walkthroughs;
     }
 
-    protected void onPostExecute(ArrayList<com.plusmobileapps.safetyapp.data.entity.Walkthrough> walkthroughs) {
+    protected void onPostExecute(List<Walkthrough> walkthroughs) {
         listener.onWalkthroughListLoaded(walkthroughs);
     }
 }
