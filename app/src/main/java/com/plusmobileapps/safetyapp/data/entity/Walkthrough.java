@@ -3,19 +3,17 @@ package com.plusmobileapps.safetyapp.data.entity;
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.ForeignKey;
+import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 
 import java.util.Date;
-
-/**
- * Created by aaronmusengo on 1/23/18.
- */
 
 @Entity(tableName = "walkthroughs",
         foreignKeys = @ForeignKey(entity = School.class,
                                   parentColumns = "schoolId",
                                   childColumns = "schoolId"))
 public class Walkthrough {
+
     @PrimaryKey(autoGenerate = true)
     private int walkthroughId;
 
@@ -34,11 +32,15 @@ public class Walkthrough {
     @ColumnInfo(name = "lastUpdatedDate")
     private String lastUpdatedDate;
 
-    public Walkthrough( String name, double percentComplete, String createdDate, String lastUpdatedDate, int schoolId) {
+    public Walkthrough( String name) {
+
         this.name = name;
-        this.createdDate = createdDate;
-        this.lastUpdatedDate = lastUpdatedDate;
-        this.schoolId = schoolId;
+        percentComplete = 0.0;
+        Date date = new Date();
+        createdDate = date.toString();
+        lastUpdatedDate = createdDate;
+        schoolId = 1;
+
     }
 
     //Getters
@@ -53,6 +55,24 @@ public class Walkthrough {
     public String  getLastUpdatedDate() { return this.lastUpdatedDate; }
 
     public int getSchoolId() { return this.schoolId; }
+
+    public String getDate(String date) {
+        String[] tmp = date.split(" ");
+        String temp = tmp[1] + " " + tmp[2] + ", " + tmp[tmp.length - 1];
+        return temp;
+    }
+
+    public String getTime(String date) {
+        String[] tmp = date.split(" ");
+        int hour =  Integer.parseInt(tmp[3].substring(0, 2));
+        if(hour < 12) {
+            return tmp[3].substring(0, 5) + " AM";
+        } else if(hour == 12) {
+            return tmp[3].substring(0, 5) + " PM";
+        } else {
+            return hour - 12 + tmp[3].substring(2, 5) + " PM";
+        }
+    }
 
     //Setters
     public void setWalkthroughId(int walkthroughId) {
@@ -78,5 +98,13 @@ public class Walkthrough {
     public void setSchoolId(int schoolId) {
         this.schoolId = schoolId;
     }
+
+
+    public boolean isInProgress() {
+        int complete = ((int) percentComplete);
+        return complete != 100;
+    }
+
+
 }
 

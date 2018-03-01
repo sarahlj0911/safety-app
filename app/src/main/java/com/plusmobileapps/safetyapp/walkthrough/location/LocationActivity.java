@@ -33,7 +33,7 @@ public class LocationActivity extends AppCompatActivity implements LocationContr
 
         Intent intent = getIntent();
         String title = intent.getStringExtra(WalkthroughLandingFragment.EXTRA_WALKTHROUGH_NAME);
-        int id = intent.getIntExtra(WalkthroughLandingFragment.EXTRA_WALKTHROUGH_ID, -1);
+        int id = intent.getIntExtra("walkthroughId", -1);//TODO: FIX
         new LocationPresenter(this, id);
 
         Toolbar toolbar = findViewById(R.id.location_toolbar);
