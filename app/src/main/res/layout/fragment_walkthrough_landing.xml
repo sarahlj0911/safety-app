@@ -29,5 +29,15 @@
         android:clickable="true"
         android:visibility="gone"/>
 
+    <TextView
+        android:id="@+id/no_walkthrough"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="You don't have any walkthroughs."
+        android:textSize="30sp"
+        android:gravity="center"
+        android:layout_margin="20dp"
+        android:textColor="#000000"/>
+
 
 </FrameLayout>
