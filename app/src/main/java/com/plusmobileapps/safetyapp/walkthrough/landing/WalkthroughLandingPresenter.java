@@ -1,6 +1,10 @@
 package com.plusmobileapps.safetyapp.walkthrough.landing;
 
+
 import android.os.AsyncTask;
+
+import com.plusmobileapps.safetyapp.data.entity.Walkthrough;
+
 
 import java.util.ArrayList;
 

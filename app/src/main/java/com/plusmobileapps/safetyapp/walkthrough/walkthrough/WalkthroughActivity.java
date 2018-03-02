@@ -56,6 +56,7 @@ public class WalkthroughActivity extends AppCompatActivity implements Walkthroug
         previousButton.setOnClickListener(previousButtonListener);
         Button nextButton = findViewById(R.id.next_question);
         nextButton.setOnClickListener(nextButtonListener);
+
     }
 
     @Override

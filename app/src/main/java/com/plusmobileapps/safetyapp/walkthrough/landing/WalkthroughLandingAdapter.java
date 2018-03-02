@@ -27,7 +27,7 @@ public class WalkthroughLandingAdapter extends RecyclerView.Adapter<WalkthroughL
 
     private List<Walkthrough> walkthroughs;
 
-    public WalkthroughLandingAdapter(ArrayList<Walkthrough> walkthroughs, WalkthroughLandingFragment.WalkthroughLandingItemListener itemListener) {
+    public WalkthroughLandingAdapter(List<Walkthrough> walkthroughs, WalkthroughLandingFragment.WalkthroughLandingItemListener itemListener) {
         this.walkthroughs = walkthroughs;
         this.itemListener = itemListener;
     }

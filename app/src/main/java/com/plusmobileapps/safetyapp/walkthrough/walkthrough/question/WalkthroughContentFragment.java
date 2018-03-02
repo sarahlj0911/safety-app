@@ -80,6 +80,8 @@ public class WalkthroughContentFragment extends Fragment implements View.OnClick
         View view = inflater.inflate(R.layout.fragment_walkthrough_question, container, false);
         String walkthroughJsonObject = getArguments().getString("walkthroughQuestion");
 
+        response = new Response();
+
         walkthroughQuestion = new Gson().fromJson(walkthroughJsonObject, Question.class);
         initViews(view);
         generateQuestionView(view, walkthroughQuestion);
@@ -246,14 +248,17 @@ public class WalkthroughContentFragment extends Fragment implements View.OnClick
             case R.id.priority_btn_red:
                 priority = Priority.HIGH;
                 presenter.priorityClicked(priority);
+                response.setPriority(2);
                 break;
             case R.id.priority_btn_yellow:
                 priority = Priority.MEDIUM;
                 presenter.priorityClicked(priority);
+                response.setPriority(1);
                 break;
             case R.id.priority_btn_green:
                 priority = Priority.NONE;
                 presenter.priorityClicked(priority);
+                response.setPriority(0);
                 break;
             default:
                 break;
@@ -303,6 +308,7 @@ public class WalkthroughContentFragment extends Fragment implements View.OnClick
         File storageDir = this.getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         File image = File.createTempFile(imageFileName, ".jpg", storageDir);
         photoPath = image.getAbsolutePath();
+        response.setImage(photoPath);
         return image;
     }
 

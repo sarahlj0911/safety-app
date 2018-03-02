@@ -103,18 +103,18 @@ public class ActionItemDetailPresenter implements ActionItemDetailContract.Prese
         @Override
         public void onResponseLoaded(Response response) {
             originalResponse = response;
-            editedResponse = new Response(
-                    response.getResponseId(),
-                    response.getIsActionItem(),
-                    response.getLocationId(),
-                    response.getTimeStamp(),
-                    response.getRating(),
-                    response.getPriority(),
-                    response.getActionPlan(),
-                    response.getQuestionId(),
-                    response.getImagePath(),
-                    response.getUserId(),
-                    response.getWalkthroughId());
+            editedResponse = new Response();
+//                    response.getResponseId(),
+//                    response.getIsActionItem(),
+//                    response.getLocationId(),
+//                    response.getTimeStamp(),
+//                    response.getRating(),
+//                    response.getPriority(),
+//                    response.getActionPlan(),
+//                    response.getQuestionId(),
+//                    response.getImagePath(),
+//                    response.getUserId(),
+//                    response.getWalkthroughId());
             setupUi();
         }
     };

@@ -49,6 +49,7 @@ public class WalkthroughContentPresenter implements WalkthroughFragmentContract.
 
     @Override
     public Response getResponse() {
+
         return view.getResponse();
     }
 }

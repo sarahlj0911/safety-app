@@ -33,7 +33,7 @@ public class WalkthroughPresenter implements WalkthroughContract.Presenter {
     @Override
     public void start(int locationId, int walkthroughId) {
        loadQuestions(locationId);
-       loadResponses(locationId, walkthroughId);
+        loadResponses(locationId, walkthroughId);
        this.walkthroughId = walkthroughId;
     }
 
@@ -90,6 +90,7 @@ public class WalkthroughPresenter implements WalkthroughContract.Presenter {
     @Override
     public void backButtonPressed() {
         view.showConfirmationDialog();
+        //saveResponses();
     }
 
     public void setQuestions(List<Question> questions) {
@@ -100,10 +101,10 @@ public class WalkthroughPresenter implements WalkthroughContract.Presenter {
 
     private void saveResponses() {
         //TODO create async task to save responses
-        SaveResponses save = new SaveResponses();
-        save.responses = responses;
-        save.execute();
-        view.closeWalkthrough();
+//        SaveResponses save = new SaveResponses();
+//        save.responses = responses;
+//        save.execute();
+//        view.closeWalkthrough();
     }
 
     static class SaveResponses extends AsyncTask<Void,Void, Boolean> {
