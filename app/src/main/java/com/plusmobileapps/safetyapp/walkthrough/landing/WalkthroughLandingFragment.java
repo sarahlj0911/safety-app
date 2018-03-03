@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.github.amlcurran.showcaseview.OnShowcaseEventListener;
 import com.github.amlcurran.showcaseview.ShowcaseView;
@@ -38,6 +39,7 @@ public class WalkthroughLandingFragment extends Fragment
     private static final String TAG = "WalkthruLandingFragment";
     private PrefManager prefManager;
     private View overlay;
+    private View noWalkthroughs;
     private FloatingActionButton fab;
     private RecyclerView recyclerView;
     private WalkthroughLandingAdapter adapter;
@@ -66,6 +68,7 @@ public class WalkthroughLandingFragment extends Fragment
         rootView.setTag(TAG);
         recyclerView = rootView.findViewById(R.id.landing_walkthrough_recyclerview);
         overlay = rootView.findViewById(R.id.overlay);
+        noWalkthroughs = rootView.findViewById(R.id.no_walkthrough);
         fab = rootView.findViewById(R.id.floatingActionButton);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         adapter = new WalkthroughLandingAdapter(new ArrayList<Walkthrough>(0), itemListener);
@@ -101,6 +104,7 @@ public class WalkthroughLandingFragment extends Fragment
     @Override
     public void showWalkthroughs(List<Walkthrough> walkthroughs) {
         Log.d(TAG, "In showWalkthroughs. walkthroughs.size = " + walkthroughs.size());
+        showNoWalkthroughs(walkthroughs.size() == 0);
         fab.setVisibility(View.VISIBLE);
         adapter.replaceData(walkthroughs);
         adapter.notifyDataSetChanged();
@@ -189,6 +193,14 @@ public class WalkthroughLandingFragment extends Fragment
                 });
         AlertDialog dialog = builder.create();
         dialog.show();
+    }
+
+    public void showNoWalkthroughs(boolean show) {
+        if(show) {
+            noWalkthroughs.setVisibility(View.VISIBLE);
+        } else {
+            noWalkthroughs.setVisibility(View.GONE);
+        }
     }
 
     /**
