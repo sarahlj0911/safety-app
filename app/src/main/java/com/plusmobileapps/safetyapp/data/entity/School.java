@@ -16,16 +16,26 @@ public class School {
     @ColumnInfo(name = "schoolName")
     private String schoolName;
 
+    @ColumnInfo(name = "remoteId")
+    private int remoteId;
+
     public School(int schoolId, String schoolName) {
         this.schoolId = schoolId;
         this.schoolName = schoolName;
+        this.remoteId = 0;
     }
 
     //getters
     public int getSchoolId() { return this.schoolId; }
     public String getSchoolName() { return this.schoolName; }
+    public int getRemoteId() {
+        return this.remoteId;
+    }
 
     //setters
     public void setSchoolId(int schoolId) { this.schoolId = schoolId; }
     public void setSchoolName(String schoolName) { this.schoolName = schoolName;}
+    public void setRemoteId(int remoteId) {
+        this.remoteId = remoteId;
+    }
 }

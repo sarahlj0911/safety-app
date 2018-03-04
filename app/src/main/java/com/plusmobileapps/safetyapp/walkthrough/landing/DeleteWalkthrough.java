@@ -18,13 +18,16 @@ public class DeleteWalkthrough extends AsyncTask<Void, Void, Void> {
     public DeleteWalkthrough(Walkthrough walkthrough, WalkthroughLandingContract.View view) {
         this.walkthrough = walkthrough;
         this.view = view;
+
+        this.walkthrough.setIsDeleted(1);
     }
 
     @Override
     protected Void doInBackground(Void... voids) {
         db = AppDatabase.getAppDatabase(MyApplication.getAppContext());
         WalkthroughDao dao = db.walkthroughDao();
-        dao.delete(walkthrough);
+        //dao.delete(walkthrough);
+        dao.logicalDelete(walkthrough);
         return null;
     }
 }

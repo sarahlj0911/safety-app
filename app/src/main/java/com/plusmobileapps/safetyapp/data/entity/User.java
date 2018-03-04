@@ -31,12 +31,16 @@ public class User {
     @ColumnInfo(name = "role")
     private String role;
 
+    @ColumnInfo(name = "remoteId")
+    private int remoteId;
+
     public User(int userId, int schoolId, String emailAddress, String userName, String role) {
         this.userId = userId;
         this.schoolId = schoolId;
         this.emailAddress = emailAddress;
         this.role = role;
         this.userName = userName;
+        this.remoteId = 0;
     }
 
     //Getters
@@ -60,6 +64,10 @@ public class User {
         return role;
     }
 
+    public int getRemoteId() {
+        return remoteId;
+    }
+
     //Setters
     public void setUserId(int userId) {
         this.userId = userId;
@@ -79,5 +87,9 @@ public class User {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public void setRemoteId(int remoteId) {
+        this.remoteId = remoteId;
     }
 }
