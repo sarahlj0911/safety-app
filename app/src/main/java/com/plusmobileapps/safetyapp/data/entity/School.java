@@ -38,4 +38,8 @@ public class School {
     public void setRemoteId(int remoteId) {
         this.remoteId = remoteId;
     }
+
+    public boolean isRegistered() {
+        return remoteId > 0;
+    }
 }
