@@ -49,6 +49,7 @@ public class PrefManager {
 
     public void setUserSeenCreateWalkthroughTutorial(boolean seen) {
         editor.putBoolean(HAS_SEEN_CREATE_WALKTHROUGH_TUTORIAL, seen);
+        editor.commit();
     }
 
     public boolean getHasSeenCreateWalkthroughTutorial() {
