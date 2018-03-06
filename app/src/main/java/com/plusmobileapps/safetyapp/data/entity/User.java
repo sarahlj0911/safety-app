@@ -34,6 +34,8 @@ public class User {
     @ColumnInfo(name = "remoteId")
     private int remoteId;
 
+    // TODO Add isRegistered field
+
     public User(int userId, int schoolId, String emailAddress, String userName, String role) {
         this.userId = userId;
         this.schoolId = schoolId;

@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.plusmobileapps.safetyapp.MyApplication;
+import com.plusmobileapps.safetyapp.PrefManager;
 import com.plusmobileapps.safetyapp.data.AppDatabase;
 import com.plusmobileapps.safetyapp.data.dao.SchoolDao;
 import com.plusmobileapps.safetyapp.data.dao.UserDao;
@@ -23,6 +24,7 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -33,9 +35,9 @@ import java.util.List;
 public class SyncAdapter extends AbstractThreadedSyncAdapter {
     private static final String TAG = "SyncAdapter";
     // Global variables
-    // Define a variable to contain a content resolver instance
     ContentResolver mContentResolver;
     Connection conn;
+    private PrefManager prefManager;
     private AppDatabase db;
     private SchoolDao schoolDao;
     private UserDao userDao;
@@ -45,7 +47,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
     //private static final String url = "jdbc:mysql://safetymysqlinstance.cbcumohyescr.us-west-2.rds.amazonaws.com:3306/safetywalkthrough";
     private static final String dbName = "safetywalkthrough";
     private static final String appId = "safety_app";
-    private static final String pass = "J7jd!ETRysdxrTGh";
+    private static final String pass = "";
 
     /**
      * Set up the sync adapter
@@ -57,6 +59,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
          * from the incoming Context
          */
         mContentResolver = context.getContentResolver();
+        prefManager = new PrefManager(context);
     }
 
     /**
@@ -74,11 +77,22 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
          * from the incoming Context
          */
         mContentResolver = context.getContentResolver();
+        prefManager = new PrefManager(context);
     }
 
     @Override
     public void onPerformSync(Account account, Bundle extras, String authority,
                               ContentProviderClient provider, SyncResult syncResult) {
+        if (!prefManager.isUserSignedUp()) {
+            return;
+        }
+
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
         School school = null;
         User user = null;
         boolean schoolRegistered = false;
@@ -93,31 +107,83 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
         schoolDao = db.schoolDao();
         userDao = db.userDao();
 
-        List<School> schoolList = schoolDao.getAll();
+        school = schoolDao.get();
+        if (!school.isRegistered()) {
+            remoteSchoolId = registerSchool(school);
+        }
 
-        if (schoolList != null && !schoolList.isEmpty()) {
-            school = schoolList.get(0);
+        Log.d(TAG, "Registered school remote id = " + remoteSchoolId);
 
-            if (school.isRegistered()) {
-                schoolRegistered = true;
+        /*user = userDao.getUser();
+        userRegistered = user.isRegistered();
+        userEmail = user.getEmailAddress();*/
+
+    }
+
+    public int registerSchool(School school) {
+        String schoolName = school.getSchoolName();
+        int remoteId = 0;
+        List<Statement> statements = new ArrayList<>();
+        List<ResultSet> resultSets = new ArrayList<>();
+
+        PreparedStatement selectSchoolStmt = null;
+        Statement getNextSchoolId = null;
+        PreparedStatement insertSchoolStmt = null;
+
+        ResultSet rs = null;
+        ResultSet nextSchoolIdRs = null;
+
+        try {
+            conn = DriverManager.getConnection(url, appId, pass);
+            conn.setAutoCommit(false);
+            Log.d(TAG, "Successfully connected to database on host [" + url + "]");
+
+            String selectSchool = "SELECT schoolId FROM schools WHERE schoolName = ?";
+            selectSchoolStmt = conn.prepareStatement(selectSchool);
+            statements.add(selectSchoolStmt);
+            selectSchoolStmt.setString(1, schoolName);
+
+            rs = selectSchoolStmt.executeQuery();
+            resultSets.add(rs);
+
+            while (rs.next()) {
+                if (rs.getInt(1) == 0) {
+                    getNextSchoolId = conn.createStatement();
+                    statements.add(getNextSchoolId);
+                    nextSchoolIdRs = getNextSchoolId.executeQuery("SELECT MAX(schoolId) " +
+                            "FROM schools");
+                    resultSets.add(nextSchoolIdRs);
+
+                    while (nextSchoolIdRs.next()) {
+                        Log.d(TAG, "next school id = " + nextSchoolIdRs.getInt(1));
+                        remoteId = nextSchoolIdRs.getInt(1) + 1;
+                    }
+
+                    Log.d(TAG, "Inserting school with values [" + remoteId + ", " + schoolName +"]");
+                    String insertSchool = "INSERT INTO schools VALUES (?, ?)";
+                    insertSchoolStmt = conn.prepareStatement(insertSchool);
+                    statements.add(insertSchoolStmt);
+                    insertSchoolStmt.setInt(1, remoteId);
+                    insertSchoolStmt.setString(2, schoolName);
+                    insertSchoolStmt.execute();
+
+                    // Commit insert
+                    conn.commit();
+                    Log.d(TAG, "Successfully registered school");
+                    // Rollback if there was a problem inserting
+                    conn.rollback();
+                } else {
+                    remoteId = rs.getInt(1);
+                }
             }
-
-            schoolName = school.getSchoolName();
+        } catch(Exception e) {
+            e.printStackTrace();
+            Log.d(TAG, "Problem syncing school data: " + e.getMessage());
+        } finally {
+            cleanup(resultSets, statements, conn);
         }
 
-        user = userDao.getUser();
-
-        if (user.isRegistered()) {
-            userRegistered = true;
-        }
-
-        userEmail = user.getEmailAddress();
-
-        HashMap<String, Integer> remoteIdMap = new HashMap<>();
-
-        if (!schoolRegistered || !userRegistered) {
-            remoteIdMap = registerSchoolAndUser(school, user);
-        }
+        return remoteId;
     }
 
     public boolean testConnection() {
@@ -213,34 +279,40 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
     public HashMap<String, Integer> registerSchoolAndUser(School school, User user) {
         HashMap<String, Integer> remoteIdMap = new HashMap<>();
+        boolean schoolFound = true;
         boolean userFound = false;
 
-        try {
-            Class.forName("com.mysql.jdbc.Driver");
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
+
 
         try {
             conn = DriverManager.getConnection(url, appId, pass);
             Log.d(TAG, "Successfully connected to database on host [" + url + "]");
 
             PreparedStatement selectSchoolAndUserStmt = null;
-            String selectSchoolAndUser = "SELECT s.schoolId, u.userId, u.emailAddress FROM schools s" +
-                    "LEFT OUTER JOIN user u ON s.schoolId = u.schoolId" +
+            String selectSchoolAndUser = "SELECT s.schoolId, u.emailAddress, u.userId FROM schools s " +
+                    "LEFT OUTER JOIN user u ON s.schoolId = u.schoolId " +
                     "WHERE s.schoolName = ?";
             selectSchoolAndUserStmt = conn.prepareStatement(selectSchoolAndUser);
             selectSchoolAndUserStmt.setString(1, school.getSchoolName());
 
             ResultSet rs = selectSchoolAndUserStmt.executeQuery();
 
+            if (!rs.next()) {
+                schoolFound = false;
+                userFound = false;
+            }
+
             while (rs.next()) {
                 remoteIdMap.put("remoteSchoolId", rs.getInt(1));
-                if (rs.getString(3).equals(user.getEmailAddress())) {
-                    remoteIdMap.put("remoteUserId", rs.getInt(2));
-                    break;
+                if (rs.getString(2).equals(user.getEmailAddress())) {
+                    remoteIdMap.put("remoteUserId", rs.getInt(3));
+                    userFound = true;
                 }
             }
+
+            /*if (!userFound) {
+                Statement
+            }*/
 
             if (!rs.next()) {
                 Statement maxSchoolIdStmt = conn.createStatement();
@@ -274,6 +346,17 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
         return remoteIdMap;
     }
 
-
+    public void cleanup(List<ResultSet> resultSets, List<Statement> statements, Connection conn) {
+        try {
+            for (ResultSet rs : resultSets) {
+                if (rs != null) {
+                    rs.close();
+                }
+            }
+        } catch (SQLException sqle) {
+            sqle.printStackTrace();
+            Log.d(TAG, sqle.getMessage());
+        }
+    }
 
 }

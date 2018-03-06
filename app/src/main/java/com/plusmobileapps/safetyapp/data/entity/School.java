@@ -19,6 +19,8 @@ public class School {
     @ColumnInfo(name = "remoteId")
     private int remoteId;
 
+    // TODO Add isRegistered field
+
     public School(int schoolId, String schoolName) {
         this.schoolId = schoolId;
         this.schoolName = schoolName;
