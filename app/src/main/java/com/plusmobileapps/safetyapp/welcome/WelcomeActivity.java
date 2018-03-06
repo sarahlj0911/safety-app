@@ -40,10 +40,12 @@ public class WelcomeActivity extends AppCompatActivity {
 
         // Checking for first time launch - before calling setContentView()
         prefManager = new PrefManager(this);
-        if (!prefManager.isFirstTimeLaunch()) {
-            //launchHomeScreen();
-            launchSignupScreen();
-            finish();
+        if (prefManager.isTutorialSeen()) {
+            if(prefManager.isUserSignedUp()) {
+                launchMainScreen();
+            } else {
+                launchSignupScreen();
+            }
         }
 
         setContentView(R.layout.activity_welcome);
@@ -89,6 +91,7 @@ public class WelcomeActivity extends AppCompatActivity {
                     // move to next screen
                     welcomeViewPager.setCurrentItem(current);
                 } else {
+                    prefManager.setIsTutorialSeen(true);
                     //launchHomeScreen();
                     launchSignupScreen();
                 }
@@ -124,10 +127,10 @@ public class WelcomeActivity extends AppCompatActivity {
         finish();
     }
 
-    /*private void launchHomeScreen() {
+    private void launchMainScreen() {
         startActivity(new Intent(WelcomeActivity.this, MainActivity.class));
         finish();
-    }*/
+    }
 
     //  viewpager change listener
     ViewPager.OnPageChangeListener viewPagerPageChangeListener = new ViewPager.OnPageChangeListener() {
