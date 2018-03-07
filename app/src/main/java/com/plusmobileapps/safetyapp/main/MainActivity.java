@@ -37,12 +37,12 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
     // An account type, in the form of a domain name
     public static final String ACCOUNT_TYPE = "safetyapp.com";
     // The account name
-    public static final String ACCOUNT = "dummyaccount";
+    public static final String ACCOUNT = "default_account";
     // Instance fields
     Account account;
     // Sync interval constants
     public static final long SECONDS_PER_MINUTE = 60L;
-    public static final long SYNC_INTERVAL_IN_MINUTES = 5L;
+    public static final long SYNC_INTERVAL_IN_MINUTES = 60L;
     public static final long SYNC_INTERVAL = SYNC_INTERVAL_IN_MINUTES * SECONDS_PER_MINUTE;
     // Global variables
     // A content resolver for accessing the provider
@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
         // Get the content resolver
         mResolver = getContentResolver();
         // Turn on periodic syncing
-        ContentResolver.addPeriodicSync(
+        mResolver.addPeriodicSync(
                 account, AUTHORITY, Bundle.EMPTY, SYNC_INTERVAL
         );
 
@@ -214,7 +214,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
              * then call context.setIsSyncable(account, AUTHORITY, 1) here.
              */
         } else {
-            Log.d(TAG, "The account exists or some other error occurred. Do something!");
+            Log.d(TAG, "Account already exists or some other error occurred.");
         }
 
         Log.d(TAG, "Sync account created!");

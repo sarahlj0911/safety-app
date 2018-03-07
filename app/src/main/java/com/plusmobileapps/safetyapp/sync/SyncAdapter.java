@@ -6,6 +6,7 @@ import android.content.ContentProviderClient;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.SyncResult;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -44,10 +45,10 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
     // Connection properties
     //private static final String url = "jdbc:mysql://10.0.2.2:3306/safetywalkthrough";
-    private static final String url = "jdbc:mysql://safetymysqlinstance.cbcumohyescr.us-west-2.rds.amazonaws.com:3306/safetywalkthrough";
+    private static final String url = "jdbc:mysql://safetymysqlinstance.cbcumohyescr.us-west-2.rds.amazonaws.com:3306/safetywalkthrough?useSSL=false";
     private static final String dbName = "safetywalkthrough";
     private static final String appId = "safety_app";
-    private static final String pass = "";
+    private static final String pass = "J7jd!ETRysdxrTGh";
 
     /**
      * Set up the sync adapter
@@ -84,8 +85,10 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
     public void onPerformSync(Account account, Bundle extras, String authority,
                               ContentProviderClient provider, SyncResult syncResult) {
         if (!prefManager.isUserSignedUp()) {
+            Log.d(TAG, "PrefManager says user isn't signed up, so not running sync");
             return;
         }
+        Log.d(TAG, "Performing sync");
 
         try {
             Class.forName("com.mysql.jdbc.Driver");
