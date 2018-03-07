@@ -88,7 +88,7 @@ public class WalkthroughLandingFragment extends Fragment
         super.onResume();
         prefManager = new PrefManager(getContext());
 
-        if (!prefManager.isUserSignedUp()) {
+        if (!prefManager.getHasSeenCreateWalkthroughTutorial()) {
             presenter.firstAppLaunch();
         }
 
@@ -145,7 +145,6 @@ public class WalkthroughLandingFragment extends Fragment
                 .setStyle(R.style.CustomShowcaseTheme2)
                 .setShowcaseEventListener(this)
                 .replaceEndButton(R.layout.tutorial_custom_button)
-                .hideOnTouchOutside()
                 .setOnClickListener(tutorialClickListener)
                 .build();
         showcaseView.setButtonPosition(params);
@@ -209,8 +208,6 @@ public class WalkthroughLandingFragment extends Fragment
     private View.OnClickListener tutorialClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            //prefManager.setFirstTimeLaunch(false);
-            prefManager.setIsUserSignedUp(true);
             showcaseView.hide();
         }
     };
@@ -243,6 +240,7 @@ public class WalkthroughLandingFragment extends Fragment
     public void onShowcaseViewHide(ShowcaseView showcaseView) {
         fab.setClickable(true);
         overlay.setVisibility(View.GONE);
+        prefManager.setUserSeenCreateWalkthroughTutorial(true);
     }
 
     @Override
