@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
         // Get the content resolver
         mResolver = getContentResolver();
         // Turn on periodic syncing
-        mResolver.addPeriodicSync(
+        ContentResolver.addPeriodicSync(
                 account, AUTHORITY, Bundle.EMPTY, SYNC_INTERVAL
         );
 

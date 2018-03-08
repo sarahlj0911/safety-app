@@ -44,11 +44,11 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
     private UserDao userDao;
 
     // Connection properties
-    //private static final String url = "jdbc:mysql://10.0.2.2:3306/safetywalkthrough";
-    private static final String url = "jdbc:mysql://safetymysqlinstance.cbcumohyescr.us-west-2.rds.amazonaws.com:3306/safetywalkthrough?useSSL=false";
+    private static final String url = "jdbc:mysql://10.0.2.2:3306/safetywalkthrough";
+    //private static final String url = "jdbc:mysql://safetymysqlinstance.cbcumohyescr.us-west-2.rds.amazonaws.com:3306/safetywalkthrough?useSSL=false";
     private static final String dbName = "safetywalkthrough";
     private static final String appId = "safety_app";
-    private static final String pass = "J7jd!ETRysdxrTGh";
+    private static final String pass = "";
 
     /**
      * Set up the sync adapter
@@ -118,9 +118,16 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
             Log.d(TAG, "School " + school.getSchoolName() + " is already registered");
         }
 
-        /*user = userDao.getUser();
-        userRegistered = user.isRegistered();
-        userEmail = user.getEmailAddress();*/
+        user = userDao.getUser();
+        if (!user.isRegistered()) {
+            Log.d(TAG, "User not registered");
+            remoteUserId = registerUser(user, remoteSchoolId);
+            user.setRemoteId(remoteUserId);
+            userDao.insert(user);
+            Log.d(TAG, "Registered user remote id = " + remoteUserId);
+        } else {
+            Log.d(TAG, "User " + user.getUserName() + " is already registered");
+        }
 
     }
 
@@ -157,9 +164,12 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                         "FROM schools");
                 resultSets.add(nextSchoolIdRs);
 
-                while (nextSchoolIdRs.next()) {
-                    Log.d(TAG, "next school id = " + nextSchoolIdRs.getInt(1));
-                    remoteId = nextSchoolIdRs.getInt(1) + 1;
+                if (!nextSchoolIdRs.next()) {
+                    remoteId = 1;
+                } else {
+                    do {
+                        remoteId = nextSchoolIdRs.getInt(1) + 1;
+                    } while (nextSchoolIdRs.next());
                 }
 
                 Log.d(TAG, "Inserting school with values [" + remoteId + ", " + schoolName +"]");
@@ -173,6 +183,78 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                 // Commit insert
                 conn.commit();
                 Log.d(TAG, "Successfully registered school");
+                // Rollback if there was a problem inserting
+                conn.rollback();
+            } else {
+                do {
+                    remoteId = rs.getInt(1);
+                } while (rs.next());
+            }
+        } catch(Exception e) {
+            e.printStackTrace();
+            Log.d(TAG, "Problem syncing school data: " + e.getMessage());
+        } finally {
+            cleanup(resultSets, statements, conn);
+        }
+
+        return remoteId;
+    }
+
+    private int registerUser(User user, int remoteSchoolId) {
+        String email = user.getEmailAddress();
+        int remoteId = 0;
+        List<Statement> statements = new ArrayList<>();
+        List<ResultSet> resultSets = new ArrayList<>();
+
+        PreparedStatement selectUserStmt = null;
+        Statement getNextUserId = null;
+        PreparedStatement insertUserStmt = null;
+
+        ResultSet rs = null;
+        ResultSet nextUserIdRs = null;
+
+        try {
+            conn = DriverManager.getConnection(url, appId, pass);
+            conn.setAutoCommit(false);
+            Log.d(TAG, "Successfully connected to database on host [" + url + "]");
+
+            String selectUser = "SELECT userId FROM user WHERE emailAddress = ?";
+            selectUserStmt = conn.prepareStatement(selectUser);
+            statements.add(selectUserStmt);
+            selectUserStmt.setString(1, email);
+
+            rs = selectUserStmt.executeQuery();
+            resultSets.add(rs);
+
+            if (!rs.next() || rs.getInt(1) == 0) {
+                getNextUserId = conn.createStatement();
+                statements.add(getNextUserId);
+                nextUserIdRs = getNextUserId.executeQuery("SELECT MAX(userId) " +
+                        "FROM user");
+                resultSets.add(nextUserIdRs);
+
+                if (!nextUserIdRs.next()) {
+                    remoteId = 1;
+                } else {
+                    do {
+                        remoteId = nextUserIdRs.getInt(1) + 1;
+                    } while (nextUserIdRs.next());
+                }
+
+                Log.d(TAG, "Inserting user with values [" + remoteId + ", " + user.getUserName() + ", " + email + ", " + user.getRole() + ", " + remoteSchoolId + "]");
+                String insertUser = "INSERT INTO user VALUES (?, ?, ?, ?, ?)";
+                insertUserStmt = conn.prepareStatement(insertUser);
+                statements.add(insertUserStmt);
+                insertUserStmt.setInt(1, remoteId);
+                insertUserStmt.setString(2, user.getUserName());
+                insertUserStmt.setString(3, email);
+                insertUserStmt.setString(4, user.getRole());
+                insertUserStmt.setInt(5, remoteSchoolId);
+                insertUserStmt.execute();
+
+                // Commit insert
+                conn.commit();
+                Log.d(TAG, "Successfully registered user");
                 // Rollback if there was a problem inserting
                 conn.rollback();
             } else {
