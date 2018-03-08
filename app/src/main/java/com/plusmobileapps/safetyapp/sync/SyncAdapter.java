@@ -6,7 +6,6 @@ import android.content.ContentProviderClient;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.SyncResult;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -15,8 +14,11 @@ import com.plusmobileapps.safetyapp.PrefManager;
 import com.plusmobileapps.safetyapp.data.AppDatabase;
 import com.plusmobileapps.safetyapp.data.dao.SchoolDao;
 import com.plusmobileapps.safetyapp.data.dao.UserDao;
+import com.plusmobileapps.safetyapp.data.dao.WalkthroughDao;
 import com.plusmobileapps.safetyapp.data.entity.School;
 import com.plusmobileapps.safetyapp.data.entity.User;
+import com.plusmobileapps.safetyapp.data.entity.Walkthrough;
+import com.plusmobileapps.safetyapp.util.Utils;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -42,6 +44,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
     private AppDatabase db;
     private SchoolDao schoolDao;
     private UserDao userDao;
+    private WalkthroughDao walkthroughDao;
 
     // Connection properties
     private static final String url = "jdbc:mysql://10.0.2.2:3306/safetywalkthrough";
@@ -98,14 +101,13 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
         School school = null;
         User user = null;
-        boolean userRegistered = false;
         int remoteSchoolId = 0;
-        String userEmail = "";
         int remoteUserId = 0;
 
         db = AppDatabase.getAppDatabase(MyApplication.getAppContext());
         schoolDao = db.schoolDao();
         userDao = db.userDao();
+        walkthroughDao = db.walkthroughDao();
 
         school = schoolDao.get();
         if (!school.isRegistered()) {
@@ -129,6 +131,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
             Log.d(TAG, "User " + user.getUserName() + " is already registered");
         }
 
+        // TODO Implement walkthrough/response, location, question, and question_mapping sync
     }
 
     private int registerSchool(School school) {

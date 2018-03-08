@@ -19,6 +19,7 @@ public class DeleteWalkthrough extends AsyncTask<Void, Void, Void> {
         this.walkthrough = walkthrough;
         this.view = view;
 
+        // Perform logical delete
         this.walkthrough.setIsDeleted(1);
     }
 
@@ -27,7 +28,7 @@ public class DeleteWalkthrough extends AsyncTask<Void, Void, Void> {
         db = AppDatabase.getAppDatabase(MyApplication.getAppContext());
         WalkthroughDao dao = db.walkthroughDao();
         //dao.delete(walkthrough);
-        dao.logicalDelete(walkthrough);
+        dao.update(walkthrough);
         return null;
     }
 }
