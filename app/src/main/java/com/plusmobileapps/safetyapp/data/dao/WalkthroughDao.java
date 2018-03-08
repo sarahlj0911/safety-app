@@ -37,5 +37,5 @@ public interface WalkthroughDao {
     void delete(Walkthrough walkthrough);
 
     @Update
-    void logicalDelete(Walkthrough walkthrough);
+    void update(Walkthrough walkthrough);
 }
