@@ -264,7 +264,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
             }
         } catch(Exception e) {
             e.printStackTrace();
-            Log.d(TAG, "Problem syncing school data: " + e.getMessage());
+            Log.d(TAG, "Problem syncing user data: " + e.getMessage());
         } finally {
             cleanup(resultSets, statements, conn);
         }
@@ -278,6 +278,16 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                 if (rs != null) {
                     rs.close();
                 }
+            }
+
+            for (Statement statement : statements) {
+                if (statement != null) {
+                    statement.close();
+                }
+            }
+
+            if (conn != null) {
+                conn.close();
             }
         } catch (SQLException sqle) {
             sqle.printStackTrace();

@@ -13,11 +13,12 @@ import java.util.List;
 
 /**
  * Created by aaronmusengo on 1/23/18.
+ * Updated by Robert Beerman on 3/8/2018
  */
 
 @Dao
 public interface WalkthroughDao {
-    @Query("SELECT * FROM walkthroughs WHERE isDeleted != 1")
+    @Query("SELECT * FROM walkthroughs WHERE isDeleted == 0")
     List<Walkthrough> getAll();
 
     @Query("SELECT * FROM walkthroughs where walkthroughId LIKE :walkthroughId")
