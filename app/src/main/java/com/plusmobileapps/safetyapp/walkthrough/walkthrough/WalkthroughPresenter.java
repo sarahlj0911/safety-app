@@ -23,7 +23,9 @@ public class WalkthroughPresenter implements WalkthroughContract.Presenter {
     private List<Question> questions = new ArrayList<>(0);
     private List<Response> responses = new ArrayList<>(0);
     private int currentIndex = 0;
+    private int locationId;
     private int walkthroughId;
+
 
 
     public WalkthroughPresenter(WalkthroughContract.View view) {
@@ -31,10 +33,10 @@ public class WalkthroughPresenter implements WalkthroughContract.Presenter {
     }
 
     @Override
-    public void start(int locationId, int walkthroughId) {
+    public void start(int locationId) {
        loadQuestions(locationId);
-        loadResponses(locationId, walkthroughId);
-       this.walkthroughId = walkthroughId;
+       this.locationId = locationId;
+       new GetCurrentWalkthroughIdTask(this).execute();
     }
 
     @Override
@@ -43,8 +45,9 @@ public class WalkthroughPresenter implements WalkthroughContract.Presenter {
     }
 
     @Override
-    public void loadResponses(int locationId, int walkthroughId) {
-        new WalkthroughResponseModel(locationId, walkthroughId, view, this).execute();
+    public void loadResponses(int walkthroughId) {
+        this.walkthroughId = walkthroughId;
+        new WalkthroughResponseModel(this.locationId, walkthroughId, view, this).execute();
     }
 
     @Override
@@ -63,13 +66,15 @@ public class WalkthroughPresenter implements WalkthroughContract.Presenter {
 
     @Override
     public void nextQuestionClicked() {
-        //if youre at the last question
+        //if you're at the last question
         if(currentIndex + 1 == questions.size()) {
             saveResponses();
             return;
         }
 
         Response response = view.getCurrentResponse();
+        response.setLocationId(locationId);
+        response.setWalkthroughId(walkthroughId);
 
         //check if the next question has already been started
         if(currentIndex == responses.size()) {
@@ -90,7 +95,7 @@ public class WalkthroughPresenter implements WalkthroughContract.Presenter {
     @Override
     public void backButtonPressed() {
         view.showConfirmationDialog();
-        //saveResponses();
+        saveResponses();
     }
 
     public void setQuestions(List<Question> questions) {
@@ -101,10 +106,10 @@ public class WalkthroughPresenter implements WalkthroughContract.Presenter {
 
     private void saveResponses() {
         //TODO create async task to save responses
-//        SaveResponses save = new SaveResponses();
-//        save.responses = responses;
-//        save.execute();
-//        view.closeWalkthrough();
+        SaveResponses save = new SaveResponses();
+        save.responses = responses;
+        save.execute();
+        view.closeWalkthrough();
     }
 
     static class SaveResponses extends AsyncTask<Void,Void, Boolean> {

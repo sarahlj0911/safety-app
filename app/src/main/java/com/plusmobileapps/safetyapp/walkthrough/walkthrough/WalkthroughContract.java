@@ -15,10 +15,10 @@ public interface WalkthroughContract {
 
     interface Presenter {
 
-        void start(int locationId, int walkthroughId);
+        void start(int locationId);
 
         void loadQuestions(int locationId);
-        void loadResponses(int locationId, int walkthroughId);
+        void loadResponses(int walkthroughId);
         void previousQuestionClicked();
         void nextQuestionClicked();
 

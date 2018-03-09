@@ -62,7 +62,7 @@ public class WalkthroughActivity extends AppCompatActivity implements Walkthroug
     @Override
     protected void onResume() {
         super.onResume();
-        presenter.start(locationId, walkthroughId);
+        presenter.start(locationId);
     }
 
     @Override

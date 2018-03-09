@@ -44,7 +44,7 @@ public class WalkthroughContentFragment extends Fragment implements View.OnClick
     static final String TAG = "WalkthruContentFragment";
     private static final int REQUEST_IMAGE_CAPTURE = 1;
     private Question walkthroughQuestion;
-    private Response response;
+    private Response response = new Response();
     private TextView descriptionTextView;
     private String description;
     private ImageButton cameraButton;
@@ -69,7 +69,7 @@ public class WalkthroughContentFragment extends Fragment implements View.OnClick
         Bundle bundle = new Bundle(1);
         bundle.putString("walkthroughQuestion", new Gson().toJson(question));
         fragment.setArguments(bundle);
-
+        fragment.response.setQuestionId(question.getQuestionId());
         return fragment;
     }
 
@@ -80,8 +80,10 @@ public class WalkthroughContentFragment extends Fragment implements View.OnClick
         View view = inflater.inflate(R.layout.fragment_walkthrough_question, container, false);
         String walkthroughJsonObject = getArguments().getString("walkthroughQuestion");
 
-        response = new Response();
-
+        //TODO: Refactor response to init with foreign keys.
+        //TODO: Revisit User table in the DB because we don't really need it.
+        //Should create a response with foreign keys.
+        response.setUserId(1);
         walkthroughQuestion = new Gson().fromJson(walkthroughJsonObject, Question.class);
         initViews(view);
         generateQuestionView(view, walkthroughQuestion);
@@ -212,7 +214,7 @@ public class WalkthroughContentFragment extends Fragment implements View.OnClick
 
     @Override
     public Response getResponse() {
-        return null;
+        return this.response;
     }
 
     /**

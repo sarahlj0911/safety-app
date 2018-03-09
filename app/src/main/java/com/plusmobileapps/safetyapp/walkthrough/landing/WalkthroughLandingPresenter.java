@@ -57,6 +57,7 @@ public class WalkthroughLandingPresenter implements WalkthroughLandingContract.P
 
     private void createNewWalkthrough() {
         view.showCreateWalkthroughDialog();
+
     }
 
 
@@ -67,6 +68,7 @@ public class WalkthroughLandingPresenter implements WalkthroughLandingContract.P
     @Override
     public void confirmCreateWalkthroughClicked(String title) {
         walkthrough = new Walkthrough(title);
+
         new SaveNewWalkthrough(walkthrough, view).execute();
     }
 
