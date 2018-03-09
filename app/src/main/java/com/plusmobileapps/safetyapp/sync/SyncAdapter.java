@@ -12,9 +12,16 @@ import android.util.Log;
 import com.plusmobileapps.safetyapp.MyApplication;
 import com.plusmobileapps.safetyapp.PrefManager;
 import com.plusmobileapps.safetyapp.data.AppDatabase;
+import com.plusmobileapps.safetyapp.data.dao.LocationDao;
+import com.plusmobileapps.safetyapp.data.dao.QuestionDao;
+import com.plusmobileapps.safetyapp.data.dao.QuestionMappingDao;
+import com.plusmobileapps.safetyapp.data.dao.ResponseDao;
 import com.plusmobileapps.safetyapp.data.dao.SchoolDao;
 import com.plusmobileapps.safetyapp.data.dao.UserDao;
 import com.plusmobileapps.safetyapp.data.dao.WalkthroughDao;
+import com.plusmobileapps.safetyapp.data.entity.Location;
+import com.plusmobileapps.safetyapp.data.entity.Question;
+import com.plusmobileapps.safetyapp.data.entity.QuestionMapping;
 import com.plusmobileapps.safetyapp.data.entity.School;
 import com.plusmobileapps.safetyapp.data.entity.User;
 import com.plusmobileapps.safetyapp.data.entity.Walkthrough;
@@ -45,6 +52,10 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
     private SchoolDao schoolDao;
     private UserDao userDao;
     private WalkthroughDao walkthroughDao;
+    private ResponseDao responseDao;
+    private LocationDao locationDao;
+    private QuestionDao questionDao;
+    private QuestionMappingDao questionMappingDao;
 
     // Connection properties
     private static final String url = "jdbc:mysql://10.0.2.2:3306/safetywalkthrough";
@@ -108,6 +119,10 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
         schoolDao = db.schoolDao();
         userDao = db.userDao();
         walkthroughDao = db.walkthroughDao();
+        responseDao = db.responseDao();
+        locationDao = db.locationDao();
+        questionDao = db.questionDao();
+        questionMappingDao = db.questionMappingDao();
 
         school = schoolDao.get();
         if (!school.isRegistered()) {
@@ -131,7 +146,76 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
             Log.d(TAG, "User " + user.getUserName() + " is already registered");
         }
 
-        // TODO Implement walkthrough/response, location, question, and question_mapping sync
+        syncLocations(remoteSchoolId);
+        // TODO Sync questions
+        // TODO Sync question_mapping
+        // TODO Sync walkthroughs & responses
+    }
+
+    private void syncLocations(int remoteSchoolId) {
+        List<Location> locations = locationDao.getAllLocations();
+        List<Question> questions = questionDao.getAll();
+        List<QuestionMapping> questionMappings = questionMappingDao.getAllQuestionMappings();
+
+        List<Statement> statements = new ArrayList<>();
+        Statement stmt = null;
+        PreparedStatement locationStmt = null;
+        PreparedStatement questionStmt = null;
+        PreparedStatement questionMappingStmt = null;
+        String locationSql = "REPLACE INTO location (locationId, schoolId, name, type, locationInstruction) " +
+                "VALUES (?, ?, ?, ?, ?)";
+        String questionSql = "REPLACE INTO question (questionId, questionText, shortDesc, ratingOption1, ratingOption2, ratingOption3, ratingOption4) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?)";
+
+        if (locations == null || locations.isEmpty()) {
+            return;
+        }
+
+        try {
+            conn = DriverManager.getConnection(url, appId, pass);
+            conn.setAutoCommit(false);
+            locationStmt = conn.prepareStatement(locationSql);
+            statements.add(locationStmt);
+            questionStmt = conn.prepareStatement(questionSql);
+            statements.add(questionStmt);
+            /*questionMappingStmt = conn.prepareStatement(questionMappingSql);
+            statements.add(questionMappingStmt);*/
+
+            for (Location location : locations) {
+                locationStmt.setInt(1, location.getLocationId());
+                locationStmt.setInt(2, remoteSchoolId);
+                locationStmt.setString(3, location.getName());
+                locationStmt.setString(4, location.getType());
+                locationStmt.setString(5, location.getLocationInstruction());
+                locationStmt.addBatch();
+            }
+
+            int[] locationCount = locationStmt.executeBatch();
+            Log.d(TAG, "Synced " + locationCount.length + " locations");
+
+            for (Question question : questions) {
+                questionStmt.setInt(1, question.getQuestionId());
+                questionStmt.setString(2, question.getQuestionText());
+                questionStmt.setString(3, question.getShortDescription());
+                questionStmt.setString(4, question.getRatingOption1());
+                questionStmt.setString(5, question.getRatingOption2());
+                questionStmt.setString(6, question.getRatingOption3());
+                questionStmt.setString(7, question.getRatingOption4());
+                questionStmt.addBatch();
+            }
+
+            int[] questionCount = questionStmt.executeBatch();
+            Log.d(TAG, "Synced " + questionCount.length + " questions");
+
+            conn.commit();
+
+            conn.rollback();
+        } catch(Exception e) {
+            e.printStackTrace();
+            Log.d(TAG, "Problem syncing location or question data: " + e.getMessage());
+        } finally {
+            cleanup(null, statements, conn);
+        }
     }
 
     private int registerSchool(School school) {
@@ -150,7 +234,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
         try {
             conn = DriverManager.getConnection(url, appId, pass);
             conn.setAutoCommit(false);
-            Log.d(TAG, "Successfully connected to database on host [" + url + "]");
+            Log.d(TAG, "Successfully connected to database");
 
             String selectSchool = "SELECT schoolId FROM schools WHERE schoolName = ?";
             selectSchoolStmt = conn.prepareStatement(selectSchool);
@@ -219,7 +303,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
         try {
             conn = DriverManager.getConnection(url, appId, pass);
             conn.setAutoCommit(false);
-            Log.d(TAG, "Successfully connected to database on host [" + url + "]");
+            Log.d(TAG, "Successfully connected to database");
 
             String selectUser = "SELECT userId FROM user WHERE emailAddress = ?";
             selectUserStmt = conn.prepareStatement(selectUser);
@@ -244,15 +328,17 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                     } while (nextUserIdRs.next());
                 }
 
-                Log.d(TAG, "Inserting user with values [" + remoteId + ", " + user.getUserName() + ", " + email + ", " + user.getRole() + ", " + remoteSchoolId + "]");
-                String insertUser = "INSERT INTO user VALUES (?, ?, ?, ?, ?)";
+                Log.d(TAG, "Inserting user with values [" + remoteId + ", " + user.getUserName() +
+                        ", " + email + ", " + user.getRole() + ", " + remoteSchoolId + "]");
+                String insertUser = "INSERT INTO user (userId, schoolId, userName, emailAddress, role) " +
+                        "VALUES (?, ?, ?, ?, ?)";
                 insertUserStmt = conn.prepareStatement(insertUser);
                 statements.add(insertUserStmt);
                 insertUserStmt.setInt(1, remoteId);
-                insertUserStmt.setString(2, user.getUserName());
-                insertUserStmt.setString(3, email);
-                insertUserStmt.setString(4, user.getRole());
-                insertUserStmt.setInt(5, remoteSchoolId);
+                insertUserStmt.setInt(2, remoteSchoolId);
+                insertUserStmt.setString(3, user.getUserName());
+                insertUserStmt.setString(4, email);
+                insertUserStmt.setString(5, user.getRole());
                 insertUserStmt.execute();
 
                 // Commit insert
@@ -277,15 +363,19 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
     private void cleanup(List<ResultSet> resultSets, List<Statement> statements, Connection conn) {
         try {
-            for (ResultSet rs : resultSets) {
-                if (rs != null) {
-                    rs.close();
+            if (resultSets != null) {
+                for (ResultSet rs : resultSets) {
+                    if (rs != null) {
+                        rs.close();
+                    }
                 }
             }
 
-            for (Statement statement : statements) {
-                if (statement != null) {
-                    statement.close();
+            if (statements != null) {
+                for (Statement statement : statements) {
+                    if (statement != null) {
+                        statement.close();
+                    }
                 }
             }
 
