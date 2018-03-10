@@ -36,6 +36,7 @@ public interface WalkthroughDao {
     @Delete
     void delete(Walkthrough walkthrough);
 
+    // Used primarily for logical deletion
     @Update
     void update(Walkthrough walkthrough);
 }

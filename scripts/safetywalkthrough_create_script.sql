@@ -143,9 +143,15 @@ CREATE TABLE IF NOT EXISTS `safetywalkthrough`.`responses` (
   `rating` INT NULL,
   `timestamp` VARCHAR(32) NULL,
   `isActionItem` INT NULL,
-  PRIMARY KEY (`responseId`, `schoolId`, `walkthroughId`, `locationId`, `questionId`, `userId`) )
---  , INDEX `fk_responses_question1_idx` (`questionId` ASC),
---  INDEX `fk_responses_walkthroughs1_idx` (`walkthroughId` ASC),
+  `image` VARCHAR(256) NULL,
+  PRIMARY KEY (`responseId`, `schoolId`, `walkthroughId`, `locationId`, `questionId`, `userId`),
+  INDEX `fk_responses_walkthroughs1_idx` (`walkthroughId` ASC),
+  CONSTRAINT `fk_responses_walkthroughs1`
+    FOREIGN KEY (`walkthroughId`)
+    REFERENCES `safetywalkthrough`.`walkthroughs` (`walkthroughId`)
+    ON DELETE CASCADE
+    ON UPDATE NO ACTION)
+--  INDEX `fk_responses_question1_idx` (`questionId` ASC),
 --  INDEX `fk_responses_location1_idx` (`locationId` ASC),
 --  INDEX `fk_responses_schools1_idx` (`schoolId` ASC),
 --  CONSTRAINT `fk_responses_question1`
@@ -153,11 +159,7 @@ CREATE TABLE IF NOT EXISTS `safetywalkthrough`.`responses` (
 --    REFERENCES `safetywalkthrough`.`question` (`questionId`)
 --    ON DELETE NO ACTION
 --    ON UPDATE NO ACTION,
---  CONSTRAINT `fk_responses_walkthroughs1`
---    FOREIGN KEY (`walkthroughId`)
---    REFERENCES `safetywalkthrough`.`walkthroughs` (`walkthroughId`)
---    ON DELETE NO ACTION
---    ON UPDATE NO ACTION,
+
 --  CONSTRAINT `fk_responses_location1`
 --    FOREIGN KEY (`locationId`)
 --    REFERENCES `safetywalkthrough`.`location` (`locationId`)

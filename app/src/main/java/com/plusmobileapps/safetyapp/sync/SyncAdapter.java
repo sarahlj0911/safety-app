@@ -20,15 +20,20 @@ import com.plusmobileapps.safetyapp.data.dao.UserDao;
 import com.plusmobileapps.safetyapp.data.dao.WalkthroughDao;
 import com.plusmobileapps.safetyapp.data.entity.Location;
 import com.plusmobileapps.safetyapp.data.entity.QuestionMapping;
+import com.plusmobileapps.safetyapp.data.entity.Response;
 import com.plusmobileapps.safetyapp.data.entity.School;
 import com.plusmobileapps.safetyapp.data.entity.User;
+import com.plusmobileapps.safetyapp.data.entity.Walkthrough;
+import com.plusmobileapps.safetyapp.util.Utils;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -55,7 +60,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
     //private static final String url = "jdbc:mysql://safetymysqlinstance.cbcumohyescr.us-west-2.rds.amazonaws.com:3306/safetywalkthrough?useSSL=false";
     private static final String dbName = "safetywalkthrough";
     private static final String appId = "safety_app";
-    private static final String pass = "";
+    private static final String pass = "J7jd!ETRysdxrTGh";
 
     /**
      * Set up the sync adapter
@@ -135,24 +140,183 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
             remoteUserId = registerUser(user, remoteSchoolId);
             user.setRemoteId(remoteUserId);
             userDao.insert(user);
-            Log.d(TAG, "Registered user remote id = " + remoteUserId);
+            Log.i(TAG, "Registered user remote id = " + remoteUserId);
         } else {
+            remoteUserId = user.getRemoteId();
             Log.d(TAG, "User " + user.getUserName() + " is already registered");
         }
 
-        syncWalkthroughData(remoteSchoolId);
+        syncLocationsAndQuestions(remoteSchoolId);
+        deleteRemoteWalkthroughs(remoteSchoolId, remoteUserId);
         // TODO Sync walkthroughs & responses
+        syncWalkthroughsAndResponses(remoteSchoolId, remoteUserId);
     }
 
-    private void syncWalkthroughData(int remoteSchoolId) {
+    private void deleteRemoteWalkthroughs(int remoteSchoolId, int remoteUserId) {
+        List<Statement> statements = new ArrayList<>();
+        List<Walkthrough> deletedWalkthroughs = walkthroughDao.getAllDeleted();
+        PreparedStatement deleteWalkthroughsStmt;
+
+        String deleteWalkthroughsSql = "DELETE FROM walkthroughs " +
+                "WHERE schoolId = ? AND userId = ? AND walkthroughId = ?";
+
+        try {
+            conn = DriverManager.getConnection(url, appId, pass);
+            conn.setAutoCommit(false);
+            Log.i(TAG, "Successfully connected to database");
+
+            deleteWalkthroughsStmt = conn.prepareStatement(deleteWalkthroughsSql);
+            statements.add(deleteWalkthroughsStmt);
+
+            for (Walkthrough deletedWalkthrough : deletedWalkthroughs) {
+                deleteWalkthroughsStmt.setInt(1, remoteSchoolId);
+                deleteWalkthroughsStmt.setInt(2, remoteUserId);
+                deleteWalkthroughsStmt.setInt(3, deletedWalkthrough.getWalkthroughId());
+                deleteWalkthroughsStmt.addBatch();
+            }
+
+            int[] deletedCount = deleteWalkthroughsStmt.executeBatch();
+            Log.i(TAG, "Deleted " + deletedCount.length + " walkthroughs");
+
+            conn.commit();
+
+            conn.rollback();
+
+            if (deletedCount.length == deletedWalkthroughs.size()) {
+                for (Walkthrough walkthroughToDelete : deletedWalkthroughs) {
+                    walkthroughDao.delete(walkthroughToDelete);
+                }
+            } else {
+                Log.i(TAG, "Inconsistent walkthrough deletion counts; not deleting local walkthroughs");
+            }
+        } catch(Exception e) {
+            e.printStackTrace();
+            Log.e(TAG, "Problem deleting walkthroughs: " + e.getMessage());
+        } finally {
+            cleanup(null, statements, conn);
+        }
+    }
+
+    private void syncWalkthroughsAndResponses(int remoteSchoolId, int remoteUserId) {
+        List<Statement> statements = new ArrayList<>();
+        List<ResultSet> resultSets = new ArrayList<>();
+        List<Walkthrough> activeWalkthroughs = walkthroughDao.getAll();
+        PreparedStatement getLastSyncDateTimeStmt;
+        PreparedStatement updateWalkthroughStmt;
+        PreparedStatement updateResponseStmt;
+
+        String getLastSyncDateTimeSql = "SELECT MAX(lastUpdatedDate) " +
+                "FROM walkthroughs WHERE schoolId = ? AND userId = ?";
+
+        /*String updateWalkthroughSql = "UPDATE walkthroughs " +
+                "SET name = ?, lastUpdatedDate = ?, percentComplete = ? " +
+                "WHERE schoolId = ? AND walkthroughId = ? AND userId = ?";*/
+
+        String updateWalkthroughSql = "INSERT INTO walkthroughs " +
+                "(walkthroughId, schoolId, userId, name, lastUpdatedDate, createdDate, percentComplete) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?) " +
+                "ON DUPLICATE KEY UPDATE " +
+                "name = ?, lastUpdatedDate = ?, percentComplete = ?";
+
+        String updateResponseSql = "UPDATE responses " +
+                "SET actionPlan = ?, priority = ?, rating = ?, timestamp = ?, isActionItem = ?, image = ? " +
+                "WHERE schoolId = ? AND userId = ? AND walkthroughId = ? AND responseId = ?";
+
+        ResultSet lastSyncDateTimeRs;
+        Timestamp lastSyncDateTime = null;
+
+        try {
+            conn = DriverManager.getConnection(url, appId, pass);
+            conn.setAutoCommit(false);
+            Log.i(TAG, "Successfully connected to database");
+
+            getLastSyncDateTimeStmt = conn.prepareStatement(getLastSyncDateTimeSql);
+            statements.add(getLastSyncDateTimeStmt);
+            getLastSyncDateTimeStmt.setInt(1, remoteSchoolId);
+            getLastSyncDateTimeStmt.setInt(2, remoteUserId);
+
+            lastSyncDateTimeRs = getLastSyncDateTimeStmt.executeQuery();
+            resultSets.add(lastSyncDateTimeRs);
+
+            while(lastSyncDateTimeRs.next()) {
+                lastSyncDateTime = lastSyncDateTimeRs.getTimestamp(1);
+            }
+
+            if (lastSyncDateTime != null) {
+                Log.d(TAG, "Max last update date: " + lastSyncDateTime.toString());
+            } else {
+                Log.i(TAG, "No walkthroughs for schoolId " + remoteSchoolId + ", userId " + remoteUserId + " in db");
+            }
+
+            updateWalkthroughStmt = conn.prepareStatement(updateWalkthroughSql);
+            statements.add(updateWalkthroughStmt);
+            updateResponseStmt = conn.prepareStatement(updateResponseSql);
+            statements.add(updateResponseStmt);
+
+            for (Walkthrough walkthrough : activeWalkthroughs) {
+                int walkthroughId = walkthrough.getWalkthroughId();
+                java.util.Date lastUpdatedDate = Utils.convertStringToDate(walkthrough.getLastUpdatedDate());
+                Timestamp newTimeStamp = new Timestamp(lastUpdatedDate.getTime());
+                java.util.Date createdDate = Utils.convertStringToDate(walkthrough.getCreatedDate());
+                Timestamp createdTimestamp = new Timestamp(createdDate.getTime());
+
+                if (lastSyncDateTime == null || lastSyncDateTime.before(lastUpdatedDate)) {
+                    updateWalkthroughStmt.setInt(1, walkthroughId);
+                    updateWalkthroughStmt.setInt(2, remoteSchoolId);
+                    updateWalkthroughStmt.setInt(3, remoteUserId);
+                    updateWalkthroughStmt.setString(4, walkthrough.getName());
+                    updateWalkthroughStmt.setTimestamp(5, newTimeStamp);
+                    updateWalkthroughStmt.setTimestamp(6, createdTimestamp);
+                    updateWalkthroughStmt.setDouble(7, walkthrough.getPercentComplete());
+                    updateWalkthroughStmt.setString(8, walkthrough.getName());
+                    updateWalkthroughStmt.setTimestamp(9, newTimeStamp);
+                    updateWalkthroughStmt.setDouble(10, walkthrough.getPercentComplete());
+                    Log.d(TAG, updateWalkthroughStmt.toString());
+                    updateWalkthroughStmt.addBatch();
+
+                    List<Response> responses = responseDao.getAllByWalkthroughId(walkthrough.getWalkthroughId());
+
+                    for (Response response : responses) {
+                        updateResponseStmt.setString(1, response.getActionPlan());
+                        updateResponseStmt.setInt(2, response.getPriority());
+                        updateResponseStmt.setInt(3, response.getRating());
+                        updateResponseStmt.setString(4, response.getTimeStamp());
+                        updateResponseStmt.setInt(5, response.getIsActionItem());
+                        updateResponseStmt.setString(6, response.getImagePath());
+                        updateResponseStmt.setInt(7, remoteSchoolId);
+                        updateResponseStmt.setInt(8, remoteUserId);
+                        updateResponseStmt.setInt(9, walkthroughId);
+                        updateResponseStmt.setInt(10, response.getResponseId());
+                        updateResponseStmt.addBatch();
+                    }
+                }
+            }
+
+            int[] walkthroughCount = updateWalkthroughStmt.executeBatch();
+            Log.i(TAG, "Upddated " + walkthroughCount.length + " walkthroughs");
+
+            int[] responseCount = updateResponseStmt.executeBatch();
+            Log.i(TAG, "Updated " + responseCount.length + " responses");
+
+            conn.commit();
+
+            conn.rollback();
+
+        } catch(Exception e) {
+            e.printStackTrace();
+            Log.e(TAG, "Problem syncing location or question data: " + e.getMessage());
+        } finally {
+            cleanup(resultSets, statements, conn);
+        }
+    }
+
+    private void syncLocationsAndQuestions(int remoteSchoolId) {
         List<Location> locations = locationDao.getAllLocations();
         List<QuestionMapping> questionMappings = questionMappingDao.getAllQuestionMappings();
 
         List<Statement> statements = new ArrayList<>();
-        Statement stmt = null;
-        PreparedStatement locationStmt = null;
-        PreparedStatement questionStmt = null;
-        PreparedStatement questionMappingStmt = null;
+        PreparedStatement locationStmt;
+        PreparedStatement questionMappingStmt;
         String locationSql = "REPLACE INTO location (locationId, schoolId, name, type, locationInstruction) " +
                 "VALUES (?, ?, ?, ?, ?)";
         String questionMappingSql = "REPLACE INTO question_mapping (mappingId, schoolId, locationId, questionId) " +
@@ -180,7 +344,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
             }
 
             int[] locationCount = locationStmt.executeBatch();
-            Log.d(TAG, "Synced " + locationCount.length + " locations");
+            Log.i(TAG, "Synced " + locationCount.length + " locations");
 
             for (QuestionMapping questionMapping : questionMappings) {
                 questionMappingStmt.setInt(1, questionMapping.getMappingId());
@@ -191,14 +355,14 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
             }
 
             int[] questionMappingCount = questionMappingStmt.executeBatch();
-            Log.d(TAG, "Synced " + questionMappingCount.length + " question mappings");
+            Log.i(TAG, "Synced " + questionMappingCount.length + " question mappings");
 
             conn.commit();
 
             conn.rollback();
         } catch(Exception e) {
             e.printStackTrace();
-            Log.d(TAG, "Problem syncing location or question data: " + e.getMessage());
+            Log.e(TAG, "Problem syncing location or question data: " + e.getMessage());
         } finally {
             cleanup(null, statements, conn);
         }
@@ -210,20 +374,20 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
         List<Statement> statements = new ArrayList<>();
         List<ResultSet> resultSets = new ArrayList<>();
 
-        PreparedStatement selectSchoolStmt = null;
-        Statement getNextSchoolId = null;
-        PreparedStatement insertSchoolStmt = null;
+        PreparedStatement selectSchoolStmt;
+        Statement getNextSchoolIdStmt;
+        PreparedStatement insertSchoolStmt;
 
-        ResultSet rs = null;
-        ResultSet nextSchoolIdRs = null;
+        ResultSet rs;
+        ResultSet nextSchoolIdRs;
 
         try {
             conn = DriverManager.getConnection(url, appId, pass);
             conn.setAutoCommit(false);
-            Log.d(TAG, "Successfully connected to database");
+            Log.i(TAG, "Successfully connected to database");
 
-            String selectSchool = "SELECT schoolId FROM schools WHERE schoolName = ?";
-            selectSchoolStmt = conn.prepareStatement(selectSchool);
+            String selectSchoolSql = "SELECT schoolId FROM schools WHERE schoolName = ?";
+            selectSchoolStmt = conn.prepareStatement(selectSchoolSql);
             statements.add(selectSchoolStmt);
             selectSchoolStmt.setString(1, schoolName);
 
@@ -231,9 +395,9 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
             resultSets.add(rs);
 
             if (!rs.next() || rs.getInt(1) == 0) {
-                getNextSchoolId = conn.createStatement();
-                statements.add(getNextSchoolId);
-                nextSchoolIdRs = getNextSchoolId.executeQuery("SELECT MAX(schoolId) " +
+                getNextSchoolIdStmt = conn.createStatement();
+                statements.add(getNextSchoolIdStmt);
+                nextSchoolIdRs = getNextSchoolIdStmt.executeQuery("SELECT MAX(schoolId) " +
                         "FROM schools");
                 resultSets.add(nextSchoolIdRs);
 
@@ -246,8 +410,8 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                 }
 
                 Log.d(TAG, "Inserting school with values [" + remoteId + ", " + schoolName +"]");
-                String insertSchool = "INSERT INTO schools VALUES (?, ?)";
-                insertSchoolStmt = conn.prepareStatement(insertSchool);
+                String insertSchoolSql = "INSERT INTO schools VALUES (?, ?)";
+                insertSchoolStmt = conn.prepareStatement(insertSchoolSql);
                 statements.add(insertSchoolStmt);
                 insertSchoolStmt.setInt(1, remoteId);
                 insertSchoolStmt.setString(2, schoolName);
@@ -255,7 +419,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
                 // Commit insert
                 conn.commit();
-                Log.d(TAG, "Successfully registered school");
+                Log.i(TAG, "Successfully registered school");
                 // Rollback if there was a problem inserting
                 conn.rollback();
             } else {
@@ -265,7 +429,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
             }
         } catch(Exception e) {
             e.printStackTrace();
-            Log.d(TAG, "Problem syncing school data: " + e.getMessage());
+            Log.e(TAG, "Problem syncing school data: " + e.getMessage());
         } finally {
             cleanup(resultSets, statements, conn);
         }
@@ -279,20 +443,20 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
         List<Statement> statements = new ArrayList<>();
         List<ResultSet> resultSets = new ArrayList<>();
 
-        PreparedStatement selectUserStmt = null;
-        Statement getNextUserId = null;
-        PreparedStatement insertUserStmt = null;
+        PreparedStatement selectUserStmt;
+        Statement getNextUserIdStmt;
+        PreparedStatement insertUserStmt;
 
-        ResultSet rs = null;
-        ResultSet nextUserIdRs = null;
+        ResultSet rs;
+        ResultSet nextUserIdRs;
 
         try {
             conn = DriverManager.getConnection(url, appId, pass);
             conn.setAutoCommit(false);
-            Log.d(TAG, "Successfully connected to database");
+            Log.i(TAG, "Successfully connected to database");
 
-            String selectUser = "SELECT userId FROM user WHERE emailAddress = ?";
-            selectUserStmt = conn.prepareStatement(selectUser);
+            String selectUserSql = "SELECT userId FROM user WHERE emailAddress = ?";
+            selectUserStmt = conn.prepareStatement(selectUserSql);
             statements.add(selectUserStmt);
             selectUserStmt.setString(1, email);
 
@@ -300,9 +464,9 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
             resultSets.add(rs);
 
             if (!rs.next() || rs.getInt(1) == 0) {
-                getNextUserId = conn.createStatement();
-                statements.add(getNextUserId);
-                nextUserIdRs = getNextUserId.executeQuery("SELECT MAX(userId) " +
+                getNextUserIdStmt = conn.createStatement();
+                statements.add(getNextUserIdStmt);
+                nextUserIdRs = getNextUserIdStmt.executeQuery("SELECT MAX(userId) " +
                         "FROM user");
                 resultSets.add(nextUserIdRs);
 
@@ -316,9 +480,9 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
                 Log.d(TAG, "Inserting user with values [" + remoteId + ", " + user.getUserName() +
                         ", " + email + ", " + user.getRole() + ", " + remoteSchoolId + "]");
-                String insertUser = "INSERT INTO user (userId, schoolId, userName, emailAddress, role) " +
+                String insertUserSql = "INSERT INTO user (userId, schoolId, userName, emailAddress, role) " +
                         "VALUES (?, ?, ?, ?, ?)";
-                insertUserStmt = conn.prepareStatement(insertUser);
+                insertUserStmt = conn.prepareStatement(insertUserSql);
                 statements.add(insertUserStmt);
                 insertUserStmt.setInt(1, remoteId);
                 insertUserStmt.setInt(2, remoteSchoolId);
@@ -329,7 +493,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
                 // Commit insert
                 conn.commit();
-                Log.d(TAG, "Successfully registered user");
+                Log.i(TAG, "Successfully registered user");
                 // Rollback if there was a problem inserting
                 conn.rollback();
             } else {
@@ -339,7 +503,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
             }
         } catch(Exception e) {
             e.printStackTrace();
-            Log.d(TAG, "Problem syncing user data: " + e.getMessage());
+            Log.e(TAG, "Problem syncing user data: " + e.getMessage());
         } finally {
             cleanup(resultSets, statements, conn);
         }
@@ -370,7 +534,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
             }
         } catch (SQLException sqle) {
             sqle.printStackTrace();
-            Log.d(TAG, sqle.getMessage());
+            Log.e(TAG, sqle.getMessage());
         }
     }
 

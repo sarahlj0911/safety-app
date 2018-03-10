@@ -18,6 +18,9 @@ public interface ResponseDao {
     @Query("SELECT * FROM responses")
     List<Response> getAll();
 
+    @Query("SELECT * FROM responses WHERE walkthroughId = :walkthroughId")
+    List<Response> getAllByWalkthroughId(int walkthroughId);
+
     @Query("SELECT * FROM responses where responseId LIKE :responseId")
     Response getByResponseId(String responseId);
 
