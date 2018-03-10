@@ -13,29 +13,23 @@ import com.plusmobileapps.safetyapp.MyApplication;
 import com.plusmobileapps.safetyapp.PrefManager;
 import com.plusmobileapps.safetyapp.data.AppDatabase;
 import com.plusmobileapps.safetyapp.data.dao.LocationDao;
-import com.plusmobileapps.safetyapp.data.dao.QuestionDao;
 import com.plusmobileapps.safetyapp.data.dao.QuestionMappingDao;
 import com.plusmobileapps.safetyapp.data.dao.ResponseDao;
 import com.plusmobileapps.safetyapp.data.dao.SchoolDao;
 import com.plusmobileapps.safetyapp.data.dao.UserDao;
 import com.plusmobileapps.safetyapp.data.dao.WalkthroughDao;
 import com.plusmobileapps.safetyapp.data.entity.Location;
-import com.plusmobileapps.safetyapp.data.entity.Question;
 import com.plusmobileapps.safetyapp.data.entity.QuestionMapping;
 import com.plusmobileapps.safetyapp.data.entity.School;
 import com.plusmobileapps.safetyapp.data.entity.User;
-import com.plusmobileapps.safetyapp.data.entity.Walkthrough;
-import com.plusmobileapps.safetyapp.util.Utils;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -54,11 +48,10 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
     private WalkthroughDao walkthroughDao;
     private ResponseDao responseDao;
     private LocationDao locationDao;
-    private QuestionDao questionDao;
     private QuestionMappingDao questionMappingDao;
 
     // Connection properties
-    private static final String url = "jdbc:mysql://10.0.2.2:3306/safetywalkthrough";
+    private static final String url = "jdbc:mysql://10.0.2.2:3306/safetywalkthrough?useSSL=false";
     //private static final String url = "jdbc:mysql://safetymysqlinstance.cbcumohyescr.us-west-2.rds.amazonaws.com:3306/safetywalkthrough?useSSL=false";
     private static final String dbName = "safetywalkthrough";
     private static final String appId = "safety_app";
@@ -121,7 +114,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
         walkthroughDao = db.walkthroughDao();
         responseDao = db.responseDao();
         locationDao = db.locationDao();
-        questionDao = db.questionDao();
+        //questionDao = db.questionDao();
         questionMappingDao = db.questionMappingDao();
 
         school = schoolDao.get();
@@ -132,6 +125,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
             schoolDao.insert(school);
             Log.d(TAG, "Registered school remote id = " + remoteSchoolId);
         } else {
+            remoteSchoolId = school.getRemoteId();
             Log.d(TAG, "School " + school.getSchoolName() + " is already registered");
         }
 
@@ -146,15 +140,12 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
             Log.d(TAG, "User " + user.getUserName() + " is already registered");
         }
 
-        syncLocations(remoteSchoolId);
-        // TODO Sync questions
-        // TODO Sync question_mapping
+        syncWalkthroughData(remoteSchoolId);
         // TODO Sync walkthroughs & responses
     }
 
-    private void syncLocations(int remoteSchoolId) {
+    private void syncWalkthroughData(int remoteSchoolId) {
         List<Location> locations = locationDao.getAllLocations();
-        List<Question> questions = questionDao.getAll();
         List<QuestionMapping> questionMappings = questionMappingDao.getAllQuestionMappings();
 
         List<Statement> statements = new ArrayList<>();
@@ -164,8 +155,8 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
         PreparedStatement questionMappingStmt = null;
         String locationSql = "REPLACE INTO location (locationId, schoolId, name, type, locationInstruction) " +
                 "VALUES (?, ?, ?, ?, ?)";
-        String questionSql = "REPLACE INTO question (questionId, questionText, shortDesc, ratingOption1, ratingOption2, ratingOption3, ratingOption4) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String questionMappingSql = "REPLACE INTO question_mapping (mappingId, schoolId, locationId, questionId) " +
+                "VALUES (?, ?, ?, ?)";
 
         if (locations == null || locations.isEmpty()) {
             return;
@@ -176,10 +167,8 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
             conn.setAutoCommit(false);
             locationStmt = conn.prepareStatement(locationSql);
             statements.add(locationStmt);
-            questionStmt = conn.prepareStatement(questionSql);
-            statements.add(questionStmt);
-            /*questionMappingStmt = conn.prepareStatement(questionMappingSql);
-            statements.add(questionMappingStmt);*/
+            questionMappingStmt = conn.prepareStatement(questionMappingSql);
+            statements.add(questionMappingStmt);
 
             for (Location location : locations) {
                 locationStmt.setInt(1, location.getLocationId());
@@ -193,19 +182,16 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
             int[] locationCount = locationStmt.executeBatch();
             Log.d(TAG, "Synced " + locationCount.length + " locations");
 
-            for (Question question : questions) {
-                questionStmt.setInt(1, question.getQuestionId());
-                questionStmt.setString(2, question.getQuestionText());
-                questionStmt.setString(3, question.getShortDescription());
-                questionStmt.setString(4, question.getRatingOption1());
-                questionStmt.setString(5, question.getRatingOption2());
-                questionStmt.setString(6, question.getRatingOption3());
-                questionStmt.setString(7, question.getRatingOption4());
-                questionStmt.addBatch();
+            for (QuestionMapping questionMapping : questionMappings) {
+                questionMappingStmt.setInt(1, questionMapping.getMappingId());
+                questionMappingStmt.setInt(2, remoteSchoolId);
+                questionMappingStmt.setInt(3, questionMapping.getLocationId());
+                questionMappingStmt.setInt(4, questionMapping.getQuestionId());
+                questionMappingStmt.addBatch();
             }
 
-            int[] questionCount = questionStmt.executeBatch();
-            Log.d(TAG, "Synced " + questionCount.length + " questions");
+            int[] questionMappingCount = questionMappingStmt.executeBatch();
+            Log.d(TAG, "Synced " + questionMappingCount.length + " question mappings");
 
             conn.commit();
 
