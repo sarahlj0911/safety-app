@@ -31,15 +31,6 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        // Checking if user has already signed up
-        PrefManager prefManager = new PrefManager(this);
-        prefManager.setFirstTimeLaunch(false);
-
-        if (prefManager.isUserSignedUp()) {
-            launchHomeScreen();
-        }
-
         setContentView(R.layout.activity_signup);
         presenter = new SignupPresenter(this);
         Button saveSignupBtn = findViewById(R.id.button_save_signup);
@@ -67,6 +58,8 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
 
     @Override
     public void launchHomeScreen() {
+        PrefManager prefManager = new PrefManager(this);
+        prefManager.setIsUserSignedUp(true);
         startActivity(new Intent(SignupActivity.this, MainActivity.class));
         finish();
     }

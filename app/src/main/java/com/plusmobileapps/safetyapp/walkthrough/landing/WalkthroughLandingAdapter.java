@@ -1,6 +1,5 @@
 package com.plusmobileapps.safetyapp.walkthrough.landing;
 
-import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -22,9 +21,7 @@ public class WalkthroughLandingAdapter extends RecyclerView.Adapter<WalkthroughL
     public static final int ITEM_TYPE_NORMAL = 1;
     public static final int ITEM_TYPE_HEADER = 0;
     private Walkthrough walkthrough;
-    private int walkthroughCount = 0;
     private WalkthroughLandingFragment.WalkthroughLandingItemListener itemListener;
-
     private List<Walkthrough> walkthroughs;
 
     public WalkthroughLandingAdapter(List<Walkthrough> walkthroughs, WalkthroughLandingFragment.WalkthroughLandingItemListener itemListener) {
@@ -38,6 +35,7 @@ public class WalkthroughLandingAdapter extends RecyclerView.Adapter<WalkthroughL
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.viewholder_landing_walkthrough, parent, false);
         return new CardViewHolder(view);
+
     }
 
 
@@ -73,7 +71,6 @@ public class WalkthroughLandingAdapter extends RecyclerView.Adapter<WalkthroughL
                 holder.getProgressBar().setVisibility(View.INVISIBLE);
             }
         }
-
     }
 
     @Override
@@ -135,5 +132,4 @@ public class WalkthroughLandingAdapter extends RecyclerView.Adapter<WalkthroughL
         }
 
     }
-
 }
