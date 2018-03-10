@@ -26,8 +26,6 @@ public class WalkthroughPresenter implements WalkthroughContract.Presenter {
     private int locationId;
     private int walkthroughId;
 
-
-
     public WalkthroughPresenter(WalkthroughContract.View view) {
         this.view = view;
     }
@@ -76,6 +74,7 @@ public class WalkthroughPresenter implements WalkthroughContract.Presenter {
 
         Response response = view.getCurrentResponse();
         response = setUpResponse(response);
+
         //check if the next question has already been started
         if(currentIndex == responses.size()) {
             responses.add(response);
@@ -111,7 +110,7 @@ public class WalkthroughPresenter implements WalkthroughContract.Presenter {
     public void setResponses(List<Response> responses) { this.responses = responses; }
 
     private void saveResponses() {
-        //TODO create async task to save responses
+
         SaveResponses save = new SaveResponses();
         save.responses = responses;
         save.execute();

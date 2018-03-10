@@ -66,17 +66,7 @@ public class Response {
     private int walkthroughId;
 
     public Response() {
-//        this.responseId = responseId;
-//        this.isActionItem = isActionItem;
-//        this.locationId = locationId;
-//        this.timeStamp = timeStamp;
-//        this.rating = rating;
-//        this.priority = priority;
-//        this.actionPlan = actionPlan;
-//        this.questionId = questionId;
-//        this.imagePath = imagePath;
-//        this.userId = userId;
-//        this.walkthroughId = walkthroughId;
+
     }
 
     //Getters

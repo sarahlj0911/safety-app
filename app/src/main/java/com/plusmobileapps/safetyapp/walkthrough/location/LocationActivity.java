@@ -33,7 +33,7 @@ public class LocationActivity extends AppCompatActivity implements LocationContr
 
         Intent intent = getIntent();
         String title = intent.getStringExtra(WalkthroughLandingFragment.EXTRA_WALKTHROUGH_NAME);
-        int id = intent.getIntExtra("walkthroughId", -1);//TODO: FIX
+        int id = intent.getIntExtra("walkthroughId", -1);
         new LocationPresenter(this, id);
 
         Toolbar toolbar = findViewById(R.id.location_toolbar);
@@ -79,7 +79,6 @@ public class LocationActivity extends AppCompatActivity implements LocationContr
 
     @Override
     public void openRequestedLocation(int locationId, String locationName, int walkthroughId) {
-        //TODO refactor to use locationId.
         Intent intent = new Intent(this, WalkthroughActivity.class);
         intent.putExtra(WalkthroughActivity.EXTRA_LOCATION_ID, locationId);
         intent.putExtra(EXTRA_WALKTHROUGH_LOCATION_NAME, locationName);

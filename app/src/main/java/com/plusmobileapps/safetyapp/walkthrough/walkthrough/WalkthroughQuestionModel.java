@@ -50,6 +50,5 @@ public class WalkthroughQuestionModel extends AsyncTask<Void, Void, List<Questio
         view.showNextQuestion(questions.get(0));
     }
 
-
 }
 
