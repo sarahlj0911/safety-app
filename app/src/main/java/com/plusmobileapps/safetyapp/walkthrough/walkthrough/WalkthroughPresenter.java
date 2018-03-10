@@ -47,17 +47,19 @@ public class WalkthroughPresenter implements WalkthroughContract.Presenter {
     @Override
     public void loadResponses(int walkthroughId) {
         this.walkthroughId = walkthroughId;
-        new WalkthroughResponseModel(this.locationId, walkthroughId, view, this).execute();
+//        TODO: insert previous responses from previously filled out walkthroughs
+//        new WalkthroughResponseModel(this.locationId, walkthroughId, view, this).execute();
     }
 
     @Override
     public void previousQuestionClicked() {
         if(currentIndex == 0) {
-            saveResponses();
+            view.showConfirmationDialog();
             return;
         }
 
         Response lastResponse = view.getCurrentResponse();
+        lastResponse = setUpResponse(lastResponse);
         responses.set(currentIndex-1, lastResponse);
         currentIndex--;
 
@@ -73,9 +75,7 @@ public class WalkthroughPresenter implements WalkthroughContract.Presenter {
         }
 
         Response response = view.getCurrentResponse();
-        response.setLocationId(locationId);
-        response.setWalkthroughId(walkthroughId);
-
+        response = setUpResponse(response);
         //check if the next question has already been started
         if(currentIndex == responses.size()) {
             responses.add(response);
@@ -87,15 +87,21 @@ public class WalkthroughPresenter implements WalkthroughContract.Presenter {
 
     }
 
+    private Response setUpResponse(Response response) {
+        response.setWalkthroughId(walkthroughId);
+        response.setLocationId(locationId);
+        return response;
+    }
+
     @Override
     public void confirmationExitClicked() {
+        saveResponses();
         view.closeWalkthrough();
     }
 
     @Override
     public void backButtonPressed() {
         view.showConfirmationDialog();
-        saveResponses();
     }
 
     public void setQuestions(List<Question> questions) {

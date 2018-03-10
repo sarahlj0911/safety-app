@@ -32,7 +32,7 @@ import static android.arch.persistence.room.ForeignKey.CASCADE;
                         childColumns = "questionId"),
         })
 public class Response {
-    @PrimaryKey(autoGenerate = false)
+    @PrimaryKey(autoGenerate = true)
     private int responseId;
 
     @ColumnInfo(name = "isActionItem")
