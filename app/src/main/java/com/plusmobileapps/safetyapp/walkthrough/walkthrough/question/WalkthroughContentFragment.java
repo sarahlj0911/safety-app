@@ -39,7 +39,12 @@ import static android.app.Activity.RESULT_OK;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class WalkthroughContentFragment extends Fragment implements View.OnClickListener, WalkthroughFragmentContract.View {
+public class WalkthroughContentFragment extends Fragment
+        implements View.OnClickListener, WalkthroughFragmentContract.View {
+
+    private enum Rating {
+        OPTION1, OPTION2, OPTION3, OPTION4
+    }
 
     static final String TAG = "WalkthruContentFragment";
     private static final int REQUEST_IMAGE_CAPTURE = 1;
@@ -63,6 +68,8 @@ public class WalkthroughContentFragment extends Fragment implements View.OnClick
     private String photoPath;
     private PackageManager packageManager;
     private WalkthroughFragmentContract.Presenter presenter;
+    private RadioGroup radioGroup;
+    private int currentRating;
 
     public static WalkthroughContentFragment newInstance(Question question) {
         WalkthroughContentFragment fragment = new WalkthroughContentFragment();
@@ -98,18 +105,19 @@ public class WalkthroughContentFragment extends Fragment implements View.OnClick
     }
 
     private View generateQuestionView(View view, Question question) {
-        RadioGroup radioGroup = view.findViewById(R.id.radioGroup);
+        radioGroup = view.findViewById(R.id.radioGroup);
+        radioGroup.setOnCheckedChangeListener(ratingChangeListener);
         if (question.getRatingOption1() != null) {
-            radioGroup.addView(generateRadioButton(question.getRatingOption1(), question.getQuestionId()));
+            radioGroup.addView(generateRadioButton(question.getRatingOption1(), Rating.OPTION1));
         }
         if (question.getRatingOption2() != null) {
-            radioGroup.addView(generateRadioButton(question.getRatingOption2(), question.getQuestionId()));
+            radioGroup.addView(generateRadioButton(question.getRatingOption2(), Rating.OPTION2));
         }
         if (question.getRatingOption3() != null) {
-            radioGroup.addView(generateRadioButton(question.getRatingOption3(), question.getQuestionId()));
+            radioGroup.addView(generateRadioButton(question.getRatingOption3(), Rating.OPTION3));
         }
         if (question.getRatingOption4() != null) {
-            radioGroup.addView(generateRadioButton(question.getRatingOption4(), question.getQuestionId()));
+            radioGroup.addView(generateRadioButton(question.getRatingOption4(), Rating.OPTION4));
         }
 
         descriptionTextView.setText(question.getQuestionText());
@@ -117,9 +125,9 @@ public class WalkthroughContentFragment extends Fragment implements View.OnClick
         return view;
     }
 
-    private RadioButton generateRadioButton(String content, int id) {
+    private RadioButton generateRadioButton(String content, Rating id) {
         RadioButton radioButton = new RadioButton(getContext());
-        radioButton.setId(id);
+        radioButton.setId(id.ordinal());
         radioButton.setText(content);
 
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -214,8 +222,32 @@ public class WalkthroughContentFragment extends Fragment implements View.OnClick
 
     @Override
     public Response getResponse() {
-        return this.response;
+        response.setActionPlan(actionPlanEditText.getText().toString());
+        response.setRating(currentRating);
+        return response;
     }
+
+    private RadioGroup.OnCheckedChangeListener ratingChangeListener = new RadioGroup.OnCheckedChangeListener() {
+        @Override
+        public void onCheckedChanged(RadioGroup group, int checkedId) {
+            switch (checkedId) {
+                case 0:
+                    currentRating = Rating.OPTION1.ordinal();
+                    break;
+                case 1:
+                    currentRating = Rating.OPTION2.ordinal();
+                    break;
+                case 2:
+                    currentRating = Rating.OPTION3.ordinal();
+                    break;
+                case 3:
+                    currentRating = Rating.OPTION4.ordinal();
+                    break;
+                default:
+                    break;
+            }
+        }
+    };
 
     /**
      * Handle all click events here within the fragment
@@ -250,17 +282,17 @@ public class WalkthroughContentFragment extends Fragment implements View.OnClick
             case R.id.priority_btn_red:
                 priority = Priority.HIGH;
                 presenter.priorityClicked(priority);
-                response.setPriority(2);
+                response.setPriority(Priority.HIGH.ordinal());
                 break;
             case R.id.priority_btn_yellow:
                 priority = Priority.MEDIUM;
                 presenter.priorityClicked(priority);
-                response.setPriority(1);
+                response.setPriority(Priority.MEDIUM.ordinal());
                 break;
             case R.id.priority_btn_green:
                 priority = Priority.NONE;
                 presenter.priorityClicked(priority);
-                response.setPriority(0);
+                response.setPriority(Priority.NONE.ordinal());
                 break;
             default:
                 break;
