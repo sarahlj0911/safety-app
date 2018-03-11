@@ -13,6 +13,7 @@ public interface WalkthroughLandingContract {
 
         void showWalkthroughs(List<Walkthrough> walkthroughs);
         void openWalkthrough(int id, String title);
+        void showNoWalkThrough(boolean show);
         void createNewWalkthrough(int id, String title);
         void showTutorial();
         void showInProcessConfirmationDialog();

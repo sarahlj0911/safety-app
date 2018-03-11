@@ -106,7 +106,6 @@ public class WalkthroughLandingFragment extends Fragment
     @Override
     public void showWalkthroughs(List<Walkthrough> walkthroughs) {
         Log.d(TAG, "In showWalkthroughs. walkthroughs.size = " + walkthroughs.size());
-        showNoWalkthroughs(walkthroughs.size() == 0);
         fab.setVisibility(View.VISIBLE);
         adapter.replaceData(walkthroughs);
         adapter.notifyDataSetChanged();
@@ -200,12 +199,9 @@ public class WalkthroughLandingFragment extends Fragment
         dialog.show();
     }
 
-    public void showNoWalkthroughs(boolean show) {
-        if(show) {
-            noWalkthroughs.setVisibility(View.VISIBLE);
-        } else {
-            noWalkthroughs.setVisibility(View.GONE);
-        }
+    @Override
+    public void showNoWalkThrough(boolean show) {
+        noWalkthroughs.setVisibility(show ? View.VISIBLE : View.GONE);
     }
 
     /**

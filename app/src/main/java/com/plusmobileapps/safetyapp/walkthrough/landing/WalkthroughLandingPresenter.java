@@ -61,7 +61,8 @@ public class WalkthroughLandingPresenter implements WalkthroughLandingContract.P
     }
 
 
-    private void setupLandingUi(List<Walkthrough> walkthroughs) {
+    private void setupLandingUi() {
+        view.showNoWalkThrough(walkthroughs.size() == 0);
         view.showWalkthroughs(walkthroughs);
     }
 
@@ -82,8 +83,7 @@ public class WalkthroughLandingPresenter implements WalkthroughLandingContract.P
         @Override
         public void onWalkthroughListLoaded(List<Walkthrough> allWalkthroughs) {
             walkthroughs = allWalkthroughs;
-            setupLandingUi(walkthroughs);
-
+            setupLandingUi();
         }
     };
 
