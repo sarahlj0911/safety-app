@@ -48,10 +48,10 @@ public class Response {
     private String timeStamp; //TODO Convert to time stamp object
 
     @ColumnInfo(name = "rating")
-    private int rating;
+    private int rating = -1;
 
     @ColumnInfo(name = "priority")
-    private int priority;
+    private int priority = -1;
 
     @ColumnInfo(name = "actionPlan")
     private String actionPlan;
@@ -187,6 +187,18 @@ public class Response {
             }
         }
         return false;
+    }
+
+    public boolean isResponseFilledOut() {
+        return isRatingEmpty() || isPriorityEmpty();
+    }
+
+    public boolean isRatingEmpty() {
+        return rating == -1;
+    }
+
+    public boolean isPriorityEmpty() {
+        return priority == -1;
     }
 
 }

@@ -9,6 +9,8 @@
     <color name="actionItemYellow">#FFEB3B</color>
     <color name="divider">#9E9E9E</color>
 
+    <color name="textColorPrimary">#000000</color>
+
     <!-- Welcome pages dot colors -->
     <color name="dot_active_welcome">#303F9F</color>
     <color name="dot_inactive_welcome">#ABB6F2</color>

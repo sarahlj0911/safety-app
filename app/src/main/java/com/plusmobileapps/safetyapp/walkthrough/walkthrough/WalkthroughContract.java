@@ -10,6 +10,7 @@ public interface WalkthroughContract {
         void showPreviousQuestion();
         Response getCurrentResponse();
         void closeWalkthrough();
+        void showError(boolean showPriority, boolean showRating);
 
     }
 
