@@ -68,7 +68,7 @@ public class WalkthroughPresenter implements WalkthroughContract.Presenter {
     public void nextQuestionClicked() {
         //if you're at the last question
         if(currentIndex + 1 == questions.size()) {
-            saveResponses();
+            finishWalkthrough();
             return;
         }
 
@@ -123,6 +123,11 @@ public class WalkthroughPresenter implements WalkthroughContract.Presenter {
         view.closeWalkthrough();
     }
 
+    private void finishWalkthrough() {
+        saveResponses();
+
+    }
+
     static class SaveResponses extends AsyncTask<Void,Void, Boolean> {
         List<Response> responses;
 
@@ -135,5 +140,13 @@ public class WalkthroughPresenter implements WalkthroughContract.Presenter {
             return true;
         }
 
+    }
+
+    static class MarkWalkthroughFinishedTask extends AsyncTask<Void, Void, Boolean> {
+
+        @Override
+        protected Boolean doInBackground(Void... voids) {
+            return null;
+        }
     }
 }
