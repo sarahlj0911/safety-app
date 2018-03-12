@@ -27,7 +27,6 @@ import com.plusmobileapps.safetyapp.data.entity.Walkthrough;
 import com.plusmobileapps.safetyapp.util.Utils;
 
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -56,11 +55,11 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
     private QuestionMappingDao questionMappingDao;
 
     // Connection properties
-    private static final String url = "jdbc:mysql://10.0.2.2:3306/safetywalkthrough?useSSL=false";
-    //private static final String url = "jdbc:mysql://safetymysqlinstance.cbcumohyescr.us-west-2.rds.amazonaws.com:3306/safetywalkthrough?useSSL=false";
-    private static final String dbName = "safetywalkthrough";
-    private static final String appId = "safety_app";
-    private static final String pass = "J7jd!ETRysdxrTGh";
+    private static final String URL = "jdbc:mysql://10.0.2.2:3306/safetywalkthrough?useSSL=false";
+    //private static final String URL = "jdbc:mysql://safetymysqlinstance.cbcumohyescr.us-west-2.rds.amazonaws.com:3306/safetywalkthrough?useSSL=false";
+    //private static final String DB_NAME = "safetywalkthrough";
+    private static final String APP_ID = "safety_app";
+    private static final String PASS = "J7jd!ETRysdxrTGh";
 
     /**
      * Set up the sync adapter
@@ -161,7 +160,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                 "WHERE schoolId = ? AND userId = ? AND walkthroughId = ?";
 
         try {
-            conn = DriverManager.getConnection(url, appId, pass);
+            conn = DriverManager.getConnection(URL, APP_ID, PASS);
             conn.setAutoCommit(false);
             Log.i(TAG, "Successfully connected to database");
 
@@ -208,25 +207,24 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
         String getLastSyncDateTimeSql = "SELECT MAX(lastUpdatedDate) " +
                 "FROM walkthroughs WHERE schoolId = ? AND userId = ?";
 
-        /*String updateWalkthroughSql = "UPDATE walkthroughs " +
-                "SET name = ?, lastUpdatedDate = ?, percentComplete = ? " +
-                "WHERE schoolId = ? AND walkthroughId = ? AND userId = ?";*/
-
         String updateWalkthroughSql = "INSERT INTO walkthroughs " +
                 "(walkthroughId, schoolId, userId, name, lastUpdatedDate, createdDate, percentComplete) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?) " +
                 "ON DUPLICATE KEY UPDATE " +
                 "name = ?, lastUpdatedDate = ?, percentComplete = ?";
 
-        String updateResponseSql = "UPDATE responses " +
-                "SET actionPlan = ?, priority = ?, rating = ?, timestamp = ?, isActionItem = ?, image = ? " +
-                "WHERE schoolId = ? AND userId = ? AND walkthroughId = ? AND responseId = ?";
+        String updateResponseSql = "INSERT INTO responses " +
+                "(responseId, schoolId, userId, walkthroughId, locationId, questionId, actionPlan, " +
+                "priority, rating, timestamp, isActionItem, image) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) " +
+                "ON DUPLICATE KEY UPDATE " +
+                "actionPlan = ?, priority = ?, rating = ?, timestamp = ?, isActionItem = ?, image = ?";
 
         ResultSet lastSyncDateTimeRs;
         Timestamp lastSyncDateTime = null;
 
         try {
-            conn = DriverManager.getConnection(url, appId, pass);
+            conn = DriverManager.getConnection(URL, APP_ID, PASS);
             conn.setAutoCommit(false);
             Log.i(TAG, "Successfully connected to database");
 
@@ -271,22 +269,31 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                     updateWalkthroughStmt.setString(8, walkthrough.getName());
                     updateWalkthroughStmt.setTimestamp(9, newTimeStamp);
                     updateWalkthroughStmt.setDouble(10, walkthrough.getPercentComplete());
-                    Log.d(TAG, updateWalkthroughStmt.toString());
+                    //Log.d(TAG, updateWalkthroughStmt.toString());
                     updateWalkthroughStmt.addBatch();
 
                     List<Response> responses = responseDao.getAllByWalkthroughId(walkthrough.getWalkthroughId());
 
                     for (Response response : responses) {
-                        updateResponseStmt.setString(1, response.getActionPlan());
-                        updateResponseStmt.setInt(2, response.getPriority());
-                        updateResponseStmt.setInt(3, response.getRating());
-                        updateResponseStmt.setString(4, response.getTimeStamp());
-                        updateResponseStmt.setInt(5, response.getIsActionItem());
-                        updateResponseStmt.setString(6, response.getImagePath());
-                        updateResponseStmt.setInt(7, remoteSchoolId);
-                        updateResponseStmt.setInt(8, remoteUserId);
-                        updateResponseStmt.setInt(9, walkthroughId);
-                        updateResponseStmt.setInt(10, response.getResponseId());
+                        updateResponseStmt.setInt(1, response.getResponseId());
+                        updateResponseStmt.setInt(2, remoteSchoolId);
+                        updateResponseStmt.setInt(3, remoteUserId);
+                        updateResponseStmt.setInt(4, walkthroughId);
+                        updateResponseStmt.setInt(5, response.getLocationId());
+                        updateResponseStmt.setInt(6, response.getQuestionId());
+                        updateResponseStmt.setString(7, response.getActionPlan());
+                        updateResponseStmt.setInt(8, response.getPriority());
+                        updateResponseStmt.setInt(9, response.getRating());
+                        updateResponseStmt.setString(10, response.getTimeStamp());
+                        updateResponseStmt.setInt(11, response.getIsActionItem());
+                        updateResponseStmt.setString(12, response.getImagePath());
+                        updateResponseStmt.setString(13, response.getActionPlan());
+                        updateResponseStmt.setInt(14, response.getPriority());
+                        updateResponseStmt.setInt(15, response.getRating());
+                        updateResponseStmt.setString(16, response.getTimeStamp());
+                        updateResponseStmt.setInt(17, response.getIsActionItem());
+                        updateResponseStmt.setString(18, response.getImagePath());
+                        Log.d(TAG, updateResponseStmt.toString());
                         updateResponseStmt.addBatch();
                     }
                 }
@@ -304,7 +311,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
         } catch(Exception e) {
             e.printStackTrace();
-            Log.e(TAG, "Problem syncing location or question data: " + e.getMessage());
+            Log.e(TAG, "Problem syncing walkthrough or response data: " + e.getMessage());
         } finally {
             cleanup(resultSets, statements, conn);
         }
@@ -327,7 +334,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
         }
 
         try {
-            conn = DriverManager.getConnection(url, appId, pass);
+            conn = DriverManager.getConnection(URL, APP_ID, PASS);
             conn.setAutoCommit(false);
             locationStmt = conn.prepareStatement(locationSql);
             statements.add(locationStmt);
@@ -382,7 +389,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
         ResultSet nextSchoolIdRs;
 
         try {
-            conn = DriverManager.getConnection(url, appId, pass);
+            conn = DriverManager.getConnection(URL, APP_ID, PASS);
             conn.setAutoCommit(false);
             Log.i(TAG, "Successfully connected to database");
 
@@ -451,7 +458,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
         ResultSet nextUserIdRs;
 
         try {
-            conn = DriverManager.getConnection(url, appId, pass);
+            conn = DriverManager.getConnection(URL, APP_ID, PASS);
             conn.setAutoCommit(false);
             Log.i(TAG, "Successfully connected to database");
 
@@ -537,5 +544,4 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
             Log.e(TAG, sqle.getMessage());
         }
     }
-
 }

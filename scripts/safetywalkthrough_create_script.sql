@@ -7,10 +7,6 @@ SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
 -- -----------------------------------------------------
 -- Schema safetywalkthrough
 -- -----------------------------------------------------
-
--- -----------------------------------------------------
--- Schema safetywalkthrough
--- -----------------------------------------------------
 CREATE SCHEMA IF NOT EXISTS `safetywalkthrough` DEFAULT CHARACTER SET utf8 ;
 USE `safetywalkthrough` ;
 
@@ -34,12 +30,6 @@ CREATE TABLE IF NOT EXISTS `safetywalkthrough`.`user` (
   `emailAddress` VARCHAR(100) NOT NULL,
   `role` VARCHAR(20) NOT NULL,
   PRIMARY KEY (`userId`, `schoolId`) )
---  , INDEX `fk_user_schools_idx` (`schoolId` ASC),
---  CONSTRAINT `fk_user_schools`
---    FOREIGN KEY (`schoolId`)
---    REFERENCES `safetywalkthrough`.`schools` (`schoolId`)
---    ON DELETE NO ACTION
---    ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
@@ -53,12 +43,6 @@ CREATE TABLE IF NOT EXISTS `safetywalkthrough`.`location` (
   `type` VARCHAR(45) NOT NULL,
   `locationInstruction` VARCHAR(100) NOT NULL,
   PRIMARY KEY (`locationId`, `schoolId`) )
---  , INDEX `fk_location_schools1_idx` (`schoolId` ASC),
---  CONSTRAINT `fk_location_schools1`
---    FOREIGN KEY (`schoolId`)
---    REFERENCES `safetywalkthrough`.`schools` (`schoolId`)
---    ON DELETE NO ACTION
---    ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
@@ -86,24 +70,6 @@ CREATE TABLE IF NOT EXISTS `safetywalkthrough`.`question_mapping` (
   `locationId` INT NOT NULL,
   `questionId` INT NOT NULL,
   PRIMARY KEY (`mappingId`, `schoolId`) )
---  , INDEX `fk_question_mapping_schools1_idx` (`schoolId` ASC),
---  INDEX `fk_question_mapping_location1_idx` (`locationId` ASC),
---  INDEX `fk_question_mapping_question1_idx` (`questionId` ASC),
---  CONSTRAINT `fk_question_mapping_schools1`
---    FOREIGN KEY (`schoolId`)
---    REFERENCES `safetywalkthrough`.`schools` (`schoolId`)
---    ON DELETE NO ACTION
---    ON UPDATE NO ACTION,
---  CONSTRAINT `fk_question_mapping_location1`
---   FOREIGN KEY (`locationId`)
---    REFERENCES `safetywalkthrough`.`location` (`locationId`)
---    ON DELETE NO ACTION
---    ON UPDATE NO ACTION,
---  CONSTRAINT `fk_question_mapping_question1`
---    FOREIGN KEY (`questionId`)
---    REFERENCES `safetywalkthrough`.`question` (`questionId`)
---    ON DELETE NO ACTION
---    ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
@@ -115,62 +81,39 @@ CREATE TABLE IF NOT EXISTS `safetywalkthrough`.`walkthroughs` (
   `schoolId` INT NOT NULL,
   `userId` INT NOT NULL,
   `name` VARCHAR(32) NULL,
-  `lastUpdatedDate` VARCHAR(32) NULL,
-  `createdDate` VARCHAR(32) NULL,
+  `lastUpdatedDate` DATETIME DEFAULT NULL,
+  `createdDate` DATETIME DEFAULT NULL,
   `percentComplete` DECIMAL(5,2) NULL,
   PRIMARY KEY (`walkthroughId`, `schoolId`, `userId`) )
---  , INDEX `fk_walkthroughs_schools1_idx` (`schoolId` ASC),
---  CONSTRAINT `fk_walkthroughs_schools1`
---    FOREIGN KEY (`schoolId`)
---    REFERENCES `safetywalkthrough`.`schools` (`schoolId`)
---    ON DELETE NO ACTION
---    ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
 -- Table `safetywalkthrough`.`responses`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `safetywalkthrough`.`responses` (
+CREATE TABLE `safetywalkthrough`.`responses` (
   `responseId` INT NOT NULL,
   `schoolId` INT NOT NULL,
   `userId` INT NOT NULL,
   `walkthroughId` INT NOT NULL,
   `locationId` INT NOT NULL,
   `questionId` INT NOT NULL,
-  `actionPlan` VARCHAR(256) NULL,
-  `priority` INT NULL,
-  `rating` INT NULL,
-  `timestamp` VARCHAR(32) NULL,
-  `isActionItem` INT NULL,
-  `image` VARCHAR(256) NULL,
-  PRIMARY KEY (`responseId`, `schoolId`, `walkthroughId`, `locationId`, `questionId`, `userId`),
-  INDEX `fk_responses_walkthroughs1_idx` (`walkthroughId` ASC),
-  CONSTRAINT `fk_responses_walkthroughs1`
-    FOREIGN KEY (`walkthroughId`)
-    REFERENCES `safetywalkthrough`.`walkthroughs` (`walkthroughId`)
+  `actionPlan` VARCHAR(256) NULL DEFAULT NULL,
+  `priority` INT NULL DEFAULT NULL,
+  `rating` INT NULL DEFAULT NULL,
+  `timestamp` VARCHAR(32) NULL DEFAULT NULL,
+  `isActionItem` INT NULL DEFAULT 0,
+  `image` VARCHAR(256) NULL DEFAULT NULL,
+PRIMARY KEY (`responseId`, `walkthroughId`, `schoolId`, `userId`),
+  INDEX `fk_responses_walkthroughs_idx` (`walkthroughId` ASC, `schoolId` ASC, `userId` ASC),
+  CONSTRAINT `fk_responses_walkthroughs`
+    FOREIGN KEY (`walkthroughId` , `schoolId` , `userId`)
+    REFERENCES `safetywalkthrough`.`walkthroughs` (`walkthroughId` , `schoolId` , `userId`)
     ON DELETE CASCADE
     ON UPDATE NO ACTION)
---  INDEX `fk_responses_question1_idx` (`questionId` ASC),
---  INDEX `fk_responses_location1_idx` (`locationId` ASC),
---  INDEX `fk_responses_schools1_idx` (`schoolId` ASC),
---  CONSTRAINT `fk_responses_question1`
---    FOREIGN KEY (`questionId`)
---    REFERENCES `safetywalkthrough`.`question` (`questionId`)
---    ON DELETE NO ACTION
---    ON UPDATE NO ACTION,
-
---  CONSTRAINT `fk_responses_location1`
---    FOREIGN KEY (`locationId`)
---    REFERENCES `safetywalkthrough`.`location` (`locationId`)
---    ON DELETE NO ACTION
---    ON UPDATE NO ACTION,
---  CONSTRAINT `fk_responses_schools1`
---    FOREIGN KEY (`schoolId`)
---    REFERENCES `safetywalkthrough`.`schools` (`schoolId`)
---    ON DELETE NO ACTION
---    ON UPDATE NO ACTION)
 ENGINE = InnoDB;
+
+GRANT SELECT, INSERT, DELETE, UPDATE, TRIGGER ON TABLE `safetywalkthrough`.* TO 'safety_app';
 
 INSERT INTO `question` (questionId,questionText,shortDesc,ratingOption1,ratingOption2,ratingOption3,ratingOption4) VALUES (1,'Count evidence of school-ownership. Look for things with the school name or logo prominently displayed.','School Ownership','None','1-3','4 or more',NULL);
 INSERT INTO `question` (questionId,questionText,shortDesc,ratingOption1,ratingOption2,ratingOption3,ratingOption4) VALUES (2,'Count signs with positive behavioral expecations of students.','Positive Signs','None','1 or more',NULL,NULL);
