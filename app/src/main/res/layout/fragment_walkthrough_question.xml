@@ -30,46 +30,46 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <RadioButton
-                android:id="@+id/radio_button1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:button="@null"
-                android:drawableBottom="?android:attr/listChoiceIndicatorSingle"
-                android:gravity="center_horizontal|bottom"
-                android:onClick="onRadioButtonClicked" />
+            <!--<RadioButton-->
+                <!--android:id="@+id/radio_button1"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_weight="1"-->
+                <!--android:button="@null"-->
+                <!--android:drawableBottom="?android:attr/listChoiceIndicatorSingle"-->
+                <!--android:gravity="center_horizontal|bottom"-->
+                <!--android:onClick="onRadioButtonClicked" />-->
 
-            <RadioButton
-                android:id="@+id/radio_button2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:button="@null"
-                android:drawableBottom="?android:attr/listChoiceIndicatorSingle"
-                android:gravity="center_horizontal|bottom"
-                android:onClick="onRadioButtonClicked" />
+            <!--<RadioButton-->
+                <!--android:id="@+id/radio_button2"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_weight="1"-->
+                <!--android:button="@null"-->
+                <!--android:drawableBottom="?android:attr/listChoiceIndicatorSingle"-->
+                <!--android:gravity="center_horizontal|bottom"-->
+                <!--android:onClick="onRadioButtonClicked" />-->
 
-            <RadioButton
-                android:id="@+id/radio_button3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:button="@null"
-                android:drawableBottom="?android:attr/listChoiceIndicatorSingle"
-                android:gravity="center_horizontal|bottom"
-                android:onClick="onRadioButtonClicked" />
+            <!--<RadioButton-->
+                <!--android:id="@+id/radio_button3"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_weight="1"-->
+                <!--android:button="@null"-->
+                <!--android:drawableBottom="?android:attr/listChoiceIndicatorSingle"-->
+                <!--android:gravity="center_horizontal|bottom"-->
+                <!--android:onClick="onRadioButtonClicked" />-->
 
-            <RadioButton
-                android:id="@+id/radio_button4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:button="@null"
-                android:drawableBottom="?android:attr/listChoiceIndicatorSingle"
-                android:gravity="center_horizontal|bottom"
-                android:visibility="gone"
-                android:onClick="onRadioButtonClicked" />
+            <!--<RadioButton-->
+                <!--android:id="@+id/radio_button4"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_weight="1"-->
+                <!--android:button="@null"-->
+                <!--android:drawableBottom="?android:attr/listChoiceIndicatorSingle"-->
+                <!--android:gravity="center_horizontal|bottom"-->
+                <!--android:visibility="gone"-->
+                <!--android:onClick="onRadioButtonClicked" />-->
 
         </RadioGroup>
 

@@ -65,7 +65,7 @@ public class ActionItemDetailActivity extends AppCompatActivity
     @Override
     public void showConfirmationExitDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this)
-                .setMessage(getString(R.string.exit_confirmation))
+                .setMessage(getString(R.string.exit_confirmation_no_save))
                 .setTitle(getString(R.string.confirmation))
                 .setPositiveButton(getString(R.string.yes), confirmationListener)
                 .setNegativeButton(getString(R.string.cancel), confirmationListener);

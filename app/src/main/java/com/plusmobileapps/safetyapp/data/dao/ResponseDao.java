@@ -24,11 +24,14 @@ public interface ResponseDao {
     @Query("SELECT * FROM responses")
     List<Response> getAllActionItems();
 
+    @Query("SELECT * FROM RESPONSES where locationId LIKE :locationId AND walkthroughId LIKE :walkthroughId")
+    List<Response> getResponsesForLocation(int locationId, int walkthroughId);
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insert(Response response);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insertAll(Response... responses);
+    void insertAll(List<Response> responses);
 
     @Delete
     void delete(Response response);

@@ -32,7 +32,7 @@ import static android.arch.persistence.room.ForeignKey.CASCADE;
                         childColumns = "questionId"),
         })
 public class Response {
-    @PrimaryKey(autoGenerate = false)
+    @PrimaryKey(autoGenerate = true)
     private int responseId;
 
     @ColumnInfo(name = "isActionItem")
@@ -65,18 +65,8 @@ public class Response {
     @ColumnInfo(name = "walkthroughId")
     private int walkthroughId;
 
-    public Response(int responseId, int isActionItem, int locationId, String timeStamp, int rating, int priority, String actionPlan, int questionId, String imagePath, int userId, int walkthroughId) {
-        this.responseId = responseId;
-        this.isActionItem = isActionItem;
-        this.locationId = locationId;
-        this.timeStamp = timeStamp;
-        this.rating = rating;
-        this.priority = priority;
-        this.actionPlan = actionPlan;
-        this.questionId = questionId;
-        this.imagePath = imagePath;
-        this.userId = userId;
-        this.walkthroughId = walkthroughId;
+    public Response() {
+
     }
 
     //Getters
@@ -169,6 +159,14 @@ public class Response {
             return false;
         }
         return true;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
+
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
     }
 
     @Override

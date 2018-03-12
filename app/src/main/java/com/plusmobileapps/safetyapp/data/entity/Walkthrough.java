@@ -32,7 +32,8 @@ public class Walkthrough {
     @ColumnInfo(name = "lastUpdatedDate")
     private String lastUpdatedDate;
 
-    public Walkthrough(String name) {
+    public Walkthrough( String name) {
+
         this.name = name;
         percentComplete = 0.0;
         Date date = new Date();
@@ -41,7 +42,6 @@ public class Walkthrough {
         schoolId = 1;
 
     }
-    
 
     //Getters
     public int getWalkthroughId() { return this.walkthroughId; }

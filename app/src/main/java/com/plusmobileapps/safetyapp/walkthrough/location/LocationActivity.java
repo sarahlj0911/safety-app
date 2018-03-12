@@ -18,6 +18,9 @@ import java.util.List;
 
 public class LocationActivity extends AppCompatActivity implements LocationContract.View{
 
+    public static final String EXTRA_WALKTHROUGH_LOCATION_NAME = "walkthrough_name";
+    public static final String EXTRA_WALKTHROUGH_ID = "walkthrough_Id";
+
     private LocationContract.Presenter presenter;
     private RecyclerView recyclerView;
     private LocationAdapter adapter;
@@ -27,12 +30,11 @@ public class LocationActivity extends AppCompatActivity implements LocationContr
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_location);
-        new LocationPresenter(this);
 
         Intent intent = getIntent();
         String title = intent.getStringExtra(WalkthroughLandingFragment.EXTRA_WALKTHROUGH_NAME);
-        Long id = intent.getLongExtra(WalkthroughLandingFragment.EXTRA_REQUESTED_WALKTHROUGH, -1L);
-
+        int id = intent.getIntExtra("walkthroughId", -1);
+        new LocationPresenter(this, id);
 
         Toolbar toolbar = findViewById(R.id.location_toolbar);
         setSupportActionBar(toolbar);
@@ -76,9 +78,11 @@ public class LocationActivity extends AppCompatActivity implements LocationContr
     }
 
     @Override
-    public void openRequestedLocation(String location) {
+    public void openRequestedLocation(int locationId, String locationName, int walkthroughId) {
         Intent intent = new Intent(this, WalkthroughActivity.class);
-        intent.putExtra(WalkthroughActivity.EXTRA_LOCATION, location);
+        intent.putExtra(WalkthroughActivity.EXTRA_LOCATION_ID, locationId);
+        intent.putExtra(EXTRA_WALKTHROUGH_LOCATION_NAME, locationName);
+        intent.putExtra(EXTRA_WALKTHROUGH_ID, walkthroughId);
         startActivity(intent);
     }
 

@@ -8,6 +8,7 @@ import com.plusmobileapps.safetyapp.R;
 import com.plusmobileapps.safetyapp.data.AppDatabase;
 import com.plusmobileapps.safetyapp.data.dao.ResponseDao;
 import com.plusmobileapps.safetyapp.data.entity.Response;
+import com.plusmobileapps.safetyapp.model.Priority;
 
 public class ActionItemDetailPresenter implements ActionItemDetailContract.Presenter {
 
@@ -47,13 +48,13 @@ public class ActionItemDetailPresenter implements ActionItemDetailContract.Prese
     private int getStatusColorDrawable(String selectedPriority) {
         switch (selectedPriority) {
             case "High":
-                editedResponse.setPriority(3);
+                editedResponse.setPriority(Priority.HIGH.ordinal());
                 return R.drawable.circle_red;
             case "Medium":
-                editedResponse.setPriority(2);
+                editedResponse.setPriority(Priority.MEDIUM.ordinal());
                 return R.drawable.circle_yellow;
             case "Low":
-                editedResponse.setPriority(1);
+                editedResponse.setPriority(Priority.NONE.ordinal());
                 return R.drawable.circle_green;
             default:
                 return -1;
@@ -103,18 +104,7 @@ public class ActionItemDetailPresenter implements ActionItemDetailContract.Prese
         @Override
         public void onResponseLoaded(Response response) {
             originalResponse = response;
-            editedResponse = new Response(
-                    response.getResponseId(),
-                    response.getIsActionItem(),
-                    response.getLocationId(),
-                    response.getTimeStamp(),
-                    response.getRating(),
-                    response.getPriority(),
-                    response.getActionPlan(),
-                    response.getQuestionId(),
-                    response.getImagePath(),
-                    response.getUserId(),
-                    response.getWalkthroughId());
+            editedResponse = new Response();
             setupUi();
         }
     };
