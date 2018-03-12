@@ -28,20 +28,20 @@ public class WalkthroughLandingPresenter implements WalkthroughLandingContract.P
 
     @Override
     public void walkthroughClicked(int position) {
-        final Walkthrough walkthrough = walkthroughs.get(position);
+        final Walkthrough walkthrough = walkthroughs.get(walkthroughs.size() - position - 1);
         view.openWalkthrough(walkthrough.getWalkthroughId(), walkthrough.getName());
     }
 
     @Override
     public void deleteInProgressWalkthroughConfirmed() {
-        new DeleteWalkthrough(walkthroughs.get(0), view).execute();
+        new DeleteWalkthrough(walkthroughs.get(walkthroughs.size() - 1), view).execute();
         createNewWalkthrough();
     }
 
     @Override
     public void createNewWalkthroughIconClicked() {
         if(walkthroughs.size() > 0) {
-            if(walkthroughs.get(0).isInProgress()) {
+            if(walkthroughs.get(walkthroughs.size() - 1).isInProgress()) {
                 view.showInProcessConfirmationDialog();
             } else {
                 createNewWalkthrough();

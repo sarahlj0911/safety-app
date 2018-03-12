@@ -43,17 +43,19 @@ public class WalkthroughLandingAdapter extends RecyclerView.Adapter<WalkthroughL
     public void onBindViewHolder(final CardViewHolder holder, int position) {
         Log.d(TAG, "In onBindViewHolder");
         if(walkthroughs.size() > 0) {
-            walkthrough = walkthroughs.get(position);
+            int i = walkthroughs.size() - position - 1;
+            walkthrough = walkthroughs.get(i);
             TextView header = holder.getHeader();
 
-            //handle the header visibility
-            if (position <= 1) {
+            if(walkthrough.isInProgress()) {
                 header.setVisibility(View.VISIBLE);
-                if (position == 1) {
-                    header.setText(R.string.viewholder_header_completed);
-                } else {
-                    header.setText(R.string.viewholder_header_inprogress);
-                }
+                header.setText(R.string.viewholder_header_inprogress);
+            } else if(position == 0) {
+                header.setVisibility(View.VISIBLE);
+                header.setText(R.string.viewholder_header_completed);
+            } else if(position == 1 && walkthroughs.get(walkthroughs.size() - 1).isInProgress()) {
+                header.setVisibility(View.VISIBLE);
+                header.setText(R.string.viewholder_header_completed);
             } else {
                 header.setVisibility(View.GONE);
             }
