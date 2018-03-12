@@ -42,6 +42,8 @@ import java.util.List;
 
 public class SyncAdapter extends AbstractThreadedSyncAdapter {
     private static final String TAG = "SyncAdapter";
+    public static final String COM_MYSQL_JDBC_DRIVER = "com.mysql.jdbc.Driver";
+
     // Global variables
     private ContentResolver mContentResolver;
     private Connection conn;
@@ -57,9 +59,36 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
     // Connection properties
     private static final String URL = "jdbc:mysql://10.0.2.2:3306/safetywalkthrough?useSSL=false";
     //private static final String URL = "jdbc:mysql://safetymysqlinstance.cbcumohyescr.us-west-2.rds.amazonaws.com:3306/safetywalkthrough?useSSL=false";
-    //private static final String DB_NAME = "safetywalkthrough";
     private static final String APP_ID = "safety_app";
-    private static final String PASS = "J7jd!ETRysdxrTGh";
+    private static final String PASS = "";
+
+    // SQL statement constants
+    public static final String SELECT_MAX_SCHOOL_ID_SQL = "SELECT MAX(schoolId) FROM schools";
+    public static final String INSERT_SCHOOL_SQL = "INSERT INTO schools VALUES (?, ?)";
+    public static final String SELECT_USER_ID_FROM_USER_SQL = "SELECT userId FROM user WHERE emailAddress = ?";
+    public static final String SELECT_MAX_USER_ID_SQL = "SELECT MAX(userId) FROM user";
+    public static final String INSERT_USER_SQL = "INSERT INTO user (userId, schoolId, userName, " +
+            "emailAddress, role) VALUES (?, ?, ?, ?, ?)";
+    private static final String DELETE_WALKTHROUGH_SQL = "DELETE FROM walkthroughs " +
+            "WHERE schoolId = ? AND userId = ? AND walkthroughId = ?";
+    private static final String GET_LAST_SYNC_DATETIME_SQL = "SELECT MAX(lastUpdatedDate) " +
+            "FROM walkthroughs WHERE schoolId = ? AND userId = ?";
+    private static final String UPDATE_WALKTHROUGH_SQL = "INSERT INTO walkthroughs " +
+            "(walkthroughId, schoolId, userId, name, lastUpdatedDate, createdDate, percentComplete) " +
+            "VALUES (?, ?, ?, ?, ?, ?, ?) " +
+            "ON DUPLICATE KEY UPDATE " +
+            "name = ?, lastUpdatedDate = ?, percentComplete = ?";
+    private static final String UPDATE_RESPONSE_SQL = "INSERT INTO responses " +
+            "(responseId, schoolId, userId, walkthroughId, locationId, questionId, actionPlan, " +
+            "priority, rating, timestamp, isActionItem, image) " +
+            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) " +
+            "ON DUPLICATE KEY UPDATE " +
+            "actionPlan = ?, priority = ?, rating = ?, timestamp = ?, isActionItem = ?, image = ?";
+    private static final String LOCATION_SQL = "REPLACE INTO location (locationId, schoolId, name, " +
+            "type, locationInstruction) VALUES (?, ?, ?, ?, ?)";
+    private static final String QUESTION_MAPPING_SQL = "REPLACE INTO question_mapping " +
+            "(mappingId, schoolId, locationId, questionId) VALUES (?, ?, ?, ?)";
+    private static final String SELECT_SCHOOL_SQL = "SELECT schoolId FROM schools WHERE schoolName = ?";
 
     /**
      * Set up the sync adapter
@@ -99,10 +128,10 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
             Log.d(TAG, "PrefManager says user isn't signed up, so not running sync");
             return;
         }
-        Log.d(TAG, "Performing sync");
+        Log.i(TAG, "Performing sync");
 
         try {
-            Class.forName("com.mysql.jdbc.Driver");
+            Class.forName(COM_MYSQL_JDBC_DRIVER);
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
@@ -118,7 +147,6 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
         walkthroughDao = db.walkthroughDao();
         responseDao = db.responseDao();
         locationDao = db.locationDao();
-        //questionDao = db.questionDao();
         questionMappingDao = db.questionMappingDao();
 
         school = schoolDao.get();
@@ -147,7 +175,6 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
         syncLocationsAndQuestions(remoteSchoolId);
         deleteRemoteWalkthroughs(remoteSchoolId, remoteUserId);
-        // TODO Sync walkthroughs & responses
         syncWalkthroughsAndResponses(remoteSchoolId, remoteUserId);
     }
 
@@ -156,15 +183,12 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
         List<Walkthrough> deletedWalkthroughs = walkthroughDao.getAllDeleted();
         PreparedStatement deleteWalkthroughsStmt;
 
-        String deleteWalkthroughsSql = "DELETE FROM walkthroughs " +
-                "WHERE schoolId = ? AND userId = ? AND walkthroughId = ?";
-
         try {
             conn = DriverManager.getConnection(URL, APP_ID, PASS);
             conn.setAutoCommit(false);
             Log.i(TAG, "Successfully connected to database");
 
-            deleteWalkthroughsStmt = conn.prepareStatement(deleteWalkthroughsSql);
+            deleteWalkthroughsStmt = conn.prepareStatement(DELETE_WALKTHROUGH_SQL);
             statements.add(deleteWalkthroughsStmt);
 
             for (Walkthrough deletedWalkthrough : deletedWalkthroughs) {
@@ -203,23 +227,6 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
         PreparedStatement getLastSyncDateTimeStmt;
         PreparedStatement updateWalkthroughStmt;
         PreparedStatement updateResponseStmt;
-
-        String getLastSyncDateTimeSql = "SELECT MAX(lastUpdatedDate) " +
-                "FROM walkthroughs WHERE schoolId = ? AND userId = ?";
-
-        String updateWalkthroughSql = "INSERT INTO walkthroughs " +
-                "(walkthroughId, schoolId, userId, name, lastUpdatedDate, createdDate, percentComplete) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?) " +
-                "ON DUPLICATE KEY UPDATE " +
-                "name = ?, lastUpdatedDate = ?, percentComplete = ?";
-
-        String updateResponseSql = "INSERT INTO responses " +
-                "(responseId, schoolId, userId, walkthroughId, locationId, questionId, actionPlan, " +
-                "priority, rating, timestamp, isActionItem, image) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) " +
-                "ON DUPLICATE KEY UPDATE " +
-                "actionPlan = ?, priority = ?, rating = ?, timestamp = ?, isActionItem = ?, image = ?";
-
         ResultSet lastSyncDateTimeRs;
         Timestamp lastSyncDateTime = null;
 
@@ -228,7 +235,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
             conn.setAutoCommit(false);
             Log.i(TAG, "Successfully connected to database");
 
-            getLastSyncDateTimeStmt = conn.prepareStatement(getLastSyncDateTimeSql);
+            getLastSyncDateTimeStmt = conn.prepareStatement(GET_LAST_SYNC_DATETIME_SQL);
             statements.add(getLastSyncDateTimeStmt);
             getLastSyncDateTimeStmt.setInt(1, remoteSchoolId);
             getLastSyncDateTimeStmt.setInt(2, remoteUserId);
@@ -246,9 +253,9 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                 Log.i(TAG, "No walkthroughs for schoolId " + remoteSchoolId + ", userId " + remoteUserId + " in db");
             }
 
-            updateWalkthroughStmt = conn.prepareStatement(updateWalkthroughSql);
+            updateWalkthroughStmt = conn.prepareStatement(UPDATE_WALKTHROUGH_SQL);
             statements.add(updateWalkthroughStmt);
-            updateResponseStmt = conn.prepareStatement(updateResponseSql);
+            updateResponseStmt = conn.prepareStatement(UPDATE_RESPONSE_SQL);
             statements.add(updateResponseStmt);
 
             for (Walkthrough walkthrough : activeWalkthroughs) {
@@ -293,7 +300,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                         updateResponseStmt.setString(16, response.getTimeStamp());
                         updateResponseStmt.setInt(17, response.getIsActionItem());
                         updateResponseStmt.setString(18, response.getImagePath());
-                        Log.d(TAG, updateResponseStmt.toString());
+                        //Log.d(TAG, updateResponseStmt.toString());
                         updateResponseStmt.addBatch();
                     }
                 }
@@ -320,14 +327,9 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
     private void syncLocationsAndQuestions(int remoteSchoolId) {
         List<Location> locations = locationDao.getAllLocations();
         List<QuestionMapping> questionMappings = questionMappingDao.getAllQuestionMappings();
-
         List<Statement> statements = new ArrayList<>();
         PreparedStatement locationStmt;
         PreparedStatement questionMappingStmt;
-        String locationSql = "REPLACE INTO location (locationId, schoolId, name, type, locationInstruction) " +
-                "VALUES (?, ?, ?, ?, ?)";
-        String questionMappingSql = "REPLACE INTO question_mapping (mappingId, schoolId, locationId, questionId) " +
-                "VALUES (?, ?, ?, ?)";
 
         if (locations == null || locations.isEmpty()) {
             return;
@@ -336,9 +338,9 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
         try {
             conn = DriverManager.getConnection(URL, APP_ID, PASS);
             conn.setAutoCommit(false);
-            locationStmt = conn.prepareStatement(locationSql);
+            locationStmt = conn.prepareStatement(LOCATION_SQL);
             statements.add(locationStmt);
-            questionMappingStmt = conn.prepareStatement(questionMappingSql);
+            questionMappingStmt = conn.prepareStatement(QUESTION_MAPPING_SQL);
             statements.add(questionMappingStmt);
 
             for (Location location : locations) {
@@ -384,7 +386,6 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
         PreparedStatement selectSchoolStmt;
         Statement getNextSchoolIdStmt;
         PreparedStatement insertSchoolStmt;
-
         ResultSet rs;
         ResultSet nextSchoolIdRs;
 
@@ -393,8 +394,8 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
             conn.setAutoCommit(false);
             Log.i(TAG, "Successfully connected to database");
 
-            String selectSchoolSql = "SELECT schoolId FROM schools WHERE schoolName = ?";
-            selectSchoolStmt = conn.prepareStatement(selectSchoolSql);
+
+            selectSchoolStmt = conn.prepareStatement(SELECT_SCHOOL_SQL);
             statements.add(selectSchoolStmt);
             selectSchoolStmt.setString(1, schoolName);
 
@@ -404,8 +405,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
             if (!rs.next() || rs.getInt(1) == 0) {
                 getNextSchoolIdStmt = conn.createStatement();
                 statements.add(getNextSchoolIdStmt);
-                nextSchoolIdRs = getNextSchoolIdStmt.executeQuery("SELECT MAX(schoolId) " +
-                        "FROM schools");
+                nextSchoolIdRs = getNextSchoolIdStmt.executeQuery(SELECT_MAX_SCHOOL_ID_SQL);
                 resultSets.add(nextSchoolIdRs);
 
                 if (!nextSchoolIdRs.next()) {
@@ -417,7 +417,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                 }
 
                 Log.d(TAG, "Inserting school with values [" + remoteId + ", " + schoolName +"]");
-                String insertSchoolSql = "INSERT INTO schools VALUES (?, ?)";
+                String insertSchoolSql = INSERT_SCHOOL_SQL;
                 insertSchoolStmt = conn.prepareStatement(insertSchoolSql);
                 statements.add(insertSchoolStmt);
                 insertSchoolStmt.setInt(1, remoteId);
@@ -462,7 +462,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
             conn.setAutoCommit(false);
             Log.i(TAG, "Successfully connected to database");
 
-            String selectUserSql = "SELECT userId FROM user WHERE emailAddress = ?";
+            String selectUserSql = SELECT_USER_ID_FROM_USER_SQL;
             selectUserStmt = conn.prepareStatement(selectUserSql);
             statements.add(selectUserStmt);
             selectUserStmt.setString(1, email);
@@ -473,8 +473,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
             if (!rs.next() || rs.getInt(1) == 0) {
                 getNextUserIdStmt = conn.createStatement();
                 statements.add(getNextUserIdStmt);
-                nextUserIdRs = getNextUserIdStmt.executeQuery("SELECT MAX(userId) " +
-                        "FROM user");
+                nextUserIdRs = getNextUserIdStmt.executeQuery(SELECT_MAX_USER_ID_SQL);
                 resultSets.add(nextUserIdRs);
 
                 if (!nextUserIdRs.next()) {
@@ -487,8 +486,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
                 Log.d(TAG, "Inserting user with values [" + remoteId + ", " + user.getUserName() +
                         ", " + email + ", " + user.getRole() + ", " + remoteSchoolId + "]");
-                String insertUserSql = "INSERT INTO user (userId, schoolId, userName, emailAddress, role) " +
-                        "VALUES (?, ?, ?, ?, ?)";
+                String insertUserSql = INSERT_USER_SQL;
                 insertUserStmt = conn.prepareStatement(insertUserSql);
                 statements.add(insertUserStmt);
                 insertUserStmt.setInt(1, remoteId);
