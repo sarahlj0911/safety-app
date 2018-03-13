@@ -43,6 +43,11 @@ public class WalkthroughContentPresenter implements WalkthroughFragmentContract.
     }
 
     @Override
+    public void showError(boolean showPriority, boolean showRating) {
+        view.showError(showPriority, showRating);
+    }
+
+    @Override
     public void photoTaken() {
 
     }

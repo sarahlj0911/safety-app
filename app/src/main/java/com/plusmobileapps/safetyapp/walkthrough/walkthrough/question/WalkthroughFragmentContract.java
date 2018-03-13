@@ -12,12 +12,14 @@ public interface WalkthroughFragmentContract {
     interface View extends BaseView<Presenter> {
         void enableActionPlan(boolean show);
         void showPriority(Priority priority);
+        void showError(boolean showPriority, boolean showRating);
         Response getResponse();
     }
 
     interface Presenter extends BasePresenter {
         Response getResponse();
 
+        void showError(boolean showPriority, boolean showRating);
         void priorityClicked(Priority priority);
         void photoTaken();
     }

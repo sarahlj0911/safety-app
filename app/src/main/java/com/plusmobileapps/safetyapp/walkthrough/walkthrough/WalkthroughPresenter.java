@@ -75,6 +75,12 @@ public class WalkthroughPresenter implements WalkthroughContract.Presenter {
         Response response = view.getCurrentResponse();
         response = setUpResponse(response);
 
+        if(response.isResponseFilledOut()) {
+            view.showError(response.isPriorityEmpty(), response.isRatingEmpty());
+            return;
+        }
+
+
         //check if the next question has already been started
         if(currentIndex == responses.size()) {
             responses.add(response);

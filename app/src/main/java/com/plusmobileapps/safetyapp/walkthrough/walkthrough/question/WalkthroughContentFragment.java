@@ -42,6 +42,7 @@ import static android.app.Activity.RESULT_OK;
 public class WalkthroughContentFragment extends Fragment
         implements View.OnClickListener, WalkthroughFragmentContract.View {
 
+
     private enum Rating {
         OPTION1, OPTION2, OPTION3, OPTION4
     }
@@ -50,7 +51,7 @@ public class WalkthroughContentFragment extends Fragment
     private static final int REQUEST_IMAGE_CAPTURE = 1;
     private Question walkthroughQuestion;
     private Response response = new Response();
-    private TextView descriptionTextView;
+    private TextView titleRating;
     private String description;
     private ImageButton cameraButton;
     private ArrayList<String> options = new ArrayList<>();
@@ -64,12 +65,13 @@ public class WalkthroughContentFragment extends Fragment
     private View priorityGreenSelected;
     private TextView actionPlanLabel;
     private EditText actionPlanEditText;
+    private TextView titlePriority;
     private String actionPlan;
     private String photoPath;
     private PackageManager packageManager;
     private WalkthroughFragmentContract.Presenter presenter;
     private RadioGroup radioGroup;
-    private int currentRating;
+    private int currentRating = -1;
 
     public static WalkthroughContentFragment newInstance(Question question) {
         WalkthroughContentFragment fragment = new WalkthroughContentFragment();
@@ -120,7 +122,7 @@ public class WalkthroughContentFragment extends Fragment
             radioGroup.addView(generateRadioButton(question.getRatingOption4(), Rating.OPTION4));
         }
 
-        descriptionTextView.setText(question.getQuestionText());
+        titleRating.setText(question.getQuestionText());
 
         return view;
     }
@@ -138,7 +140,6 @@ public class WalkthroughContentFragment extends Fragment
     }
 
     private void initViews(View view) {
-        descriptionTextView = view.findViewById(R.id.question_description);
         actionPlanLabel = view.findViewById(R.id.title_action_plan);
         actionPlanEditText = view.findViewById(R.id.actionPlanEditText);
         priorityRed = view.findViewById(R.id.priority_btn_red);
@@ -151,6 +152,9 @@ public class WalkthroughContentFragment extends Fragment
         priorityYellowSelected = view.findViewById(R.id.priority_btn_yellow_selected);
         priorityGreenSelected = view.findViewById(R.id.priority_btn_green_selected);
         cameraButton = view.findViewById(R.id.button_take_photo);
+        titlePriority = view.findViewById(R.id.title_priority);
+        titleRating = view.findViewById(R.id.title_rating);
+
     }
 
     @Override
@@ -218,6 +222,18 @@ public class WalkthroughContentFragment extends Fragment
     public void enableActionPlan(boolean show) {
         actionPlanLabel.setEnabled(show);
         actionPlanEditText.setEnabled(show);
+    }
+
+    @Override
+    public void showError(boolean showPriority, boolean showRating) {
+        titleRating.setTextColor(getTextColor(showRating));
+        titlePriority.setTextColor(getTextColor(showPriority));
+    }
+
+    private int getTextColor(boolean show) {
+        return show ?
+                getResources().getColor(R.color.actionItemRed) :
+                getResources().getColor(R.color.textColorPrimary);
     }
 
     @Override

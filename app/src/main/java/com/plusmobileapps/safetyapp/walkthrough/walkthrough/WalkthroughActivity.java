@@ -119,6 +119,11 @@ public class WalkthroughActivity extends AppCompatActivity implements Walkthroug
     }
 
     @Override
+    public void showError(boolean showPriority, boolean showRating) {
+        currentContentPresenter.showError(showPriority, showRating);
+    }
+
+    @Override
     public void showPreviousQuestion() {
         fragmentManager.popBackStack();
     }
