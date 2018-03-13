@@ -10,10 +10,12 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.GestureDetector;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RadioButton;
+import android.widget.TextView;
 
 import com.plusmobileapps.safetyapp.R;
 import com.plusmobileapps.safetyapp.data.entity.Question;
@@ -126,6 +128,13 @@ public class WalkthroughActivity extends AppCompatActivity implements Walkthroug
     @Override
     public Response getCurrentResponse() {
         return currentContentPresenter.getResponse();
+    }
+
+    @Override
+    public void showQuestionCount(int index, int total) {
+        TextView questionCount = (TextView) findViewById(R.id.question_count);
+        String text = "Question: " + (index + 1) + " of " + total;
+        questionCount.setText(text);
     }
 
     @Override

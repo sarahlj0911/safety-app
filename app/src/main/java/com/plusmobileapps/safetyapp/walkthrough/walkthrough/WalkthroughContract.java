@@ -9,6 +9,7 @@ public interface WalkthroughContract {
         void showNextQuestion(Question question);
         void showPreviousQuestion();
         Response getCurrentResponse();
+        void showQuestionCount(int index, int total);
         void closeWalkthrough();
 
     }
@@ -21,7 +22,6 @@ public interface WalkthroughContract {
         void loadResponses(int walkthroughId);
         void previousQuestionClicked();
         void nextQuestionClicked();
-
         void confirmationExitClicked();
         void backButtonPressed();
 
