@@ -62,6 +62,7 @@ public class WalkthroughPresenter implements WalkthroughContract.Presenter {
         currentIndex--;
 
         view.showPreviousQuestion();
+        view.showQuestionCount(currentIndex, questions.size());
     }
 
     @Override
@@ -83,6 +84,7 @@ public class WalkthroughPresenter implements WalkthroughContract.Presenter {
         }
         currentIndex++;
         view.showNextQuestion(questions.get(currentIndex));
+        view.showQuestionCount(currentIndex, questions.size());
 
     }
 
@@ -105,6 +107,7 @@ public class WalkthroughPresenter implements WalkthroughContract.Presenter {
 
     public void setQuestions(List<Question> questions) {
         this.questions = questions;
+        view.showQuestionCount(currentIndex, questions.size());
     }
 
     public void setResponses(List<Response> responses) { this.responses = responses; }

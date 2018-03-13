@@ -43,6 +43,16 @@
             android:layout_weight="1"
             android:text="@string/back" />
 
+
+        <TextView
+            android:id="@+id/question_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="Question"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+
         <Button
             android:id="@+id/next_question"
             android:layout_width="wrap_content"
