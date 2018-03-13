@@ -70,7 +70,6 @@ public class WalkthroughContentFragment extends Fragment
     private WalkthroughFragmentContract.Presenter presenter;
     private RadioGroup radioGroup;
     private int currentRating;
-    private TextView questionCounter;
 
     public static WalkthroughContentFragment newInstance(Question question) {
         WalkthroughContentFragment fragment = new WalkthroughContentFragment();
