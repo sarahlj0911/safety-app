@@ -23,6 +23,7 @@ import com.github.amlcurran.showcaseview.ShowcaseView;
 import com.github.amlcurran.showcaseview.targets.ViewTarget;
 import com.plusmobileapps.safetyapp.PrefManager;
 import com.plusmobileapps.safetyapp.R;
+import com.plusmobileapps.safetyapp.data.entity.Walkthrough;
 import com.plusmobileapps.safetyapp.walkthrough.location.LocationActivity;
 import com.plusmobileapps.safetyapp.data.entity.Walkthrough;
 
@@ -34,6 +35,7 @@ public class WalkthroughLandingFragment extends Fragment
 
     public static String EXTRA_REQUESTED_WALKTHROUGH = "requested_walkthrough";
     public static String EXTRA_WALKTHROUGH_NAME = "walkthrough_name";
+    public static String EXTRA_WALKTHROUGH_ID = "walkthrough_id";
 
     private static ShowcaseView showcaseView;
     private static final String TAG = "WalkthruLandingFragment";
@@ -111,7 +113,7 @@ public class WalkthroughLandingFragment extends Fragment
     }
 
     @Override
-    public void openWalkthrough(long id, String title) {
+    public void openWalkthrough(int id, String title) {
         fab.setVisibility(View.GONE);
         Intent intent = new Intent(getContext(), LocationActivity.class);
         intent.putExtra(EXTRA_REQUESTED_WALKTHROUGH, id);
@@ -120,9 +122,13 @@ public class WalkthroughLandingFragment extends Fragment
     }
 
     @Override
-    public void createNewWalkthrough(String title) {
+    public void createNewWalkthrough(int id, String title) {
+        Walkthrough walkthrough = new Walkthrough(title);
+        //TODO: SAVE WALKTHROUGH
         Intent intent = new Intent(getContext(), LocationActivity.class);
         intent.putExtra(EXTRA_WALKTHROUGH_NAME, title);
+        intent.putExtra(EXTRA_WALKTHROUGH_ID, walkthrough.getWalkthroughId());
+
         startActivity(intent);
     }
 

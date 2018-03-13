@@ -10,7 +10,7 @@ public interface LocationContract {
 
     interface View extends BaseView<Presenter> {
         void showLocations(List<Location> locations);
-        void openRequestedLocation(String location);
+        void openRequestedLocation(int locationId, String locationName, int walkthroughId);
         void navigateBack();
     }
 

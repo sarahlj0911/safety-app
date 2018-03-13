@@ -10,9 +10,10 @@ import java.util.List;
 public interface WalkthroughLandingContract {
 
     interface View extends BaseView<Presenter>{
+
         void showWalkthroughs(List<Walkthrough> walkthroughs);
-        void openWalkthrough(long id, String title);
-        void createNewWalkthrough(String title);
+        void openWalkthrough(int id, String title);
+        void createNewWalkthrough(int id, String title);
         void showTutorial();
         void showInProcessConfirmationDialog();
         void showCreateWalkthroughDialog();

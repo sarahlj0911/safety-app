@@ -1,6 +1,10 @@
 package com.plusmobileapps.safetyapp.walkthrough.landing;
 
+
 import android.os.AsyncTask;
+
+import com.plusmobileapps.safetyapp.data.entity.Walkthrough;
+
 
 import java.util.ArrayList;
 
@@ -53,6 +57,7 @@ public class WalkthroughLandingPresenter implements WalkthroughLandingContract.P
 
     private void createNewWalkthrough() {
         view.showCreateWalkthroughDialog();
+
     }
 
 
@@ -63,6 +68,7 @@ public class WalkthroughLandingPresenter implements WalkthroughLandingContract.P
     @Override
     public void confirmCreateWalkthroughClicked(String title) {
         walkthrough = new Walkthrough(title);
+
         new SaveNewWalkthrough(walkthrough, view).execute();
     }
 

@@ -35,7 +35,7 @@ public class Walkthrough {
     @ColumnInfo(name = "isDeleted")
     private int isDeleted;
 
-    public Walkthrough(String name) {
+    public Walkthrough( String name) {
         this.name = name;
         percentComplete = 0.0;
         Date date = new Date();
@@ -44,7 +44,6 @@ public class Walkthrough {
         schoolId = 1;
         isDeleted = 0;
     }
-    
 
     //Getters
     public int getWalkthroughId() { return this.walkthroughId; }
