@@ -1,6 +1,7 @@
 package com.plusmobileapps.safetyapp.walkthrough.walkthrough;
 
 import android.os.AsyncTask;
+import android.util.Log;
 
 import com.plusmobileapps.safetyapp.MyApplication;
 import com.plusmobileapps.safetyapp.data.AppDatabase;
@@ -17,7 +18,7 @@ import java.util.List;
  */
 
 public class WalkthroughPresenter implements WalkthroughContract.Presenter {
-
+    private static final String TAG = "WalkthroughPresenter";
     private WalkthroughContentFragment walkthroughFragment;
     private WalkthroughContract.View view;
     private List<Question> questions = new ArrayList<>(0);
@@ -46,7 +47,8 @@ public class WalkthroughPresenter implements WalkthroughContract.Presenter {
     public void loadResponses(int walkthroughId) {
         this.walkthroughId = walkthroughId;
 //        TODO: insert previous responses from previously filled out walkthroughs
-//        new WalkthroughResponseModel(this.locationId, walkthroughId, view, this).execute();
+        new WalkthroughResponseModel(this.locationId, walkthroughId, view, this).execute();
+
     }
 
     @Override
@@ -110,7 +112,10 @@ public class WalkthroughPresenter implements WalkthroughContract.Presenter {
         view.showQuestionCount(currentIndex, questions.size());
     }
 
-    public void setResponses(List<Response> responses) { this.responses = responses; }
+    public void setResponses(List<Response> responses) {
+        this.responses = responses;
+        Log.d(TAG, "responses.size(): " + responses.size());
+    }
 
     private void saveResponses() {
 

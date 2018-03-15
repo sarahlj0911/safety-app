@@ -50,6 +50,7 @@ public class WalkthroughContentFragment extends Fragment
     private static final int REQUEST_IMAGE_CAPTURE = 1;
     private Question walkthroughQuestion;
     private Response response = new Response();
+    //private Response response;
     private TextView descriptionTextView;
     private String description;
     private ImageButton cameraButton;
@@ -77,6 +78,7 @@ public class WalkthroughContentFragment extends Fragment
         bundle.putString("walkthroughQuestion", new Gson().toJson(question));
         fragment.setArguments(bundle);
         fragment.response.setQuestionId(question.getQuestionId());
+        fragment.response.setPriority(0);
         return fragment;
     }
 
@@ -88,9 +90,12 @@ public class WalkthroughContentFragment extends Fragment
         String walkthroughJsonObject = getArguments().getString("walkthroughQuestion");
 
         //TODO: Refactor response to init with foreign keys.
-        //TODO: Revisit User table in the DB because we don't really need it.
+        /*if (response == null) {
+            response = new Response();*/
+            response.setUserId(1);
+        //}
         //Should create a response with foreign keys.
-        response.setUserId(1);
+
         walkthroughQuestion = new Gson().fromJson(walkthroughJsonObject, Question.class);
         initViews(view);
         generateQuestionView(view, walkthroughQuestion);
@@ -224,6 +229,9 @@ public class WalkthroughContentFragment extends Fragment
     public Response getResponse() {
         response.setActionPlan(actionPlanEditText.getText().toString());
         response.setRating(currentRating);
+        if (priority != null) {
+            response.setPriority(priority.ordinal());
+        }
         return response;
     }
 

@@ -1,5 +1,7 @@
 package com.plusmobileapps.safetyapp.walkthrough.walkthrough.question;
 
+import android.util.Log;
+
 import com.plusmobileapps.safetyapp.data.entity.Response;
 import com.plusmobileapps.safetyapp.model.Priority;
 
@@ -9,8 +11,10 @@ import com.plusmobileapps.safetyapp.model.Priority;
 
 public class WalkthroughContentPresenter implements WalkthroughFragmentContract.Presenter {
 
-
+    private static final String TAG = "WalkthruContentPrsntr";
     private WalkthroughFragmentContract.View view;
+
+    Response response;
 
     public WalkthroughContentPresenter(WalkthroughFragmentContract.View view ) {
         this.view = view;
@@ -19,6 +23,8 @@ public class WalkthroughContentPresenter implements WalkthroughFragmentContract.
 
     @Override
     public void start() {
+        response = getResponse();
+        Log.d(TAG, "Current response priority: " + response.getPriority());
     }
 
 
