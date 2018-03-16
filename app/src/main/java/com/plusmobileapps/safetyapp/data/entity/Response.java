@@ -120,13 +120,13 @@ public class Response {
         this.isActionItem = isActionItem;
     }
 
-    public void setImage(String image) {
+    /*public void setImage(String image) {
         if(image == null) {
             this.imagePath = "";
         } else {
             this.imagePath = imagePath;
         }
-    }
+    }*/
 
     public void setLocationId(int locationId) {
         this.locationId = locationId;

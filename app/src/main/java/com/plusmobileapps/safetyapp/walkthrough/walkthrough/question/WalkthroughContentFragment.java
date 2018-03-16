@@ -50,12 +50,11 @@ public class WalkthroughContentFragment extends Fragment
     private static final int REQUEST_IMAGE_CAPTURE = 1;
     private Question walkthroughQuestion;
     private Response response = new Response();
-    //private Response response;
     private TextView descriptionTextView;
     private String description;
     private ImageButton cameraButton;
     private ArrayList<String> options = new ArrayList<>();
-    private String rating;
+    //private String rating;
     private Priority priority;
     private View priorityRed;
     private View priorityYellow;
@@ -90,10 +89,8 @@ public class WalkthroughContentFragment extends Fragment
         String walkthroughJsonObject = getArguments().getString("walkthroughQuestion");
 
         //TODO: Refactor response to init with foreign keys.
-        /*if (response == null) {
-            response = new Response();*/
-            response.setUserId(1);
-        //}
+        response.setUserId(1);
+
         //Should create a response with foreign keys.
 
         walkthroughQuestion = new Gson().fromJson(walkthroughJsonObject, Question.class);
@@ -164,21 +161,21 @@ public class WalkthroughContentFragment extends Fragment
         presenter.start();
     }
 
-    @Override
+/*    @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
         super.onSaveInstanceState(savedInstanceState);
 
         actionPlan = actionPlanEditText.getText().toString();
         savedInstanceState.putString("description", description);
         savedInstanceState.putStringArrayList("options", options);
-        savedInstanceState.putString("rating", rating);
+        savedInstanceState.putInt("rating", currentRating);
 
         if (priority != null) {
             savedInstanceState.putString("priority", priority.toString());
         }
         savedInstanceState.putString("actionPlan", actionPlan);
         savedInstanceState.putString("photoPath", photoPath);
-    }
+    }*/
 
 
     @Override
@@ -229,9 +226,11 @@ public class WalkthroughContentFragment extends Fragment
     public Response getResponse() {
         response.setActionPlan(actionPlanEditText.getText().toString());
         response.setRating(currentRating);
-        if (priority != null) {
+        /*if (priority != null) {
             response.setPriority(priority.ordinal());
-        }
+        }*/
+        response.setImagePath(photoPath);
+
         return response;
     }
 
@@ -266,6 +265,7 @@ public class WalkthroughContentFragment extends Fragment
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.button_take_photo:
+                Log.d(TAG, "Picture button clicked!");
                 Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
                     // Create the File where the photo should go
@@ -350,7 +350,8 @@ public class WalkthroughContentFragment extends Fragment
         File storageDir = this.getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         File image = File.createTempFile(imageFileName, ".jpg", storageDir);
         photoPath = image.getAbsolutePath();
-        response.setImage(photoPath);
+        Log.d(TAG, "photoPath: " + photoPath);
+        response.setImagePath(photoPath);
         return image;
     }
 
