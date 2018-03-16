@@ -4,6 +4,10 @@ import android.os.AsyncTask;
 
 import com.plusmobileapps.safetyapp.MyApplication;
 
+import com.plusmobileapps.safetyapp.data.dao.LocationDao;
+import com.plusmobileapps.safetyapp.data.dao.QuestionDao;
+import com.plusmobileapps.safetyapp.data.entity.Location;
+import com.plusmobileapps.safetyapp.data.entity.Question;
 import com.plusmobileapps.safetyapp.data.entity.Response;
 import com.plusmobileapps.safetyapp.data.dao.ResponseDao;
 import com.plusmobileapps.safetyapp.data.AppDatabase;
@@ -25,7 +29,23 @@ public class LoadActionItemTask extends AsyncTask<Void, Void, List<Response>> {
     protected List<Response> doInBackground(Void... voids) {
         db = AppDatabase.getAppDatabase(MyApplication.getAppContext());
         ResponseDao responseDao = db.responseDao();
-        return responseDao.getAllActionItems();
+        LocationDao locationDao = db.locationDao();
+        QuestionDao questionDao = db.questionDao();
+
+        List<Response> items = responseDao.getAllActionItems();
+        for (Response actionItem : items) {
+            int locationId = actionItem.getLocationId();
+            Location location = locationDao.getByLocationId(locationId);
+            actionItem.setLocationName(location.getName());
+
+            int questionId = actionItem.getQuestionId();
+            Question question = questionDao.getByQuestionID(questionId);
+            String title = question.getShortDescription();
+            actionItem.setTitle(title);
+
+        }
+
+        return items;
     }
 
     @Override

@@ -2,6 +2,7 @@ package com.plusmobileapps.safetyapp.data.entity;
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.ForeignKey;
+import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 import android.graphics.Bitmap;
 import android.graphics.Picture;
@@ -65,6 +66,12 @@ public class Response {
     @ColumnInfo(name = "walkthroughId")
     private int walkthroughId;
 
+    @Ignore
+    private String locationName;
+
+    @Ignore
+    private String title;
+
     public Response() {
 
     }
@@ -110,6 +117,10 @@ public class Response {
     public int getUserId() { return this.userId; }
 
     public int getWalkthroughId() { return this.walkthroughId; }
+
+    public String getLocationName() { return this.locationName; }
+
+    public String getTitle() { return this.title; }
 
     //Setters
     public void setResponseId(int responseId) {
@@ -168,6 +179,10 @@ public class Response {
     public void setImagePath(String imagePath) {
         this.imagePath = imagePath;
     }
+
+    public void setLocationName(String locationName) { this.locationName = locationName; }
+
+    public void setTitle(String title) { this.title = title; }
 
     @Override
     public boolean equals(Object obj) {
