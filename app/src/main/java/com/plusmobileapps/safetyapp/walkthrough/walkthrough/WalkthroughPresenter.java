@@ -48,7 +48,7 @@ public class WalkthroughPresenter implements WalkthroughContract.Presenter {
         this.walkthroughId = walkthroughId;
 //        TODO: insert previous responses from previously filled out walkthroughs
         new WalkthroughResponseModel(this.locationId, walkthroughId, view, this).execute();
-
+        view.showNextQuestion(questions.get(0), responses);
     }
 
     @Override
@@ -85,7 +85,8 @@ public class WalkthroughPresenter implements WalkthroughContract.Presenter {
             responses.set(currentIndex, response);
         }
         currentIndex++;
-        view.showNextQuestion(questions.get(currentIndex));
+        /*view.showNextQuestion(questions.get(currentIndex));*/
+        view.showNextQuestion(questions.get(currentIndex), responses);
         view.showQuestionCount(currentIndex, questions.size());
 
     }

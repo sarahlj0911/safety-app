@@ -204,6 +204,25 @@ public class Response {
         return false;
     }
 
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("Response{");
+        sb.append("responseId=").append(responseId);
+        sb.append(", isActionItem=").append(isActionItem);
+        sb.append(", imagePath='").append(imagePath).append('\'');
+        sb.append(", locationId=").append(locationId);
+        sb.append(", timeStamp='").append(timeStamp).append('\'');
+        sb.append(", rating=").append(rating);
+        sb.append(", priority=").append(priority);
+        sb.append(", actionPlan='").append(actionPlan).append('\'');
+        sb.append(", questionId=").append(questionId);
+        sb.append(", userId=").append(userId);
+        sb.append(", walkthroughId=").append(walkthroughId);
+        sb.append(", locationName='").append(locationName).append('\'');
+        sb.append(", title='").append(title).append('\'');
+        sb.append('}');
+        return sb.toString();
+    }
 }
 
 

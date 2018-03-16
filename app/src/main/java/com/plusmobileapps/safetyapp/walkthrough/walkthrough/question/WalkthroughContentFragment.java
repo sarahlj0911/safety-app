@@ -71,13 +71,31 @@ public class WalkthroughContentFragment extends Fragment
     private RadioGroup radioGroup;
     private int currentRating;
 
-    public static WalkthroughContentFragment newInstance(Question question) {
+    /*public static WalkthroughContentFragment newInstance(Question question) {*/
+    public static WalkthroughContentFragment newInstance(Question question, Response loadedResponse) {
         WalkthroughContentFragment fragment = new WalkthroughContentFragment();
         Bundle bundle = new Bundle(1);
         bundle.putString("walkthroughQuestion", new Gson().toJson(question));
         fragment.setArguments(bundle);
-        fragment.response.setQuestionId(question.getQuestionId());
-        fragment.response.setPriority(0);
+
+        if (loadedResponse == null) {
+            Log.d(TAG, "No response loaded");
+            fragment.response.setQuestionId(question.getQuestionId());
+            fragment.response.setPriority(0);
+        } else {
+            fragment.response = loadedResponse;
+
+            Log.d(TAG, "Loaded response:\n" + fragment.response.toString());
+
+            /*fragment.response.setResponseId(loadedResponse.getResponseId());
+            fragment.response.setQuestionId(loadedResponse.getQuestionId());
+            fragment.response.setRating(loadedResponse.getRating());
+            fragment.response.setPriority(loadedResponse.getPriority());
+            fragment.response.setActionPlan(loadedResponse.getActionPlan());
+            fragment.response.setImagePath(loadedResponse.getImagePath());
+            fragment.response.setIsActionItem(loadedResponse.getIsActionItem());*/
+        }
+
         return fragment;
     }
 

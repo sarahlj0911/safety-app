@@ -113,8 +113,26 @@ public class WalkthroughActivity extends AppCompatActivity implements Walkthroug
     }
 
     @Override
-    public void showNextQuestion(Question question) {
-        WalkthroughContentFragment fragment = WalkthroughContentFragment.newInstance(question);
+    /*public void showNextQuestion(Question question) {*/
+    public void showNextQuestion(Question question, List<Response> responses) {
+        /*WalkthroughContentFragment fragment = WalkthroughContentFragment.newInstance(question);*/
+        Response response = null;
+
+        if (responses != null && !responses.isEmpty()) {
+            for (Response candidateResponse : responses) {
+                int candidateWalkthruId = candidateResponse.getWalkthroughId();
+                int candidateLocationId = candidateResponse.getLocationId();
+                int candidateQuestionId = candidateResponse.getQuestionId();
+                if (candidateWalkthruId == walkthroughId
+                        && candidateLocationId == locationId
+                        && candidateQuestionId == question.getQuestionId()) {
+                    response = candidateResponse;
+                }
+                break;
+            }
+        }
+
+        WalkthroughContentFragment fragment = WalkthroughContentFragment.newInstance(question, response);
         currentContentPresenter = new WalkthroughContentPresenter(fragment);
 
         FragmentTransaction transaction = fragmentManager.beginTransaction();
