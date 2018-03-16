@@ -15,9 +15,11 @@ import com.plusmobileapps.safetyapp.data.entity.Response;
 public class DismissActionItemTask extends AsyncTask<Void, Void, Void> {
     private AppDatabase db;
     private Response response;
+    private ActionItemContract.Presenter presenter;
 
-    public DismissActionItemTask(Response response) {
+    public DismissActionItemTask(Response response, ActionItemContract.Presenter presenter) {
         this.response = response;
+        this.presenter = presenter;
     }
 
     @Override
@@ -30,6 +32,6 @@ public class DismissActionItemTask extends AsyncTask<Void, Void, Void> {
 
     @Override
     protected void onPostExecute(Void aVoid) {
-
+        presenter.loadActionItems(false);
     }
 }

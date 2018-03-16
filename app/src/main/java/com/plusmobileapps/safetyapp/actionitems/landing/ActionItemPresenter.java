@@ -73,6 +73,6 @@ public class ActionItemPresenter implements ActionItemContract.Presenter {
 
     private void updateLastResponse(int isActionItem) {
         lastDismissedResponse.setIsActionItem(isActionItem);
-        new DismissActionItemTask(lastDismissedResponse).execute();
+        new DismissActionItemTask(lastDismissedResponse, this).execute();
     }
 }
