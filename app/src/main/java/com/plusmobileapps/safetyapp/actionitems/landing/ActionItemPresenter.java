@@ -38,17 +38,20 @@ public class ActionItemPresenter implements ActionItemContract.Presenter {
             isFirstLaunch = false;
             new LoadActionItemTask(actionItemView, actionItems).execute();
         } else if (actionItems != null) {
-            List<Response> responses = new ArrayList<>(0);
-            responses.addAll(actionItems);
-            actionItemView.showActionItems(responses);
+            showActionItems();
         }
-
     }
 
     @Override
     public void openActionItemDetail(int position) {
         String responseId = Integer.toString(actionItems.get(position).getResponseId());
         actionItemView.showActionItemDetailUi(responseId);
+    }
+
+    private void showActionItems() {
+        List<Response> responses = new ArrayList<>(0);
+        responses.addAll(actionItems);
+        actionItemView.showActionItems(responses);
     }
 
     @Override
@@ -58,6 +61,7 @@ public class ActionItemPresenter implements ActionItemContract.Presenter {
         updateLastResponse(0);
         actionItems.remove(position);
         actionItemView.dismissActionItem(position);
+        showActionItems();
     }
 
     @Override
