@@ -109,6 +109,8 @@ public class ActionItemDetailPresenter implements ActionItemDetailContract.Prese
         } else {
             view.finishActivity();
         }
+
+        //TODO: Add call to reload actionItem cards when andrew creates it in US-44
     }
 
     private boolean isActionItemEdited() {
