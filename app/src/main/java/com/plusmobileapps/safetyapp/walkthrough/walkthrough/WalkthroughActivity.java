@@ -3,26 +3,15 @@ package com.plusmobileapps.safetyapp.walkthrough.walkthrough;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
-import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Environment;
-import android.provider.MediaStore;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageButton;
-import android.widget.RadioButton;
 import android.widget.TextView;
 
 import com.plusmobileapps.safetyapp.R;
@@ -32,8 +21,6 @@ import com.plusmobileapps.safetyapp.walkthrough.location.LocationActivity;
 import com.plusmobileapps.safetyapp.walkthrough.walkthrough.question.WalkthroughContentFragment;
 import com.plusmobileapps.safetyapp.walkthrough.walkthrough.question.WalkthroughContentPresenter;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.List;
 
 //Look at SummaryOverviewDetailsActivity
@@ -48,6 +35,7 @@ public class WalkthroughActivity extends AppCompatActivity implements Walkthroug
     private int locationId;
     private int walkthroughId;
     private WalkthroughContentPresenter currentContentPresenter;
+    private WalkthroughContentFragment fragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,9 +101,7 @@ public class WalkthroughActivity extends AppCompatActivity implements Walkthroug
     }
 
     @Override
-    /*public void showNextQuestion(Question question) {*/
     public void showNextQuestion(Question question, List<Response> responses) {
-        /*WalkthroughContentFragment fragment = WalkthroughContentFragment.newInstance(question);*/
         Response response = null;
 
         if (responses != null && !responses.isEmpty()) {
@@ -123,16 +109,23 @@ public class WalkthroughActivity extends AppCompatActivity implements Walkthroug
                 int candidateWalkthruId = candidateResponse.getWalkthroughId();
                 int candidateLocationId = candidateResponse.getLocationId();
                 int candidateQuestionId = candidateResponse.getQuestionId();
+                Log.d(TAG, "Comparing candidate response with walkthroughId [" + candidateWalkthruId +
+                        "], locationId [" + candidateLocationId +
+                        "], questionId [" + candidateQuestionId +
+                        "]\n  to current walkthroughId [" + walkthroughId +
+                        "], locationId [" + locationId +
+                        "], questionId [" + question.getQuestionId() + "]");
                 if (candidateWalkthruId == walkthroughId
                         && candidateLocationId == locationId
                         && candidateQuestionId == question.getQuestionId()) {
                     response = candidateResponse;
+                    break;
                 }
-                break;
+
             }
         }
 
-        WalkthroughContentFragment fragment = WalkthroughContentFragment.newInstance(question, response);
+        fragment = WalkthroughContentFragment.newInstance(question, response);
         currentContentPresenter = new WalkthroughContentPresenter(fragment);
 
         FragmentTransaction transaction = fragmentManager.beginTransaction();
@@ -156,6 +149,11 @@ public class WalkthroughActivity extends AppCompatActivity implements Walkthroug
     @Override
     public Response getCurrentResponse() {
         return currentContentPresenter.getResponse();
+    }
+
+    @Override
+    public WalkthroughContentFragment getCurrentFragment() {
+        return fragment;
     }
 
     @Override

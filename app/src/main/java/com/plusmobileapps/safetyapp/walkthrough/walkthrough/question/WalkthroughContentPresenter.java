@@ -15,7 +15,6 @@ public class WalkthroughContentPresenter implements WalkthroughFragmentContract.
     private WalkthroughFragmentContract.View view;
 
     Response response;
-    private boolean prioritySelected;
     private String photoPath;
 
     public WalkthroughContentPresenter(WalkthroughFragmentContract.View view ) {
@@ -26,21 +25,23 @@ public class WalkthroughContentPresenter implements WalkthroughFragmentContract.
     @Override
     public void start() {
         response = getResponse();
-        Log.d(TAG, "Current response priority: " + response.getPriority());
+        Log.d(TAG, "Current response: " + response.toString());
 
         if (response.isActionItem()) {
             view.enableActionPlan(true);
         }
 
-        if (prioritySelected) {
+        if (response.isPersisted()) {
             view.showPriority(Priority.values()[response.getPriority()]);
+            view.showActionPlan(response.getActionPlan());
+            view.showRating(response.getRating());
         }
     }
 
 
     @Override
     public void priorityClicked(Priority priority) {
-        prioritySelected = true;
+        response.setIsPersisted(true);
         switch (priority) {
             case HIGH:
                 response.setIsActionItem(1);

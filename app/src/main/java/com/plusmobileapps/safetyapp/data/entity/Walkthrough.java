@@ -15,6 +15,7 @@ import java.util.Date;
 public class Walkthrough {
 
     @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(typeAffinity = ColumnInfo.INTEGER)
     private int walkthroughId;
 
     @ColumnInfo(name = "schoolId")

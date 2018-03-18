@@ -12,9 +12,11 @@ import com.plusmobileapps.safetyapp.walkthrough.walkthrough.question.Walkthrough
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 /**
  * Created by ehanna2 on 2/24/2018.
+ * Updated by Robert Beerman on 3/18/2018
  */
 
 public class WalkthroughPresenter implements WalkthroughContract.Presenter {
@@ -46,8 +48,22 @@ public class WalkthroughPresenter implements WalkthroughContract.Presenter {
     @Override
     public void loadResponses(int walkthroughId) {
         this.walkthroughId = walkthroughId;
-//        TODO: insert previous responses from previously filled out walkthroughs
-        new WalkthroughResponseModel(this.locationId, walkthroughId, view, this).execute();
+
+        AsyncTask<Void, Void, List<Response>> wrmAsyncTask = new WalkthroughResponseModel(this.locationId, walkthroughId, view, this).execute();
+
+        try {
+            responses = wrmAsyncTask.get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+
+        for (Response response : responses) {
+            response.setIsPersisted(true);
+        }
+
+        Log.d(TAG, "responses.size(): " + responses.size());
         view.showNextQuestion(questions.get(0), responses);
     }
 
@@ -69,12 +85,6 @@ public class WalkthroughPresenter implements WalkthroughContract.Presenter {
 
     @Override
     public void nextQuestionClicked() {
-        //if you're at the last question
-        if(currentIndex + 1 == questions.size()) {
-            saveResponses();
-            return;
-        }
-
         Response response = view.getCurrentResponse();
         response = setUpResponse(response);
 
@@ -84,16 +94,27 @@ public class WalkthroughPresenter implements WalkthroughContract.Presenter {
         } else {
             responses.set(currentIndex, response);
         }
+
+        //if you're at the last question
+        if(currentIndex + 1 == questions.size()) {
+            Log.i(TAG, "End of questions, saving " + responses.size() + " responses");
+            saveResponses();
+            return;
+        }
+
         currentIndex++;
-        /*view.showNextQuestion(questions.get(currentIndex));*/
+
         view.showNextQuestion(questions.get(currentIndex), responses);
         view.showQuestionCount(currentIndex, questions.size());
 
     }
 
     private Response setUpResponse(Response response) {
+        walkthroughFragment = view.getCurrentFragment();
         response.setWalkthroughId(walkthroughId);
         response.setLocationId(locationId);
+        response.setRating(walkthroughFragment.getRating());
+        response.setActionPlan(walkthroughFragment.getActionPlan());
         return response;
     }
 
@@ -115,7 +136,6 @@ public class WalkthroughPresenter implements WalkthroughContract.Presenter {
 
     public void setResponses(List<Response> responses) {
         this.responses = responses;
-        Log.d(TAG, "responses.size(): " + responses.size());
     }
 
     private void saveResponses() {

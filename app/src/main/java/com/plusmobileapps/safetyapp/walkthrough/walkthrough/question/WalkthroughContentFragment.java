@@ -54,7 +54,6 @@ public class WalkthroughContentFragment extends Fragment
     private String description;
     private ImageButton cameraButton;
     private ArrayList<String> options = new ArrayList<>();
-    //private String rating;
     private Priority priority;
     private View priorityRed;
     private View priorityYellow;
@@ -71,7 +70,14 @@ public class WalkthroughContentFragment extends Fragment
     private RadioGroup radioGroup;
     private int currentRating;
 
-    /*public static WalkthroughContentFragment newInstance(Question question) {*/
+    public int getRating() {
+        return currentRating;
+    }
+
+    public String getActionPlan() {
+        return actionPlanEditText.getText().toString();
+    }
+
     public static WalkthroughContentFragment newInstance(Question question, Response loadedResponse) {
         WalkthroughContentFragment fragment = new WalkthroughContentFragment();
         Bundle bundle = new Bundle(1);
@@ -86,14 +92,6 @@ public class WalkthroughContentFragment extends Fragment
             fragment.response = loadedResponse;
 
             Log.d(TAG, "Loaded response:\n" + fragment.response.toString());
-
-            /*fragment.response.setResponseId(loadedResponse.getResponseId());
-            fragment.response.setQuestionId(loadedResponse.getQuestionId());
-            fragment.response.setRating(loadedResponse.getRating());
-            fragment.response.setPriority(loadedResponse.getPriority());
-            fragment.response.setActionPlan(loadedResponse.getActionPlan());
-            fragment.response.setImagePath(loadedResponse.getImagePath());
-            fragment.response.setIsActionItem(loadedResponse.getIsActionItem());*/
         }
 
         return fragment;
@@ -105,11 +103,7 @@ public class WalkthroughContentFragment extends Fragment
         packageManager = this.getActivity().getPackageManager();
         View view = inflater.inflate(R.layout.fragment_walkthrough_question, container, false);
         String walkthroughJsonObject = getArguments().getString("walkthroughQuestion");
-
-        //TODO: Refactor response to init with foreign keys.
         response.setUserId(1);
-
-        //Should create a response with foreign keys.
 
         walkthroughQuestion = new Gson().fromJson(walkthroughJsonObject, Question.class);
         initViews(view);
@@ -179,7 +173,7 @@ public class WalkthroughContentFragment extends Fragment
         presenter.start();
     }
 
-/*    @Override
+    @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
         super.onSaveInstanceState(savedInstanceState);
 
@@ -193,12 +187,17 @@ public class WalkthroughContentFragment extends Fragment
         }
         savedInstanceState.putString("actionPlan", actionPlan);
         savedInstanceState.putString("photoPath", photoPath);
-    }*/
+    }
 
 
     @Override
     public void setPresenter(WalkthroughFragmentContract.Presenter presenter) {
         this.presenter = presenter;
+    }
+
+    @Override
+    public void showRating(int rating) {
+        radioGroup.check(rating);
     }
 
     @Override
@@ -235,6 +234,16 @@ public class WalkthroughContentFragment extends Fragment
     }
 
     @Override
+    public void showActionPlan(String actionPlan) {
+        actionPlanEditText.setText(actionPlan);
+    }
+
+    @Override
+    public void showPhoto(String imagePath) {
+
+    }
+
+    @Override
     public void enableActionPlan(boolean show) {
         actionPlanLabel.setEnabled(show);
         actionPlanEditText.setEnabled(show);
@@ -242,11 +251,7 @@ public class WalkthroughContentFragment extends Fragment
 
     @Override
     public Response getResponse() {
-        response.setActionPlan(actionPlanEditText.getText().toString());
-        response.setRating(currentRating);
-        /*if (priority != null) {
-            response.setPriority(priority.ordinal());
-        }*/
+
         response.setImagePath(photoPath);
 
         return response;
@@ -255,6 +260,8 @@ public class WalkthroughContentFragment extends Fragment
     private RadioGroup.OnCheckedChangeListener ratingChangeListener = new RadioGroup.OnCheckedChangeListener() {
         @Override
         public void onCheckedChanged(RadioGroup group, int checkedId) {
+            response.setIsPersisted(true);
+
             switch (checkedId) {
                 case 0:
                     currentRating = Rating.OPTION1.ordinal();
@@ -361,6 +368,8 @@ public class WalkthroughContentFragment extends Fragment
 
             cameraButton.setImageBitmap(rotatedBitmap);
         }
+
+        response.setIsPersisted(true);
     }
 
     private File createImageFile() throws IOException {

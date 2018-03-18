@@ -4,16 +4,10 @@ import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.ForeignKey;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
-import android.graphics.Bitmap;
-import android.graphics.Picture;
-import android.media.Image;
-
-import java.util.zip.CheckedOutputStream;
-
-import static android.arch.persistence.room.ForeignKey.CASCADE;
 
 /**
  * Created by aaronmusengo on 1/23/18.
+ * Updated by Robert Beerman on 3/18/2018
  */
 
 @Entity(tableName = "responses",
@@ -72,6 +66,9 @@ public class Response {
     @Ignore
     private String title;
 
+    @Ignore
+    private boolean persisted;
+
     public Response() {
 
     }
@@ -121,6 +118,10 @@ public class Response {
     public String getLocationName() { return this.locationName; }
 
     public String getTitle() { return this.title; }
+
+    public boolean isPersisted() {
+        return this.persisted;
+    }
 
     //Setters
     public void setResponseId(int responseId) {
@@ -184,6 +185,10 @@ public class Response {
 
     public void setTitle(String title) { this.title = title; }
 
+    public void setIsPersisted(boolean persisted) {
+        this.persisted = persisted;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof Response) {
@@ -220,6 +225,7 @@ public class Response {
         sb.append(", walkthroughId=").append(walkthroughId);
         sb.append(", locationName='").append(locationName).append('\'');
         sb.append(", title='").append(title).append('\'');
+        sb.append(", persisted='").append(persisted).append('\'');
         sb.append('}');
         return sb.toString();
     }

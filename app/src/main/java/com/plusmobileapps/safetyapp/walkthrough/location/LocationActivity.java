@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 
 import com.plusmobileapps.safetyapp.R;
@@ -17,7 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class LocationActivity extends AppCompatActivity implements LocationContract.View{
-
+    private static final String TAG = "LocationActivity";
     public static final String EXTRA_WALKTHROUGH_LOCATION_NAME = "walkthrough_name";
     public static final String EXTRA_WALKTHROUGH_ID = "walkthrough_Id";
 
@@ -33,7 +34,7 @@ public class LocationActivity extends AppCompatActivity implements LocationContr
 
         Intent intent = getIntent();
         String title = intent.getStringExtra(WalkthroughLandingFragment.EXTRA_WALKTHROUGH_NAME);
-        int id = intent.getIntExtra("walkthroughId", -1);
+        int id = intent.getIntExtra(EXTRA_WALKTHROUGH_ID, -1);
         new LocationPresenter(this, id);
 
         Toolbar toolbar = findViewById(R.id.location_toolbar);

@@ -33,9 +33,7 @@ import java.util.List;
 public class WalkthroughLandingFragment extends Fragment
         implements OnShowcaseEventListener, WalkthroughLandingContract.View {
 
-    public static String EXTRA_REQUESTED_WALKTHROUGH = "requested_walkthrough";
     public static String EXTRA_WALKTHROUGH_NAME = "walkthrough_name";
-    public static String EXTRA_WALKTHROUGH_ID = "walkthrough_id";
 
     private static ShowcaseView showcaseView;
     private static final String TAG = "WalkthruLandingFragment";
@@ -116,7 +114,7 @@ public class WalkthroughLandingFragment extends Fragment
     public void openWalkthrough(int id, String title) {
         fab.setVisibility(View.GONE);
         Intent intent = new Intent(getContext(), LocationActivity.class);
-        intent.putExtra(EXTRA_REQUESTED_WALKTHROUGH, id);
+        intent.putExtra(LocationActivity.EXTRA_WALKTHROUGH_ID, id);
         intent.putExtra(EXTRA_WALKTHROUGH_NAME, title);
         startActivity(intent);
     }
@@ -127,7 +125,7 @@ public class WalkthroughLandingFragment extends Fragment
         //TODO: SAVE WALKTHROUGH
         Intent intent = new Intent(getContext(), LocationActivity.class);
         intent.putExtra(EXTRA_WALKTHROUGH_NAME, title);
-        intent.putExtra(EXTRA_WALKTHROUGH_ID, walkthrough.getWalkthroughId());
+        intent.putExtra(LocationActivity.EXTRA_WALKTHROUGH_ID, walkthrough.getWalkthroughId());
 
         startActivity(intent);
     }
