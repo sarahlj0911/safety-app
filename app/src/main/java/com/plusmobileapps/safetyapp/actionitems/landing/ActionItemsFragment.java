@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.plusmobileapps.safetyapp.R;
 import com.plusmobileapps.safetyapp.actionitems.detail.ActionItemDetailActivity;
@@ -91,6 +92,10 @@ public class ActionItemsFragment extends Fragment implements ActionItemContract.
     @Override
     public void showActionItems(List<Response> actionItems) {
         adapter.replaceData(actionItems);
+        boolean showRecyclerView = actionItems.size() > 0;
+        TextView noActionItemText = getView().findViewById(R.id.no_action_items);
+        recyclerView.setVisibility(showRecyclerView ? View.VISIBLE : View.GONE );
+        noActionItemText.setVisibility(!showRecyclerView ? View.VISIBLE : View.GONE);
     }
 
     /**

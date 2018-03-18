@@ -4,9 +4,21 @@
     android:layout_height="match_parent"
     android:id="@+id/action_item_coordinator">
 
+    <TextView
+        android:id="@+id/no_action_items"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:text="@string/no_action_items"
+        android:textAlignment="center"
+        android:textColor="@android:color/black"
+        android:textSize="24sp"
+        android:visibility="gone"/>
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/action_items_recyclerview"
-        android:background="@color/paper"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 </android.support.design.widget.CoordinatorLayout>
