@@ -4,15 +4,7 @@ import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.ForeignKey;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
-import android.graphics.Bitmap;
-import android.graphics.Picture;
-import android.media.Image;
 
-import org.intellij.lang.annotations.JdkConstants;
-
-import java.util.zip.CheckedOutputStream;
-
-import static android.arch.persistence.room.ForeignKey.CASCADE;
 
 /**
  * Created by aaronmusengo on 1/23/18.

@@ -53,7 +53,6 @@ public class ActionItemDetailPresenter implements ActionItemDetailContract.Prese
         }
 
         editedResponse.setPriority(priority);
-        originalResponse.setPriority(priority);
         view.changeStatusDot(drawable);
     }
 
@@ -94,9 +93,6 @@ public class ActionItemDetailPresenter implements ActionItemDetailContract.Prese
 
     private void setupUi() {
         view.showActionItem(originalResponse);
-
-        //view.changeStatusDot(getStatusColorDrawable(originalResponse.getPriority()));
-
         editedResponse = originalResponse;
     }
 

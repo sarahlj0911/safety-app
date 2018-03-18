@@ -49,11 +49,8 @@ public class ActionItemAdapter extends RecyclerView.Adapter<ActionItemAdapter.Vi
             holder.getStatus().setBackgroundResource(R.drawable.circle_yellow);
         }
 
-
-
-        //        holder.getPicture().setImageBitmap(actionItem.getPhoto());
-
-
+        //TODO: Fix the images.
+//        holder.getPicture().setImageBitmap(actionItem.getPhoto());
     }
 
     @Override

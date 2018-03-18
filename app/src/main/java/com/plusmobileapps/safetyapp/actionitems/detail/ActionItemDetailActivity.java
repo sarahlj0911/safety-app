@@ -133,7 +133,6 @@ public class ActionItemDetailActivity extends AppCompatActivity
     @Override
     public void changeStatusDot(int drawableId) {
         statusDot.setBackgroundResource(drawableId);
-
     }
 
     @Override
