@@ -17,6 +17,9 @@ public interface SchoolDao {
     @Query("SELECT * FROM schools")
     List<School> getAll();
 
+    @Query("SELECT schoolId, schoolName, remoteId FROM schools WHERE schoolId = 1")
+    School get();
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insert(School school);
 }

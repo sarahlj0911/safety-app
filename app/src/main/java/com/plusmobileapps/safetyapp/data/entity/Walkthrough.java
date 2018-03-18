@@ -32,15 +32,17 @@ public class Walkthrough {
     @ColumnInfo(name = "lastUpdatedDate")
     private String lastUpdatedDate;
 
-    public Walkthrough( String name) {
+    @ColumnInfo(name = "isDeleted")
+    private int isDeleted;
 
+    public Walkthrough( String name) {
         this.name = name;
         percentComplete = 0.0;
         Date date = new Date();
         createdDate = date.toString();
         lastUpdatedDate = createdDate;
         schoolId = 1;
-
+        isDeleted = 0;
     }
 
     //Getters
@@ -55,6 +57,10 @@ public class Walkthrough {
     public String  getLastUpdatedDate() { return this.lastUpdatedDate; }
 
     public int getSchoolId() { return this.schoolId; }
+
+    public int getIsDeleted() {
+        return this.isDeleted;
+    }
 
     public String getDate(String date) {
         String[] tmp = date.split(" ");
@@ -72,6 +78,10 @@ public class Walkthrough {
         } else {
             return hour - 12 + tmp[3].substring(2, 5) + " PM";
         }
+    }
+
+    public boolean isDeleted() {
+        return isDeleted == 1;
     }
 
     //Setters
@@ -99,12 +109,13 @@ public class Walkthrough {
         this.schoolId = schoolId;
     }
 
+    public void setIsDeleted(int isDeleted) {
+        this.isDeleted = isDeleted;
+    }
 
     public boolean isInProgress() {
         int complete = ((int) percentComplete);
         return complete != 100;
     }
-
-
 }
 
