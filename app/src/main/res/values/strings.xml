@@ -100,6 +100,7 @@
 
     <!--action item landing-->
     <string name="dismiss_action_item">Action item was dismissed</string>
+    <string name="no_action_items">Great job! You currently have no action items!</string>
 
 
     <!--walkthrough-->
