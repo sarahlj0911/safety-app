@@ -41,7 +41,17 @@ public class ActionItemAdapter extends RecyclerView.Adapter<ActionItemAdapter.Vi
         holder.getDescription().setText(actionItem.getActionPlan());
         holder.getLocation().setText(actionItem.getLocationName());
         holder.getTitle().setText(actionItem.getTitle());
-//        holder.getPicture().setImageBitmap(actionItem.getPhoto());
+
+        int priority = actionItem.getPriority();
+        if (priority == 2) {
+            holder.getStatus().setBackgroundResource(R.drawable.circle_red);
+        } else if (priority == 1) {
+            holder.getStatus().setBackgroundResource(R.drawable.circle_yellow);
+        }
+
+
+
+        //        holder.getPicture().setImageBitmap(actionItem.getPhoto());
 
 
     }
@@ -77,6 +87,7 @@ public class ActionItemAdapter extends RecyclerView.Adapter<ActionItemAdapter.Vi
 
         private final TextView location = itemView.findViewById(R.id.action_item_location);
         private final ImageButton dismissButton = itemView.findViewById(R.id.dismiss_action_item_button);
+
         //TODO: figure out how to add image to persistence
 
         public ViewHolder(View view) {

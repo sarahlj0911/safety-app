@@ -42,19 +42,37 @@ public class ActionItemDetailPresenter implements ActionItemDetailContract.Prese
     @Override
     public void editPriorityPicked(String selectedPriority) {
         int drawable = getStatusColorDrawable(selectedPriority);
+        int priority = 0;
+
+        if (selectedPriority.equals("High")) {
+            priority = 2;
+        }
+
+        if (selectedPriority.equals("Medium")) {
+            priority = 1;
+        }
+
+        editedResponse.setPriority(priority);
+        originalResponse.setPriority(priority);
         view.changeStatusDot(drawable);
     }
 
-    private int getStatusColorDrawable(String selectedPriority) {
+    public int getStatusColorDrawable(String selectedPriority) {
         switch (selectedPriority) {
             case "High":
                 editedResponse.setPriority(Priority.HIGH.ordinal());
                 return R.drawable.circle_red;
+            case "2":
+                return R.drawable.circle_red;
             case "Medium":
                 editedResponse.setPriority(Priority.MEDIUM.ordinal());
                 return R.drawable.circle_yellow;
+            case "1":
+                return R.drawable.circle_yellow;
             case "Low":
                 editedResponse.setPriority(Priority.NONE.ordinal());
+                return R.drawable.circle_green;
+            case "0":
                 return R.drawable.circle_green;
             default:
                 return -1;
@@ -76,7 +94,10 @@ public class ActionItemDetailPresenter implements ActionItemDetailContract.Prese
 
     private void setupUi() {
         view.showActionItem(originalResponse);
-        view.changeStatusDot(getStatusColorDrawable(originalResponse.getPriority()));
+
+        //view.changeStatusDot(getStatusColorDrawable(originalResponse.getPriority()));
+
+        editedResponse = originalResponse;
     }
 
     @Override
@@ -96,8 +117,9 @@ public class ActionItemDetailPresenter implements ActionItemDetailContract.Prese
 
     private boolean isActionItemEdited() {
         String actionItemPlan = view.getActionItemPlan();
+
         editedResponse.setActionPlan(actionItemPlan);
-        return !editedResponse.equals(originalResponse);
+        return editedResponse.equals(originalResponse);
     }
 
     private ResponseLoadingListener listener = new ResponseLoadingListener() {
