@@ -13,6 +13,7 @@ public interface ActionItemContract {
 
     interface View extends BaseView<Presenter> {
         void setProgressIndicator(boolean active);
+        void showNoActionItems(boolean show);
         void showActionItems(List<Response> actionItems);
         void showActionItemDetailUi(String actionItemId);
         void dismissActionItem(int position);

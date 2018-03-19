@@ -78,10 +78,16 @@ public class ActionItemsFragment extends Fragment implements ActionItemContract.
     @Override
     public void showActionItems(List<Response> actionItems) {
         adapter.replaceData(actionItems);
-        boolean showRecyclerView = actionItems.size() > 0;
+
+    }
+
+    @Override
+    public void showNoActionItems(boolean show) {
         TextView noActionItemText = getView().findViewById(R.id.no_action_items);
-        recyclerView.setVisibility(showRecyclerView ? View.VISIBLE : View.GONE );
-        noActionItemText.setVisibility(!showRecyclerView ? View.VISIBLE : View.GONE);
+        recyclerView.setVisibility(!show ? View.VISIBLE : View.GONE );
+        if (noActionItemText != null) {
+            noActionItemText.setVisibility(show ? View.VISIBLE : View.GONE);
+        }
     }
 
     /**

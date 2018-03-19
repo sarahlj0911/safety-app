@@ -30,6 +30,7 @@ public class ActionItemPresenter implements ActionItemContract.Presenter {
         } else {
             showActionItems();
         }
+        updateNoActionItemText();
     }
 
     @Override
@@ -48,14 +49,16 @@ public class ActionItemPresenter implements ActionItemContract.Presenter {
     public void dismissButtonClicked(int position) {
         lastDismissedResponse = actionItems.get(position);
         lastDismissedResponseIndex = position;
-        updateLastResponse(Response.NOT_ACTION_ITEM);
         actionItems.remove(position);
+        updateLastResponse(Response.NOT_ACTION_ITEM);
+        updateNoActionItemText();
         view.dismissActionItem(position);
     }
 
     @Override
     public void undoDismissal() {
         actionItems.add(lastDismissedResponseIndex, lastDismissedResponse);
+        updateNoActionItemText();
         view.restoreActionItem(lastDismissedResponseIndex, lastDismissedResponse);
         updateLastResponse(Response.IS_ACTION_ITEM);
     }
@@ -63,5 +66,9 @@ public class ActionItemPresenter implements ActionItemContract.Presenter {
     private void updateLastResponse(int isActionItem) {
         lastDismissedResponse.setIsActionItem(isActionItem);
         new DismissActionItemTask(lastDismissedResponse).execute();
+    }
+
+    private void updateNoActionItemText() {
+        view.showNoActionItems(actionItems.size() == 0);
     }
 }
