@@ -1,6 +1,7 @@
 package com.plusmobileapps.safetyapp.walkthrough.walkthrough;
 
 import android.os.AsyncTask;
+import android.util.Log;
 
 import com.plusmobileapps.safetyapp.MyApplication;
 import com.plusmobileapps.safetyapp.data.AppDatabase;
@@ -11,13 +12,15 @@ import com.plusmobileapps.safetyapp.walkthrough.walkthrough.question.Walkthrough
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 /**
  * Created by ehanna2 on 2/24/2018.
+ * Updated by Robert Beerman on 3/18/2018
  */
 
 public class WalkthroughPresenter implements WalkthroughContract.Presenter {
-
+    private static final String TAG = "WalkthroughPresenter";
     private WalkthroughContentFragment walkthroughFragment;
     private WalkthroughContract.View view;
     private List<Question> questions = new ArrayList<>(0);
@@ -45,8 +48,23 @@ public class WalkthroughPresenter implements WalkthroughContract.Presenter {
     @Override
     public void loadResponses(int walkthroughId) {
         this.walkthroughId = walkthroughId;
-//        TODO: insert previous responses from previously filled out walkthroughs
-//        new WalkthroughResponseModel(this.locationId, walkthroughId, view, this).execute();
+
+        AsyncTask<Void, Void, List<Response>> wrmAsyncTask = new WalkthroughResponseModel(this.locationId, walkthroughId, view, this).execute();
+
+        try {
+            responses = wrmAsyncTask.get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+
+        for (Response response : responses) {
+            response.setIsPersisted(true);
+        }
+
+        Log.d(TAG, "responses.size(): " + responses.size());
+        view.showNextQuestion(questions.get(0), responses);
     }
 
     @Override
@@ -56,10 +74,12 @@ public class WalkthroughPresenter implements WalkthroughContract.Presenter {
             return;
         }
 
-        Response lastResponse = view.getCurrentResponse();
-        lastResponse = setUpResponse(lastResponse);
-        responses.set(currentIndex-1, lastResponse);
+        if (view.getCurrentResponse().isPersisted()) {
+            setUpResponse(view.getCurrentResponse());
+        }
         currentIndex--;
+
+        Log.d(TAG, "previousQuestionClicked responses.size after setting lastRespsonse: " + responses.size());
 
         view.showPreviousQuestion();
         view.showQuestionCount(currentIndex, questions.size());
@@ -67,30 +87,38 @@ public class WalkthroughPresenter implements WalkthroughContract.Presenter {
 
     @Override
     public void nextQuestionClicked() {
-        //if you're at the last question
-        if(currentIndex + 1 == questions.size()) {
-            saveResponses();
-            return;
-        }
-
         Response response = view.getCurrentResponse();
         response = setUpResponse(response);
+
+        Log.d(TAG, "nextQuestionClicked responses.size before adding this response: " + responses.size());
 
         //check if the next question has already been started
         if(currentIndex == responses.size()) {
             responses.add(response);
-        } else {
-            responses.set(currentIndex, response);
         }
+
+        Log.d(TAG, "nextQuestionClicked responses.size after adding this response: " + responses.size());
+
+        //if you're at the last question
+        if(currentIndex + 1 == questions.size()) {
+            Log.i(TAG, "End of questions, saving " + responses.size() + " responses");
+            saveResponses();
+            return;
+        }
+
         currentIndex++;
-        view.showNextQuestion(questions.get(currentIndex));
+
+        view.showNextQuestion(questions.get(currentIndex), responses);
         view.showQuestionCount(currentIndex, questions.size());
 
     }
 
     private Response setUpResponse(Response response) {
+        walkthroughFragment = view.getCurrentFragment();
         response.setWalkthroughId(walkthroughId);
         response.setLocationId(locationId);
+        response.setRating(walkthroughFragment.getRating());
+        response.setActionPlan(walkthroughFragment.getActionPlan());
         return response;
     }
 
@@ -110,7 +138,9 @@ public class WalkthroughPresenter implements WalkthroughContract.Presenter {
         view.showQuestionCount(currentIndex, questions.size());
     }
 
-    public void setResponses(List<Response> responses) { this.responses = responses; }
+    public void setResponses(List<Response> responses) {
+        this.responses = responses;
+    }
 
     private void saveResponses() {
 

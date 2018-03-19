@@ -54,7 +54,6 @@ public class WalkthroughContentFragment extends Fragment
     private String description;
     private ImageButton cameraButton;
     private ArrayList<String> options = new ArrayList<>();
-    private String rating;
     private Priority priority;
     private View priorityRed;
     private View priorityYellow;
@@ -71,12 +70,30 @@ public class WalkthroughContentFragment extends Fragment
     private RadioGroup radioGroup;
     private int currentRating;
 
-    public static WalkthroughContentFragment newInstance(Question question) {
+    public int getRating() {
+        return currentRating;
+    }
+
+    public String getActionPlan() {
+        return actionPlanEditText.getText().toString();
+    }
+
+    public static WalkthroughContentFragment newInstance(Question question, Response loadedResponse) {
         WalkthroughContentFragment fragment = new WalkthroughContentFragment();
         Bundle bundle = new Bundle(1);
         bundle.putString("walkthroughQuestion", new Gson().toJson(question));
         fragment.setArguments(bundle);
-        fragment.response.setQuestionId(question.getQuestionId());
+
+        if (loadedResponse == null) {
+            Log.d(TAG, "No response loaded");
+            fragment.response.setQuestionId(question.getQuestionId());
+            fragment.response.setPriority(0);
+        } else {
+            fragment.response = loadedResponse;
+
+            Log.d(TAG, "Loaded response:\n" + fragment.response.toString());
+        }
+
         return fragment;
     }
 
@@ -86,11 +103,8 @@ public class WalkthroughContentFragment extends Fragment
         packageManager = this.getActivity().getPackageManager();
         View view = inflater.inflate(R.layout.fragment_walkthrough_question, container, false);
         String walkthroughJsonObject = getArguments().getString("walkthroughQuestion");
-
-        //TODO: Refactor response to init with foreign keys.
-        //TODO: Revisit User table in the DB because we don't really need it.
-        //Should create a response with foreign keys.
         response.setUserId(1);
+
         walkthroughQuestion = new Gson().fromJson(walkthroughJsonObject, Question.class);
         initViews(view);
         generateQuestionView(view, walkthroughQuestion);
@@ -166,7 +180,7 @@ public class WalkthroughContentFragment extends Fragment
         actionPlan = actionPlanEditText.getText().toString();
         savedInstanceState.putString("description", description);
         savedInstanceState.putStringArrayList("options", options);
-        savedInstanceState.putString("rating", rating);
+        savedInstanceState.putInt("rating", currentRating);
 
         if (priority != null) {
             savedInstanceState.putString("priority", priority.toString());
@@ -179,6 +193,11 @@ public class WalkthroughContentFragment extends Fragment
     @Override
     public void setPresenter(WalkthroughFragmentContract.Presenter presenter) {
         this.presenter = presenter;
+    }
+
+    @Override
+    public void showRating(int rating) {
+        radioGroup.check(rating);
     }
 
     @Override
@@ -215,6 +234,16 @@ public class WalkthroughContentFragment extends Fragment
     }
 
     @Override
+    public void showActionPlan(String actionPlan) {
+        actionPlanEditText.setText(actionPlan);
+    }
+
+    @Override
+    public void showPhoto(String imagePath) {
+
+    }
+
+    @Override
     public void enableActionPlan(boolean show) {
         actionPlanLabel.setEnabled(show);
         actionPlanEditText.setEnabled(show);
@@ -222,14 +251,17 @@ public class WalkthroughContentFragment extends Fragment
 
     @Override
     public Response getResponse() {
-        response.setActionPlan(actionPlanEditText.getText().toString());
-        response.setRating(currentRating);
+
+        response.setImagePath(photoPath);
+
         return response;
     }
 
     private RadioGroup.OnCheckedChangeListener ratingChangeListener = new RadioGroup.OnCheckedChangeListener() {
         @Override
         public void onCheckedChanged(RadioGroup group, int checkedId) {
+            response.setIsPersisted(true);
+
             switch (checkedId) {
                 case 0:
                     currentRating = Rating.OPTION1.ordinal();
@@ -258,6 +290,7 @@ public class WalkthroughContentFragment extends Fragment
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.button_take_photo:
+                Log.d(TAG, "Picture button clicked!");
                 Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
                     // Create the File where the photo should go
@@ -337,6 +370,8 @@ public class WalkthroughContentFragment extends Fragment
 
             cameraButton.setImageBitmap(rotatedBitmap);
         }
+
+        response.setIsPersisted(true);
     }
 
     private File createImageFile() throws IOException {
@@ -344,7 +379,8 @@ public class WalkthroughContentFragment extends Fragment
         File storageDir = this.getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         File image = File.createTempFile(imageFileName, ".jpg", storageDir);
         photoPath = image.getAbsolutePath();
-        response.setImage(photoPath);
+        Log.d(TAG, "photoPath: " + photoPath);
+        response.setImagePath(photoPath);
         return image;
     }
 

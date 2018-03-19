@@ -5,7 +5,6 @@ import android.os.AsyncTask;
 import com.plusmobileapps.safetyapp.MyApplication;
 import com.plusmobileapps.safetyapp.data.AppDatabase;
 import com.plusmobileapps.safetyapp.data.dao.QuestionDao;
-import com.plusmobileapps.safetyapp.data.dao.ResponseDao;
 import com.plusmobileapps.safetyapp.data.entity.Question;
 import com.plusmobileapps.safetyapp.data.entity.Response;
 
@@ -19,7 +18,6 @@ import java.util.List;
 public class WalkthroughQuestionModel extends AsyncTask<Void, Void, List<Question>> {
 
     private List<Question> questions = new ArrayList<>();
-    private List<Response> responses;
     private WalkthroughContract.View view;
     private WalkthroughPresenter presenter;
     AppDatabase db;
@@ -47,7 +45,6 @@ public class WalkthroughQuestionModel extends AsyncTask<Void, Void, List<Questio
     protected void onPostExecute(List<Question> questions) {
         super.onPostExecute(questions);
         presenter.setQuestions(questions);
-        view.showNextQuestion(questions.get(0));
     }
 
 }

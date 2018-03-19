@@ -8,6 +8,7 @@ import android.arch.persistence.room.PrimaryKey;
 
 /**
  * Created by aaronmusengo on 1/23/18.
+ * Updated by Robert Beerman on 3/18/2018
  */
 
 @Entity(tableName = "responses",
@@ -69,6 +70,9 @@ public class Response {
     @Ignore
     private String title;
 
+    @Ignore
+    private boolean persisted;
+
     public Response() {
 
     }
@@ -121,6 +125,10 @@ public class Response {
 
     public String getRatingText() { return this.ratingText; }
 
+    public boolean isPersisted() {
+        return this.persisted;
+    }
+
     //Setters
     public void setResponseId(int responseId) {
         this.responseId = responseId;
@@ -130,13 +138,13 @@ public class Response {
         this.isActionItem = isActionItem;
     }
 
-    public void setImage(String image) {
+    /*public void setImage(String image) {
         if(image == null) {
             this.imagePath = "";
         } else {
             this.imagePath = imagePath;
         }
-    }
+    }*/
 
     public void setLocationId(int locationId) {
         this.locationId = locationId;
@@ -185,6 +193,10 @@ public class Response {
 
     public void setRatingText(String ratingText) { this.ratingText = ratingText; }
 
+    public void setIsPersisted(boolean persisted) {
+        this.persisted = persisted;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof Response) {
@@ -200,6 +212,26 @@ public class Response {
         return false;
     }
 
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("Response{");
+        sb.append("responseId=").append(responseId);
+        sb.append(", isActionItem=").append(isActionItem);
+        sb.append(", imagePath='").append(imagePath).append('\'');
+        sb.append(", locationId=").append(locationId);
+        sb.append(", timeStamp='").append(timeStamp).append('\'');
+        sb.append(", rating=").append(rating);
+        sb.append(", priority=").append(priority);
+        sb.append(", actionPlan='").append(actionPlan).append('\'');
+        sb.append(", questionId=").append(questionId);
+        sb.append(", userId=").append(userId);
+        sb.append(", walkthroughId=").append(walkthroughId);
+        sb.append(", locationName='").append(locationName).append('\'');
+        sb.append(", title='").append(title).append('\'');
+        sb.append(", persisted='").append(persisted).append('\'');
+        sb.append('}');
+        return sb.toString();
+    }
 }
 
 

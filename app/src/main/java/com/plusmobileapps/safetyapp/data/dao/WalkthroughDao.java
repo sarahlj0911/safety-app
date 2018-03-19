@@ -28,7 +28,7 @@ public interface WalkthroughDao {
     List<Walkthrough> getAllDeleted();
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insert(Walkthrough walkthrough);
+    long insert(Walkthrough walkthrough);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertAll(Walkthrough... walkthroughs);
