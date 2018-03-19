@@ -28,6 +28,11 @@ import android.arch.persistence.room.PrimaryKey;
                         childColumns = "questionId"),
         })
 public class Response {
+
+    public final static int IS_ACTION_ITEM = 1;
+    public final static int NOT_ACTION_ITEM = 0;
+
+
     @PrimaryKey(autoGenerate = true)
     private int responseId;
 

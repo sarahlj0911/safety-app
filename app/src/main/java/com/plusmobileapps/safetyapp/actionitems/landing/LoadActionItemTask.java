@@ -16,12 +16,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class LoadActionItemTask extends AsyncTask<Void, Void, List<Response>> {
-    private ActionItemContract.View view;
+    private ActionItemContract.Presenter presenter;
     private AppDatabase db;
     private List<Response> actionItems;
 
-    public LoadActionItemTask(ActionItemContract.View view, List<Response> actionItems) {
-        this.view = view;
+    public LoadActionItemTask(ActionItemContract.Presenter presenter, List<Response> actionItems) {
+        this.presenter = presenter;
         this.actionItems = actionItems;
     }
 
@@ -59,6 +59,6 @@ public class LoadActionItemTask extends AsyncTask<Void, Void, List<Response>> {
         }
 
         this.actionItems.addAll(filteredList);
-        view.showActionItems(filteredList);
+        presenter.loadActionItems(false);
     }
 }
