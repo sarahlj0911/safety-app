@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
@@ -14,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -34,6 +36,7 @@ public class WalkthroughLandingFragment extends Fragment
         implements OnShowcaseEventListener, WalkthroughLandingContract.View {
 
     public static String EXTRA_WALKTHROUGH_NAME = "walkthrough_name";
+    private static final int MINIMUM_CHARACTER_NAME = 2;
 
     private static ShowcaseView showcaseView;
     private static final String TAG = "WalkthruLandingFragment";
@@ -175,25 +178,44 @@ public class WalkthroughLandingFragment extends Fragment
 
     @Override
     public void showCreateWalkthroughDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setTitle(getString(R.string.tutorial_title))
                 .setView(getLayoutInflater().inflate(R.layout.dialog_create_walkthrough, null))
-                .setPositiveButton(getString(R.string.create), new DialogInterface.OnClickListener() {
+                .setPositiveButton(getString(R.string.create), null)
+                .setNegativeButton(getString(R.string.cancel), null)
+                .setCancelable(false);
+
+        AlertDialog dialog = builder.create();
+        dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(final DialogInterface dialog) {
+                final Button positiveButton = ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_POSITIVE);
+                final Button negativeButton = ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_NEGATIVE);
+
+                positiveButton.setOnClickListener(new View.OnClickListener() {
                     @Override
-                    public void onClick(DialogInterface dialog, int which) {
+                    public void onClick(View v) {
                         Dialog dialogObj = Dialog.class.cast(dialog);
-                        EditText editText = dialogObj.findViewById(R.id.edittext_create_walkthrough);
-                        String walkthroughTitle = editText.getText().toString();
-                        presenter.confirmCreateWalkthroughClicked(walkthroughTitle);
-                    }
-                })
-                .setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        //user clicked cancel
+                        TextInputLayout textInputLayout = dialogObj.findViewById(R.id.edit_text_create_walkthrough);
+                        String walkthroughTitle = textInputLayout.getEditText().getText().toString();
+                        if(walkthroughTitle != null & walkthroughTitle.length() >= MINIMUM_CHARACTER_NAME) {
+                            presenter.confirmCreateWalkthroughClicked(walkthroughTitle);
+                            dialog.dismiss();
+                        } else {
+                            textInputLayout.setError(getString(R.string.error_create_walkthrough_name));
+                        }
                     }
                 });
-        AlertDialog dialog = builder.create();
+
+                negativeButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                    }
+                });
+            }
+        });
+
         dialog.show();
     }
 
