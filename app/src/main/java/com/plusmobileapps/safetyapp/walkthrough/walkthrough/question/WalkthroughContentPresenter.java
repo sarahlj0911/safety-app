@@ -7,6 +7,7 @@ import com.plusmobileapps.safetyapp.model.Priority;
 
 /**
  * Created by asteinme on 2/24/18.
+ * Updated by Robert Beerman on 3/19/18
  */
 
 public class WalkthroughContentPresenter implements WalkthroughFragmentContract.Presenter {
@@ -15,7 +16,6 @@ public class WalkthroughContentPresenter implements WalkthroughFragmentContract.
     private WalkthroughFragmentContract.View view;
 
     Response response;
-    private String photoPath;
 
     public WalkthroughContentPresenter(WalkthroughFragmentContract.View view ) {
         this.view = view;
@@ -36,8 +36,11 @@ public class WalkthroughContentPresenter implements WalkthroughFragmentContract.
             view.showActionPlan(response.getActionPlan());
             view.showRating(response.getRating());
         }
-    }
 
+        if (response.getImagePath() != null && !response.getImagePath().trim().equals("")) {
+            view.showPhoto(response.getImagePath());
+        }
+    }
 
     @Override
     public void priorityClicked(Priority priority) {
@@ -64,8 +67,8 @@ public class WalkthroughContentPresenter implements WalkthroughFragmentContract.
     }
 
     @Override
-    public void photoTaken() {
-
+    public void photoTaken(String imagePath) {
+        response.setImagePath(imagePath);
     }
 
     @Override
@@ -73,6 +76,4 @@ public class WalkthroughContentPresenter implements WalkthroughFragmentContract.
 
         return view.getResponse();
     }
-
-
 }

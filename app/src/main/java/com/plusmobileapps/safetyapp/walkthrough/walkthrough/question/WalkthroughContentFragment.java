@@ -54,6 +54,7 @@ public class WalkthroughContentFragment extends Fragment
     private String description;
     private ImageButton cameraButton;
     private ArrayList<String> options = new ArrayList<>();
+    private String rating;
     private Priority priority;
     private View priorityRed;
     private View priorityYellow;
@@ -240,7 +241,42 @@ public class WalkthroughContentFragment extends Fragment
 
     @Override
     public void showPhoto(String imagePath) {
+        Bitmap bitmap = BitmapFactory.decodeFile(imagePath);
+        cameraButton.setImageBitmap(bitmap);
 
+        // Can add this photo rotation and resizing back in if needed.
+        /*int targetWidth = cameraButton.getWidth();
+        int targetHeight = cameraButton.getHeight();
+        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+        bmOptions.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(imagePath, bmOptions);
+        int photoWidth = bmOptions.outWidth;
+        int photoHeight = bmOptions.outHeight;
+
+        // Determine how much to scale down the image
+        int scaleFactor = Math.min(photoWidth / targetWidth, photoHeight / targetHeight);
+
+        // Decode the image file into a Bitmap sized to fit the View
+        bmOptions.inJustDecodeBounds = false;
+        bmOptions.inSampleSize = scaleFactor;
+        bmOptions.inPurgeable = true;
+
+        Bitmap scaledBitmap = BitmapFactory.decodeFile(imagePath, bmOptions);
+
+        // Rotate the image
+        *//* TODO There must be a way to determine IF we need to rotate the image or not
+           and/or manipulate the camera setup to make it output the correct orientation,
+           but this is what works for now.*//*
+        Matrix matrix = new Matrix();
+        matrix.postRotate(90);
+        Bitmap rotatedBitmap = Bitmap.createBitmap(scaledBitmap, 0, 0, scaledBitmap.getWidth(), scaledBitmap.getHeight(), matrix, true);
+
+        ViewGroup.LayoutParams params = cameraButton.getLayoutParams();
+        params.width = rotatedBitmap.getWidth();
+        params.height = rotatedBitmap.getHeight();
+        cameraButton.setLayoutParams(params);
+
+        cameraButton.setImageBitmap(rotatedBitmap);*/
     }
 
     @Override
@@ -251,9 +287,6 @@ public class WalkthroughContentFragment extends Fragment
 
     @Override
     public Response getResponse() {
-
-        response.setImagePath(photoPath);
-
         return response;
     }
 
@@ -290,7 +323,7 @@ public class WalkthroughContentFragment extends Fragment
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.button_take_photo:
-                Log.d(TAG, "Picture button clicked!");
+                Log.d(TAG, "Taking a photo...");
                 Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
                     // Create the File where the photo should go
@@ -298,6 +331,9 @@ public class WalkthroughContentFragment extends Fragment
 
                     try {
                         imageFile = createImageFile();
+                        photoPath = imageFile.getAbsolutePath();
+                        Log.d(TAG, "photoPath: " + photoPath);
+                        response.setImagePath(photoPath);
                     } catch (IOException ioe) {
                         Log.d(TAG, "Error while creating image file");
                         ioe.printStackTrace();
@@ -307,6 +343,7 @@ public class WalkthroughContentFragment extends Fragment
                         Uri imageURI = FileProvider.getUriForFile(this.getActivity(),
                                 "com.plusmobileapps.safetyapp.fileprovider",
                                 imageFile);
+                        Log.d(TAG, "imageURI: " + imageURI.toString());
                         takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageURI);
                         startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
                     }
@@ -337,51 +374,22 @@ public class WalkthroughContentFragment extends Fragment
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            int targetWidth = cameraButton.getWidth();
-            int targetHeight = cameraButton.getHeight();
-            BitmapFactory.Options bmOptions = new BitmapFactory.Options();
-            bmOptions.inJustDecodeBounds = true;
-            BitmapFactory.decodeFile(photoPath, bmOptions);
-            int photoWidth = bmOptions.outWidth;
-            int photoHeight = bmOptions.outHeight;
-
-            // Determine how much to scale down the image
-            int scaleFactor = Math.min(photoWidth / targetWidth, photoHeight / targetHeight);
-
-            // Decode the image file into a Bitmap sized to fit the View
-            bmOptions.inJustDecodeBounds = false;
-            bmOptions.inSampleSize = scaleFactor;
-            bmOptions.inPurgeable = true;
-
-            Bitmap scaledBitmap = BitmapFactory.decodeFile(photoPath, bmOptions);
-
-            // Rotate the image
-            /* TODO There must be a way to determine IF we need to rotate the image or not
-               and/or manipulate the camera setup to make it output the correct orientation,
-               but this is what works for now. */
-            Matrix matrix = new Matrix();
-            matrix.postRotate(90);
-            Bitmap rotatedBitmap = Bitmap.createBitmap(scaledBitmap, 0, 0, scaledBitmap.getWidth(), scaledBitmap.getHeight(), matrix, true);
-
-            ViewGroup.LayoutParams params = cameraButton.getLayoutParams();
-            params.width = rotatedBitmap.getWidth();
-            params.height = rotatedBitmap.getHeight();
-            cameraButton.setLayoutParams(params);
-
-            cameraButton.setImageBitmap(rotatedBitmap);
+            presenter.photoTaken(photoPath);
+            response.setIsPersisted(true);
         }
-
-        response.setIsPersisted(true);
     }
 
     private File createImageFile() throws IOException {
-        String imageFileName = "JPEG_" + walkthroughQuestion.getRatingOption4() + "_";
+        String imageFileName = "JPEG_";
         File storageDir = this.getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         File image = File.createTempFile(imageFileName, ".jpg", storageDir);
-        photoPath = image.getAbsolutePath();
+        /*photoPath = image.getAbsolutePath();
         Log.d(TAG, "photoPath: " + photoPath);
-        response.setImagePath(photoPath);
+        response.setImagePath(photoPath);*/
         return image;
     }
 
+    public String getPhotoPath() {
+        return photoPath;
+    }
 }

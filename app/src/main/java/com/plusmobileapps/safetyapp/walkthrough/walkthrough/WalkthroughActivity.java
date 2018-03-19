@@ -3,9 +3,12 @@ package com.plusmobileapps.safetyapp.walkthrough.walkthrough;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -21,14 +24,14 @@ import com.plusmobileapps.safetyapp.walkthrough.location.LocationActivity;
 import com.plusmobileapps.safetyapp.walkthrough.walkthrough.question.WalkthroughContentFragment;
 import com.plusmobileapps.safetyapp.walkthrough.walkthrough.question.WalkthroughContentPresenter;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
-//Look at SummaryOverviewDetailsActivity
 public class WalkthroughActivity extends AppCompatActivity implements WalkthroughContract.View {
 
     static final String TAG = "WalkthroughActivity";
     public static final String EXTRA_LOCATION_ID = "com.plusmobileapps.safetyapp.walkthrough.overview.LOCATION";
-    private static final int REQUEST_IMAGE_CAPTURE = 1;
     FragmentManager fragmentManager;
     WalkthroughPresenter presenter = new WalkthroughPresenter(this);
 
@@ -187,4 +190,13 @@ public class WalkthroughActivity extends AppCompatActivity implements Walkthroug
         }
     };
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        Log.d(TAG, "WalkthroughActivity is aware of photo taken");
+        Response response = fragment.getResponse();
+        Log.d(TAG, "Got response from fragment: " + response.toString());
+        presenter.refreshDisplay(response.getImagePath());
+    }
 }

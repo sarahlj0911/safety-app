@@ -20,7 +20,7 @@ public interface WalkthroughFragmentContract {
     interface Presenter extends BasePresenter {
         Response getResponse();
         void priorityClicked(Priority priority);
-        void photoTaken();
+        void photoTaken(String imagePath);
     }
 
 }
