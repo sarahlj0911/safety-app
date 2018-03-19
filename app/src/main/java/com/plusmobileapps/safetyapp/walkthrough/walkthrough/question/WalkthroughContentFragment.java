@@ -54,6 +54,7 @@ public class WalkthroughContentFragment extends Fragment
     private String description;
     private ImageButton cameraButton;
     private ArrayList<String> options = new ArrayList<>();
+    private String rating;
     private Priority priority;
     private View priorityRed;
     private View priorityYellow;
@@ -290,7 +291,7 @@ public class WalkthroughContentFragment extends Fragment
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.button_take_photo:
-                Log.d(TAG, "Picture button clicked!");
+                Log.d(TAG, "Taking a photo...");
                 Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
                     // Create the File where the photo should go
@@ -307,6 +308,7 @@ public class WalkthroughContentFragment extends Fragment
                         Uri imageURI = FileProvider.getUriForFile(this.getActivity(),
                                 "com.plusmobileapps.safetyapp.fileprovider",
                                 imageFile);
+                        Log.d(TAG, "imageURI: " + imageURI.toString());
                         takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageURI);
                         startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
                     }
@@ -337,6 +339,7 @@ public class WalkthroughContentFragment extends Fragment
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            Log.d(TAG, "Ok, we should be prepping the picture now...");
             int targetWidth = cameraButton.getWidth();
             int targetHeight = cameraButton.getHeight();
             BitmapFactory.Options bmOptions = new BitmapFactory.Options();
@@ -371,6 +374,7 @@ public class WalkthroughContentFragment extends Fragment
             cameraButton.setImageBitmap(rotatedBitmap);
         }
 
+        presenter.photoTaken();
         response.setIsPersisted(true);
     }
 
