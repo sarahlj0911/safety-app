@@ -119,6 +119,7 @@ public class WalkthroughPresenter implements WalkthroughContract.Presenter {
         response.setLocationId(locationId);
         response.setRating(walkthroughFragment.getRating());
         response.setActionPlan(walkthroughFragment.getActionPlan());
+        response.setImagePath(walkthroughFragment.getPhotoPath());
         return response;
     }
 

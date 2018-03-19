@@ -35,6 +35,7 @@ public class WalkthroughContentPresenter implements WalkthroughFragmentContract.
             view.showPriority(Priority.values()[response.getPriority()]);
             view.showActionPlan(response.getActionPlan());
             view.showRating(response.getRating());
+            view.showPhoto(response.getImagePath());
         }
     }
 
@@ -64,8 +65,8 @@ public class WalkthroughContentPresenter implements WalkthroughFragmentContract.
     }
 
     @Override
-    public void photoTaken() {
-
+    public void photoTaken(String imagePath) {
+        response.setImagePath(imagePath);
     }
 
     @Override
