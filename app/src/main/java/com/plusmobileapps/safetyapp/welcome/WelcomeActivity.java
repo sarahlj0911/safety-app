@@ -50,10 +50,10 @@ public class WelcomeActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_welcome);
 
-        welcomeViewPager = (ViewPager) findViewById(R.id.welcome_view_pager);
-        dotsLayout = (LinearLayout) findViewById(R.id.layoutDots);
-        btnBack = (Button) findViewById(R.id.welcome_btn_back);
-        btnNext = (Button) findViewById(R.id.welcome_btn_next);
+        welcomeViewPager = findViewById(R.id.welcome_view_pager);
+        dotsLayout = findViewById(R.id.layoutDots);
+        btnBack = findViewById(R.id.welcome_btn_back);
+        btnNext = findViewById(R.id.welcome_btn_next);
 
         layouts = new int[] {
                 R.layout.welcome_slide1,
@@ -70,7 +70,7 @@ public class WelcomeActivity extends AppCompatActivity {
         welcomeViewPager.setAdapter(welcomeViewPagerAdapter);
         welcomeViewPager.addOnPageChangeListener(viewPagerPageChangeListener);
 
-        btnBack.setVisibility(View.GONE);
+        btnBack.setVisibility(View.INVISIBLE);
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
