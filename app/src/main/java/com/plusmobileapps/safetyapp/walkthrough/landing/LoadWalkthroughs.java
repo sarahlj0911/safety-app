@@ -6,6 +6,7 @@ import android.util.Log;
 import com.plusmobileapps.safetyapp.MyApplication;
 import com.plusmobileapps.safetyapp.data.AppDatabase;
 import com.plusmobileapps.safetyapp.data.dao.WalkthroughDao;
+import com.plusmobileapps.safetyapp.data.entity.Response;
 import com.plusmobileapps.safetyapp.data.entity.Walkthrough;
 
 import java.util.ArrayList;
@@ -32,6 +33,7 @@ public class LoadWalkthroughs extends AsyncTask<Void, Void, List<Walkthrough>> {
         db = AppDatabase.getAppDatabase((MyApplication.getAppContext()));
         WalkthroughDao dao = db.walkthroughDao();
         walkthroughs = dao.getAll();
+
         return walkthroughs;
     }
 

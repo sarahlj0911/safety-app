@@ -4,13 +4,7 @@ import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.ForeignKey;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
-import android.graphics.Bitmap;
-import android.graphics.Picture;
-import android.media.Image;
 
-import java.util.zip.CheckedOutputStream;
-
-import static android.arch.persistence.room.ForeignKey.CASCADE;
 
 /**
  * Created by aaronmusengo on 1/23/18.
@@ -70,6 +64,9 @@ public class Response {
     private String locationName;
 
     @Ignore
+    private String ratingText;
+
+    @Ignore
     private String title;
 
     public Response() {
@@ -121,6 +118,8 @@ public class Response {
     public String getLocationName() { return this.locationName; }
 
     public String getTitle() { return this.title; }
+
+    public String getRatingText() { return this.ratingText; }
 
     //Setters
     public void setResponseId(int responseId) {
@@ -184,18 +183,15 @@ public class Response {
 
     public void setTitle(String title) { this.title = title; }
 
+    public void setRatingText(String ratingText) { this.ratingText = ratingText; }
+
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof Response) {
             Response response = (Response) obj;
             if (response.getActionPlan().equals(actionPlan) &&
-                    response.getIsActionItem() == isActionItem &&
                     response.getLocationId() == locationId &&
-                    response.getTimeStamp().equals(timeStamp) &&
-                    response.getPriority() == priority &&
                     response.getQuestionId() == questionId &&
-                    response.getRating() == rating &&
-                    response.getUserId() == userId &&
                     response.getWalkthroughId() == walkthroughId
                     ) {
                 return true;
