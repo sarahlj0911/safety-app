@@ -26,28 +26,16 @@ import jp.wasabeef.recyclerview.animators.SlideInRightAnimator;
 public class ActionItemsFragment extends Fragment implements ActionItemContract.View {
 
     private static final String TAG = "ActionItemsFragment";
-    private static final String KEY_LAYOUT_MANAGER = "layoutManager";
     protected RecyclerView recyclerView;
-    protected RecyclerView.LayoutManager layoutManager;
-    protected ActionItemsFragment.LayoutManagerType currentLayoutManagerType;
     protected ActionItemAdapter adapter;
-    private ArrayList<Response> actionItems;
-
     private ActionItemContract.Presenter presenter;
-
-    private enum LayoutManagerType {
-        GRID_LAYOUT_MANAGER,
-        LINEAR_LAYOUT_MANAGER
-    }
-
 
     public ActionItemsFragment() {
         // Required empty public constructor
     }
 
     public static ActionItemsFragment newInstance() {
-        ActionItemsFragment fragment = new ActionItemsFragment();
-        return fragment;
+        return new ActionItemsFragment();
     }
 
     @Override
@@ -63,10 +51,8 @@ public class ActionItemsFragment extends Fragment implements ActionItemContract.
 
         adapter = new ActionItemAdapter(new ArrayList<Response>(0), itemListener);
 
-        recyclerView = (RecyclerView) rootView.findViewById(R.id.action_items_recyclerview);
-        layoutManager = new LinearLayoutManager(getActivity());
-        currentLayoutManagerType = LayoutManagerType.LINEAR_LAYOUT_MANAGER;
-        recyclerView.setLayoutManager(layoutManager);
+        recyclerView = rootView.findViewById(R.id.action_items_recyclerview);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(adapter);
         recyclerView.setItemAnimator(new SlideInRightAnimator());
 
@@ -92,10 +78,16 @@ public class ActionItemsFragment extends Fragment implements ActionItemContract.
     @Override
     public void showActionItems(List<Response> actionItems) {
         adapter.replaceData(actionItems);
-        boolean showRecyclerView = actionItems.size() > 0;
+
+    }
+
+    @Override
+    public void showNoActionItems(boolean show) {
         TextView noActionItemText = getView().findViewById(R.id.no_action_items);
-        recyclerView.setVisibility(showRecyclerView ? View.VISIBLE : View.GONE );
-        noActionItemText.setVisibility(!showRecyclerView ? View.VISIBLE : View.GONE);
+        recyclerView.setVisibility(!show ? View.VISIBLE : View.GONE );
+        if (noActionItemText != null) {
+            noActionItemText.setVisibility(show ? View.VISIBLE : View.GONE);
+        }
     }
 
     /**
