@@ -94,7 +94,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
 
         new WalkthroughLandingPresenter(factory.getWalkthroughLandingFragment());
         new ActionItemPresenter(factory.getActionItemsFragment());
-        new SummaryPresenter(factory.getSummaryFragment());
+       new SummaryPresenter(factory.getSummaryFragment());
     }
 
     private void findViewsById() {
@@ -152,9 +152,9 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
                 case R.id.navigation_dashboard:
                     presenter.navButtonClicked(1);
                     return true;
-                case R.id.navigation_history:
-                    presenter.navButtonClicked(2);
-                    return true;
+                //case R.id.navigation_history:
+                //    presenter.navButtonClicked(2);
+                //    return true;
             }
             return false;
         }
