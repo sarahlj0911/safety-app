@@ -30,8 +30,9 @@ public class MainSwipeAdapter extends FragmentPagerAdapter {
     }
 
     @Override
+    //was 3 now 2 since we are disabling the summary for MVP
     public int getCount() {
-        return 3;
+        return 2;
     }
 
 }
