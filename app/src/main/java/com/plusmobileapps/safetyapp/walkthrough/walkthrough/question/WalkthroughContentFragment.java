@@ -316,11 +316,13 @@ public class WalkthroughContentFragment extends Fragment
                 priority = Priority.HIGH;
                 presenter.priorityClicked(priority);
                 response.setPriority(Priority.HIGH.ordinal());
+                response.setIsActionItem(1);
                 break;
             case R.id.priority_btn_yellow:
                 priority = Priority.MEDIUM;
                 presenter.priorityClicked(priority);
                 response.setPriority(Priority.MEDIUM.ordinal());
+                response.setIsActionItem(1);
                 break;
             case R.id.priority_btn_green:
                 priority = Priority.NONE;

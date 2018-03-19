@@ -1,6 +1,7 @@
 package com.plusmobileapps.safetyapp.actionitems.detail;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -10,6 +11,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.plusmobileapps.safetyapp.R;
 import com.plusmobileapps.safetyapp.data.entity.Response;
@@ -30,7 +32,11 @@ public class ActionItemDetailActivity extends AppCompatActivity
     private View statusDot;
     private Button saveButton;
     private EditText actionPlanText;
-
+    private TextView detailRatingTextView;
+    private TextView locationTextView;
+    private TextView detailTimeStampTextView;
+    private TextView titleTextView;
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,6 +54,11 @@ public class ActionItemDetailActivity extends AppCompatActivity
         saveButton = findViewById(R.id.save_action_item_detail);
         actionPlanText = findViewById(R.id.editTextActionPlan);
         saveButton.setOnClickListener(saveListener);
+        detailRatingTextView = findViewById(R.id.detail_rating);
+        locationTextView = findViewById(R.id.locationTextView);
+        detailTimeStampTextView = findViewById(R.id.detail_timestamp);
+        titleTextView = findViewById(R.id.actionItemDetailTitle);
+
     }
 
     @Override
@@ -96,6 +107,21 @@ public class ActionItemDetailActivity extends AppCompatActivity
     @Override
     public void showActionItem(Response response) {
         actionPlanText.setText(response.getActionPlan());
+        detailRatingTextView.setText("Rating: " + response.getRatingText());
+        locationTextView.setText(response.getLocationName());
+        titleTextView.setText(response.getTitle());
+
+        String priority = Integer.toString(response.getPriority());
+        int drawable = presenter.getStatusColorDrawable(priority);
+        changeStatusDot(drawable);
+
+        String timeStamp = response.getTimeStamp();
+        if (timeStamp != null) {
+            detailTimeStampTextView.setText("Date: " + timeStamp);
+        } else {
+            detailTimeStampTextView.setText("");
+        }
+
     }
 
     @Override

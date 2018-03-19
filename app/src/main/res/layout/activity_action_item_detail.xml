@@ -30,26 +30,35 @@
 
         <TextView
             android:id="@+id/actionItemDetailTitle"
-            android:layout_width="110dp"
+            android:layout_width="250dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_marginStart="8dp"
             android:focusableInTouchMode="true"
             android:focusedByDefault="true"
-            android:text="Graffiti"
+            android:text="School Ownership"
             android:textColor="@android:color/black"
             android:textSize="30sp" />
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:orientation="horizontal">
 
         <TextView
             android:id="@+id/detail_rating"
             android:layout_width="93dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:layout_marginStart="32dp"
+            android:layout_marginStart="8dp"
             android:text="Rating:  3"
             android:textAlignment="gravity"
             android:textColor="@android:color/black"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            app:layout_constraintTop_toBottomOf="@+id/actionItemDetailTitle" />
+
 
         <TextView
             android:id="@+id/detail_timestamp"
@@ -84,11 +93,11 @@
             android:text="Edit Priority"
             app:layout_constraintBottom_toBottomOf="@+id/action_item_status"
             app:layout_constraintStart_toEndOf="@+id/action_item_status"
-            app:layout_constraintTop_toTopOf="@+id/action_item_status" />
+            app:layout_constraintTop_toBottomOf="@+id/actionItemDetailTitle" />
     </LinearLayout>
 
     <TextView
-        android:id="@+id/textView6"
+        android:id="@+id/locationTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"

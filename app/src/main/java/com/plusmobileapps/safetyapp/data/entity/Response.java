@@ -5,6 +5,7 @@ import android.arch.persistence.room.ForeignKey;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 
+
 /**
  * Created by aaronmusengo on 1/23/18.
  * Updated by Robert Beerman on 3/18/2018
@@ -64,6 +65,9 @@ public class Response {
     private String locationName;
 
     @Ignore
+    private String ratingText;
+
+    @Ignore
     private String title;
 
     @Ignore
@@ -118,6 +122,8 @@ public class Response {
     public String getLocationName() { return this.locationName; }
 
     public String getTitle() { return this.title; }
+
+    public String getRatingText() { return this.ratingText; }
 
     public boolean isPersisted() {
         return this.persisted;
@@ -185,6 +191,8 @@ public class Response {
 
     public void setTitle(String title) { this.title = title; }
 
+    public void setRatingText(String ratingText) { this.ratingText = ratingText; }
+
     public void setIsPersisted(boolean persisted) {
         this.persisted = persisted;
     }
@@ -194,13 +202,8 @@ public class Response {
         if (obj instanceof Response) {
             Response response = (Response) obj;
             if (response.getActionPlan().equals(actionPlan) &&
-                    response.getIsActionItem() == isActionItem &&
                     response.getLocationId() == locationId &&
-                    response.getTimeStamp().equals(timeStamp) &&
-                    response.getPriority() == priority &&
                     response.getQuestionId() == questionId &&
-                    response.getRating() == rating &&
-                    response.getUserId() == userId &&
                     response.getWalkthroughId() == walkthroughId
                     ) {
                 return true;
