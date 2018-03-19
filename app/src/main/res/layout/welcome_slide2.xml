@@ -6,12 +6,13 @@
 
     <TextView
         android:id="@+id/welcome2_textView1"
-        android:layout_width="307dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="@dimen/activity_horizontal_margin"
         android:fontFamily="sans-serif"
         android:lineSpacingExtra="8sp"
         android:text="@string/welcome2_item1"
-        android:textAlignment="center"
+        android:textAlignment="textStart"
         android:textColor="@android:color/black"
         android:textSize="18sp"
         android:textStyle="bold" />
