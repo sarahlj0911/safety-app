@@ -241,10 +241,11 @@ public class WalkthroughContentFragment extends Fragment
 
     @Override
     public void showPhoto(String imagePath) {
-        Log.d(TAG, "Ok, we should be prepping the picture now...");
         Bitmap bitmap = BitmapFactory.decodeFile(imagePath);
         cameraButton.setImageBitmap(bitmap);
-       /* int targetWidth = cameraButton.getWidth();
+
+        // Can add this photo rotation and resizing back in if needed.
+        /*int targetWidth = cameraButton.getWidth();
         int targetHeight = cameraButton.getHeight();
         BitmapFactory.Options bmOptions = new BitmapFactory.Options();
         bmOptions.inJustDecodeBounds = true;
@@ -265,7 +266,7 @@ public class WalkthroughContentFragment extends Fragment
         // Rotate the image
         *//* TODO There must be a way to determine IF we need to rotate the image or not
            and/or manipulate the camera setup to make it output the correct orientation,
-           but this is what works for now. *//*
+           but this is what works for now.*//*
         Matrix matrix = new Matrix();
         matrix.postRotate(90);
         Bitmap rotatedBitmap = Bitmap.createBitmap(scaledBitmap, 0, 0, scaledBitmap.getWidth(), scaledBitmap.getHeight(), matrix, true);
@@ -286,9 +287,6 @@ public class WalkthroughContentFragment extends Fragment
 
     @Override
     public Response getResponse() {
-
-        response.setImagePath(photoPath);
-
         return response;
     }
 
@@ -333,6 +331,9 @@ public class WalkthroughContentFragment extends Fragment
 
                     try {
                         imageFile = createImageFile();
+                        photoPath = imageFile.getAbsolutePath();
+                        Log.d(TAG, "photoPath: " + photoPath);
+                        response.setImagePath(photoPath);
                     } catch (IOException ioe) {
                         Log.d(TAG, "Error while creating image file");
                         ioe.printStackTrace();
@@ -376,48 +377,15 @@ public class WalkthroughContentFragment extends Fragment
             presenter.photoTaken(photoPath);
             response.setIsPersisted(true);
         }
-            /*Log.d(TAG, "Ok, we should be prepping the picture now...");
-            int targetWidth = cameraButton.getWidth();
-            int targetHeight = cameraButton.getHeight();
-            BitmapFactory.Options bmOptions = new BitmapFactory.Options();
-            bmOptions.inJustDecodeBounds = true;
-            BitmapFactory.decodeFile(photoPath, bmOptions);
-            int photoWidth = bmOptions.outWidth;
-            int photoHeight = bmOptions.outHeight;
-
-            // Determine how much to scale down the image
-            int scaleFactor = Math.min(photoWidth / targetWidth, photoHeight / targetHeight);
-
-            // Decode the image file into a Bitmap sized to fit the View
-            bmOptions.inJustDecodeBounds = false;
-            bmOptions.inSampleSize = scaleFactor;
-            bmOptions.inPurgeable = true;
-
-            Bitmap scaledBitmap = BitmapFactory.decodeFile(photoPath, bmOptions);
-
-            // Rotate the image
-            *//* TODO There must be a way to determine IF we need to rotate the image or not
-               and/or manipulate the camera setup to make it output the correct orientation,
-               but this is what works for now. *//*
-            Matrix matrix = new Matrix();
-            matrix.postRotate(90);
-            Bitmap rotatedBitmap = Bitmap.createBitmap(scaledBitmap, 0, 0, scaledBitmap.getWidth(), scaledBitmap.getHeight(), matrix, true);
-
-            ViewGroup.LayoutParams params = cameraButton.getLayoutParams();
-            params.width = rotatedBitmap.getWidth();
-            params.height = rotatedBitmap.getHeight();
-            cameraButton.setLayoutParams(params);
-
-            //cameraButton.setImageBitmap(rotatedBitmap);*/
     }
 
     private File createImageFile() throws IOException {
         String imageFileName = "JPEG_";
         File storageDir = this.getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         File image = File.createTempFile(imageFileName, ".jpg", storageDir);
-        photoPath = image.getAbsolutePath();
+        /*photoPath = image.getAbsolutePath();
         Log.d(TAG, "photoPath: " + photoPath);
-        //response.setImagePath(photoPath);
+        response.setImagePath(photoPath);*/
         return image;
     }
 

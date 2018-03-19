@@ -28,12 +28,10 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
-//Look at SummaryOverviewDetailsActivity
 public class WalkthroughActivity extends AppCompatActivity implements WalkthroughContract.View {
 
     static final String TAG = "WalkthroughActivity";
     public static final String EXTRA_LOCATION_ID = "com.plusmobileapps.safetyapp.walkthrough.overview.LOCATION";
-    private static final int REQUEST_IMAGE_CAPTURE = 1;
     FragmentManager fragmentManager;
     WalkthroughPresenter presenter = new WalkthroughPresenter(this);
 
@@ -191,4 +189,14 @@ public class WalkthroughActivity extends AppCompatActivity implements Walkthroug
             presenter.nextQuestionClicked();
         }
     };
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        Log.d(TAG, "WalkthroughActivity is aware of photo taken");
+        Response response = fragment.getResponse();
+        Log.d(TAG, "Got response from fragment: " + response.toString());
+        presenter.refreshDisplay(response.getImagePath());
+    }
 }

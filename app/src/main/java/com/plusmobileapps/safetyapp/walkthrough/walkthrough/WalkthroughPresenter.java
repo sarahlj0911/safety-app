@@ -35,9 +35,11 @@ public class WalkthroughPresenter implements WalkthroughContract.Presenter {
 
     @Override
     public void start(int locationId) {
-       loadQuestions(locationId);
-       this.locationId = locationId;
-       new GetCurrentWalkthroughIdTask(this).execute();
+        if (questions.size() == 0) {
+            loadQuestions(locationId);
+            this.locationId = locationId;
+            new GetCurrentWalkthroughIdTask(this).execute();
+        }
     }
 
     @Override
@@ -74,12 +76,12 @@ public class WalkthroughPresenter implements WalkthroughContract.Presenter {
             return;
         }
 
-        if (view.getCurrentResponse().isPersisted()) {
-            setUpResponse(view.getCurrentResponse());
+        Response currentResponse = view.getCurrentResponse();
+        if (currentIndex == responses.size()) {
+            responses.add(currentResponse);
         }
-        currentIndex--;
 
-        Log.d(TAG, "previousQuestionClicked responses.size after setting lastRespsonse: " + responses.size());
+        currentIndex--;
 
         view.showPreviousQuestion();
         view.showQuestionCount(currentIndex, questions.size());
@@ -90,14 +92,10 @@ public class WalkthroughPresenter implements WalkthroughContract.Presenter {
         Response response = view.getCurrentResponse();
         response = setUpResponse(response);
 
-        Log.d(TAG, "nextQuestionClicked responses.size before adding this response: " + responses.size());
-
         //check if the next question has already been started
-        if(currentIndex == responses.size()) {
+        if (currentIndex == responses.size()) {
             responses.add(response);
         }
-
-        Log.d(TAG, "nextQuestionClicked responses.size after adding this response: " + responses.size());
 
         //if you're at the last question
         if(currentIndex + 1 == questions.size()) {
@@ -119,7 +117,6 @@ public class WalkthroughPresenter implements WalkthroughContract.Presenter {
         response.setLocationId(locationId);
         response.setRating(walkthroughFragment.getRating());
         response.setActionPlan(walkthroughFragment.getActionPlan());
-        response.setImagePath(walkthroughFragment.getPhotoPath());
         return response;
     }
 
@@ -163,5 +160,12 @@ public class WalkthroughPresenter implements WalkthroughContract.Presenter {
             return true;
         }
 
+    }
+
+    @Override
+    public void refreshDisplay(String imagePath) {
+        Response response = view.getCurrentResponse();
+        response.setImagePath(imagePath);
+        setUpResponse(response);
     }
 }
