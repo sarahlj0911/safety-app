@@ -74,10 +74,12 @@ public class WalkthroughPresenter implements WalkthroughContract.Presenter {
             return;
         }
 
-        Response lastResponse = view.getCurrentResponse();
-        lastResponse = setUpResponse(lastResponse);
-        responses.set(currentIndex-1, lastResponse);
+        if (view.getCurrentResponse().isPersisted()) {
+            setUpResponse(view.getCurrentResponse());
+        }
         currentIndex--;
+
+        Log.d(TAG, "previousQuestionClicked responses.size after setting lastRespsonse: " + responses.size());
 
         view.showPreviousQuestion();
         view.showQuestionCount(currentIndex, questions.size());
@@ -88,12 +90,14 @@ public class WalkthroughPresenter implements WalkthroughContract.Presenter {
         Response response = view.getCurrentResponse();
         response = setUpResponse(response);
 
+        Log.d(TAG, "nextQuestionClicked responses.size before adding this response: " + responses.size());
+
         //check if the next question has already been started
         if(currentIndex == responses.size()) {
             responses.add(response);
-        } else {
-            responses.set(currentIndex, response);
         }
+
+        Log.d(TAG, "nextQuestionClicked responses.size after adding this response: " + responses.size());
 
         //if you're at the last question
         if(currentIndex + 1 == questions.size()) {

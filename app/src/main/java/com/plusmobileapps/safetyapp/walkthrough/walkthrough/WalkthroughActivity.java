@@ -31,7 +31,7 @@ public class WalkthroughActivity extends AppCompatActivity implements Walkthroug
     private static final int REQUEST_IMAGE_CAPTURE = 1;
     FragmentManager fragmentManager;
     WalkthroughPresenter presenter = new WalkthroughPresenter(this);
-    ;
+
     private int locationId;
     private int walkthroughId;
     private WalkthroughContentPresenter currentContentPresenter;
