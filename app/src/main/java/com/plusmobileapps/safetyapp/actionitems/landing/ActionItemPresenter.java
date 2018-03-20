@@ -41,6 +41,7 @@ public class ActionItemPresenter implements ActionItemContract.Presenter {
 
     private void showActionItems() {
         List<Response> responses = new ArrayList<>(0);
+
         responses.addAll(actionItems);
         view.showActionItems(responses);
     }
@@ -70,5 +71,9 @@ public class ActionItemPresenter implements ActionItemContract.Presenter {
 
     private void updateNoActionItemText() {
         view.showNoActionItems(actionItems.size() == 0);
+    }
+
+    public void setActionItems(List<Response> actionItems) {
+        this.actionItems = actionItems;
     }
 }

@@ -32,7 +32,8 @@ public class LoadActionItemTask extends AsyncTask<Void, Void, List<Response>> {
         LocationDao locationDao = db.locationDao();
         QuestionDao questionDao = db.questionDao();
 
-        List<Response> items = responseDao.getAllActionItems();
+        List<Response> items = responseDao.getAllActionItems(1);
+
         for (Response actionItem : items) {
             int locationId = actionItem.getLocationId();
             Location location = locationDao.getByLocationId(locationId);
@@ -51,14 +52,17 @@ public class LoadActionItemTask extends AsyncTask<Void, Void, List<Response>> {
     @Override
     protected void onPostExecute(List<Response> actionItems) {
         super.onPostExecute(actionItems);
-        List<Response> filteredList = new ArrayList<>(0);
-        for (Response response : actionItems) {
-            if(response.isActionItem()) {
-                filteredList.add(response);
-            }
-        }
+//        List<Response> filteredList = new ArrayList<>(0);
+//
+//        for (Response response : actionItems) {
+//            if(response.isActionItem()) {
+//                filteredList.add(response);
+//            }
+//        }
 
-        this.actionItems.addAll(filteredList);
+//        this.actionItems.addAll(filteredList);
+        this.actionItems = actionItems;
+        presenter.setActionItems(actionItems);
         presenter.loadActionItems(false);
     }
 }

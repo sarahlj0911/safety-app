@@ -25,5 +25,6 @@ public interface ActionItemContract {
         void openActionItemDetail(int position);
         void dismissButtonClicked(int position);
         void undoDismissal();
+        void setActionItems(List<Response> actionItems);
     }
 }
