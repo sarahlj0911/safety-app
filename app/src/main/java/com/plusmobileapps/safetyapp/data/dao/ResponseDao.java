@@ -24,8 +24,9 @@ public interface ResponseDao {
     @Query("SELECT * FROM responses where responseId LIKE :responseId")
     Response getByResponseId(String responseId);
 
-    @Query("SELECT * FROM responses")
-    List<Response> getAllActionItems();
+
+    @Query("SELECT * FROM responses where isActionItem LIKE :actionItem")
+    List<Response> getAllActionItems(int actionItem);
 
     @Query("SELECT * FROM RESPONSES where locationId LIKE :locationId AND walkthroughId LIKE :walkthroughId")
     List<Response> getResponsesForLocation(int locationId, int walkthroughId);
