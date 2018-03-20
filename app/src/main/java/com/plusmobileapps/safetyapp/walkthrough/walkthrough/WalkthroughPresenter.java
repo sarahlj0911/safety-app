@@ -8,6 +8,7 @@ import com.plusmobileapps.safetyapp.data.AppDatabase;
 import com.plusmobileapps.safetyapp.data.dao.ResponseDao;
 import com.plusmobileapps.safetyapp.data.entity.Question;
 import com.plusmobileapps.safetyapp.data.entity.Response;
+import com.plusmobileapps.safetyapp.data.entity.Walkthrough;
 import com.plusmobileapps.safetyapp.walkthrough.walkthrough.question.WalkthroughContentFragment;
 
 import java.util.ArrayList;
@@ -28,6 +29,10 @@ public class WalkthroughPresenter implements WalkthroughContract.Presenter {
     private int currentIndex = 0;
     private int locationId;
     private int walkthroughId;
+    private int totalQuestions = 0;
+    private int totalResponses = 0;
+    private Walkthrough walkthrough;
+    private GetWalkthrough getWalkthrough;
 
     public WalkthroughPresenter(WalkthroughContract.View view) {
         this.view = view;
@@ -40,6 +45,8 @@ public class WalkthroughPresenter implements WalkthroughContract.Presenter {
             this.locationId = locationId;
             new GetCurrentWalkthroughIdTask(this).execute();
         }
+        GetTotalQuestionCount totalQC = new GetTotalQuestionCount(this);
+        totalQC.execute();
     }
 
     @Override
@@ -50,7 +57,8 @@ public class WalkthroughPresenter implements WalkthroughContract.Presenter {
     @Override
     public void loadResponses(int walkthroughId) {
         this.walkthroughId = walkthroughId;
-
+        GetWalkthrough getWalkthrough = new GetWalkthrough(this, String.valueOf(walkthroughId));
+        getWalkthrough.execute();
         AsyncTask<Void, Void, List<Response>> wrmAsyncTask = new WalkthroughResponseModel(this.locationId, walkthroughId, view, this).execute();
 
         try {
@@ -141,11 +149,41 @@ public class WalkthroughPresenter implements WalkthroughContract.Presenter {
     }
 
     private void saveResponses() {
-
         SaveResponses save = new SaveResponses();
         save.responses = responses;
         save.execute();
+        GetTotalResponseCount totalRC = new GetTotalResponseCount(this);
+        totalRC.execute();
         view.closeWalkthrough();
+    }
+
+    @Override
+    public void setTotalQuestionCount(int totalQuestions) {
+        this.totalQuestions = totalQuestions;
+    }
+
+    @Override
+    public void setTotalResponseCount(int totalResponses) {
+        this.totalResponses = totalResponses;
+    }
+
+    @Override
+    public void setWalkthrough(Walkthrough walkthrough) {
+        this.walkthrough = walkthrough;
+    }
+
+    @Override
+    public void calculateProgress() {
+        int percent = 0;
+        System.out.println("Total Questions in calculation: " + totalQuestions);
+        System.out.println("Total Responses in calculation: " + totalResponses);
+        percent = (int) (((double) totalResponses / (double) totalQuestions) * 100);
+        System.out.println("Percent complete is: " + percent);
+
+        String id = String.valueOf(walkthroughId);
+        walkthrough.setPercentComplete(percent);
+        System.out.println(walkthrough.getName());
+        System.out.println(walkthrough.getPercentComplete());
     }
 
     static class SaveResponses extends AsyncTask<Void,Void, Boolean> {

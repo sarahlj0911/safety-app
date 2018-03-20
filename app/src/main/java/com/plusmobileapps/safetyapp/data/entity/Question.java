@@ -1,6 +1,7 @@
 package com.plusmobileapps.safetyapp.data.entity;
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 import android.graphics.Bitmap;
 
@@ -11,6 +12,7 @@ import android.graphics.Bitmap;
 
 @Entity(tableName = "question")
 public class Question {
+
     @PrimaryKey(autoGenerate = false)
     private int questionId;
 
@@ -31,8 +33,6 @@ public class Question {
 
     @ColumnInfo(name = "shortDesc")
     private String shortDescription;
-
-
 
     public Question(int questionId, String questionText, String shortDescription, String ratingOption1, String ratingOption2, String ratingOption3, String ratingOption4) {
         this.questionId = questionId;
@@ -62,6 +62,7 @@ public class Question {
     public String getRatingOption3() { return ratingOption3; }
 
     public String getRatingOption4() { return ratingOption4; }
+
 
     //Setters
     public void setQuestionId(int id) {

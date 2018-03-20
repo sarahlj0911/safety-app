@@ -45,6 +45,7 @@ public class WalkthroughQuestionModel extends AsyncTask<Void, Void, List<Questio
     protected void onPostExecute(List<Question> questions) {
         super.onPostExecute(questions);
         presenter.setQuestions(questions);
+
     }
 
 }

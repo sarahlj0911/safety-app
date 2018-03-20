@@ -91,7 +91,6 @@ public class WalkthroughContentFragment extends Fragment
             fragment.response.setPriority(0);
         } else {
             fragment.response = loadedResponse;
-
             Log.d(TAG, "Loaded response:\n" + fragment.response.toString());
         }
 
