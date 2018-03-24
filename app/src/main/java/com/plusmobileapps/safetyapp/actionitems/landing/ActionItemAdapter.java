@@ -6,12 +6,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.io.File;
 import java.util.List;
 
 import com.plusmobileapps.safetyapp.R;
 import com.plusmobileapps.safetyapp.data.entity.Response;
+import com.squareup.picasso.Picasso;
 
 public class ActionItemAdapter extends RecyclerView.Adapter<ActionItemAdapter.ViewHolder> {
 
@@ -41,6 +44,9 @@ public class ActionItemAdapter extends RecyclerView.Adapter<ActionItemAdapter.Vi
         holder.getDescription().setText(actionItem.getActionPlan());
         holder.getLocation().setText(actionItem.getLocationName());
         holder.getTitle().setText(actionItem.getTitle());
+
+        File file = new File(actionItem.getImagePath());
+        Picasso.get().load(file).into(holder.getImageView());
 
         int priority = actionItem.getPriority();
         if (priority == 2) {
@@ -81,6 +87,7 @@ public class ActionItemAdapter extends RecyclerView.Adapter<ActionItemAdapter.Vi
         private final View status = itemView.findViewById(R.id.action_item_status);
         private final TextView title = itemView.findViewById(R.id.action_item_title);
         private final TextView description = itemView.findViewById(R.id.action_item_description);
+        private final ImageView imageView = itemView.findViewById(R.id.action_item_image);
 
         private final TextView location = itemView.findViewById(R.id.action_item_location);
         private final ImageButton dismissButton = itemView.findViewById(R.id.dismiss_action_item_button);
@@ -119,6 +126,10 @@ public class ActionItemAdapter extends RecyclerView.Adapter<ActionItemAdapter.Vi
 
         public TextView getDescription() {
             return description;
+        }
+
+        public ImageView getImageView() {
+            return imageView;
         }
 
     }

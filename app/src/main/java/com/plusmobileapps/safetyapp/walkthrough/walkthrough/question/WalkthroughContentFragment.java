@@ -29,6 +29,7 @@ import com.plusmobileapps.safetyapp.data.entity.Question;
 import com.plusmobileapps.safetyapp.data.entity.Response;
 import com.plusmobileapps.safetyapp.model.Priority;
 import com.plusmobileapps.safetyapp.R;
+import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.io.IOException;
@@ -69,7 +70,7 @@ public class WalkthroughContentFragment extends Fragment
     private PackageManager packageManager;
     private WalkthroughFragmentContract.Presenter presenter;
     private RadioGroup radioGroup;
-    private int currentRating;
+    private int currentRating = -1;
 
     public int getRating() {
         return currentRating;
@@ -88,7 +89,7 @@ public class WalkthroughContentFragment extends Fragment
         if (loadedResponse == null) {
             Log.d(TAG, "No response loaded");
             fragment.response.setQuestionId(question.getQuestionId());
-            fragment.response.setPriority(0);
+            fragment.response.setPriority(-1);
         } else {
             fragment.response = loadedResponse;
 
@@ -241,8 +242,8 @@ public class WalkthroughContentFragment extends Fragment
 
     @Override
     public void showPhoto(String imagePath) {
-        Bitmap bitmap = BitmapFactory.decodeFile(imagePath);
-        cameraButton.setImageBitmap(bitmap);
+        File file = new File(imagePath);
+        Picasso.get().load(file).into(cameraButton);
 
         // Can add this photo rotation and resizing back in if needed.
         /*int targetWidth = cameraButton.getWidth();
