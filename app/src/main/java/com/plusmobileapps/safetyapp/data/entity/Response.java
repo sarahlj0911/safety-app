@@ -33,7 +33,7 @@ public class Response {
     public final static int NOT_ACTION_ITEM = 0;
 
 
-    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey
     private int responseId;
 
     @ColumnInfo(name = "isActionItem")

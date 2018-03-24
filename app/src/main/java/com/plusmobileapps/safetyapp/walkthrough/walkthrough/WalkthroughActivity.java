@@ -69,6 +69,12 @@ public class WalkthroughActivity extends AppCompatActivity implements Walkthroug
     }
 
     @Override
+    protected void onPause() {
+        super.onPause();
+        presenter.saveQuestions();
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:

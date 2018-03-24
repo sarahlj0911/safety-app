@@ -20,6 +20,7 @@ public interface WalkthroughContract {
     interface Presenter {
         void start(int locationId);
         void loadQuestions(int locationId);
+        void saveQuestions();
         void loadResponses(int walkthroughId);
         void previousQuestionClicked();
         void nextQuestionClicked();
