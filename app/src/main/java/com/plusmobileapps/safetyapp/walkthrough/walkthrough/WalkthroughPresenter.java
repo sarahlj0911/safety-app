@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.plusmobileapps.safetyapp.MyApplication;
 import com.plusmobileapps.safetyapp.data.AppDatabase;
+import com.plusmobileapps.safetyapp.data.ResponseUniqueIdFactory;
 import com.plusmobileapps.safetyapp.data.dao.ResponseDao;
 import com.plusmobileapps.safetyapp.data.entity.Question;
 import com.plusmobileapps.safetyapp.data.entity.Response;
@@ -70,6 +71,14 @@ public class WalkthroughPresenter implements WalkthroughContract.Presenter {
     }
 
     @Override
+    public void saveQuestions() {
+        Response response = view.getCurrentResponse();
+        response = setUpResponse(response);
+        responses.add(response);
+        saveResponses(false);
+    }
+
+    @Override
     public void previousQuestionClicked() {
         if(currentIndex == 0) {
             view.showConfirmationDialog();
@@ -92,15 +101,17 @@ public class WalkthroughPresenter implements WalkthroughContract.Presenter {
         Response response = view.getCurrentResponse();
         response = setUpResponse(response);
 
-        //check if the next question has already been started
-        if (currentIndex == responses.size()) {
+        //check if response has already been added
+        if(responses.size() == currentIndex + 1) {
+            responses.set(currentIndex, response);
+        } else if (currentIndex == responses.size()) {
             responses.add(response);
         }
 
         //if you're at the last question
         if(currentIndex + 1 == questions.size()) {
             Log.i(TAG, "End of questions, saving " + responses.size() + " responses");
-            saveResponses();
+            saveResponses(true);
             return;
         }
 
@@ -112,6 +123,9 @@ public class WalkthroughPresenter implements WalkthroughContract.Presenter {
     }
 
     private Response setUpResponse(Response response) {
+        if(response.getResponseId() == 0) {
+            response.setResponseId(ResponseUniqueIdFactory.getId());
+        }
         walkthroughFragment = view.getCurrentFragment();
         response.setWalkthroughId(walkthroughId);
         response.setLocationId(locationId);
@@ -122,7 +136,7 @@ public class WalkthroughPresenter implements WalkthroughContract.Presenter {
 
     @Override
     public void confirmationExitClicked() {
-        saveResponses();
+        saveResponses(true);
         view.closeWalkthrough();
     }
 
@@ -140,12 +154,14 @@ public class WalkthroughPresenter implements WalkthroughContract.Presenter {
         this.responses = responses;
     }
 
-    private void saveResponses() {
+    private void saveResponses(boolean finish) {
 
         SaveResponses save = new SaveResponses();
         save.responses = responses;
         save.execute();
-        view.closeWalkthrough();
+        if(finish) {
+            view.closeWalkthrough();
+        }
     }
 
     static class SaveResponses extends AsyncTask<Void,Void, Boolean> {
