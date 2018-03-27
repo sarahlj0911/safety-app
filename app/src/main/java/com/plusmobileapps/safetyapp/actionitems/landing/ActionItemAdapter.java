@@ -45,8 +45,10 @@ public class ActionItemAdapter extends RecyclerView.Adapter<ActionItemAdapter.Vi
         holder.getLocation().setText(actionItem.getLocationName());
         holder.getTitle().setText(actionItem.getTitle());
 
-        File file = new File(actionItem.getImagePath());
-        Picasso.get().load(file).into(holder.getImageView());
+        if(actionItem.getImagePath() != null){
+            File file = new File(actionItem.getImagePath());
+            Picasso.get().load(file).into(holder.getImageView());
+        }
 
         int priority = actionItem.getPriority();
         if (priority == 2) {

@@ -116,8 +116,10 @@ public class ActionItemDetailActivity extends AppCompatActivity
         locationTextView.setText(response.getLocationName());
         titleTextView.setText(response.getTitle());
 
-        File file = new File(response.getImagePath());
-        Picasso.get().load(file).into(imageView);
+        if(response.getImagePath() != null) {
+            File file = new File(response.getImagePath());
+            Picasso.get().load(file).into(imageView);
+        }
 
         String priority = Integer.toString(response.getPriority());
         int drawable = presenter.getStatusColorDrawable(priority);

@@ -242,9 +242,10 @@ public class WalkthroughContentFragment extends Fragment
 
     @Override
     public void showPhoto(String imagePath) {
-        File file = new File(imagePath);
-        Picasso.get().load(file).into(cameraButton);
-
+        if(imagePath != null) {
+            File file = new File(imagePath);
+            Picasso.get().load(file).into(cameraButton);
+        }
         // Can add this photo rotation and resizing back in if needed.
         /*int targetWidth = cameraButton.getWidth();
         int targetHeight = cameraButton.getHeight();
