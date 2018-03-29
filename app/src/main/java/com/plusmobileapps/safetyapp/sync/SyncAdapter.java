@@ -58,8 +58,8 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
     private QuestionMappingDao questionMappingDao;
 
     // Connection properties
-    private static final String URL = "jdbc:mysql://safetymysqlinstance.cbcumohyescr.us-west-2.rds.amazonaws.com:3306/safetywalkthrough?useSSL=false";
-    private static final String APP_ID = "safety_app";
+    private static final String URL = BuildConfig.DB_URL;
+    private static final String APP_ID = BuildConfig.APP_ID;
     private static final String PASS = BuildConfig.SYNC_PASS;
 
     // SQL statement constants
