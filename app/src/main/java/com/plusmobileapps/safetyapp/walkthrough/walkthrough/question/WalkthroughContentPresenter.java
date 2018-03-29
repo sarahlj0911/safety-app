@@ -32,9 +32,13 @@ public class WalkthroughContentPresenter implements WalkthroughFragmentContract.
         }
 
         if (response.isPersisted()) {
-            view.showPriority(Priority.values()[response.getPriority()]);
+            if(response.getPriority() != -1) {
+                view.showPriority(Priority.values()[response.getPriority()]);
+            }
             view.showActionPlan(response.getActionPlan());
-            view.showRating(response.getRating());
+            if(response.getRating() != -1) {
+                view.showRating(response.getRating());
+            }
         }
 
         if (response.getImagePath() != null && !response.getImagePath().trim().equals("")) {

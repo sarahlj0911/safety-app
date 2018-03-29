@@ -55,6 +55,9 @@ dependencies {
     //walkthrough tutorial library
     implementation 'com.github.amlcurran.showcaseview:library:5.4.3'
 
+    //image loading library
+    implementation 'com.squareup.picasso:picasso:2.71828'
+
     //test
     // Dependencies for local unit tests
     testImplementation "junit:junit:$rootProject.ext.junitVersion"
