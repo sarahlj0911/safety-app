@@ -34,7 +34,7 @@ public class UpdateWalkthroughTask extends AsyncTask<Integer, Void, Boolean> {
         // Get count of responses for this walkthrough
         Double responseCount = ((Integer)responseDao.getResponseCount(walkthroughId)).doubleValue();
         Log.d(TAG, "Response count: " + responseCount);
-        Double percentComplete = responseCount / questionCount;
+        Double percentComplete = responseCount / questionCount * 100.0;
         Log.d(TAG, "Walkthrough percent complete: " + percentComplete);
 
         Date date = new Date();
