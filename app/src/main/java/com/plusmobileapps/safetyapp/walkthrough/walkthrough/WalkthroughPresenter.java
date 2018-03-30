@@ -159,10 +159,6 @@ public class WalkthroughPresenter implements WalkthroughContract.Presenter {
         save.responses = responses;
         save.execute(walkthroughId);
 
-        Log.d(TAG, "Saving responses (should also update walkthrough");
-
-        /*new UpdateWalkthroughTask(walkthroughId);*/
-
         if(finish) {
             view.closeWalkthrough();
         }
@@ -183,12 +179,8 @@ public class WalkthroughPresenter implements WalkthroughContract.Presenter {
         }
 
         @Override
-        protected void onPostExecute(Boolean result) {
-            super.onPostExecute(result);
-            Log.d(TAG, "In post execute... Incoming result: " + result);
-            if (result) {
-                new UpdateWalkthroughTask().execute(walkthroughId);
-            }
+        protected void onPostExecute(Boolean saved) {
+            new UpdateWalkthroughTask().execute(walkthroughId);
         }
 
     }

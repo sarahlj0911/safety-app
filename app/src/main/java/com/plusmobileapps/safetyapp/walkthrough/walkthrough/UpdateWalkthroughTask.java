@@ -28,10 +28,10 @@ public class UpdateWalkthroughTask extends AsyncTask<Integer, Void, Boolean> {
         ResponseDao responseDao = db.responseDao();
         Walkthrough walkthrough = walkthroughDao.getByWalkthroughId(walkthroughId.toString());
 
-        // TODO Determine how many total questions there are for this walkthrough
+        // Determine how many total questions there are for this walkthrough
         Double questionCount = ((Integer)questionMappingDao.getQuestionCount()).doubleValue();
         Log.d(TAG, "Question count: " + questionCount);
-        // TODO Get count of responses for this walkthrough
+        // Get count of responses for this walkthrough
         Double responseCount = ((Integer)responseDao.getResponseCount(walkthroughId)).doubleValue();
         Log.d(TAG, "Response count: " + responseCount);
         Double percentComplete = responseCount / questionCount;
