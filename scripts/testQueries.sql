@@ -32,3 +32,9 @@ delete from safetywalkthrough.question_mapping;
 
 delete from safetywalkthrough.walkthroughs;
 
+SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
+truncate responses;
+truncate walkthroughs;
+truncate user;
+truncate schools;
+SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
