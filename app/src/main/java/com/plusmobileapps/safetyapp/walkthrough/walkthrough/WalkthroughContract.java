@@ -9,7 +9,7 @@ public interface WalkthroughContract {
 
     interface View {
         void showConfirmationDialog();
-        void showNextQuestion(Question question, List<Response> responses);
+        void showNextQuestion(Question question, Response response);
         void showPreviousQuestion();
         Response getCurrentResponse();
         WalkthroughContentFragment getCurrentFragment();

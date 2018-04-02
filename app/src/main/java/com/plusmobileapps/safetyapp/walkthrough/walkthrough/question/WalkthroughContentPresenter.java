@@ -24,7 +24,7 @@ public class WalkthroughContentPresenter implements WalkthroughFragmentContract.
 
     @Override
     public void start() {
-        response = getResponse();
+        response = view.getLoadedResponse();
         Log.d(TAG, "Current response: " + response.toString());
 
         if (response.isActionItem()) {

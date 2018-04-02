@@ -15,6 +15,7 @@ public interface WalkthroughFragmentContract {
         void showActionPlan(String actionPlan);
         void showPhoto(String imagePath);
         Response getResponse();
+        Response getLoadedResponse();
     }
 
     interface Presenter extends BasePresenter {

@@ -38,6 +38,7 @@ public class WalkthroughActivity extends AppCompatActivity implements Walkthroug
     private int locationId;
     private int walkthroughId;
     private WalkthroughContentPresenter currentContentPresenter;
+    private WalkthroughContentPresenter previousContentPresenter;
     private WalkthroughContentFragment fragment;
 
     @Override
@@ -69,8 +70,8 @@ public class WalkthroughActivity extends AppCompatActivity implements Walkthroug
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
+    protected void onDestroy() {
+        super.onDestroy();
         presenter.saveQuestions();
     }
 
@@ -110,31 +111,9 @@ public class WalkthroughActivity extends AppCompatActivity implements Walkthroug
     }
 
     @Override
-    public void showNextQuestion(Question question, List<Response> responses) {
-        Response response = null;
-
-        if (responses != null && !responses.isEmpty()) {
-            for (Response candidateResponse : responses) {
-                int candidateWalkthruId = candidateResponse.getWalkthroughId();
-                int candidateLocationId = candidateResponse.getLocationId();
-                int candidateQuestionId = candidateResponse.getQuestionId();
-                Log.d(TAG, "Comparing candidate response with walkthroughId [" + candidateWalkthruId +
-                        "], locationId [" + candidateLocationId +
-                        "], questionId [" + candidateQuestionId +
-                        "]\n  to current walkthroughId [" + walkthroughId +
-                        "], locationId [" + locationId +
-                        "], questionId [" + question.getQuestionId() + "]");
-                if (candidateWalkthruId == walkthroughId
-                        && candidateLocationId == locationId
-                        && candidateQuestionId == question.getQuestionId()) {
-                    response = candidateResponse;
-                    break;
-                }
-
-            }
-        }
-
+    public void showNextQuestion(Question question, Response response) {
         fragment = WalkthroughContentFragment.newInstance(question, response);
+        previousContentPresenter = currentContentPresenter;
         currentContentPresenter = new WalkthroughContentPresenter(fragment);
 
         FragmentTransaction transaction = fragmentManager.beginTransaction();
@@ -152,6 +131,7 @@ public class WalkthroughActivity extends AppCompatActivity implements Walkthroug
 
     @Override
     public void showPreviousQuestion() {
+        currentContentPresenter = previousContentPresenter;
         fragmentManager.popBackStack();
     }
 
@@ -201,7 +181,7 @@ public class WalkthroughActivity extends AppCompatActivity implements Walkthroug
         super.onActivityResult(requestCode, resultCode, data);
 
         Log.d(TAG, "WalkthroughActivity is aware of photo taken");
-        Response response = fragment.getResponse();
+        Response response = currentContentPresenter.getResponse();
         Log.d(TAG, "Got response from fragment: " + response.toString());
         presenter.refreshDisplay(response.getImagePath());
     }
