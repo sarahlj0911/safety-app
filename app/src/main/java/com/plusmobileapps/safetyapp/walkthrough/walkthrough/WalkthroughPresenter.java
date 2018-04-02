@@ -155,25 +155,32 @@ public class WalkthroughPresenter implements WalkthroughContract.Presenter {
     }
 
     private void saveResponses(boolean finish) {
-
         SaveResponses save = new SaveResponses();
         save.responses = responses;
-        save.execute();
+        save.execute(walkthroughId);
+
         if(finish) {
             view.closeWalkthrough();
         }
     }
 
-    static class SaveResponses extends AsyncTask<Void,Void, Boolean> {
+    static class SaveResponses extends AsyncTask<Integer, Void, Boolean> {
         List<Response> responses;
+        Integer walkthroughId;
 
         @Override
-        protected Boolean doInBackground(Void... voids) {
+        protected Boolean doInBackground(Integer... walkthroughIds) {
+            this.walkthroughId = walkthroughIds[0];
             AppDatabase db = AppDatabase.getAppDatabase(MyApplication.getAppContext());
             ResponseDao responseDao = db.responseDao();
             responseDao.insertAll(responses);
 
             return true;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean saved) {
+            new UpdateWalkthroughTask().execute(walkthroughId);
         }
 
     }

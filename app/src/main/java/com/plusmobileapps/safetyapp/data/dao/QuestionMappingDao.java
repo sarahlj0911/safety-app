@@ -18,6 +18,9 @@ public interface QuestionMappingDao {
     @Query("SELECT * FROM question_mapping")
     List<QuestionMapping> getAllQuestionMappings();
 
+    @Query("SELECT count(*) FROM question_mapping")
+    int getQuestionCount();
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insert(QuestionMapping questionMapping);
 }

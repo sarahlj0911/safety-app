@@ -24,6 +24,9 @@ public interface ResponseDao {
     @Query("SELECT * FROM responses where responseId LIKE :responseId")
     Response getByResponseId(String responseId);
 
+    @Query("SELECT count(*) FROM responses WHERE walkthroughId = :walkthroughId " +
+            "AND rating >= 0")
+    int getResponseCount(int walkthroughId);
 
     @Query("SELECT * FROM responses where isActionItem LIKE :actionItem")
     List<Response> getAllActionItems(int actionItem);
