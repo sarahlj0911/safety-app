@@ -204,7 +204,8 @@
             android:layout_width="256dp"
             android:layout_height="256dp"
             android:layout_gravity="center_horizontal"
-            android:src="@android:drawable/ic_menu_camera" />
+            android:src="@android:drawable/ic_menu_camera"
+            android:scaleType="centerInside"/>
 
 
     </LinearLayout>
