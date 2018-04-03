@@ -77,7 +77,7 @@ public class WalkthroughPresenter implements WalkthroughContract.Presenter {
         if ( (currentIndex >= 0) && (currentIndex < responses.size()) ) {
             return responses.get(currentIndex);
         } else {
-            return new Response();
+            return null;
         }
     }
 
@@ -113,7 +113,7 @@ public class WalkthroughPresenter implements WalkthroughContract.Presenter {
         Response response = getCurrentResponse();
 
         //check if response has already been added
-        if(responses.size() == currentIndex + 1) {
+        if(responses.size() >= currentIndex + 1) {
             responses.set(currentIndex, response);
         } else if (currentIndex == responses.size()) {
             responses.add(response);
@@ -137,9 +137,9 @@ public class WalkthroughPresenter implements WalkthroughContract.Presenter {
         Response response = view.getCurrentResponse();
         if(response.getResponseId() == 0) {
             response.setResponseId(ResponseUniqueIdFactory.getId());
+            response.setUserId(1);
             response.setWalkthroughId(walkthroughId);
             response.setLocationId(locationId);
-            response.setQuestionId(questions.get(currentIndex).getQuestionId());
         }
         String timeStamp = DateFormat.getDateTimeInstance().format(new Date());
         response.setTimeStamp(timeStamp);

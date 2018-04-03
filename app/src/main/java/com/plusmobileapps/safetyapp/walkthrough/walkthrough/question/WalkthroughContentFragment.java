@@ -82,8 +82,13 @@ public class WalkthroughContentFragment extends Fragment
         if (loadedResponse == null) {
             Log.d(TAG, "No response loaded");
             fragment.response.setQuestionId(question.getQuestionId());
+            fragment.response.setRating(-1);
+            fragment.response.setPriority(-1);
+            fragment.response.setActionPlan("");
         } else {
             fragment.response = loadedResponse;
+            fragment.currentPriority = loadedResponse.getPriority();
+            fragment.currentRating = loadedResponse.getRating();
             Log.d(TAG, "Loaded response:\n" + fragment.response.toString());
         }
 
@@ -96,7 +101,7 @@ public class WalkthroughContentFragment extends Fragment
         packageManager = this.getActivity().getPackageManager();
         View view = inflater.inflate(R.layout.fragment_walkthrough_question, container, false);
         String walkthroughJsonObject = getArguments().getString("walkthroughQuestion");
-        response.setUserId(1);
+
 
         walkthroughQuestion = new Gson().fromJson(walkthroughJsonObject, Question.class);
         initViews(view);
