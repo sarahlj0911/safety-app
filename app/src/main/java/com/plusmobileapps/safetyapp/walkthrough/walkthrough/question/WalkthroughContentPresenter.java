@@ -24,21 +24,21 @@ public class WalkthroughContentPresenter implements WalkthroughFragmentContract.
 
     @Override
     public void start() {
-        response = getResponse();
+        response = view.getLoadedResponse();
         Log.d(TAG, "Current response: " + response.toString());
 
         if (response.isActionItem()) {
             view.enableActionPlan(true);
         }
 
-        if (response.isPersisted()) {
-            if(response.getPriority() != -1) {
-                view.showPriority(Priority.values()[response.getPriority()]);
-            }
+        if(response.getPriority() != -1) {
+            view.showPriority(Priority.values()[response.getPriority()]);
+        }
+        if(!response.getActionPlan().equals("")) {
             view.showActionPlan(response.getActionPlan());
-            if(response.getRating() != -1) {
-                view.showRating(response.getRating());
-            }
+        }
+        if(response.getRating() != -1) {
+            view.showRating(response.getRating());
         }
 
         if (response.getImagePath() != null && !response.getImagePath().trim().equals("")) {

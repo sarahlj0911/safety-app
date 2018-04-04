@@ -71,14 +71,7 @@ public class WalkthroughContentFragment extends Fragment
     private WalkthroughFragmentContract.Presenter presenter;
     private RadioGroup radioGroup;
     private int currentRating = -1;
-
-    public int getRating() {
-        return currentRating;
-    }
-
-    public String getActionPlan() {
-        return actionPlanEditText.getText().toString();
-    }
+    private int currentPriority = -1;
 
     public static WalkthroughContentFragment newInstance(Question question, Response loadedResponse) {
         WalkthroughContentFragment fragment = new WalkthroughContentFragment();
@@ -89,10 +82,13 @@ public class WalkthroughContentFragment extends Fragment
         if (loadedResponse == null) {
             Log.d(TAG, "No response loaded");
             fragment.response.setQuestionId(question.getQuestionId());
+            fragment.response.setRating(-1);
             fragment.response.setPriority(-1);
+            fragment.response.setActionPlan("");
         } else {
             fragment.response = loadedResponse;
-
+            fragment.currentPriority = loadedResponse.getPriority();
+            fragment.currentRating = loadedResponse.getRating();
             Log.d(TAG, "Loaded response:\n" + fragment.response.toString());
         }
 
@@ -105,7 +101,7 @@ public class WalkthroughContentFragment extends Fragment
         packageManager = this.getActivity().getPackageManager();
         View view = inflater.inflate(R.layout.fragment_walkthrough_question, container, false);
         String walkthroughJsonObject = getArguments().getString("walkthroughQuestion");
-        response.setUserId(1);
+
 
         walkthroughQuestion = new Gson().fromJson(walkthroughJsonObject, Question.class);
         initViews(view);
@@ -289,6 +285,14 @@ public class WalkthroughContentFragment extends Fragment
 
     @Override
     public Response getResponse() {
+        response.setActionPlan(actionPlanEditText.getText().toString());
+        response.setRating(currentRating);
+        response.setPriority(currentPriority);
+        return response;
+    }
+
+    @Override
+    public Response getLoadedResponse() {
         return response;
     }
 
@@ -354,19 +358,19 @@ public class WalkthroughContentFragment extends Fragment
             case R.id.priority_btn_red:
                 priority = Priority.HIGH;
                 presenter.priorityClicked(priority);
-                response.setPriority(Priority.HIGH.ordinal());
+                currentPriority = Priority.HIGH.ordinal();
                 response.setIsActionItem(1);
                 break;
             case R.id.priority_btn_yellow:
                 priority = Priority.MEDIUM;
                 presenter.priorityClicked(priority);
-                response.setPriority(Priority.MEDIUM.ordinal());
+                currentPriority = Priority.MEDIUM.ordinal();
                 response.setIsActionItem(1);
                 break;
             case R.id.priority_btn_green:
                 priority = Priority.NONE;
                 presenter.priorityClicked(priority);
-                response.setPriority(Priority.NONE.ordinal());
+                currentPriority = Priority.NONE.ordinal();
                 break;
             default:
                 break;

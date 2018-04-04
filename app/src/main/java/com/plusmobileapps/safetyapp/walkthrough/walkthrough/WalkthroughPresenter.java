@@ -11,7 +11,10 @@ import com.plusmobileapps.safetyapp.data.entity.Question;
 import com.plusmobileapps.safetyapp.data.entity.Response;
 import com.plusmobileapps.safetyapp.walkthrough.walkthrough.question.WalkthroughContentFragment;
 
+import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -67,13 +70,20 @@ public class WalkthroughPresenter implements WalkthroughContract.Presenter {
         }
 
         Log.d(TAG, "responses.size(): " + responses.size());
-        view.showNextQuestion(questions.get(0), responses);
+        view.showNextQuestion(questions.get(0), getNextResponseToShow());
+    }
+
+    private Response getNextResponseToShow() {
+        if ( (currentIndex >= 0) && (currentIndex < responses.size()) ) {
+            return responses.get(currentIndex);
+        } else {
+            return null;
+        }
     }
 
     @Override
     public void saveQuestions() {
-        Response response = view.getCurrentResponse();
-        response = setUpResponse(response);
+        Response response = getCurrentResponse();
         responses.add(response);
         saveResponses(false);
     }
@@ -85,9 +95,11 @@ public class WalkthroughPresenter implements WalkthroughContract.Presenter {
             return;
         }
 
-        Response currentResponse = view.getCurrentResponse();
+        Response currentResponse = getCurrentResponse();
         if (currentIndex == responses.size()) {
             responses.add(currentResponse);
+        } else{
+            responses.set(currentIndex, currentResponse);
         }
 
         currentIndex--;
@@ -98,11 +110,10 @@ public class WalkthroughPresenter implements WalkthroughContract.Presenter {
 
     @Override
     public void nextQuestionClicked() {
-        Response response = view.getCurrentResponse();
-        response = setUpResponse(response);
+        Response response = getCurrentResponse();
 
         //check if response has already been added
-        if(responses.size() == currentIndex + 1) {
+        if(responses.size() >= currentIndex + 1) {
             responses.set(currentIndex, response);
         } else if (currentIndex == responses.size()) {
             responses.add(response);
@@ -115,22 +126,23 @@ public class WalkthroughPresenter implements WalkthroughContract.Presenter {
             return;
         }
 
-        currentIndex++;
 
-        view.showNextQuestion(questions.get(currentIndex), responses);
+        currentIndex++;
+        view.showNextQuestion(questions.get(currentIndex), getNextResponseToShow());
         view.showQuestionCount(currentIndex, questions.size());
 
     }
 
-    private Response setUpResponse(Response response) {
+    private Response getCurrentResponse() {
+        Response response = view.getCurrentResponse();
         if(response.getResponseId() == 0) {
             response.setResponseId(ResponseUniqueIdFactory.getId());
+            response.setUserId(1);
+            response.setWalkthroughId(walkthroughId);
+            response.setLocationId(locationId);
         }
-        walkthroughFragment = view.getCurrentFragment();
-        response.setWalkthroughId(walkthroughId);
-        response.setLocationId(locationId);
-        response.setRating(walkthroughFragment.getRating());
-        response.setActionPlan(walkthroughFragment.getActionPlan());
+        String timeStamp = DateFormat.getDateTimeInstance().format(new Date());
+        response.setTimeStamp(timeStamp);
         return response;
     }
 
@@ -187,8 +199,7 @@ public class WalkthroughPresenter implements WalkthroughContract.Presenter {
 
     @Override
     public void refreshDisplay(String imagePath) {
-        Response response = view.getCurrentResponse();
+        Response response = getCurrentResponse();
         response.setImagePath(imagePath);
-        setUpResponse(response);
     }
 }
