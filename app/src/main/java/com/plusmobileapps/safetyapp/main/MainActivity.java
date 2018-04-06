@@ -5,6 +5,8 @@ import android.accounts.AccountManager;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.res.Configuration;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -20,9 +22,11 @@ import android.widget.Toast;
 import com.plusmobileapps.safetyapp.R;
 import com.plusmobileapps.safetyapp.actionitems.landing.ActionItemPresenter;
 import com.plusmobileapps.safetyapp.summary.landing.SummaryPresenter;
+import com.plusmobileapps.safetyapp.sync.DownloadCallback;
+import com.plusmobileapps.safetyapp.sync.NetworkFragment;
 import com.plusmobileapps.safetyapp.walkthrough.landing.WalkthroughLandingPresenter;
 
-public class MainActivity extends AppCompatActivity implements MainActivityContract.View {
+public class MainActivity extends AppCompatActivity implements MainActivityContract.View, DownloadCallback {
     private static final String TAG = "MainActivity";
     private TextView mTextMessage;
 
@@ -30,6 +34,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
     private BottomNavigationView navigation;
     private String walkthroughFragmentTitle = "";
     private MainActivityPresenter presenter;
+    private NetworkFragment networkFragment;
 
     // SyncAdapter Constants
     // The authority for the sync adapter's content provier
@@ -47,6 +52,8 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
     // Global variables
     // A content resolver for accessing the provider
     ContentResolver mResolver;
+
+    boolean downloading = false;
 
 
     @Override
@@ -220,5 +227,49 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
         Log.d(TAG, "Sync account created!");
 
         return newAccount;
+    }
+
+    // Below functions are for downloading remote walkthrough/response data for the entered school
+    @Override
+    public void updateFromDownload(String result) {
+        // Update your UI here based on result of download.
+    }
+
+    @Override
+    public NetworkInfo getActiveNetworkInfo() {
+        ConnectivityManager connectivityManager =
+                (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+        return networkInfo;
+    }
+
+    @Override
+    public void onProgressUpdate(int progressCode, int percentComplete) {
+        switch(progressCode) {
+            // You can add UI behavior for progress updates here.
+            case Progress.ERROR:
+
+                break;
+            case Progress.CONNECT_SUCCESS:
+
+                break;
+            case Progress.GET_INPUT_STREAM_SUCCESS:
+
+                break;
+            case Progress.PROCESS_INPUT_STREAM_IN_PROGRESS:
+
+                break;
+            case Progress.PROCESS_INPUT_STREAM_SUCCESS:
+
+                break;
+        }
+    }
+
+    @Override
+    public void finishDownloading() {
+        downloading = false;
+        if (networkFragment != null) {
+            networkFragment.cancelDownload();
+        }
     }
 }
