@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -46,6 +47,7 @@ public class WalkthroughLandingFragment extends Fragment
     private FloatingActionButton fab;
     private RecyclerView recyclerView;
     private WalkthroughLandingAdapter adapter;
+    private ProgressBar progressBar;
 
     private WalkthroughLandingContract.Presenter presenter;
 
@@ -77,6 +79,7 @@ public class WalkthroughLandingFragment extends Fragment
         adapter = new WalkthroughLandingAdapter(new ArrayList<Walkthrough>(0), itemListener);
         recyclerView.setAdapter(adapter);
         fab.setOnClickListener(fabListener);
+        progressBar = rootView.findViewById(R.id.pb_loading_indicator);
 
         return rootView;
     }
@@ -222,6 +225,11 @@ public class WalkthroughLandingFragment extends Fragment
     @Override
     public void showNoWalkThrough(boolean show) {
         noWalkthroughs.setVisibility(show ? View.VISIBLE : View.GONE);
+    }
+
+    @Override
+    public void showProgressBar(boolean show) {
+        progressBar.setVisibility(show ? View.VISIBLE : View.INVISIBLE);
     }
 
     /**
