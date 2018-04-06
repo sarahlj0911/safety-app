@@ -125,35 +125,7 @@ public abstract class AppDatabase extends RoomDatabase {
         }
     }
 
-    private Callback callback = new Callback() {
-        @Override
-        public void onCreate(@NonNull SupportSQLiteDatabase db) {
-            super.onCreate(db);
-            loadDatabase();
-        }
-    };
-
-    private void loadDatabase() {
-
-    }
-
     public static void destroyInstance() {
         INSTANCE = null;
     }
-
-    private static class PopulateDbTask extends AsyncTask<Void, Void, Void> {
-
-
-
-        public PopulateDbTask() {
-        }
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-
-
-            return null;
-        }
-    }
-
 }
