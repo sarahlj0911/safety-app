@@ -2,7 +2,6 @@ package com.plusmobileapps.safetyapp.data.entity;
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
-import android.graphics.Bitmap;
 
 
 /**
@@ -30,14 +29,14 @@ public class Question {
     private String ratingOption4;
 
     @ColumnInfo(name = "shortDesc")
-    private String shortDescription;
+    private String shortDesc;
 
 
 
-    public Question(int questionId, String questionText, String shortDescription, String ratingOption1, String ratingOption2, String ratingOption3, String ratingOption4) {
+    public Question(int questionId, String questionText, String shortDesc, String ratingOption1, String ratingOption2, String ratingOption3, String ratingOption4) {
         this.questionId = questionId;
         this.questionText = questionText;
-        this.shortDescription = shortDescription;
+        this.shortDesc = shortDesc;
         this.ratingOption1 = ratingOption1;
         this.ratingOption2 = ratingOption2;
         this.ratingOption3 = ratingOption3;
@@ -53,7 +52,7 @@ public class Question {
         return questionText;
     }
 
-    public String getShortDescription() { return shortDescription; }
+    public String getShortDesc() { return shortDesc; }
 
     public String getRatingOption1() { return ratingOption1; }
 
@@ -72,8 +71,8 @@ public class Question {
         this.questionText = questionText;
     }
 
-    public void setShortDescription(String shortDescription) {
-        this.shortDescription = shortDescription;
+    public void setShortDesc(String shortDesc) {
+        this.shortDesc = shortDesc;
     }
 
     public void setRatingOption1(String ratingOption1) {
