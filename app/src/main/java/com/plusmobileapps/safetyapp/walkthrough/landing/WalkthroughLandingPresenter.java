@@ -4,12 +4,14 @@ package com.plusmobileapps.safetyapp.walkthrough.landing;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.util.Log;
 
 import com.plusmobileapps.safetyapp.data.entity.Walkthrough;
 import java.util.ArrayList;
 
 import com.plusmobileapps.safetyapp.data.entity.Walkthrough;
 import com.plusmobileapps.safetyapp.sync.DownloadCallback;
+import com.plusmobileapps.safetyapp.sync.DownloadTask;
 import com.plusmobileapps.safetyapp.sync.NetworkFragment;
 
 import java.util.Date;
@@ -18,6 +20,7 @@ import java.util.concurrent.ExecutionException;
 
 public class WalkthroughLandingPresenter implements WalkthroughLandingContract.Presenter, DownloadCallback {
 
+    private static final String TAG = "WalkthruLandPresenter";
     private WalkthroughLandingContract.View view;
     private List<Walkthrough> walkthroughs;
     private Walkthrough walkthrough;
@@ -35,7 +38,8 @@ public class WalkthroughLandingPresenter implements WalkthroughLandingContract.P
 
     @Override
     public void start() {
-        new LoadWalkthroughs(listener).execute();
+        //new LoadWalkthroughs(listener).execute();
+        new DownloadTask(this).execute();
     }
 
     @Override
@@ -104,13 +108,16 @@ public class WalkthroughLandingPresenter implements WalkthroughLandingContract.P
     public void updateFromDownload(String result) {
         downloading = true;
         view.showProgressBar(true);
+        Log.d(TAG, result);
     }
 
     @Override
     public NetworkInfo getActiveNetworkInfo() {
         ConnectivityManager connectivityManager =
                 (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+
         NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+
         return networkInfo;
     }
 
@@ -139,7 +146,9 @@ public class WalkthroughLandingPresenter implements WalkthroughLandingContract.P
     @Override
     public void finishDownloading() {
         downloading = false;
+        new LoadWalkthroughs(listener).execute();
         view.showProgressBar(false);
+
         if (networkFragment != null) {
             networkFragment.cancelDownload();
         }
