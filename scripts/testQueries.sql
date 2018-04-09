@@ -47,3 +47,17 @@ select w.walkthroughId AS WALKTHROUGH_ID, w.userId AS WALKTHROUGH_USER, w.name A
 from safetywalkthrough.walkthroughs w
 join safetywalkthrough.responses r on w.schoolId = r.schoolId and w.walkthroughId = r.walkthroughId
 where w.schoolId = 3;
+
+select * from safetywalkthrough.walkthroughs
+where schoolId = 3;
+
+INSERT INTO `safetywalkthrough`.`walkthroughs` (`walkthroughId`,`schoolId`,`userId`,`name`,`lastUpdatedDate`,`createdDate`,`percentComplete`)
+VALUES
+(1, 1, 1, 'dstc', '2018-04-03 20:32:22', '2018-04-03 20:31:59', 1.01),
+(1, 3, 3, 'Summer 2018', '2018-04-07 17:09:57', '2018-04-05 18:40:24', 0.0),
+(1, 4, 4, 'gsryx', '2018-03-28 01:48:02', '2018-03-28 01:48:02', 0.0),
+(1, 6, 5, 'asdafs', '2018-04-06 05:06:38', '2018-04-06 05:06:38', 0.0),
+(1, 7, 6, 'asdfas', '2018-04-06 05:09:31', '2018-04-06 05:09:31', 0.0);
+
+ALTER TABLE safetywalkthrough.walkthroughs DROP PRIMARY KEY;
+ALTER TABLE safetywalkthrough.walkthroughs ADD PRIMARY KEY (`walkthroughId`, `schoolId`, `name`);

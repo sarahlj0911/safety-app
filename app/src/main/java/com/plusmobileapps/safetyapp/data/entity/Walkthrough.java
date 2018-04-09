@@ -138,5 +138,18 @@ public class Walkthrough {
         result = 31 * result + createdDate.hashCode();
         return result;
     }
+
+    @Override
+    public String toString() {
+        return "Walkthrough{" +
+                "walkthroughId=" + walkthroughId +
+                ", schoolId=" + schoolId +
+                ", name='" + name + '\'' +
+                ", percentComplete=" + percentComplete +
+                ", createdDate='" + createdDate + '\'' +
+                ", lastUpdatedDate='" + lastUpdatedDate + '\'' +
+                ", isDeleted=" + isDeleted +
+                '}';
+    }
 }
 

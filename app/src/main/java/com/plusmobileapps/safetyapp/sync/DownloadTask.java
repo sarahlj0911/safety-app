@@ -10,10 +10,13 @@ import com.plusmobileapps.safetyapp.MyApplication;
 import com.plusmobileapps.safetyapp.data.AppDatabase;
 import com.plusmobileapps.safetyapp.data.dao.ResponseDao;
 import com.plusmobileapps.safetyapp.data.dao.SchoolDao;
+import com.plusmobileapps.safetyapp.data.dao.UserDao;
 import com.plusmobileapps.safetyapp.data.dao.WalkthroughDao;
 import com.plusmobileapps.safetyapp.data.entity.Response;
 import com.plusmobileapps.safetyapp.data.entity.School;
+import com.plusmobileapps.safetyapp.data.entity.User;
 import com.plusmobileapps.safetyapp.data.entity.Walkthrough;
+import com.plusmobileapps.safetyapp.util.Utils;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -21,7 +24,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Time;
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -40,6 +46,14 @@ public class DownloadTask extends AsyncTask<Void, Integer, DownloadTask.Result> 
     private static final String APP_ID = BuildConfig.APP_ID;
     private static final String PASS = BuildConfig.SYNC_PASS;
 
+    private static final String SELECT_SCHOOL_SQL = "SELECT schoolId FROM schools WHERE schoolName = ?";
+    public static final String SELECT_MAX_SCHOOL_ID_SQL = "SELECT MAX(schoolId) FROM schools";
+    public static final String INSERT_SCHOOL_SQL = "INSERT INTO schools VALUES (?, ?)";
+    public static final String SELECT_USER_ID_FROM_USER_SQL = "SELECT userId FROM user WHERE emailAddress = ?";
+    public static final String SELECT_MAX_USER_ID_SQL = "SELECT MAX(userId) FROM user";
+    public static final String INSERT_USER_SQL = "INSERT INTO user (userId, schoolId, userName, " +
+            "emailAddress, role) VALUES (?, ?, ?, ?, ?)";
+
     private static final String GET_WALKTHROUGHS_AND_RESPONSES_SQL =
             "select w.walkthroughId AS WALKTHROUGH_ID, w.userId AS WALKTHROUGH_USER, " +
             "w.name AS NAME, w.lastUpdatedDate AS LAST_UPDATED_DATE, w.createdDate AS CREATED_DATE, " +
@@ -54,10 +68,12 @@ public class DownloadTask extends AsyncTask<Void, Integer, DownloadTask.Result> 
     private Connection conn;
     private AppDatabase db;
     private SchoolDao schoolDao;
+    private UserDao userDao;
     private WalkthroughDao walkthroughDao;
     private ResponseDao responseDao;
     private DownloadCallback callback;
     private School school;
+    User user = null;
 
     public DownloadTask(DownloadCallback callback) {
         setCallback(callback);
@@ -109,16 +125,43 @@ public class DownloadTask extends AsyncTask<Void, Integer, DownloadTask.Result> 
     @Override
     protected DownloadTask.Result doInBackground(Void... voids) {
         Result result = null;
+        int remoteSchoolId = 0;
+        int remoteUserId = 0;
+
         if (!isCancelled()) {
             db = AppDatabase.getAppDatabase(MyApplication.getAppContext());
             schoolDao = db.schoolDao();
+            userDao = db.userDao();
             walkthroughDao = db.walkthroughDao();
             responseDao = db.responseDao();
 
-            int schoolId = schoolDao.get().getRemoteId();
+            school = schoolDao.get();
 
             try {
-                getWalkthroughsAndResponses(schoolId);
+                if (!school.isRegistered()) {
+                    Log.d(TAG, "School not registered");
+                    remoteSchoolId = registerSchool(school);
+                    school.setRemoteId(remoteSchoolId);
+                    schoolDao.insert(school);
+                    Log.d(TAG, "Registered school remote id = " + remoteSchoolId);
+                } else {
+                    remoteSchoolId = school.getRemoteId();
+                    Log.d(TAG, "School " + school.getSchoolName() + " is already registered");
+                }
+
+                user = userDao.getUser();
+                if (!user.isRegistered()) {
+                    Log.d(TAG, "User not registered");
+                    remoteUserId = registerUser(user, remoteSchoolId);
+                    user.setRemoteId(remoteUserId);
+                    userDao.insert(user);
+                    Log.i(TAG, "Registered user remote id = " + remoteUserId);
+                } /*else {
+                    remoteUserId = user.getRemoteId();
+                    Log.d(TAG, "User " + user.getUserName() + " is already registered");
+                }*/
+
+                getWalkthroughsAndResponses(remoteSchoolId);
                 result = new Result("Success!");
             } catch(Exception e) {
                 result = new Result(e);
@@ -129,25 +172,172 @@ public class DownloadTask extends AsyncTask<Void, Integer, DownloadTask.Result> 
         return result;
     }
 
+    private int registerSchool(School school) throws SQLException {
+        String schoolName = school.getSchoolName();
+        int remoteId = 0;
+        List<Statement> statements = new ArrayList<>();
+        List<ResultSet> resultSets = new ArrayList<>();
+
+        PreparedStatement selectSchoolStmt;
+        Statement getNextSchoolIdStmt;
+        PreparedStatement insertSchoolStmt;
+        ResultSet rs;
+        ResultSet nextSchoolIdRs;
+
+        conn = DriverManager.getConnection(URL, APP_ID, PASS);
+        conn.setAutoCommit(false);
+        Log.i(TAG, "Successfully connected to database");
+
+
+        selectSchoolStmt = conn.prepareStatement(SELECT_SCHOOL_SQL);
+        statements.add(selectSchoolStmt);
+        selectSchoolStmt.setString(1, schoolName);
+
+        rs = selectSchoolStmt.executeQuery();
+        resultSets.add(rs);
+
+        if (!rs.next() || rs.getInt(1) == 0) {
+            getNextSchoolIdStmt = conn.createStatement();
+            statements.add(getNextSchoolIdStmt);
+            nextSchoolIdRs = getNextSchoolIdStmt.executeQuery(SELECT_MAX_SCHOOL_ID_SQL);
+            resultSets.add(nextSchoolIdRs);
+
+            if (!nextSchoolIdRs.next()) {
+                remoteId = 1;
+            } else {
+                do {
+                    remoteId = nextSchoolIdRs.getInt(1) + 1;
+                } while (nextSchoolIdRs.next());
+            }
+
+            Log.d(TAG, "Inserting school with values [" + remoteId + ", " + schoolName +"]");
+            String insertSchoolSql = INSERT_SCHOOL_SQL;
+            insertSchoolStmt = conn.prepareStatement(insertSchoolSql);
+            statements.add(insertSchoolStmt);
+            insertSchoolStmt.setInt(1, remoteId);
+            insertSchoolStmt.setString(2, schoolName);
+            insertSchoolStmt.execute();
+
+            // Commit insert
+            conn.commit();
+            Log.i(TAG, "Successfully registered school");
+            // Rollback if there was a problem inserting
+            conn.rollback();
+        } else {
+            do {
+                remoteId = rs.getInt(1);
+            } while (rs.next());
+        }
+
+        cleanup(resultSets, statements, conn);
+
+
+        return remoteId;
+    }
+
+    private int registerUser(User user, int remoteSchoolId) {
+        String email = user.getEmailAddress();
+        int remoteId = 0;
+        List<Statement> statements = new ArrayList<>();
+        List<ResultSet> resultSets = new ArrayList<>();
+
+        PreparedStatement selectUserStmt;
+        Statement getNextUserIdStmt;
+        PreparedStatement insertUserStmt;
+
+        ResultSet rs;
+        ResultSet nextUserIdRs;
+
+        try {
+            conn = DriverManager.getConnection(URL, APP_ID, PASS);
+            conn.setAutoCommit(false);
+            Log.i(TAG, "Successfully connected to database");
+
+            String selectUserSql = SELECT_USER_ID_FROM_USER_SQL;
+            selectUserStmt = conn.prepareStatement(selectUserSql);
+            statements.add(selectUserStmt);
+            selectUserStmt.setString(1, email);
+
+            rs = selectUserStmt.executeQuery();
+            resultSets.add(rs);
+
+            if (!rs.next() || rs.getInt(1) == 0) {
+                getNextUserIdStmt = conn.createStatement();
+                statements.add(getNextUserIdStmt);
+                nextUserIdRs = getNextUserIdStmt.executeQuery(SELECT_MAX_USER_ID_SQL);
+                resultSets.add(nextUserIdRs);
+
+                if (!nextUserIdRs.next()) {
+                    remoteId = 1;
+                } else {
+                    do {
+                        remoteId = nextUserIdRs.getInt(1) + 1;
+                    } while (nextUserIdRs.next());
+                }
+
+                Log.d(TAG, "Inserting user with values [" + remoteId + ", " + user.getUserName() +
+                        ", " + email + ", " + user.getRole() + ", " + remoteSchoolId + "]");
+                String insertUserSql = INSERT_USER_SQL;
+                insertUserStmt = conn.prepareStatement(insertUserSql);
+                statements.add(insertUserStmt);
+                insertUserStmt.setInt(1, remoteId);
+                insertUserStmt.setInt(2, remoteSchoolId);
+                insertUserStmt.setString(3, user.getUserName());
+                insertUserStmt.setString(4, email);
+                insertUserStmt.setString(5, user.getRole());
+                insertUserStmt.execute();
+
+                // Commit insert
+                conn.commit();
+                Log.i(TAG, "Successfully registered user");
+                // Rollback if there was a problem inserting
+                conn.rollback();
+            } else {
+                do {
+                    remoteId = rs.getInt(1);
+                } while (rs.next());
+            }
+        } catch(Exception e) {
+            e.printStackTrace();
+            Log.e(TAG, "Problem syncing user data: " + e.getMessage());
+        } finally {
+            cleanup(resultSets, statements, conn);
+        }
+
+        return remoteId;
+    }
+
     private void getWalkthroughsAndResponses(int schoolId) throws SQLException {
+        Log.d(TAG, "Should be doing the download...");
+
         PreparedStatement stmt;
         ResultSet rs;
-        Set<Walkthrough> walkthroughs = new HashSet<>();
-        List<Response> responses = new ArrayList<>();
+
+        List<Walkthrough> localWalkthroughs = walkthroughDao.getAll();
+        Set<Walkthrough> remoteWalkthroughs = new HashSet<>();
+        List<Response> remoteResponses = new ArrayList<>();
 
         conn = DriverManager.getConnection(URL, APP_ID, PASS);
         stmt = conn.prepareStatement(GET_WALKTHROUGHS_AND_RESPONSES_SQL);
+        Log.d(TAG, "Looking up walkthroughs for schoolId: " + schoolId);
         stmt.setInt(1, schoolId);
         rs = stmt.executeQuery();
 
         while (rs.next()) {
             Walkthrough walkthrough = new Walkthrough(rs.getString("NAME"));
             walkthrough.setWalkthroughId(rs.getInt("WALKTHROUGH_ID"));
-            walkthrough.setLastUpdatedDate(rs.getTimestamp("LAST_UPDATED_DATE").toString());
-            walkthrough.setCreatedDate(rs.getTimestamp("CREATED_DATE").toString());
+
+            Timestamp lastUpdatedTimestamp = rs.getTimestamp("LAST_UPDATED_DATE");
+            Date lastUpdatedDate = new Date(lastUpdatedTimestamp.getTime());
+            walkthrough.setLastUpdatedDate(lastUpdatedDate.toString());
+
+            Timestamp createdTimestamp = rs.getTimestamp("CREATED_DATE");
+            Date createdDate = new Date(createdTimestamp.getTime());
+            walkthrough.setCreatedDate(createdDate.toString());
+
             walkthrough.setPercentComplete(rs.getFloat("PERCENT_COMPLETE"));
 
-            walkthroughs.add(walkthrough);
+            remoteWalkthroughs.add(walkthrough);
 
             Response response = new Response();
             response.setUserId(rs.getInt("RESPONSE_USER"));
@@ -160,16 +350,21 @@ public class DownloadTask extends AsyncTask<Void, Integer, DownloadTask.Result> 
             response.setIsActionItem(rs.getInt("IS_ACTION_ITEM"));
             response.setImagePath(rs.getString("IMAGE_PATH"));
 
-            responses.add(response);
+            remoteResponses.add(response);
 
         }
 
-        for (Walkthrough w : walkthroughs) {
+        for (Walkthrough w : remoteWalkthroughs) {
             Log.d(TAG, w.toString());
         }
 
-        for (Response r : responses) {
+        for (Response r : remoteResponses) {
             Log.d(TAG, r.toString());
+        }
+
+        if (remoteWalkthroughs.size() > 0 && localWalkthroughs.size() == 0) {
+            Walkthrough[] walkthroughsArr = remoteWalkthroughs.toArray(new Walkthrough[0]);
+            walkthroughDao.insertAll(walkthroughsArr);
         }
 
         cleanup(rs, stmt, conn);
@@ -191,6 +386,33 @@ public class DownloadTask extends AsyncTask<Void, Integer, DownloadTask.Result> 
         } catch (SQLException e) {
             e.printStackTrace();
             Log.e(TAG, e.getMessage());
+        }
+    }
+
+    private void cleanup(List<ResultSet> resultSets, List<Statement> statements, Connection conn) {
+        try {
+            if (resultSets != null) {
+                for (ResultSet rs : resultSets) {
+                    if (rs != null) {
+                        rs.close();
+                    }
+                }
+            }
+
+            if (statements != null) {
+                for (Statement statement : statements) {
+                    if (statement != null) {
+                        statement.close();
+                    }
+                }
+            }
+
+            if (conn != null) {
+                conn.close();
+            }
+        } catch (SQLException sqle) {
+            sqle.printStackTrace();
+            Log.e(TAG, sqle.getMessage());
         }
     }
 

@@ -77,7 +77,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
             "(walkthroughId, schoolId, userId, name, lastUpdatedDate, createdDate, percentComplete) " +
             "VALUES (?, ?, ?, ?, ?, ?, ?) " +
             "ON DUPLICATE KEY UPDATE " +
-            "name = ?, lastUpdatedDate = ?, percentComplete = ?";
+            "name = ?, lastUpdatedDate = ?, percentComplete = ?, userId = ?";
     private static final String UPDATE_RESPONSE_SQL = "INSERT INTO responses " +
             "(responseId, schoolId, userId, walkthroughId, locationId, questionId, actionPlan, " +
             "priority, rating, timestamp, isActionItem, image) " +
@@ -276,7 +276,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                     updateWalkthroughStmt.setString(8, walkthrough.getName());
                     updateWalkthroughStmt.setTimestamp(9, newTimeStamp);
                     updateWalkthroughStmt.setDouble(10, walkthrough.getPercentComplete());
-                    //Log.d(TAG, updateWalkthroughStmt.toString());
+                    updateWalkthroughStmt.setInt(11, remoteUserId);
                     updateWalkthroughStmt.addBatch();
 
                     List<Response> responses = responseDao.getAllByWalkthroughId(walkthrough.getWalkthroughId());

@@ -141,7 +141,8 @@ public class WalkthroughPresenter implements WalkthroughContract.Presenter {
             response.setWalkthroughId(walkthroughId);
             response.setLocationId(locationId);
         }
-        String timeStamp = DateFormat.getDateTimeInstance().format(new Date());
+        //String timeStamp = DateFormat.getDateTimeInstance().format(new Date());
+        String timeStamp = new Date().toString();
         response.setTimeStamp(timeStamp);
         return response;
     }
