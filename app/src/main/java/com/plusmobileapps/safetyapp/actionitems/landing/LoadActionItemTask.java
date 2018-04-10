@@ -12,7 +12,6 @@ import com.plusmobileapps.safetyapp.data.entity.Response;
 import com.plusmobileapps.safetyapp.data.dao.ResponseDao;
 import com.plusmobileapps.safetyapp.data.AppDatabase;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class LoadActionItemTask extends AsyncTask<Void, Void, List<Response>> {
@@ -41,7 +40,7 @@ public class LoadActionItemTask extends AsyncTask<Void, Void, List<Response>> {
 
             int questionId = actionItem.getQuestionId();
             Question question = questionDao.getByQuestionID(questionId);
-            String title = question.getShortDescription();
+            String title = question.getShortDesc();
             actionItem.setTitle(title);
 
         }

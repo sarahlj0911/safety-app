@@ -7,7 +7,6 @@ import com.plusmobileapps.safetyapp.data.AppDatabase;
 import com.plusmobileapps.safetyapp.data.dao.LocationDao;
 import com.plusmobileapps.safetyapp.data.dao.QuestionDao;
 import com.plusmobileapps.safetyapp.data.dao.ResponseDao;
-import com.plusmobileapps.safetyapp.data.entity.Location;
 import com.plusmobileapps.safetyapp.data.entity.Question;
 import com.plusmobileapps.safetyapp.data.entity.Response;
 
@@ -34,7 +33,7 @@ public class LoadActionItemDetailTask extends AsyncTask<Void, Void, Response> {
         response.setLocationName(locationName);
 
         Question question = questionDao.getByQuestionID(response.getQuestionId());
-        String title = question.getShortDescription();
+        String title = question.getShortDesc();
         response.setTitle(title);
 
         int rating = response.getRating();

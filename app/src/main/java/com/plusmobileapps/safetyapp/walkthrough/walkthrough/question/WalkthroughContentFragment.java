@@ -119,16 +119,12 @@ public class WalkthroughContentFragment extends Fragment
     private View generateQuestionView(View view, Question question) {
         radioGroup = view.findViewById(R.id.radioGroup);
         radioGroup.setOnCheckedChangeListener(ratingChangeListener);
-        if (question.getRatingOption1() != null) {
-            radioGroup.addView(generateRadioButton(question.getRatingOption1(), Rating.OPTION1));
-        }
-        if (question.getRatingOption2() != null) {
-            radioGroup.addView(generateRadioButton(question.getRatingOption2(), Rating.OPTION2));
-        }
-        if (question.getRatingOption3() != null) {
+        radioGroup.addView(generateRadioButton(question.getRatingOption1(), Rating.OPTION1));
+        radioGroup.addView(generateRadioButton(question.getRatingOption2(), Rating.OPTION2));
+        if (question.getRatingOption3() != null && !question.getRatingOption3().equals("")) {
             radioGroup.addView(generateRadioButton(question.getRatingOption3(), Rating.OPTION3));
         }
-        if (question.getRatingOption4() != null) {
+        if (question.getRatingOption4() != null && !question.getRatingOption4().equals("")) {
             radioGroup.addView(generateRadioButton(question.getRatingOption4(), Rating.OPTION4));
         }
 
