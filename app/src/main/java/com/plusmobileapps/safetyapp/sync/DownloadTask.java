@@ -29,6 +29,7 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -115,6 +116,8 @@ public class DownloadTask extends AsyncTask<Void, Integer, DownloadTask.Result> 
                 Log.d(TAG, "No connectivity. Cancelling download.");
                 callback.updateFromDownload(null);
                 cancel(true);
+            } else {
+                callback.updateFromDownload("Starting download...");
             }
         }
     }
@@ -125,10 +128,12 @@ public class DownloadTask extends AsyncTask<Void, Integer, DownloadTask.Result> 
     @Override
     protected DownloadTask.Result doInBackground(Void... voids) {
         Result result = null;
-        int remoteSchoolId = 0;
-        int remoteUserId = 0;
+        int remoteSchoolId;
+        int remoteUserId;
 
         if (!isCancelled()) {
+
+
             db = AppDatabase.getAppDatabase(MyApplication.getAppContext());
             schoolDao = db.schoolDao();
             userDao = db.userDao();
@@ -156,10 +161,7 @@ public class DownloadTask extends AsyncTask<Void, Integer, DownloadTask.Result> 
                     user.setRemoteId(remoteUserId);
                     userDao.insert(user);
                     Log.i(TAG, "Registered user remote id = " + remoteUserId);
-                } /*else {
-                    remoteUserId = user.getRemoteId();
-                    Log.d(TAG, "User " + user.getUserName() + " is already registered");
-                }*/
+                }
 
                 getWalkthroughsAndResponses(remoteSchoolId);
                 result = new Result("Success!");
@@ -308,13 +310,11 @@ public class DownloadTask extends AsyncTask<Void, Integer, DownloadTask.Result> 
     }
 
     private void getWalkthroughsAndResponses(int schoolId) throws SQLException {
-        Log.d(TAG, "Should be doing the download...");
-
         PreparedStatement stmt;
         ResultSet rs;
 
         List<Walkthrough> localWalkthroughs = walkthroughDao.getAll();
-        Set<Walkthrough> remoteWalkthroughs = new HashSet<>();
+        Set<Walkthrough> remoteWalkthroughs = new HashSet<>(6);
         List<Response> remoteResponses = new ArrayList<>();
 
         conn = DriverManager.getConnection(URL, APP_ID, PASS);
@@ -340,6 +340,7 @@ public class DownloadTask extends AsyncTask<Void, Integer, DownloadTask.Result> 
             remoteWalkthroughs.add(walkthrough);
 
             Response response = new Response();
+            response.setWalkthroughId(rs.getInt("WALKTHROUGH_ID"));
             response.setUserId(rs.getInt("RESPONSE_USER"));
             response.setLocationId(rs.getInt("LOCATION_ID"));
             response.setQuestionId(rs.getInt("QUESTION_ID"));
@@ -362,9 +363,39 @@ public class DownloadTask extends AsyncTask<Void, Integer, DownloadTask.Result> 
             Log.d(TAG, r.toString());
         }
 
-        if (remoteWalkthroughs.size() > 0 && localWalkthroughs.size() == 0) {
+        // If no remote walkthroughs for the school, there's nothing to download
+        for (Walkthrough localWalkthrough : localWalkthroughs) {
+            Iterator<Walkthrough> iter = remoteWalkthroughs.iterator();
+
+            while (iter.hasNext()) {
+                Walkthrough remoteWalkthrough = iter.next();
+                if (remoteWalkthrough.equals(localWalkthrough)) {
+                    java.util.Date remoteLastUpdate = Utils.convertStringToDate(remoteWalkthrough.getLastUpdatedDate());
+                    java.util.Date localLastUpdate = Utils.convertStringToDate(localWalkthrough.getLastUpdatedDate());
+
+                    if (remoteLastUpdate.before(localLastUpdate)) {
+                        iter.remove();
+                    }
+                }
+            }
+
+
+        }
+
+        if (remoteWalkthroughs.size() > 0) {
             Walkthrough[] walkthroughsArr = remoteWalkthroughs.toArray(new Walkthrough[0]);
             walkthroughDao.insertAll(walkthroughsArr);
+
+            for (Walkthrough remoteWalkthrough : remoteWalkthroughs) {
+                List<Response> responses = new ArrayList<>();
+                for (Response remoteResponse : remoteResponses) {
+                    if (remoteResponse.getWalkthroughId() == remoteWalkthrough.getWalkthroughId()) {
+                        responses.add(remoteResponse);
+                    }
+                }
+
+                responseDao.insertAll(responses);
+            }
         }
 
         cleanup(rs, stmt, conn);

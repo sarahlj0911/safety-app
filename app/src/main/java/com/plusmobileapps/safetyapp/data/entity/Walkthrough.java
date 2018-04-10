@@ -127,15 +127,13 @@ public class Walkthrough {
         Walkthrough that = (Walkthrough) o;
 
         if (schoolId != that.schoolId) return false;
-        if (!name.equals(that.name)) return false;
-        return createdDate.equals(that.createdDate);
+        return name.equals(that.name);
     }
 
     @Override
     public int hashCode() {
         int result = schoolId;
         result = 31 * result + name.hashCode();
-        result = 31 * result + createdDate.hashCode();
         return result;
     }
 
