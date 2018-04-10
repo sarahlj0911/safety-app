@@ -1,0 +1,74 @@
+[
+    {
+        "locationId": "1",
+        "locationInstruction": "Observe the entrance that most students use upon arrival.",
+        "name": "Student Entrance",
+        "type": "Entrance"
+    },
+    {
+        "locationId": "2",
+        "locationInstruction": "Walk the perimeter of the school buildings.",
+        "name": "School Grounds",
+        "type": "Grounds"
+    },
+    {
+        "locationId": "3",
+        "locationInstruction": "Choose a commonly used restroom. If possible, visit both the girls and boys room.",
+        "name": "Bathrooms",
+        "type": "Bathroom"
+    },
+    {
+        "locationId": "4",
+        "locationInstruction": "Observe a space that includes two classrooms during the transition between classes.",
+        "name": "Hallway",
+        "type": "Hallway"
+    },
+    {
+        "locationId": "5",
+        "locationInstruction": "Observe a space between 2 floors.",
+        "name": "Stairwell",
+        "type": "Stairwell"
+    },
+    {
+        "locationId": "6",
+        "locationInstruction": "Walk the perimeter of the cafeteria during lunch.",
+        "name": "Cafeteria",
+        "type": "Cafeteria"
+    },
+    {
+        "locationId": "7",
+        "locationInstruction": "Observe one area where students engage in problem or dangerous behavior.",
+        "name": "Hotspot",
+        "type": "Hotspot"
+    },
+    {
+        "locationId": "8",
+        "locationInstruction": "Observe a classroom from each grade level for 5 minutes.",
+        "name": "Classroom 1",
+        "type": "Classroom"
+    },
+    {
+        "locationId": "9",
+        "locationInstruction": "Observe a classroom from each grade level for 5 minutes.",
+        "name": "Classroom 2",
+        "type": "Classroom"
+    },
+    {
+        "locationId": "10",
+        "locationInstruction": "Observe a classroom from each grade level for 5 minutes.",
+        "name": "Classroom 3",
+        "type": "Classroom"
+    },
+    {
+        "locationId": "11",
+        "locationInstruction": "Observe a classroom from each grade level for 5 minutes.",
+        "name": "Classroom 4",
+        "type": "Classroom"
+    },
+    {
+        "locationId": "12",
+        "locationInstruction": "Observe the space most students are picked-up by buses/cars.",
+        "name": "Pick-up Area",
+        "type": "Pick-up Area"
+    }
+]
