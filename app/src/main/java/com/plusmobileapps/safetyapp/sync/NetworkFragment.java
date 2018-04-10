@@ -5,7 +5,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 
-import org.jetbrains.annotations.Nullable;
+//import org.jetbrains.annotations.Nullable;
 
 /**
  * Created by Robert Beerman on 4/5/2018.
@@ -30,7 +30,8 @@ public class NetworkFragment extends Fragment {
     }
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
+    /*public void onCreate(@Nullable Bundle savedInstanceState) {*/
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //urlString = getArguments().getString(URL_KEY);
     }
