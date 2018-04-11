@@ -16,6 +16,11 @@ select * from safetywalkthrough.walkthroughs;
 select * from safetywalkthrough.responses
 order by schoolId, walkthroughId, responseId;
 
+select * from safetywalkthrough.responses
+where walkthroughId = 1
+and schoolId = 3
+order by locationId;
+
 -- Insert/Replace examples for manipulating dat
 replace into safetywalkthrough.user (userName, emailAddress, role, schoolId) VALUES ('Robert', 'rbeerma@asu.edu', 'Teacher', 1);
 replace into safetywalkthrough.schools (schoolId, schoolName) VALUES (2, 'Tempe High School');
@@ -61,3 +66,5 @@ VALUES
 
 ALTER TABLE safetywalkthrough.walkthroughs DROP PRIMARY KEY;
 ALTER TABLE safetywalkthrough.walkthroughs ADD PRIMARY KEY (`walkthroughId`, `schoolId`, `name`);
+
+update safetywalkthrough.walkthroughs set percentComplete  = ((11 / 99) * 100) where walkthroughId = 1 and schoolId = 3;

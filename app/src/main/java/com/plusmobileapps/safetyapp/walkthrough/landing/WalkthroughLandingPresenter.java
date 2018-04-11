@@ -108,7 +108,7 @@ public class WalkthroughLandingPresenter implements WalkthroughLandingContract.P
     public void updateFromDownload(String result) {
         downloading = true;
         view.showProgressBar(true);
-        Log.d(TAG, result);
+        Log.d(TAG, "Result from DownloadTask: " + result);
     }
 
     @Override
