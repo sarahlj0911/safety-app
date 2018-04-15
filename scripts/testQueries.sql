@@ -47,11 +47,13 @@ SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 -- In-app queries
 -- getSchoolWalkthroughsAndResponses
 select w.walkthroughId AS WALKTHROUGH_ID, w.userId AS WALKTHROUGH_USER, w.name AS NAME, w.lastUpdatedDate AS LAST_UPDATED_DATE, w.createdDate AS CREATED_DATE, w.percentComplete AS PERCENT_COMPLETE,
- r.userId AS RESPONSE_USER, r.locationId AS LOCATION_ID, r.questionId AS QUESTION_ID, r.actionPlan AS ACTION_PLAN, r.priority AS PRIORITY, r.rating AS RATING, r.timestamp AS TIMESTAMP,
- r.isActionItem AS IS_ACTION_ITEM, r.image AS IMAGE_PATH
+ r.userId AS RESPONSE_USER, r.locationId AS LOCATION_ID, r.questionId AS QUESTION_ID, r.actionPlan AS ACTION_PLAN, r.rating AS RATING, r.priority AS PRIORITY, r.timestamp AS TIMESTAMP,
+ r.isActionItem AS IS_ACTION_ITEM, r.image AS IMAGE_PATH, s.schoolName
 from safetywalkthrough.walkthroughs w
 join safetywalkthrough.responses r on w.schoolId = r.schoolId and w.walkthroughId = r.walkthroughId
-where w.schoolId = 3;
+join safetywalkthrough.schools s on s.schoolId = w.schoolId
+where w.schoolId = 3
+order by r.locationId, r.questionId;
 
 select * from safetywalkthrough.walkthroughs
 where schoolId = 3;
@@ -68,3 +70,4 @@ ALTER TABLE safetywalkthrough.walkthroughs DROP PRIMARY KEY;
 ALTER TABLE safetywalkthrough.walkthroughs ADD PRIMARY KEY (`walkthroughId`, `schoolId`, `name`);
 
 update safetywalkthrough.walkthroughs set percentComplete  = ((11 / 99) * 100) where walkthroughId = 1 and schoolId = 3;
+

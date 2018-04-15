@@ -64,7 +64,7 @@ public class DownloadTask extends AsyncTask<Void, Integer, DownloadTask.Result> 
             "r.actionPlan AS ACTION_PLAN, r.priority AS PRIORITY, r.rating AS RATING, r.timestamp AS TIMESTAMP, " +
             "r.isActionItem AS IS_ACTION_ITEM, r.image AS IMAGE_PATH " +
             "from safetywalkthrough.walkthroughs w " +
-            "join safetywalkthrough.responses r on w.schoolId = r.schoolId and w.walkthroughId = r.walkthroughId " +
+            "left outer join safetywalkthrough.responses r on w.schoolId = r.schoolId and w.walkthroughId = r.walkthroughId " +
             "where w.schoolId = ?";
 
     private Connection conn;

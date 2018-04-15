@@ -104,7 +104,7 @@ CREATE TABLE `safetywalkthrough`.`responses` (
   `timestamp` VARCHAR(32) NULL DEFAULT NULL,
   `isActionItem` INT NULL DEFAULT 0,
   `image` VARCHAR(256) NULL DEFAULT NULL,
-PRIMARY KEY (`responseId`, `walkthroughId`, `schoolId`),
+PRIMARY KEY (`responseId`, `walkthroughId`, `schoolId`, `locationId`, `questionId`),
   INDEX `fk_responses_walkthroughs_idx` (`walkthroughId` ASC, `schoolId` ASC),
   CONSTRAINT `fk_responses_walkthroughs`
     FOREIGN KEY (`walkthroughId` , `schoolId`)

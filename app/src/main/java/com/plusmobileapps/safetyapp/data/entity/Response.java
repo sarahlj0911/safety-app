@@ -12,6 +12,7 @@ import android.arch.persistence.room.PrimaryKey;
  */
 
 @Entity(tableName = "responses",
+        primaryKeys = {"responseId", "walkthroughId", "locationId", "questionId"},
         foreignKeys =  {
             @ForeignKey(entity = Walkthrough.class,
                         parentColumns = "walkthroughId",
@@ -33,7 +34,6 @@ public class Response {
     public final static int NOT_ACTION_ITEM = 0;
 
 
-    @PrimaryKey
     private int responseId;
 
     @ColumnInfo(name = "isActionItem")
