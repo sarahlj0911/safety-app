@@ -14,8 +14,6 @@ where qm.schoolId = 3
 and qm.locationId = 1
 order by qm.locationId, qm.questionId;
 
-
-
 select * from safetywalkthrough.walkthroughs;
 
 select * from safetywalkthrough.responses
@@ -40,10 +38,11 @@ delete from safetywalkthrough.location where schoolId = 0;
 
 delete from safetywalkthrough.question_mapping;
 
-delete from safetywalkthrough.walkthroughs;
+delete from safetywalkthrough.walkthroughs
+where schoolId = 3;
 
 delete from safetywalkthrough.responses
-where schoolId = 3;
+where schoolId = 1;
 
 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 truncate responses;
@@ -61,7 +60,7 @@ from safetywalkthrough.walkthroughs w
 left outer join safetywalkthrough.responses r on w.schoolId = r.schoolId and w.walkthroughId = r.walkthroughId
 join safetywalkthrough.schools s on s.schoolId = w.schoolId
 join safetywalkthrough.question q on r.questionId = q.questionId
-where w.schoolId = 3
+where w.schoolId = 1
 order by r.locationId, r.responseId;
 
 select * from safetywalkthrough.walkthroughs
@@ -80,3 +79,4 @@ ALTER TABLE safetywalkthrough.responses ADD PRIMARY KEY (`responseId`, `walkthro
 
 update safetywalkthrough.walkthroughs set percentComplete  = ((11 / 99) * 100) where walkthroughId = 1 and schoolId = 3;
 
+delete from safetywalkthrough.responses where schoolId = 1 and responseId = 9;

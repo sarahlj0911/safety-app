@@ -136,6 +136,7 @@ public class WalkthroughPresenter implements WalkthroughContract.Presenter {
     private Response getCurrentResponse() {
         Response response = view.getCurrentResponse();
         if(response.getResponseId() == 0) {
+            Log.d(TAG, "Getting a new response and setting everything blindly...");
             response.setResponseId(ResponseUniqueIdFactory.getId());
             response.setUserId(1);
             response.setWalkthroughId(walkthroughId);

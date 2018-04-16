@@ -89,9 +89,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
     }
 
     private void setUpPresenters(MainActivityFragmentFactory factory) {
-
-        //new WalkthroughLandingPresenter(factory.getWalkthroughLandingFragment());
-        new WalkthroughLandingPresenter(this, factory.getWalkthroughLandingFragment());
+        new WalkthroughLandingPresenter(factory.getWalkthroughLandingFragment());
         new ActionItemPresenter(factory.getActionItemsFragment());
         new SummaryPresenter(factory.getSummaryFragment());
     }
