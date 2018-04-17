@@ -1,7 +1,7 @@
 package com.plusmobileapps.safetyapp.walkthrough.landing;
 
 
-import android.content.Context;
+//import android.content.Context;
 
 import com.plusmobileapps.safetyapp.data.entity.Walkthrough;
 import java.util.ArrayList;
@@ -13,7 +13,7 @@ public class WalkthroughLandingPresenter implements WalkthroughLandingContract.P
     private WalkthroughLandingContract.View view;
     private List<Walkthrough> walkthroughs;
     private Walkthrough walkthrough;
-    private Context context;
+    //private Context context;
 
     public WalkthroughLandingPresenter(WalkthroughLandingContract.View view) {
         this.view = view;

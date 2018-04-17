@@ -3,10 +3,12 @@ package com.plusmobileapps.safetyapp.sync;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 
 import com.plusmobileapps.safetyapp.BuildConfig;
 import com.plusmobileapps.safetyapp.MyApplication;
+import com.plusmobileapps.safetyapp.PrefManager;
 import com.plusmobileapps.safetyapp.data.AppDatabase;
 import com.plusmobileapps.safetyapp.data.dao.ResponseDao;
 import com.plusmobileapps.safetyapp.data.dao.SchoolDao;
@@ -75,7 +77,8 @@ public class DownloadTask extends AsyncTask<Void, Integer, DownloadTask.Result> 
     private ResponseDao responseDao;
     private DownloadCallback callback;
     private School school;
-    User user = null;
+    private User user = null;
+    private PrefManager prefManager;
 
     public DownloadTask(DownloadCallback callback) {
         setCallback(callback);
@@ -110,7 +113,7 @@ public class DownloadTask extends AsyncTask<Void, Integer, DownloadTask.Result> 
     protected void onPreExecute() {
         if (callback != null) {
             NetworkInfo networkInfo = callback.getActiveNetworkInfo();
-            Log.d(TAG, networkInfo.toString() + ", isConnected: " + networkInfo.isConnected());
+
             if (networkInfo == null || !networkInfo.isConnected()
                     || (networkInfo.getType() != ConnectivityManager.TYPE_WIFI)) {
                 // If no connectivity, cancel task and update Callback with null data
@@ -118,6 +121,7 @@ public class DownloadTask extends AsyncTask<Void, Integer, DownloadTask.Result> 
                 callback.updateFromDownload(null);
                 cancel(true);
             } else {
+                prefManager = new PrefManager(MyApplication.getAppContext());
                 callback.updateFromDownload("Starting download...");
             }
         }
@@ -361,8 +365,11 @@ public class DownloadTask extends AsyncTask<Void, Integer, DownloadTask.Result> 
             Log.d(TAG, w.toString());
         }
 
-        for (Response r : remoteResponses) {
-            Log.d(TAG, r.toString());
+        int maxLocalResponseId = prefManager.getLastResponseUniqueId();
+        int maxRemoteResponseId = getMaxResponseId(remoteResponses);
+
+        if (maxRemoteResponseId > maxLocalResponseId) {
+            prefManager.setLastResponseUniqueId(maxRemoteResponseId);
         }
 
         // If no remote walkthroughs for the school, there's nothing to download
@@ -372,6 +379,7 @@ public class DownloadTask extends AsyncTask<Void, Integer, DownloadTask.Result> 
             while (iter.hasNext()) {
                 Walkthrough remoteWalkthrough = iter.next();
                 if (remoteWalkthrough.equals(localWalkthrough)) {
+                    Log.d(TAG, "Walkthroughs are equal: remote=[" + remoteWalkthrough.getName() + "], local=[" + localWalkthrough.getName() + "]");
                     java.util.Date remoteLastUpdate = Utils.convertStringToDate(remoteWalkthrough.getLastUpdatedDate());
                     java.util.Date localLastUpdate = Utils.convertStringToDate(localWalkthrough.getLastUpdatedDate());
 
@@ -402,6 +410,17 @@ public class DownloadTask extends AsyncTask<Void, Integer, DownloadTask.Result> 
         }
 
         cleanup(rs, stmt, conn);
+    }
+
+    private int getMaxResponseId(List<Response> remoteResponses) {
+        int max = 0;
+
+        for (Response r : remoteResponses) {
+            Log.d(TAG, r.toString());
+            if (r.getResponseId() > max) { max = r.getResponseId(); }
+        }
+
+        return max;
     }
 
     private void cleanup(ResultSet rs, Statement stmt, Connection conn) {
