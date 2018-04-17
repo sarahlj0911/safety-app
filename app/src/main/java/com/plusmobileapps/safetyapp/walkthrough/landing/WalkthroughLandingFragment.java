@@ -30,6 +30,7 @@ import com.plusmobileapps.safetyapp.R;
 import com.plusmobileapps.safetyapp.data.entity.Walkthrough;
 import com.plusmobileapps.safetyapp.sync.DownloadCallback;
 import com.plusmobileapps.safetyapp.sync.NetworkFragment;
+import com.plusmobileapps.safetyapp.util.NetworkUtil;
 import com.plusmobileapps.safetyapp.walkthrough.location.LocationActivity;
 
 import java.util.ArrayList;
@@ -75,8 +76,10 @@ public class WalkthroughLandingFragment extends Fragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_walkthrough_landing, container, false);
+        final View rootView = inflater.inflate(R.layout.fragment_walkthrough_landing, container, false);
         rootView.setTag(TAG);
+        NetworkUtil.registerNetworkListener(rootView.getContext(), rootView.findViewById(R.id.fragment_walkthrough_landing_root));
+
         recyclerView = rootView.findViewById(R.id.landing_walkthrough_recyclerview);
         overlay = rootView.findViewById(R.id.overlay);
         noWalkthroughs = rootView.findViewById(R.id.no_walkthrough);
@@ -108,8 +111,6 @@ public class WalkthroughLandingFragment extends Fragment
 
         // presenter has to be started in either case
         presenter.start();
-
-
     }
 
     @Override
