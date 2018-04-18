@@ -29,6 +29,7 @@ import com.plusmobileapps.safetyapp.PrefManager;
 import com.plusmobileapps.safetyapp.R;
 import com.plusmobileapps.safetyapp.data.entity.Walkthrough;
 import com.plusmobileapps.safetyapp.sync.DownloadCallback;
+import com.plusmobileapps.safetyapp.sync.NetworkChangeReceiver;
 import com.plusmobileapps.safetyapp.sync.NetworkFragment;
 import com.plusmobileapps.safetyapp.util.NetworkUtil;
 import com.plusmobileapps.safetyapp.walkthrough.location.LocationActivity;
@@ -52,7 +53,9 @@ public class WalkthroughLandingFragment extends Fragment
     private WalkthroughLandingAdapter adapter;
     private ProgressBar progressBar;
     private NetworkFragment networkFragment;
+    private NetworkChangeReceiver networkChangeReceiver;
     boolean downloading;
+    View rootView;
 
     private WalkthroughLandingContract.Presenter presenter;
 
@@ -76,9 +79,9 @@ public class WalkthroughLandingFragment extends Fragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        final View rootView = inflater.inflate(R.layout.fragment_walkthrough_landing, container, false);
+        rootView = inflater.inflate(R.layout.fragment_walkthrough_landing, container, false);
         rootView.setTag(TAG);
-        NetworkUtil.registerNetworkListener(rootView.getContext(), rootView.findViewById(R.id.fragment_walkthrough_landing_root));
+        networkChangeReceiver = NetworkUtil.registerNetworkListener(rootView.getContext(), rootView.findViewById(R.id.fragment_walkthrough_landing_root), this);
 
         recyclerView = rootView.findViewById(R.id.landing_walkthrough_recyclerview);
         overlay = rootView.findViewById(R.id.overlay);
@@ -116,6 +119,8 @@ public class WalkthroughLandingFragment extends Fragment
     @Override
     public void onPause() {
         super.onPause();
+
+        NetworkUtil.unregisterNetworkListener(rootView.getContext(), networkChangeReceiver);
     }
 
     @Override
