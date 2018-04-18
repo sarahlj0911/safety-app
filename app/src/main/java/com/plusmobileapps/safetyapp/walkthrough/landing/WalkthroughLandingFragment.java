@@ -64,23 +64,6 @@ public class WalkthroughLandingFragment extends Fragment
 
     private WalkthroughLandingContract.Presenter presenter;
 
-    // SyncAdapter Constants
-    // The authority for the sync adapter's content provier
-    public static final String AUTHORITY = "com.plusmobileapps.safetyapp.provider";
-    // An account type, in the form of a domain name
-    public static final String ACCOUNT_TYPE = "safetyapp.com";
-    // The account name
-    public static final String ACCOUNT = "default_account";
-    // Instance fields
-    Account account;
-    // Sync interval constants
-    public static final long SECONDS_PER_MINUTE = 60L;
-    public static final long SYNC_INTERVAL_IN_MINUTES = 60L;
-    public static final long SYNC_INTERVAL = SYNC_INTERVAL_IN_MINUTES * SECONDS_PER_MINUTE;
-    // Global variables
-    // A content resolver for accessing the provider
-    ContentResolver mResolver;
-
     public WalkthroughLandingFragment() {
         // Required empty public constructor
     }
@@ -138,21 +121,11 @@ public class WalkthroughLandingFragment extends Fragment
 
         // presenter has to be started in either case
         presenter.start();
-
-        account = CreateSyncAccount(getContext());
-        mResolver = getContext().getContentResolver();
-        // TODO Uncomment this to attempt periodic syncing. Haven't gotten it to work yet, so we'll see
-        // Turn on periodic syncing
-       /* ContentResolver.addPeriodicSync(
-                account, AUTHORITY, Bundle.EMPTY, SYNC_INTERVAL
-        );*/
-
-        uploadData();
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
+    public void onDestroy() {
+        super.onDestroy();
 
         NetworkUtil.unregisterNetworkListener(rootView.getContext(), networkChangeReceiver);
     }
@@ -390,42 +363,5 @@ public class WalkthroughLandingFragment extends Fragment
         if (networkFragment != null) {
             networkFragment.cancelDownload();
         }
-    }
-
-    public void uploadData() {
-        Bundle settingsBundle = new Bundle();
-        settingsBundle.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
-        settingsBundle.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
-
-        Log.d(TAG, "Requesting sync");
-        ContentResolver.requestSync(account, AUTHORITY, settingsBundle);
-    }
-
-    /**
-     * Create a new dummy account for the sync adapter
-     *
-     * @param context The application context
-     */
-    public static Account CreateSyncAccount(Context context) {
-        // Create the account type and default account
-        Account newAccount = new Account(ACCOUNT, ACCOUNT_TYPE);
-        // Get an instance of the Android account manager
-        AccountManager accountManager = (AccountManager) context.getSystemService(ACCOUNT_SERVICE);
-        /*
-        * Add the account and account type, no password or user data
-        * If successful, return the Account object, otherwise report an error.
-         */
-        if (accountManager.addAccountExplicitly(newAccount, null, null)) {
-            /*
-             * If you don't set android:syncable="true" in your <provider> element in the manifest,
-             * then call context.setIsSyncable(account, AUTHORITY, 1) here.
-             */
-        } else {
-            Log.d(TAG, "Account already exists or some other error occurred.");
-        }
-
-        Log.d(TAG, "Sync account created!");
-
-        return newAccount;
     }
 }

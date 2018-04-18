@@ -169,7 +169,8 @@ public class WalkthroughPresenter implements WalkthroughContract.Presenter {
     }
 
     private void saveResponses(boolean finish) {
-        SaveResponses save = new SaveResponses();
+        //SaveResponses save = new SaveResponses();
+        SaveResponses save = new SaveResponses(view);
         save.responses = responses;
         save.execute(walkthroughId);
 
@@ -181,6 +182,11 @@ public class WalkthroughPresenter implements WalkthroughContract.Presenter {
     static class SaveResponses extends AsyncTask<Integer, Void, Boolean> {
         List<Response> responses;
         Integer walkthroughId;
+        WalkthroughContract.View view;
+
+        public SaveResponses(WalkthroughContract.View view) {
+            this.view = view;
+        }
 
         @Override
         protected Boolean doInBackground(Integer... walkthroughIds) {
@@ -194,7 +200,8 @@ public class WalkthroughPresenter implements WalkthroughContract.Presenter {
 
         @Override
         protected void onPostExecute(Boolean saved) {
-            new UpdateWalkthroughTask().execute(walkthroughId);
+            //new UpdateWalkthroughTask().execute(walkthroughId);
+            new UpdateWalkthroughTask(view).execute(walkthroughId);
         }
 
     }

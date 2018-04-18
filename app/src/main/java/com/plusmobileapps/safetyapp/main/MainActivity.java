@@ -1,5 +1,7 @@
 package com.plusmobileapps.safetyapp.main;
 
+import android.accounts.Account;
+import android.content.ContentResolver;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -25,6 +27,18 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
     private String walkthroughFragmentTitle = "";
     private MainActivityPresenter presenter;
 
+    // TODO Uncomment these to try the periodic sync
+    // SyncAdapter Constants
+    // The authority for the sync adapter's content provier
+    //public static final String AUTHORITY = "com.plusmobileapps.safetyapp.provider";
+    // An account type, in the form of a domain name
+    //public static final String ACCOUNT_TYPE = "safetyapp.com";
+    // The account name
+    //public static final String ACCOUNT = "default_account";
+    // Instance fields
+    //Account account;
+    //ContentResolver mResolver;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,6 +58,12 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
         Toolbar toolbar = findViewById(R.id.main_toolbar);
         setSupportActionBar(toolbar);
         setAppBarTitle(0);
+
+        // TODO Uncomment this to attempt periodic syncing. Haven't gotten it to work yet, so we'll see
+        // Turn on periodic syncing
+        /* ContentResolver.addPeriodicSync(
+                account, AUTHORITY, Bundle.EMPTY, SYNC_INTERVAL
+        );*/
     }
 
     private void setUpPresenters(MainActivityFragmentFactory factory) {
