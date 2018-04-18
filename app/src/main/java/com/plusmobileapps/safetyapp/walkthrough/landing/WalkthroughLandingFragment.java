@@ -124,7 +124,6 @@ public class WalkthroughLandingFragment extends Fragment
     @Override
     public void createNewWalkthrough(int id, String title) {
         Walkthrough walkthrough = new Walkthrough(title);
-        //TODO: SAVE WALKTHROUGH
         Intent intent = new Intent(getContext(), LocationActivity.class);
         intent.putExtra(EXTRA_WALKTHROUGH_NAME, title);
         intent.putExtra(LocationActivity.EXTRA_WALKTHROUGH_ID, walkthrough.getWalkthroughId());
@@ -249,10 +248,19 @@ public class WalkthroughLandingFragment extends Fragment
         public void onWalkthroughClicked(int position) {
             presenter.walkthroughClicked(position);
         }
+
+        @Override
+        public void onDismissButtonClicked(int position) {
+            //TODO: Confirmation dialogue.
+            //On okay: mark walkthrough as completed.
+            //On cancel: un check box.
+
+        }
     };
 
     public interface WalkthroughLandingItemListener {
         void onWalkthroughClicked(int position);
+        void onDismissButtonClicked(int position);
     }
 
     /**

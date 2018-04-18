@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -22,6 +23,7 @@ public class WalkthroughLandingAdapter extends RecyclerView.Adapter<WalkthroughL
     public static final int ITEM_TYPE_HEADER = 0;
     private Walkthrough walkthrough;
     private WalkthroughLandingFragment.WalkthroughLandingItemListener itemListener;
+
     private List<Walkthrough> walkthroughs;
 
     public WalkthroughLandingAdapter(List<Walkthrough> walkthroughs, WalkthroughLandingFragment.WalkthroughLandingItemListener itemListener) {
@@ -91,6 +93,7 @@ public class WalkthroughLandingAdapter extends RecyclerView.Adapter<WalkthroughL
         private final TextView modified;
         private final ProgressBar progressBar;
         private final TextView header;
+        private final CheckBox dismissButton;
 
         public CardViewHolder(View view) {
             super(view);
@@ -100,7 +103,8 @@ public class WalkthroughLandingAdapter extends RecyclerView.Adapter<WalkthroughL
             modified = view.findViewById(R.id.viewholder_landing_modified);
             progressBar = view.findViewById(R.id.viewholder_landing_progressbar);
             header = view.findViewById(R.id.viewholder_title);
-
+            dismissButton = view.findViewById(R.id.dismissCheckBox);
+            dismissButton.setOnClickListener(dismissListener);
             view.setOnClickListener(this);
         }
 
@@ -108,6 +112,13 @@ public class WalkthroughLandingAdapter extends RecyclerView.Adapter<WalkthroughL
         public void onClick(View view) {
             itemListener.onWalkthroughClicked(getAdapterPosition());
         }
+
+        private View.OnClickListener dismissListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                itemListener.onDismissButtonClicked(getAdapterPosition());
+            }
+        };
 
         public TextView getTime() {
             return time;
