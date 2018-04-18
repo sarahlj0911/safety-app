@@ -3,7 +3,6 @@ package com.plusmobileapps.safetyapp.sync;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
-import android.support.v4.app.Fragment;
 import android.util.Log;
 
 import com.plusmobileapps.safetyapp.BuildConfig;
@@ -26,7 +25,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
@@ -60,7 +58,6 @@ public class DownloadTask extends AsyncTask<Void, Integer, DownloadTask.Result> 
     private static final String GET_WALKTHROUGHS_AND_RESPONSES_SQL =
             "select w.walkthroughId AS WALKTHROUGH_ID, w.userId AS WALKTHROUGH_USER, " +
             "w.name AS NAME, w.lastUpdatedDate AS LAST_UPDATED_DATE, w.createdDate AS CREATED_DATE, " +
-            /*"w.percentComplete AS PERCENT_COMPLETE, r.userId AS RESPONSE_USER, " +*/
             "w.percentComplete AS PERCENT_COMPLETE, " +
             "r.responseId AS RESPONSE_ID, r.locationId AS LOCATION_ID, r.questionId AS QUESTION_ID, " +
             "r.actionPlan AS ACTION_PLAN, r.priority AS PRIORITY, r.rating AS RATING, r.timestamp AS TIMESTAMP, " +

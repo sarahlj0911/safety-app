@@ -60,7 +60,7 @@ from safetywalkthrough.walkthroughs w
 left outer join safetywalkthrough.responses r on w.schoolId = r.schoolId and w.walkthroughId = r.walkthroughId
 join safetywalkthrough.schools s on s.schoolId = w.schoolId
 join safetywalkthrough.question q on r.questionId = q.questionId
-where w.schoolId = 1
+where w.schoolId = 3
 order by r.locationId, r.responseId;
 
 select * from safetywalkthrough.walkthroughs

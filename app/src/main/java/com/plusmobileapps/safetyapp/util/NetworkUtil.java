@@ -7,7 +7,6 @@ import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.view.View;
 
@@ -25,7 +24,6 @@ public class NetworkUtil {
      * @param context   the fragment or activity context
      * @param view      the view on which to show the snack bar
      */
-    /*public static void registerNetworkListener(@NonNull Context context, @NonNull View view) {*/
     public static NetworkChangeReceiver registerNetworkListener(@NonNull Context context, @NonNull View view, final WalkthroughLandingContract.View walkthroughLandingFragment) {
         final Snackbar snackbar = Snackbar.make(view, context.getString(R.string.network_unavailable), Snackbar.LENGTH_INDEFINITE);
         NetworkChangeReceiver receiver = new NetworkChangeReceiver();
@@ -33,7 +31,6 @@ public class NetworkUtil {
 
         IntentFilter appIntentFilter = new IntentFilter();
         appIntentFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
-        /*context.registerReceiver(new NetworkChangeReceiver(), appIntentFilter);*/
         context.registerReceiver(receiver, appIntentFilter);
         IntentFilter networkIntentFilter = new IntentFilter(NetworkChangeReceiver.NETWORK_AVAILABLE_ACTION);
         LocalBroadcastManager.getInstance(context).registerReceiver(new BroadcastReceiver() {
