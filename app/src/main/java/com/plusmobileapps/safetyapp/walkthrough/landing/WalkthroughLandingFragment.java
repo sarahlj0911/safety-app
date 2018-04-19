@@ -16,6 +16,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -52,7 +53,6 @@ public class WalkthroughLandingFragment extends Fragment
     public WalkthroughLandingFragment() {
         // Required empty public constructor
     }
-
 
     public static WalkthroughLandingFragment newInstance() {
         WalkthroughLandingFragment fragment = new WalkthroughLandingFragment();
@@ -250,17 +250,36 @@ public class WalkthroughLandingFragment extends Fragment
         }
 
         @Override
-        public void onDismissButtonClicked(int position) {
+        public void onDismissButtonClicked(final int position, final CheckBox dismissButton) {
             //TODO: Confirmation dialogue.
             //On okay: mark walkthrough as completed.
             //On cancel: un check box.
+            final Walkthrough selectedWalkthrough = adapter.getWalkthroughs().get(position);
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+            builder.setMessage("Completing this walkthrough will compelete it for all users at your school. Are you sure?")
+                    .setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            presenter.setWalkthroughCompleted(selectedWalkthrough, presenter);
+                            dismissButton.setVisibility(View.INVISIBLE);
+                        }
+                    })
+                    .setNegativeButton(getString(R.string.no), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dismissButton.setChecked(false);
+                        }
+                    });
+            AlertDialog dialog = builder.create();
+            dialog.show();
 
         }
     };
 
     public interface WalkthroughLandingItemListener {
         void onWalkthroughClicked(int position);
-        void onDismissButtonClicked(int position);
+        void onDismissButtonClicked(int position, CheckBox dismissButton);
     }
 
     /**

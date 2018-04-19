@@ -26,5 +26,6 @@ public interface WalkthroughLandingContract {
         void firstAppLaunch();
         void deleteInProgressWalkthroughConfirmed();
         void confirmCreateWalkthroughClicked(String title);
+        void setWalkthroughCompleted(Walkthrough selectedWalkthrough, WalkthroughLandingContract.Presenter presenter);
     }
 }
