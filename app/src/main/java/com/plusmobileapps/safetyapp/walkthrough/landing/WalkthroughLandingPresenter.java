@@ -77,7 +77,6 @@ public class WalkthroughLandingPresenter implements WalkthroughLandingContract.P
         new SaveNewWalkthrough(walkthrough, view).execute();
     }
 
-
     @Override
     public void firstAppLaunch() {
         view.showTutorial();

@@ -6,6 +6,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -13,6 +14,7 @@ import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.FileProvider;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -134,10 +136,9 @@ public class WalkthroughContentFragment extends Fragment
     }
 
     private RadioButton generateRadioButton(String content, Rating id) {
-        RadioButton radioButton = new RadioButton(getContext());
+        RadioButton radioButton = (RadioButton) getLayoutInflater().inflate(R.layout.radio_button, null);
         radioButton.setId(id.ordinal());
         radioButton.setText(content);
-
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         layoutParams.weight = 1;
         layoutParams.gravity = Gravity.CENTER_HORIZONTAL | Gravity.BOTTOM;
