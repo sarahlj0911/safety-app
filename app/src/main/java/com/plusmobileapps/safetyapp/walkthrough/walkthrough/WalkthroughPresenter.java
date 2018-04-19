@@ -5,13 +5,16 @@ import android.util.Log;
 
 import com.plusmobileapps.safetyapp.MyApplication;
 import com.plusmobileapps.safetyapp.data.AppDatabase;
+import com.plusmobileapps.safetyapp.data.ResponseUniqueIdFactory;
 import com.plusmobileapps.safetyapp.data.dao.ResponseDao;
 import com.plusmobileapps.safetyapp.data.entity.Question;
 import com.plusmobileapps.safetyapp.data.entity.Response;
-import com.plusmobileapps.safetyapp.data.entity.Walkthrough;
 import com.plusmobileapps.safetyapp.walkthrough.walkthrough.question.WalkthroughContentFragment;
 
+import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -29,10 +32,6 @@ public class WalkthroughPresenter implements WalkthroughContract.Presenter {
     private int currentIndex = 0;
     private int locationId;
     private int walkthroughId;
-    private int totalQuestions = 0;
-    private int totalResponses = 0;
-    private Walkthrough walkthrough;
-    private GetWalkthrough getWalkthrough;
 
     public WalkthroughPresenter(WalkthroughContract.View view) {
         this.view = view;
@@ -45,8 +44,6 @@ public class WalkthroughPresenter implements WalkthroughContract.Presenter {
             this.locationId = locationId;
             new GetCurrentWalkthroughIdTask(this).execute();
         }
-        GetTotalQuestionCount totalQC = new GetTotalQuestionCount(this);
-        totalQC.execute();
     }
 
     @Override
@@ -57,8 +54,7 @@ public class WalkthroughPresenter implements WalkthroughContract.Presenter {
     @Override
     public void loadResponses(int walkthroughId) {
         this.walkthroughId = walkthroughId;
-        GetWalkthrough getWalkthrough = new GetWalkthrough(this, String.valueOf(walkthroughId));
-        getWalkthrough.execute();
+
         AsyncTask<Void, Void, List<Response>> wrmAsyncTask = new WalkthroughResponseModel(this.locationId, walkthroughId, view, this).execute();
 
         try {
@@ -74,7 +70,22 @@ public class WalkthroughPresenter implements WalkthroughContract.Presenter {
         }
 
         Log.d(TAG, "responses.size(): " + responses.size());
-        view.showNextQuestion(questions.get(0), responses);
+        view.showNextQuestion(questions.get(0), getNextResponseToShow());
+    }
+
+    private Response getNextResponseToShow() {
+        if ( (currentIndex >= 0) && (currentIndex < responses.size()) ) {
+            return responses.get(currentIndex);
+        } else {
+            return null;
+        }
+    }
+
+    @Override
+    public void saveQuestions() {
+        Response response = getCurrentResponse();
+        responses.add(response);
+        saveResponses(false);
     }
 
     @Override
@@ -84,9 +95,11 @@ public class WalkthroughPresenter implements WalkthroughContract.Presenter {
             return;
         }
 
-        Response currentResponse = view.getCurrentResponse();
+        Response currentResponse = getCurrentResponse();
         if (currentIndex == responses.size()) {
             responses.add(currentResponse);
+        } else{
+            responses.set(currentIndex, currentResponse);
         }
 
         currentIndex--;
@@ -97,40 +110,47 @@ public class WalkthroughPresenter implements WalkthroughContract.Presenter {
 
     @Override
     public void nextQuestionClicked() {
-        Response response = view.getCurrentResponse();
-        response = setUpResponse(response);
+        Response response = getCurrentResponse();
 
-        //check if the next question has already been started
-        if (currentIndex == responses.size()) {
+        //check if response has already been added
+        if(responses.size() >= currentIndex + 1) {
+            responses.set(currentIndex, response);
+        } else if (currentIndex == responses.size()) {
             responses.add(response);
         }
 
         //if you're at the last question
         if(currentIndex + 1 == questions.size()) {
             Log.i(TAG, "End of questions, saving " + responses.size() + " responses");
-            saveResponses();
+            saveResponses(true);
             return;
         }
 
-        currentIndex++;
 
-        view.showNextQuestion(questions.get(currentIndex), responses);
+        currentIndex++;
+        view.showNextQuestion(questions.get(currentIndex), getNextResponseToShow());
         view.showQuestionCount(currentIndex, questions.size());
 
     }
 
-    private Response setUpResponse(Response response) {
-        walkthroughFragment = view.getCurrentFragment();
-        response.setWalkthroughId(walkthroughId);
-        response.setLocationId(locationId);
-        response.setRating(walkthroughFragment.getRating());
-        response.setActionPlan(walkthroughFragment.getActionPlan());
+    private Response getCurrentResponse() {
+        Response response = view.getCurrentResponse();
+        if(response.getResponseId() == 0) {
+            Log.d(TAG, "Getting a new response and setting everything blindly...");
+            response.setResponseId(ResponseUniqueIdFactory.getId());
+            response.setUserId(1);
+            response.setWalkthroughId(walkthroughId);
+            response.setLocationId(locationId);
+        }
+        //String timeStamp = DateFormat.getDateTimeInstance().format(new Date());
+        String timeStamp = new Date().toString();
+        response.setTimeStamp(timeStamp);
         return response;
     }
 
     @Override
     public void confirmationExitClicked() {
-        saveResponses();
+        saveResponses(true);
         view.closeWalkthrough();
     }
 
@@ -148,49 +168,29 @@ public class WalkthroughPresenter implements WalkthroughContract.Presenter {
         this.responses = responses;
     }
 
-    private void saveResponses() {
-        SaveResponses save = new SaveResponses();
+    private void saveResponses(boolean finish) {
+        //SaveResponses save = new SaveResponses();
+        SaveResponses save = new SaveResponses(view);
         save.responses = responses;
-        save.execute();
-        GetTotalResponseCount totalRC = new GetTotalResponseCount(this);
-        totalRC.execute();
-        view.closeWalkthrough();
+        save.execute(walkthroughId);
+
+        if(finish) {
+            view.closeWalkthrough();
+        }
     }
 
-    @Override
-    public void setTotalQuestionCount(int totalQuestions) {
-        this.totalQuestions = totalQuestions;
-    }
-
-    @Override
-    public void setTotalResponseCount(int totalResponses) {
-        this.totalResponses = totalResponses;
-    }
-
-    @Override
-    public void setWalkthrough(Walkthrough walkthrough) {
-        this.walkthrough = walkthrough;
-    }
-
-    @Override
-    public void calculateProgress() {
-        int percent = 0;
-        System.out.println("Total Questions in calculation: " + totalQuestions);
-        System.out.println("Total Responses in calculation: " + totalResponses);
-        percent = (int) (((double) totalResponses / (double) totalQuestions) * 100);
-        System.out.println("Percent complete is: " + percent);
-
-        String id = String.valueOf(walkthroughId);
-        walkthrough.setPercentComplete(percent);
-        System.out.println(walkthrough.getName());
-        System.out.println(walkthrough.getPercentComplete());
-    }
-
-    static class SaveResponses extends AsyncTask<Void,Void, Boolean> {
+    static class SaveResponses extends AsyncTask<Integer, Void, Boolean> {
         List<Response> responses;
+        Integer walkthroughId;
+        WalkthroughContract.View view;
+
+        public SaveResponses(WalkthroughContract.View view) {
+            this.view = view;
+        }
 
         @Override
-        protected Boolean doInBackground(Void... voids) {
+        protected Boolean doInBackground(Integer... walkthroughIds) {
+            this.walkthroughId = walkthroughIds[0];
             AppDatabase db = AppDatabase.getAppDatabase(MyApplication.getAppContext());
             ResponseDao responseDao = db.responseDao();
             responseDao.insertAll(responses);
@@ -198,12 +198,17 @@ public class WalkthroughPresenter implements WalkthroughContract.Presenter {
             return true;
         }
 
+        @Override
+        protected void onPostExecute(Boolean saved) {
+            //new UpdateWalkthroughTask().execute(walkthroughId);
+            new UpdateWalkthroughTask(view).execute(walkthroughId);
+        }
+
     }
 
     @Override
     public void refreshDisplay(String imagePath) {
-        Response response = view.getCurrentResponse();
+        Response response = getCurrentResponse();
         response.setImagePath(imagePath);
-        setUpResponse(response);
     }
 }

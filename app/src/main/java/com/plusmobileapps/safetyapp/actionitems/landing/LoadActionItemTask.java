@@ -12,7 +12,6 @@ import com.plusmobileapps.safetyapp.data.entity.Response;
 import com.plusmobileapps.safetyapp.data.dao.ResponseDao;
 import com.plusmobileapps.safetyapp.data.AppDatabase;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class LoadActionItemTask extends AsyncTask<Void, Void, List<Response>> {
@@ -32,7 +31,8 @@ public class LoadActionItemTask extends AsyncTask<Void, Void, List<Response>> {
         LocationDao locationDao = db.locationDao();
         QuestionDao questionDao = db.questionDao();
 
-        List<Response> items = responseDao.getAllActionItems();
+        List<Response> items = responseDao.getAllActionItems(1);
+
         for (Response actionItem : items) {
             int locationId = actionItem.getLocationId();
             Location location = locationDao.getByLocationId(locationId);
@@ -40,7 +40,7 @@ public class LoadActionItemTask extends AsyncTask<Void, Void, List<Response>> {
 
             int questionId = actionItem.getQuestionId();
             Question question = questionDao.getByQuestionID(questionId);
-            String title = question.getShortDescription();
+            String title = question.getShortDesc();
             actionItem.setTitle(title);
 
         }
@@ -51,14 +51,9 @@ public class LoadActionItemTask extends AsyncTask<Void, Void, List<Response>> {
     @Override
     protected void onPostExecute(List<Response> actionItems) {
         super.onPostExecute(actionItems);
-        List<Response> filteredList = new ArrayList<>(0);
-        for (Response response : actionItems) {
-            if(response.isActionItem()) {
-                filteredList.add(response);
-            }
-        }
-
-        this.actionItems.addAll(filteredList);
+        
+        this.actionItems = actionItems;
+        presenter.setActionItems(actionItems);
         presenter.loadActionItems(false);
     }
 }

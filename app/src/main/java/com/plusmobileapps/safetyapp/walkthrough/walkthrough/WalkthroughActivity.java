@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.FileProvider;
@@ -27,6 +28,7 @@ import com.plusmobileapps.safetyapp.walkthrough.walkthrough.question.Walkthrough
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.Stack;
 
 public class WalkthroughActivity extends AppCompatActivity implements WalkthroughContract.View {
 
@@ -38,7 +40,9 @@ public class WalkthroughActivity extends AppCompatActivity implements Walkthroug
     private int locationId;
     private int walkthroughId;
     private WalkthroughContentPresenter currentContentPresenter;
+    private WalkthroughContentPresenter previousContentPresenter;
     private WalkthroughContentFragment fragment;
+    private Stack<WalkthroughContentPresenter> presenterStack = new Stack<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +70,12 @@ public class WalkthroughActivity extends AppCompatActivity implements Walkthroug
     protected void onResume() {
         super.onResume();
         presenter.start(locationId);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        presenter.saveQuestions();
     }
 
     @Override
@@ -104,33 +114,10 @@ public class WalkthroughActivity extends AppCompatActivity implements Walkthroug
     }
 
     @Override
-    public void showNextQuestion(Question question, List<Response> responses) {
-        Response response = null;
-
-        if (responses != null && !responses.isEmpty()) {
-            for (Response candidateResponse : responses) {
-                int candidateWalkthruId = candidateResponse.getWalkthroughId();
-                int candidateLocationId = candidateResponse.getLocationId();
-                int candidateQuestionId = candidateResponse.getQuestionId();
-                Log.d(TAG, "Comparing candidate response with walkthroughId [" + candidateWalkthruId +
-                        "], locationId [" + candidateLocationId +
-                        "], questionId [" + candidateQuestionId +
-                        "]\n  to current walkthroughId [" + walkthroughId +
-                        "], locationId [" + locationId +
-                        "], questionId [" + question.getQuestionId() + "]");
-                if (candidateWalkthruId == walkthroughId
-                        && candidateLocationId == locationId
-                        && candidateQuestionId == question.getQuestionId()) {
-                    response = candidateResponse;
-                    break;
-                }
-
-            }
-        }
-
+    public void showNextQuestion(Question question, Response response) {
         fragment = WalkthroughContentFragment.newInstance(question, response);
         currentContentPresenter = new WalkthroughContentPresenter(fragment);
-
+        presenterStack.push(currentContentPresenter);
         FragmentTransaction transaction = fragmentManager.beginTransaction();
 
         transaction
@@ -140,13 +127,15 @@ public class WalkthroughActivity extends AppCompatActivity implements Walkthroug
                         R.animator.slide_in_right,
                         R.animator.slide_out_right)
                 .replace(R.id.walkthrough_container, fragment)
-                .addToBackStack("walkthroughQuestion")
+                .addToBackStack("walkthrough_question")
                 .commit();
     }
 
     @Override
     public void showPreviousQuestion() {
         fragmentManager.popBackStack();
+        presenterStack.pop();
+        currentContentPresenter = presenterStack.peek();
     }
 
     @Override
@@ -195,7 +184,7 @@ public class WalkthroughActivity extends AppCompatActivity implements Walkthroug
         super.onActivityResult(requestCode, resultCode, data);
 
         Log.d(TAG, "WalkthroughActivity is aware of photo taken");
-        Response response = fragment.getResponse();
+        Response response = currentContentPresenter.getResponse();
         Log.d(TAG, "Got response from fragment: " + response.toString());
         presenter.refreshDisplay(response.getImagePath());
     }

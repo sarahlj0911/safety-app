@@ -1,20 +1,12 @@
 package com.plusmobileapps.safetyapp.walkthrough.landing;
 
-
-import android.os.AsyncTask;
-
 import com.plusmobileapps.safetyapp.data.entity.Walkthrough;
-
-
 import java.util.ArrayList;
-
-import com.plusmobileapps.safetyapp.data.entity.Walkthrough;
-import java.util.Date;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 public class WalkthroughLandingPresenter implements WalkthroughLandingContract.Presenter {
 
+    private static final String TAG = "WalkthruLandPresenter";
     private WalkthroughLandingContract.View view;
     private List<Walkthrough> walkthroughs;
     private Walkthrough walkthrough;
@@ -28,7 +20,7 @@ public class WalkthroughLandingPresenter implements WalkthroughLandingContract.P
     @Override
     public void start() {
         new LoadWalkthroughs(listener).execute();
-    }
+     }
 
     @Override
     public void walkthroughClicked(int position) {
@@ -72,7 +64,6 @@ public class WalkthroughLandingPresenter implements WalkthroughLandingContract.P
 
         new SaveNewWalkthrough(walkthrough, view).execute();
     }
-
 
     @Override
     public void firstAppLaunch() {

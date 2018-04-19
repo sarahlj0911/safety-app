@@ -6,6 +6,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -13,6 +14,7 @@ import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.FileProvider;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,6 +31,7 @@ import com.plusmobileapps.safetyapp.data.entity.Question;
 import com.plusmobileapps.safetyapp.data.entity.Response;
 import com.plusmobileapps.safetyapp.model.Priority;
 import com.plusmobileapps.safetyapp.R;
+import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.io.IOException;
@@ -69,15 +72,8 @@ public class WalkthroughContentFragment extends Fragment
     private PackageManager packageManager;
     private WalkthroughFragmentContract.Presenter presenter;
     private RadioGroup radioGroup;
-    private int currentRating;
-
-    public int getRating() {
-        return currentRating;
-    }
-
-    public String getActionPlan() {
-        return actionPlanEditText.getText().toString();
-    }
+    private int currentRating = -1;
+    private int currentPriority = -1;
 
     public static WalkthroughContentFragment newInstance(Question question, Response loadedResponse) {
         WalkthroughContentFragment fragment = new WalkthroughContentFragment();
@@ -88,9 +84,13 @@ public class WalkthroughContentFragment extends Fragment
         if (loadedResponse == null) {
             Log.d(TAG, "No response loaded");
             fragment.response.setQuestionId(question.getQuestionId());
-            fragment.response.setPriority(0);
+            fragment.response.setRating(-1);
+            fragment.response.setPriority(-1);
+            fragment.response.setActionPlan("");
         } else {
             fragment.response = loadedResponse;
+            fragment.currentPriority = loadedResponse.getPriority();
+            fragment.currentRating = loadedResponse.getRating();
             Log.d(TAG, "Loaded response:\n" + fragment.response.toString());
         }
 
@@ -103,7 +103,7 @@ public class WalkthroughContentFragment extends Fragment
         packageManager = this.getActivity().getPackageManager();
         View view = inflater.inflate(R.layout.fragment_walkthrough_question, container, false);
         String walkthroughJsonObject = getArguments().getString("walkthroughQuestion");
-        response.setUserId(1);
+
 
         walkthroughQuestion = new Gson().fromJson(walkthroughJsonObject, Question.class);
         initViews(view);
@@ -121,16 +121,12 @@ public class WalkthroughContentFragment extends Fragment
     private View generateQuestionView(View view, Question question) {
         radioGroup = view.findViewById(R.id.radioGroup);
         radioGroup.setOnCheckedChangeListener(ratingChangeListener);
-        if (question.getRatingOption1() != null) {
-            radioGroup.addView(generateRadioButton(question.getRatingOption1(), Rating.OPTION1));
-        }
-        if (question.getRatingOption2() != null) {
-            radioGroup.addView(generateRadioButton(question.getRatingOption2(), Rating.OPTION2));
-        }
-        if (question.getRatingOption3() != null) {
+        radioGroup.addView(generateRadioButton(question.getRatingOption1(), Rating.OPTION1));
+        radioGroup.addView(generateRadioButton(question.getRatingOption2(), Rating.OPTION2));
+        if (question.getRatingOption3() != null && !question.getRatingOption3().equals("")) {
             radioGroup.addView(generateRadioButton(question.getRatingOption3(), Rating.OPTION3));
         }
-        if (question.getRatingOption4() != null) {
+        if (question.getRatingOption4() != null && !question.getRatingOption4().equals("")) {
             radioGroup.addView(generateRadioButton(question.getRatingOption4(), Rating.OPTION4));
         }
 
@@ -140,10 +136,9 @@ public class WalkthroughContentFragment extends Fragment
     }
 
     private RadioButton generateRadioButton(String content, Rating id) {
-        RadioButton radioButton = new RadioButton(getContext());
+        RadioButton radioButton = (RadioButton) getLayoutInflater().inflate(R.layout.radio_button, null);
         radioButton.setId(id.ordinal());
         radioButton.setText(content);
-
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         layoutParams.weight = 1;
         layoutParams.gravity = Gravity.CENTER_HORIZONTAL | Gravity.BOTTOM;
@@ -240,9 +235,10 @@ public class WalkthroughContentFragment extends Fragment
 
     @Override
     public void showPhoto(String imagePath) {
-        Bitmap bitmap = BitmapFactory.decodeFile(imagePath);
-        cameraButton.setImageBitmap(bitmap);
-
+        if(imagePath != null) {
+            File file = new File(imagePath);
+            Picasso.get().load(file).into(cameraButton);
+        }
         // Can add this photo rotation and resizing back in if needed.
         /*int targetWidth = cameraButton.getWidth();
         int targetHeight = cameraButton.getHeight();
@@ -286,6 +282,14 @@ public class WalkthroughContentFragment extends Fragment
 
     @Override
     public Response getResponse() {
+        response.setActionPlan(actionPlanEditText.getText().toString());
+        response.setRating(currentRating);
+        response.setPriority(currentPriority);
+        return response;
+    }
+
+    @Override
+    public Response getLoadedResponse() {
         return response;
     }
 
@@ -351,19 +355,19 @@ public class WalkthroughContentFragment extends Fragment
             case R.id.priority_btn_red:
                 priority = Priority.HIGH;
                 presenter.priorityClicked(priority);
-                response.setPriority(Priority.HIGH.ordinal());
+                currentPriority = Priority.HIGH.ordinal();
                 response.setIsActionItem(1);
                 break;
             case R.id.priority_btn_yellow:
                 priority = Priority.MEDIUM;
                 presenter.priorityClicked(priority);
-                response.setPriority(Priority.MEDIUM.ordinal());
+                currentPriority = Priority.MEDIUM.ordinal();
                 response.setIsActionItem(1);
                 break;
             case R.id.priority_btn_green:
                 priority = Priority.NONE;
                 presenter.priorityClicked(priority);
-                response.setPriority(Priority.NONE.ordinal());
+                currentPriority = Priority.NONE.ordinal();
                 break;
             default:
                 break;

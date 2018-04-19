@@ -18,14 +18,18 @@ public interface ResponseDao {
     @Query("SELECT * FROM responses")
     List<Response> getAll();
 
-    @Query("SELECT * FROM responses WHERE walkthroughId = :walkthroughId")
+    @Query("SELECT * FROM responses WHERE walkthroughId = :walkthroughId ORDER BY locationId, responseId")
     List<Response> getAllByWalkthroughId(int walkthroughId);
 
     @Query("SELECT * FROM responses where responseId LIKE :responseId")
     Response getByResponseId(String responseId);
 
-    @Query("SELECT * FROM responses")
-    List<Response> getAllActionItems();
+    @Query("SELECT count(*) FROM responses WHERE walkthroughId = :walkthroughId " +
+            "AND rating >= 0")
+    int getResponseCount(int walkthroughId);
+
+    @Query("SELECT * FROM responses where isActionItem LIKE :actionItem")
+    List<Response> getAllActionItems(int actionItem);
 
     @Query("SELECT * FROM RESPONSES where locationId LIKE :locationId AND walkthroughId LIKE :walkthroughId")
     List<Response> getResponsesForLocation(int locationId, int walkthroughId);

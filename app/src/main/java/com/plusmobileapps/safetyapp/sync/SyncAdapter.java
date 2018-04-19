@@ -9,6 +9,7 @@ import android.content.SyncResult;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.plusmobileapps.safetyapp.BuildConfig;
 import com.plusmobileapps.safetyapp.MyApplication;
 import com.plusmobileapps.safetyapp.PrefManager;
 import com.plusmobileapps.safetyapp.data.AppDatabase;
@@ -57,10 +58,9 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
     private QuestionMappingDao questionMappingDao;
 
     // Connection properties
-    //private static final String URL = "jdbc:mysql://10.0.2.2:3306/safetywalkthrough?useSSL=false";
-    private static final String URL = "jdbc:mysql://safetymysqlinstance.cbcumohyescr.us-west-2.rds.amazonaws.com:3306/safetywalkthrough?useSSL=false";
-    private static final String APP_ID = "safety_app";
-    private static final String PASS = "";
+    private static final String URL = BuildConfig.DB_URL;
+    private static final String APP_ID = BuildConfig.APP_ID;
+    private static final String PASS = BuildConfig.SYNC_PASS;
 
     // SQL statement constants
     public static final String SELECT_MAX_SCHOOL_ID_SQL = "SELECT MAX(schoolId) FROM schools";
@@ -72,12 +72,13 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
     private static final String DELETE_WALKTHROUGH_SQL = "DELETE FROM walkthroughs " +
             "WHERE schoolId = ? AND userId = ? AND walkthroughId = ?";
     private static final String GET_LAST_SYNC_DATETIME_SQL = "SELECT MAX(lastUpdatedDate) " +
-            "FROM walkthroughs WHERE schoolId = ? AND userId = ?";
+            "FROM walkthroughs WHERE schoolId = ?";
+
     private static final String UPDATE_WALKTHROUGH_SQL = "INSERT INTO walkthroughs " +
             "(walkthroughId, schoolId, userId, name, lastUpdatedDate, createdDate, percentComplete) " +
             "VALUES (?, ?, ?, ?, ?, ?, ?) " +
             "ON DUPLICATE KEY UPDATE " +
-            "name = ?, lastUpdatedDate = ?, percentComplete = ?";
+            "name = ?, lastUpdatedDate = ?, percentComplete = ?, userId = ?";
     private static final String UPDATE_RESPONSE_SQL = "INSERT INTO responses " +
             "(responseId, schoolId, userId, walkthroughId, locationId, questionId, actionPlan, " +
             "priority, rating, timestamp, isActionItem, image) " +
@@ -174,7 +175,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
         }
 
         syncLocationsAndQuestions(remoteSchoolId);
-        deleteRemoteWalkthroughs(remoteSchoolId, remoteUserId);
+        //deleteRemoteWalkthroughs(remoteSchoolId, remoteUserId);
         syncWalkthroughsAndResponses(remoteSchoolId, remoteUserId);
     }
 
@@ -238,7 +239,6 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
             getLastSyncDateTimeStmt = conn.prepareStatement(GET_LAST_SYNC_DATETIME_SQL);
             statements.add(getLastSyncDateTimeStmt);
             getLastSyncDateTimeStmt.setInt(1, remoteSchoolId);
-            getLastSyncDateTimeStmt.setInt(2, remoteUserId);
 
             lastSyncDateTimeRs = getLastSyncDateTimeStmt.executeQuery();
             resultSets.add(lastSyncDateTimeRs);
@@ -276,7 +276,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                     updateWalkthroughStmt.setString(8, walkthrough.getName());
                     updateWalkthroughStmt.setTimestamp(9, newTimeStamp);
                     updateWalkthroughStmt.setDouble(10, walkthrough.getPercentComplete());
-                    //Log.d(TAG, updateWalkthroughStmt.toString());
+                    updateWalkthroughStmt.setInt(11, remoteUserId);
                     updateWalkthroughStmt.addBatch();
 
                     List<Response> responses = responseDao.getAllByWalkthroughId(walkthrough.getWalkthroughId());

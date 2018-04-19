@@ -7,8 +7,8 @@ android {
         applicationId "com.plusmobileapps.safetyapp"
         minSdkVersion 19
         targetSdkVersion 26
-        versionCode 1
-        versionName "1.0"
+        versionCode 3
+        versionName "1.1"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
     }
@@ -16,6 +16,16 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            buildConfigField("String", "DB_URL", "\"jdbc:mysql://safetymysqlinstance.cbcumohyescr.us-west-2.rds.amazonaws.com:3306/safetywalkthrough?useSSL=false\"")
+            //buildConfigField("String", "DB_URL", "\"jdbc:mysql://10.0.2.2:3306/safetywalkthrough?useSSL=false\"")
+            buildConfigField("String", "APP_ID", "\"safety_app\"")
+            buildConfigField("String", "SYNC_PASS", "\"<insert password>\"")
+        }
+        debug {
+            buildConfigField("String", "DB_URL", "\"jdbc:mysql://safetymysqlinstance.cbcumohyescr.us-west-2.rds.amazonaws.com:3306/safetywalkthrough?useSSL=false\"")
+            //buildConfigField("String", "DB_URL", "\"jdbc:mysql://10.0.2.2:3306/safetywalkthrough?useSSL=false\"")
+            buildConfigField("String", "APP_ID", "\"safety_app\"")
+            buildConfigField("String", "SYNC_PASS", "\"<insert password>\"")
         }
     }
 }
@@ -44,12 +54,11 @@ dependencies {
     implementation "android.arch.persistence.room:runtime:1.0.0"
     annotationProcessor "android.arch.persistence.room:compiler:1.0.0"
 
-    //room db helper library
-    implementation 'com.github.humazed:RoomAsset:v1.0'
-
-
     //walkthrough tutorial library
     implementation 'com.github.amlcurran.showcaseview:library:5.4.3'
+
+    //image loading library
+    implementation 'com.squareup.picasso:picasso:2.71828'
 
     //test
     // Dependencies for local unit tests

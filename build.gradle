@@ -2,7 +2,7 @@
 
 ext {
     buildToolsVersion = '27.0.3'
-    supportLibraryVersion = '27.0.2'
+    supportLibraryVersion = '27.1.0'
     junitVersion = '4.12'
     mockitoVersion = '1.10.19'
     powerMockito = '1.6.2'

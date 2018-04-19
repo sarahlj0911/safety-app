@@ -22,6 +22,7 @@ public class PrefManager {
     private static final String IS_TUTORIAL_SEEN = "IsTutorialSeen";
     private static final String IS_USER_SIGNED_UP = "IsUserSignedUp";
     private static final String HAS_SEEN_CREATE_WALKTHROUGH_TUTORIAL = "HasSeenCreateWalkthroughTutorial";
+    private static final String LAST_RESPONSE_ID = "LastResponseId";
 
     public PrefManager(Context context) {
         this.context = context;
@@ -54,5 +55,14 @@ public class PrefManager {
 
     public boolean getHasSeenCreateWalkthroughTutorial() {
         return pref.getBoolean(HAS_SEEN_CREATE_WALKTHROUGH_TUTORIAL, false);
+    }
+
+    public void setLastResponseUniqueId(int lastId) {
+        editor.putInt(LAST_RESPONSE_ID, lastId);
+        editor.commit();
+    }
+
+    public int getLastResponseUniqueId() {
+        return pref.getInt(LAST_RESPONSE_ID, 0);
     }
 }

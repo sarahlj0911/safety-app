@@ -11,10 +11,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.plusmobileapps.safetyapp.R;
 import com.plusmobileapps.safetyapp.data.entity.Response;
+import com.squareup.picasso.Picasso;
+
+import java.io.File;
 
 /**
  * Created by rbeerma
@@ -36,6 +40,7 @@ public class ActionItemDetailActivity extends AppCompatActivity
     private TextView locationTextView;
     private TextView detailTimeStampTextView;
     private TextView titleTextView;
+    private ImageView imageView;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,7 +63,7 @@ public class ActionItemDetailActivity extends AppCompatActivity
         locationTextView = findViewById(R.id.locationTextView);
         detailTimeStampTextView = findViewById(R.id.detail_timestamp);
         titleTextView = findViewById(R.id.actionItemDetailTitle);
-
+        imageView = findViewById(R.id.imageView);
     }
 
     @Override
@@ -110,6 +115,11 @@ public class ActionItemDetailActivity extends AppCompatActivity
         detailRatingTextView.setText("Rating: " + response.getRatingText());
         locationTextView.setText(response.getLocationName());
         titleTextView.setText(response.getTitle());
+
+        if(response.getImagePath() != null) {
+            File file = new File(response.getImagePath());
+            Picasso.get().load(file).into(imageView);
+        }
 
         String priority = Integer.toString(response.getPriority());
         int drawable = presenter.getStatusColorDrawable(priority);

@@ -10,7 +10,7 @@ public interface WalkthroughContract {
 
     interface View {
         void showConfirmationDialog();
-        void showNextQuestion(Question question, List<Response> responses);
+        void showNextQuestion(Question question, Response response);
         void showPreviousQuestion();
         Response getCurrentResponse();
         WalkthroughContentFragment getCurrentFragment();
@@ -22,16 +22,13 @@ public interface WalkthroughContract {
     interface Presenter {
         void start(int locationId);
         void loadQuestions(int locationId);
+        void saveQuestions();
         void loadResponses(int walkthroughId);
         void previousQuestionClicked();
         void nextQuestionClicked();
         void confirmationExitClicked();
         void backButtonPressed();
         void refreshDisplay(String imagePath);
-        void setTotalQuestionCount(int totalQuestionCount);
-        void setTotalResponseCount(int totalResponses);
-        void setWalkthrough(Walkthrough walkthrough);
-        void calculateProgress();
     }
 
 }

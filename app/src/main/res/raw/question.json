@@ -1,0 +1,344 @@
+[
+    {
+        "questionId": "1",
+        "questionText": "Count evidence of school-ownership. Look for things with the school name or logo prominently displayed.",
+        "ratingOption1": "None",
+        "ratingOption2": "1-3",
+        "ratingOption3": "4 or more",
+        "ratingOption4": "",
+        "shortDesc": "School Ownership"
+    },
+    {
+        "questionId": "2",
+        "questionText": "Count signs with positive behavioral expecations of students.\r\n",
+        "ratingOption1": "None",
+        "ratingOption2": "1 or more",
+        "ratingOption3": "",
+        "ratingOption4": "",
+        "shortDesc": "Positive Signs"
+    },
+    {
+        "questionId": "3",
+        "questionText": "Count groupings of student work.\r\n",
+        "ratingOption1": "0-1",
+        "ratingOption2": "2-4",
+        "ratingOption3": "5 or more",
+        "ratingOption4": "",
+        "shortDesc": "Student Work Groupings"
+    },
+    {
+        "questionId": "4",
+        "questionText": "Count evidence of defacement. This includes markings/etchings of names, symbols, or profanity on walls, doors, etc.",
+        "ratingOption1": "None",
+        "ratingOption2": "1-7",
+        "ratingOption3": "8 or more",
+        "ratingOption4": "",
+        "shortDesc": "Defacement"
+    },
+    {
+        "questionId": "5",
+        "questionText": "Count evidence of vandalism. Look for things that have been intentionally broken or bent.",
+        "ratingOption1": "None",
+        "ratingOption2": "1-7",
+        "ratingOption3": "8 or more",
+        "ratingOption4": "",
+        "shortDesc": "Vandalism"
+    },
+    {
+        "questionId": "6",
+        "questionText": "Count broken lights. Look for fixtures that contain burned out bulbs or are otherwise broken or not functioning.",
+        "ratingOption1": "None",
+        "ratingOption2": "1 or more",
+        "ratingOption3": "",
+        "ratingOption4": "",
+        "shortDesc": "Broken Lights"
+    },
+    {
+        "questionId": "7",
+        "questionText": "Students consistently follow rules appropriate to the setting.\r\n",
+        "ratingOption1": "Never",
+        "ratingOption2": "Some of the time",
+        "ratingOption3": "A lot of the time",
+        "ratingOption4": "",
+        "shortDesc": "Rule Following"
+    },
+    {
+        "questionId": "8",
+        "questionText": "Are adults present to monitor student entrance during morning arrival?",
+        "ratingOption1": "Yes",
+        "ratingOption2": "No",
+        "ratingOption3": "",
+        "ratingOption4": "",
+        "shortDesc": "Adults Present"
+    },
+    {
+        "questionId": "9",
+        "questionText": "Are there signs clearly posted to indicate the entrance to the school grounds?",
+        "ratingOption1": "Yes",
+        "ratingOption2": "No",
+        "ratingOption3": "",
+        "ratingOption4": "",
+        "shortDesc": "Entrance Signs"
+    },
+    {
+        "questionId": "10",
+        "questionText": "What is the condition of the landscaping around the building?",
+        "ratingOption1": "Not maintained",
+        "ratingOption2": "Maintained",
+        "ratingOption3": "Well-maintained",
+        "ratingOption4": "",
+        "shortDesc": "Landscaping"
+    },
+    {
+        "questionId": "11",
+        "questionText": "Count trash.\r\n",
+        "ratingOption1": "≤ 1 full grocery bag\r\n",
+        "ratingOption2": "= 2 full grocery bags\r\n",
+        "ratingOption3": "≥ 3 full grocery bags",
+        "ratingOption4": "",
+        "shortDesc": "Trash"
+    },
+    {
+        "questionId": "12",
+        "questionText": "Count evidence of substance use. Look for bottles, cans, or paraphernalia that once held alccohol, prescriptions, or illicit drugs.",
+        "ratingOption1": "None",
+        "ratingOption2": "1 or more",
+        "ratingOption3": "",
+        "ratingOption4": "",
+        "shortDesc": "Substance Use"
+    },
+    {
+        "questionId": "13",
+        "questionText": "Bathroom is clean and in good repair (e.g. fixtures not leaking).",
+        "ratingOption1": "Strongly disagree",
+        "ratingOption2": "Disagree",
+        "ratingOption3": "Agree",
+        "ratingOption4": "Strongly agree",
+        "shortDesc": "Overall Condition"
+    },
+    {
+        "questionId": "14",
+        "questionText": "Bathroom has needed supplies.",
+        "ratingOption1": "Strongly disagree",
+        "ratingOption2": "Disagree",
+        "ratingOption3": "Agree",
+        "ratingOption4": "Strongly agree",
+        "shortDesc": "Has Supplies"
+    },
+    {
+        "questionId": "15",
+        "questionText": "Count trash.",
+        "ratingOption1": "None or a few pieces",
+        "ratingOption2": "= 1 full grocery bags",
+        "ratingOption3": "≥ 2 full grocery bags",
+        "ratingOption4": "",
+        "shortDesc": "Trash"
+    },
+    {
+        "questionId": "16",
+        "questionText": "Adults are visible in the hallway during transition.",
+        "ratingOption1": "Never",
+        "ratingOption2": "Some of the time",
+        "ratingOption3": "A lot of the time",
+        "ratingOption4": "",
+        "shortDesc": "Adults Visible"
+    },
+    {
+        "questionId": "17",
+        "questionText": "Adults scan the area and are aware of what is occurring.",
+        "ratingOption1": "Never",
+        "ratingOption2": "Some of the time",
+        "ratingOption3": "A lot of the time",
+        "ratingOption4": "",
+        "shortDesc": "Adults Aware"
+    },
+    {
+        "questionId": "18",
+        "questionText": "Adults and students have positive interactions (i.e., greet each other).",
+        "ratingOption1": "Never",
+        "ratingOption2": "Some of the time",
+        "ratingOption3": "A lot of the time",
+        "ratingOption4": "",
+        "shortDesc": "Positive Interactions"
+    },
+    {
+        "questionId": "19",
+        "questionText": "Hallway is crowded.\r\n",
+        "ratingOption1": "Never",
+        "ratingOption2": "Some of the time",
+        "ratingOption3": "A lot of the time",
+        "ratingOption4": "",
+        "shortDesc": "Crowded Hallway"
+    },
+    {
+        "questionId": "20",
+        "questionText": "Noise level is appropriate for the activities in the location.",
+        "ratingOption1": "Never",
+        "ratingOption2": "Some of the time",
+        "ratingOption3": "A lot of the time",
+        "ratingOption4": "",
+        "shortDesc": "Appropriate Noise Level"
+    },
+    {
+        "questionId": "21",
+        "questionText": "Cafeteria is clean and maintained aesthetically.",
+        "ratingOption1": "Strongly disagree",
+        "ratingOption2": "Disagree",
+        "ratingOption3": "Agree",
+        "ratingOption4": "Strongly agree",
+        "shortDesc": "Clean/Maintained"
+    },
+    {
+        "questionId": "22",
+        "questionText": "Count broken lights. Look for fixtures that contain burned out bulbs or are otherwise broken or not functioning.",
+        "ratingOption1": "None",
+        "ratingOption2": "1-7",
+        "ratingOption3": "8 or more",
+        "ratingOption4": "",
+        "shortDesc": "Broken Lights"
+    },
+    {
+        "questionId": "23",
+        "questionText": "Count signs with positive behavioral expecations of students.\r\n",
+        "ratingOption1": "None",
+        "ratingOption2": "1-7",
+        "ratingOption3": "8 or more",
+        "ratingOption4": "",
+        "shortDesc": "Positive Signs"
+    },
+    {
+        "questionId": "24",
+        "questionText": "The cafeteria promotes healthy eating.",
+        "ratingOption1": "Strongly disagree",
+        "ratingOption2": "Disagree",
+        "ratingOption3": "Agree",
+        "ratingOption4": "Strongly agree",
+        "shortDesc": "Promotes Healthy Eating"
+    },
+    {
+        "questionId": "25",
+        "questionText": "Students treat their peers with respect.\r\n",
+        "ratingOption1": "Never",
+        "ratingOption2": "Some of the time",
+        "ratingOption3": "A lot of the time",
+        "ratingOption4": "",
+        "shortDesc": "Respectful Peer Treatment"
+    },
+    {
+        "questionId": "26",
+        "questionText": "Count trash immediately after students leave the cafeteria.",
+        "ratingOption1": "None or a few pieces",
+        "ratingOption2": "= 1 full grocery bags",
+        "ratingOption3": "≥ 2 full grocery bags",
+        "ratingOption4": "",
+        "shortDesc": "Trash"
+    },
+    {
+        "questionId": "27",
+        "questionText": "Count vandalism. Look for things that have been intentionally broken or bent.",
+        "ratingOption1": "None",
+        "ratingOption2": "1-7",
+        "ratingOption3": "8 or more",
+        "ratingOption4": "",
+        "shortDesc": "Vandalism"
+    },
+    {
+        "questionId": "28",
+        "questionText": "The classroom is clean and maintained aesthetically.",
+        "ratingOption1": "Strongly disagree",
+        "ratingOption2": "Disagree",
+        "ratingOption3": "Agree",
+        "ratingOption4": "Strongly agree",
+        "shortDesc": "Clean/Maintained"
+    },
+    {
+        "questionId": "29",
+        "questionText": "Count signs with positive behavioral expecations of students.\r\n",
+        "ratingOption1": "0-2",
+        "ratingOption2": "3-5",
+        "ratingOption3": "6 or more",
+        "ratingOption4": "",
+        "shortDesc": "Positive Signs"
+    },
+    {
+        "questionId": "30",
+        "questionText": "A behavioral matrix is present.\r\n",
+        "ratingOption1": "Yes",
+        "ratingOption2": "No",
+        "ratingOption3": "",
+        "ratingOption4": "",
+        "shortDesc": "Behavioral Matrix Present"
+    },
+    {
+        "questionId": "31",
+        "questionText": "Observed evidence that the teacher has a reinforcement system to reward positive behaviors.",
+        "ratingOption1": "Yes",
+        "ratingOption2": "No",
+        "ratingOption3": "",
+        "ratingOption4": "",
+        "shortDesc": "Evidence of Reinforcement System"
+    },
+    {
+        "questionId": "32",
+        "questionText": "Teacher shows some evidence that she/he is aware of students' interests and backgrounds.\r\n",
+        "ratingOption1": "Never",
+        "ratingOption2": "Some of the time",
+        "ratingOption3": "A lot of the time",
+        "ratingOption4": "",
+        "shortDesc": "Awareness of Student Interests"
+    },
+    {
+        "questionId": "33",
+        "questionText": "Teacher integrates cultural artifacts reflective of students' interests into learning activities (e.g., music, local landmarks, artwork).",
+        "ratingOption1": "Never",
+        "ratingOption2": "Some of the time",
+        "ratingOption3": "A lot of the time",
+        "ratingOption4": "",
+        "shortDesc": "Cultural Artifacts Integrated"
+    },
+    {
+        "questionId": "34",
+        "questionText": "Teacher is calm and attentive when problems arise.\r\n",
+        "ratingOption1": "Never",
+        "ratingOption2": "Some of the time",
+        "ratingOption3": "A lot of the time",
+        "ratingOption4": "",
+        "shortDesc": "Calm and Attentive"
+    },
+    {
+        "questionId": "35",
+        "questionText": "Teacher uses active listening techniques (e.g., eye contact, focusing, body language, not interrupting, paraphrasing, asking for more details, offering information, responding in full sentences rather than yes or no).\r\n",
+        "ratingOption1": "Never",
+        "ratingOption2": "Some of the time",
+        "ratingOption3": "A lot of the time",
+        "ratingOption4": "",
+        "shortDesc": "Active Listening"
+    },
+    {
+        "questionId": "36",
+        "questionText": "Teacher interacts positively with students (i.e., uses more praise than reprimands).\r\n",
+        "ratingOption1": "Never",
+        "ratingOption2": "Some of the time",
+        "ratingOption3": "A lot of the time",
+        "ratingOption4": "",
+        "shortDesc": "Positive Interactions"
+    },
+    {
+        "questionId": "37",
+        "questionText": "Students are interested and engaged.\r\n",
+        "ratingOption1": "Never",
+        "ratingOption2": "Some of the time",
+        "ratingOption3": "A lot of the time",
+        "ratingOption4": "",
+        "shortDesc": "Students Engaged"
+    },
+    {
+        "questionId": "38",
+        "questionText": "Students treat their peers with respect. (e.g., listen when peers are talking).\r\n",
+        "ratingOption1": "Never",
+        "ratingOption2": "Some of the time",
+        "ratingOption3": "A lot of the time",
+        "ratingOption4": "",
+        "shortDesc": "Respectful Peer Treatment"
+    }
+]

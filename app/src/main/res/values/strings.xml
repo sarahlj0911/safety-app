@@ -60,6 +60,7 @@
     <string name="btn_signup">Let\'s get started!</string>
     <string name="signup_role_prompt">Choose a role</string>
     <string name="error_create_walkthrough_name">Name requires 2 or more characters</string>
+    <string name="new_school">Add New School</string>
 
     <string-array name="signup_roles">
         <item>Administrator</item>
@@ -110,6 +111,8 @@
 
     <string name="last_modified">Last Modified:</string>
     <string name="walkthrough_last_modified">Last Modified:</string>
+
+    <string name="network_unavailable">Offline, get back online for sync to work</string>
 
 </resources>
 

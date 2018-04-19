@@ -76,15 +76,26 @@
         android:layout_alignTop="@+id/label_signup_school_name"
         android:defaultFocusHighlightEnabled="false"
         android:fadingEdge="vertical"
+        android:singleLine="false"
         android:paddingTop="7dp" tools:targetApi="o"/>
+
+    <EditText
+        android:id="@+id/new_school_text_box"
+        android:layout_width="220dp"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/spinner_signup_school_name"
+        android:layout_alignTop="@+id/spinner_signup_school_name"
+        android:visibility="invisible"
+        android:paddingTop="7dp"
+        android:textSize="18sp"/>
 
     <TextView
         android:id="@+id/label_signup_role"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignStart="@+id/button_save_signup"
-        android:layout_below="@+id/label_signup_school_name"
-        android:layout_marginTop="28dp"
+        android:layout_below="@+id/new_school_text_box"
+        android:layout_marginTop="37dp"
         android:text="@string/label_signup_role"
         android:textColor="@android:color/black"
         android:textSize="18sp" />
@@ -93,8 +104,9 @@
         android:id="@+id/spinner_signup_role"
         android:layout_width="220dp"
         android:layout_height="32dp"
+        android:layout_alignBaseline="@+id/label_signup_role"
+        android:layout_alignBottom="@+id/label_signup_role"
         android:layout_alignEnd="@+id/signup_email"
-        android:layout_alignTop="@+id/label_signup_role"
         android:defaultFocusHighlightEnabled="false"
         android:entries="@array/signup_roles"
         android:fadingEdge="vertical"

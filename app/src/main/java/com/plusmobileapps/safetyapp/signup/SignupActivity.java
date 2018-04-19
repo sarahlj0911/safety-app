@@ -39,6 +39,8 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
     private Spinner schoolSpinner;
     private ArrayList<String> schoolList;
     private ArrayAdapter<String> schoolSpinnerList;
+    private EditText newSchool;
+    private boolean schoolExists;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,12 +50,12 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
         Button saveSignupBtn = findViewById(R.id.button_save_signup);
         saveSignupBtn.setOnClickListener(saveSignupClickListener);
         schoolList = new ArrayList<String>();
-
         schoolSpinner = (Spinner)findViewById(R.id.spinner_signup_school_name);
-
+        newSchool = (EditText)findViewById(R.id.new_school_text_box);
 
         nameInput = findViewById(R.id.signup_name);
         emailInput = findViewById(R.id.signup_email);
+        newSchool = findViewById(R.id.new_school_text_box);
 
         nameInput.getEditText().addTextChangedListener(nameListener);
         emailInput.getEditText().addTextChangedListener(emailListener);
@@ -83,26 +85,55 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
         for(int i = 0; i < schools.size(); i++) {
             schoolList.add(schools.get(i).getSchoolName().toString());
         }
+        schoolList.add(getString(R.string.new_school));
         Log.d(TAG, "Populating spinner with " + schools.size() + " schools");
         schoolSpinnerList = new ArrayAdapter<String>(this, R.layout.fragment_spinner_item, schoolList);
         schoolSpinnerList.setDropDownViewResource(R.layout.fragment_spinner_item);
         schoolSpinner.setAdapter(schoolSpinnerList);
 
+        schoolSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                if(getString(R.string.new_school).equals(schoolSpinner.getSelectedItem().toString())) {
+                    newSchool.setVisibility(View.VISIBLE);
+                    schoolSpinner.setVisibility(View.GONE);
+                    schoolExists = false;
+                } else {
+                    schoolExists = true;
+                }
+            }
 
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
     }
+
+
 
     private View.OnClickListener saveSignupClickListener = new View.OnClickListener() {
 
         @Override
         public void onClick(View v) {
             HashMap<String, String> formInput = new HashMap<>();
+            String school;
 
-            Spinner schoolInput = findViewById(R.id.spinner_signup_school_name);
+            if(schoolExists) {
+                Spinner schoolInput = findViewById(R.id.spinner_signup_school_name);
+                school = schoolInput.getSelectedItem().toString();
+                Log.d(TAG, "Chosen School: " + school);
+            } else {
+                school = newSchool.getEditableText().toString();
+                Log.d(TAG, "New School: " + school);
+            }
+
+
             Spinner roleInput = findViewById(R.id.spinner_signup_role);
 
             String name = nameInput.getEditText().getText().toString();
             String email = emailInput.getEditText().getText().toString();
-            String school = schoolInput.getSelectedItem().toString();
+
             String role = roleInput.getSelectedItem().toString();
 
             formInput.put(SignupPresenter.NAME_INPUT, name);

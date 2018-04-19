@@ -24,8 +24,6 @@ public class MainActivityFragmentFactory {
         return actionItemsFragment;
     }
 
-    public SummaryFragment getSummaryFragment() {
-        return summaryFragment;
-    }
+   public SummaryFragment getSummaryFragment() {return summaryFragment;    }
 
 }
