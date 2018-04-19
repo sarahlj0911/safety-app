@@ -9,16 +9,25 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.plusmobileapps.safetyapp.PrefManager;
 import com.plusmobileapps.safetyapp.R;
+import com.plusmobileapps.safetyapp.data.entity.School;
 import com.plusmobileapps.safetyapp.main.MainActivity;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 
 public class SignupActivity extends AppCompatActivity implements SignupContract.View {
 
@@ -27,6 +36,9 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
     private TextInputLayout nameInput;
     private TextInputLayout emailInput;
     private TextInputLayout schoolNameInput;
+    private Spinner schoolSpinner;
+    private ArrayList<String> schoolList;
+    private ArrayAdapter<String> schoolSpinnerList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,14 +47,16 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
         presenter = new SignupPresenter(this);
         Button saveSignupBtn = findViewById(R.id.button_save_signup);
         saveSignupBtn.setOnClickListener(saveSignupClickListener);
+        schoolList = new ArrayList<String>();
+
+        schoolSpinner = (Spinner)findViewById(R.id.spinner_signup_school_name);
+
 
         nameInput = findViewById(R.id.signup_name);
         emailInput = findViewById(R.id.signup_email);
-        schoolNameInput = findViewById(R.id.signup_school_name);
 
         nameInput.getEditText().addTextChangedListener(nameListener);
         emailInput.getEditText().addTextChangedListener(emailListener);
-        schoolNameInput.getEditText().addTextChangedListener(schoolNameListener);
     }
 
     @Override
@@ -64,17 +78,31 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
         finish();
     }
 
+    @Override
+    public void populateSchoolSpinner(List<School> schools) {
+        for(int i = 0; i < schools.size(); i++) {
+            schoolList.add(schools.get(i).getSchoolName().toString());
+        }
+        Log.d(TAG, "Populating spinner with " + schools.size() + " schools");
+        schoolSpinnerList = new ArrayAdapter<String>(this, R.layout.fragment_spinner_item, schoolList);
+        schoolSpinnerList.setDropDownViewResource(R.layout.fragment_spinner_item);
+        schoolSpinner.setAdapter(schoolSpinnerList);
+
+
+    }
+
     private View.OnClickListener saveSignupClickListener = new View.OnClickListener() {
 
         @Override
         public void onClick(View v) {
             HashMap<String, String> formInput = new HashMap<>();
 
+            Spinner schoolInput = findViewById(R.id.spinner_signup_school_name);
             Spinner roleInput = findViewById(R.id.spinner_signup_role);
 
             String name = nameInput.getEditText().getText().toString();
             String email = emailInput.getEditText().getText().toString();
-            String school = schoolNameInput.getEditText().getText().toString();
+            String school = schoolInput.getSelectedItem().toString();
             String role = roleInput.getSelectedItem().toString();
 
             formInput.put(SignupPresenter.NAME_INPUT, name);

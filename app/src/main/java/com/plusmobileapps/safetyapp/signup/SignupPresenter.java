@@ -2,6 +2,7 @@ package com.plusmobileapps.safetyapp.signup;
 
 import android.os.AsyncTask;
 import android.util.Log;
+import android.widget.Spinner;
 
 import com.plusmobileapps.safetyapp.data.entity.School;
 import com.plusmobileapps.safetyapp.data.entity.User;
@@ -9,6 +10,8 @@ import com.plusmobileapps.safetyapp.data.entity.User;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
+import java.util.List;
+import java.util.ArrayList;
 
 /**
  * Created by Robert Beerman on 2/17/2018.
@@ -26,15 +29,23 @@ public class SignupPresenter implements SignupContract.Presenter {
     private boolean isSaved;
     private String errorMessage;
 
+    private List<School> schools;
+
     SignupPresenter(SignupContract.View view) {
         this.view = view;
         view.setPresenter(this);
         errorMessage = "";
+        schools = new ArrayList<>();
     }
 
     @Override
     public void start() {
         isSaved = true;
+        new GetSchoolsTask(listener).execute();
+    }
+
+    private void setupSchoolSpinner() {
+        view.populateSchoolSpinner(schools);
     }
 
     @Override
@@ -48,26 +59,20 @@ public class SignupPresenter implements SignupContract.Presenter {
             view.displayNoNameError(false);
         }
 
-        String schoolName = formInput.get(SCHOOL_NAME_INPUT);
-        if(isEmpty(schoolName)) {
-            view.displayNoSchoolError(true);
-            isValidInput = false;
-        } else {
-            view.displayNoSchoolError(false);
-        }
+        Log.d(TAG, "School Name is: " + formInput.get(SCHOOL_NAME_INPUT));
 
         String email = formInput.get(EMAIL_INPUT);
-        if(isEmpty(email)) {
+        if (isEmpty(email)) {
             view.displayNoEmailError(true);
             isValidInput = false;
-        } else if (!email.contains("@")){
+        } else if (!email.contains("@")) {
             view.displayInvalidEmailError(true);
             isValidInput = false;
         } else {
             view.displayNoEmailError(false);
         }
 
-        if(isValidInput) {
+        if (isValidInput) {
             saveSignupData(formInput);
             view.launchHomeScreen();
         }
@@ -98,7 +103,6 @@ public class SignupPresenter implements SignupContract.Presenter {
         String role = formInput.get(ROLE_INPUT);
 
 
-
         User user = new User(1, 1, email, userName, role);
 
         AsyncTask<Void, Void, Boolean> saveUserTask = new SaveUserTask(user).execute();
@@ -126,4 +130,17 @@ public class SignupPresenter implements SignupContract.Presenter {
     public void schoolNameTextAdded() {
         view.displayNoSchoolError(false);
     }
+
+    private SignupLoadingListener listener = new SignupLoadingListener() {
+        @Override
+        public void onSignupLoaded(List<School> allSchools) {
+            schools = allSchools;
+            setupSchoolSpinner();
+        }
+    };
+
+    interface SignupLoadingListener {
+        void onSignupLoaded(List<School> allSchools);
+    }
+
 }
