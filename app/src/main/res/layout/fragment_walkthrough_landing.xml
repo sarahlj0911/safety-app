@@ -29,6 +29,13 @@
         android:clickable="true"
         android:visibility="gone"/>
 
+    <ProgressBar
+        android:id="@+id/pb_loading_indicator"
+        android:layout_width="84dp"
+        android:layout_height="84dp"
+        android:layout_gravity="center"
+        android:visibility="invisible"/>
+
     <TextView
         android:id="@+id/no_walkthrough"
         android:layout_width="match_parent"
