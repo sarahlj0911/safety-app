@@ -72,7 +72,8 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
     private static final String DELETE_WALKTHROUGH_SQL = "DELETE FROM walkthroughs " +
             "WHERE schoolId = ? AND userId = ? AND walkthroughId = ?";
     private static final String GET_LAST_SYNC_DATETIME_SQL = "SELECT MAX(lastUpdatedDate) " +
-            "FROM walkthroughs WHERE schoolId = ? AND userId = ?";
+            "FROM walkthroughs WHERE schoolId = ?";
+
     private static final String UPDATE_WALKTHROUGH_SQL = "INSERT INTO walkthroughs " +
             "(walkthroughId, schoolId, userId, name, lastUpdatedDate, createdDate, percentComplete) " +
             "VALUES (?, ?, ?, ?, ?, ?, ?) " +
@@ -174,7 +175,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
         }
 
         syncLocationsAndQuestions(remoteSchoolId);
-        deleteRemoteWalkthroughs(remoteSchoolId, remoteUserId);
+        //deleteRemoteWalkthroughs(remoteSchoolId, remoteUserId);
         syncWalkthroughsAndResponses(remoteSchoolId, remoteUserId);
     }
 
@@ -238,7 +239,6 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
             getLastSyncDateTimeStmt = conn.prepareStatement(GET_LAST_SYNC_DATETIME_SQL);
             statements.add(getLastSyncDateTimeStmt);
             getLastSyncDateTimeStmt.setInt(1, remoteSchoolId);
-            getLastSyncDateTimeStmt.setInt(2, remoteUserId);
 
             lastSyncDateTimeRs = getLastSyncDateTimeStmt.executeQuery();
             resultSets.add(lastSyncDateTimeRs);
