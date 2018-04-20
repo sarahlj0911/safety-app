@@ -72,12 +72,13 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
     private static final String DELETE_WALKTHROUGH_SQL = "DELETE FROM walkthroughs " +
             "WHERE schoolId = ? AND userId = ? AND walkthroughId = ?";
     private static final String GET_LAST_SYNC_DATETIME_SQL = "SELECT MAX(lastUpdatedDate) " +
-            "FROM walkthroughs WHERE schoolId = ? AND userId = ?";
+            "FROM walkthroughs WHERE schoolId = ?";
+
     private static final String UPDATE_WALKTHROUGH_SQL = "INSERT INTO walkthroughs " +
             "(walkthroughId, schoolId, userId, name, lastUpdatedDate, createdDate, percentComplete) " +
             "VALUES (?, ?, ?, ?, ?, ?, ?) " +
             "ON DUPLICATE KEY UPDATE " +
-            "name = ?, lastUpdatedDate = ?, percentComplete = ?";
+            "name = ?, lastUpdatedDate = ?, percentComplete = ?, userId = ?";
     private static final String UPDATE_RESPONSE_SQL = "INSERT INTO responses " +
             "(responseId, schoolId, userId, walkthroughId, locationId, questionId, actionPlan, " +
             "priority, rating, timestamp, isActionItem, image) " +
@@ -174,7 +175,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
         }
 
         syncLocationsAndQuestions(remoteSchoolId);
-        deleteRemoteWalkthroughs(remoteSchoolId, remoteUserId);
+        //deleteRemoteWalkthroughs(remoteSchoolId, remoteUserId);
         syncWalkthroughsAndResponses(remoteSchoolId, remoteUserId);
     }
 
@@ -238,7 +239,6 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
             getLastSyncDateTimeStmt = conn.prepareStatement(GET_LAST_SYNC_DATETIME_SQL);
             statements.add(getLastSyncDateTimeStmt);
             getLastSyncDateTimeStmt.setInt(1, remoteSchoolId);
-            getLastSyncDateTimeStmt.setInt(2, remoteUserId);
 
             lastSyncDateTimeRs = getLastSyncDateTimeStmt.executeQuery();
             resultSets.add(lastSyncDateTimeRs);
@@ -276,7 +276,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                     updateWalkthroughStmt.setString(8, walkthrough.getName());
                     updateWalkthroughStmt.setTimestamp(9, newTimeStamp);
                     updateWalkthroughStmt.setDouble(10, walkthrough.getPercentComplete());
-                    //Log.d(TAG, updateWalkthroughStmt.toString());
+                    updateWalkthroughStmt.setInt(11, remoteUserId);
                     updateWalkthroughStmt.addBatch();
 
                     List<Response> responses = responseDao.getAllByWalkthroughId(walkthrough.getWalkthroughId());

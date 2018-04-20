@@ -18,6 +18,7 @@ public interface WalkthroughLandingContract {
         void showTutorial();
         void showInProcessConfirmationDialog();
         void showCreateWalkthroughDialog();
+        void showProgressBar(boolean show);
     }
 
     interface Presenter extends BasePresenter {

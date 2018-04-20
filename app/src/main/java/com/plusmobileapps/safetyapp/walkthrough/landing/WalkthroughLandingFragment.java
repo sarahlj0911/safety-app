@@ -1,8 +1,14 @@
 package com.plusmobileapps.safetyapp.walkthrough.landing;
 
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.app.Dialog;
+import android.content.ContentResolver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TextInputLayout;
@@ -18,6 +24,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 
 import com.github.amlcurran.showcaseview.OnShowcaseEventListener;
@@ -26,14 +33,19 @@ import com.github.amlcurran.showcaseview.targets.ViewTarget;
 import com.plusmobileapps.safetyapp.PrefManager;
 import com.plusmobileapps.safetyapp.R;
 import com.plusmobileapps.safetyapp.data.entity.Walkthrough;
+import com.plusmobileapps.safetyapp.sync.DownloadCallback;
+import com.plusmobileapps.safetyapp.sync.NetworkChangeReceiver;
+import com.plusmobileapps.safetyapp.sync.NetworkFragment;
 import com.plusmobileapps.safetyapp.util.NetworkUtil;
 import com.plusmobileapps.safetyapp.walkthrough.location.LocationActivity;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static android.content.Context.ACCOUNT_SERVICE;
+
 public class WalkthroughLandingFragment extends Fragment
-        implements OnShowcaseEventListener, WalkthroughLandingContract.View {
+        implements OnShowcaseEventListener, WalkthroughLandingContract.View, DownloadCallback {
 
     public static String EXTRA_WALKTHROUGH_NAME = "walkthrough_name";
     private static final int MINIMUM_CHARACTER_NAME = 2;
@@ -46,6 +58,11 @@ public class WalkthroughLandingFragment extends Fragment
     private FloatingActionButton fab;
     private RecyclerView recyclerView;
     private WalkthroughLandingAdapter adapter;
+    private ProgressBar progressBar;
+    private NetworkFragment networkFragment;
+    private NetworkChangeReceiver networkChangeReceiver;
+    boolean downloading;
+    View rootView;
 
     private WalkthroughLandingContract.Presenter presenter;
 
@@ -61,14 +78,16 @@ public class WalkthroughLandingFragment extends Fragment
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        networkFragment = NetworkFragment.getInstance(getFragmentManager());
+        networkFragment.setCallback(this);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        final View rootView = inflater.inflate(R.layout.fragment_walkthrough_landing, container, false);
+        rootView = inflater.inflate(R.layout.fragment_walkthrough_landing, container, false);
         rootView.setTag(TAG);
-        NetworkUtil.registerNetworkListener(rootView.getContext(), rootView.findViewById(R.id.fragment_walkthrough_landing_root));
+        networkChangeReceiver = NetworkUtil.registerNetworkListener(rootView.getContext(), rootView.findViewById(R.id.fragment_walkthrough_landing_root), this);
 
         recyclerView = rootView.findViewById(R.id.landing_walkthrough_recyclerview);
         overlay = rootView.findViewById(R.id.overlay);
@@ -78,6 +97,7 @@ public class WalkthroughLandingFragment extends Fragment
         adapter = new WalkthroughLandingAdapter(new ArrayList<Walkthrough>(0), itemListener);
         recyclerView.setAdapter(adapter);
         fab.setOnClickListener(fabListener);
+        progressBar = rootView.findViewById(R.id.pb_loading_indicator);
 
         return rootView;
     }
@@ -96,13 +116,19 @@ public class WalkthroughLandingFragment extends Fragment
             presenter.firstAppLaunch();
         }
 
+        downloadData();
+
+        Log.d(TAG, "Resumed; should start presenter and upload data");
+
         // presenter has to be started in either case
         presenter.start();
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
+    public void onDestroy() {
+        super.onDestroy();
+
+        NetworkUtil.unregisterNetworkListener(rootView.getContext(), networkChangeReceiver);
     }
 
     @Override
@@ -224,6 +250,11 @@ public class WalkthroughLandingFragment extends Fragment
         noWalkthroughs.setVisibility(show ? View.VISIBLE : View.GONE);
     }
 
+    @Override
+    public void showProgressBar(boolean show) {
+        progressBar.setVisibility(show ? View.VISIBLE : View.INVISIBLE);
+    }
+
     /**
      * handle click listeners
      */
@@ -306,4 +337,60 @@ public class WalkthroughLandingFragment extends Fragment
 
     }
 
+    // Below functions are for downloading remote walkthrough/response data for the entered school
+    private void downloadData() {
+        if (!downloading && networkFragment != null) {
+            networkFragment.startDownload();
+            downloading = true;
+        }
+    }
+
+    @Override
+    public void updateFromDownload(String result) {
+        downloading = true;
+        showProgressBar(true);
+        Log.d(TAG, "Result from DownloadTask: " + result);
+    }
+
+    @Override
+    public NetworkInfo getActiveNetworkInfo() {
+        ConnectivityManager connectivityManager =
+                (ConnectivityManager) getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+
+        return networkInfo;
+    }
+
+    @Override
+    public void onProgressUpdate(int progressCode, int percentComplete) {
+        switch(progressCode) {
+            // You can add UI behavior for progress updates here.
+            case DownloadCallback.Progress.ERROR:
+
+                break;
+            case DownloadCallback.Progress.CONNECT_SUCCESS:
+
+                break;
+            case DownloadCallback.Progress.GET_INPUT_STREAM_SUCCESS:
+
+                break;
+            case DownloadCallback.Progress.PROCESS_INPUT_STREAM_IN_PROGRESS:
+
+                break;
+            case DownloadCallback.Progress.PROCESS_INPUT_STREAM_SUCCESS:
+
+                break;
+        }
+    }
+
+    @Override
+    public void finishDownloading() {
+        downloading = false;
+        showProgressBar(false);
+
+        if (networkFragment != null) {
+            networkFragment.cancelDownload();
+        }
+    }
 }

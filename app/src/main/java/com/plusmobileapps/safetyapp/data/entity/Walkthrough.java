@@ -118,5 +118,36 @@ public class Walkthrough {
         int complete = ((int) percentComplete);
         return complete != 100;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Walkthrough that = (Walkthrough) o;
+
+        if (schoolId != that.schoolId) return false;
+        return name.equals(that.name);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = schoolId;
+        result = 31 * result + name.hashCode();
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        return "Walkthrough{" +
+                "walkthroughId=" + walkthroughId +
+                ", schoolId=" + schoolId +
+                ", name='" + name + '\'' +
+                ", percentComplete=" + percentComplete +
+                ", createdDate='" + createdDate + '\'' +
+                ", lastUpdatedDate='" + lastUpdatedDate + '\'' +
+                ", isDeleted=" + isDeleted +
+                '}';
+    }
 }
 

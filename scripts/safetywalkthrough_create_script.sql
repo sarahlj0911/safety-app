@@ -79,12 +79,12 @@ ENGINE = InnoDB;
 CREATE TABLE IF NOT EXISTS `safetywalkthrough`.`walkthroughs` (
   `walkthroughId` INT NOT NULL,
   `schoolId` INT NOT NULL,
-  `userId` INT NOT NULL,
-  `name` VARCHAR(32) NULL,
+  `userId` INT,
+  `name` VARCHAR(32) NOT NULL,
   `lastUpdatedDate` DATETIME DEFAULT NULL,
   `createdDate` DATETIME DEFAULT NULL,
   `percentComplete` DECIMAL(5,2) NULL,
-  PRIMARY KEY (`walkthroughId`, `schoolId`, `userId`) )
+  PRIMARY KEY (`walkthroughId`, `schoolId`, `name`) )
 ENGINE = InnoDB;
 
 
@@ -104,11 +104,11 @@ CREATE TABLE `safetywalkthrough`.`responses` (
   `timestamp` VARCHAR(32) NULL DEFAULT NULL,
   `isActionItem` INT NULL DEFAULT 0,
   `image` VARCHAR(256) NULL DEFAULT NULL,
-PRIMARY KEY (`responseId`, `walkthroughId`, `schoolId`, `userId`),
-  INDEX `fk_responses_walkthroughs_idx` (`walkthroughId` ASC, `schoolId` ASC, `userId` ASC),
+PRIMARY KEY (`responseId`, `walkthroughId`, `schoolId`, `locationId`, `questionId`),
+  INDEX `fk_responses_walkthroughs_idx` (`walkthroughId` ASC, `schoolId` ASC),
   CONSTRAINT `fk_responses_walkthroughs`
-    FOREIGN KEY (`walkthroughId` , `schoolId` , `userId`)
-    REFERENCES `safetywalkthrough`.`walkthroughs` (`walkthroughId` , `schoolId` , `userId`)
+    FOREIGN KEY (`walkthroughId` , `schoolId`)
+    REFERENCES `safetywalkthrough`.`walkthroughs` (`walkthroughId` , `schoolId`)
     ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
@@ -154,8 +154,6 @@ INSERT INTO `question` (questionId,questionText,shortDesc,ratingOption1,ratingOp
 INSERT INTO `question` (questionId,questionText,shortDesc,ratingOption1,ratingOption2,ratingOption3,ratingOption4) VALUES (37,'Students are interested and engaged.','Students Engaged','Never','Some of the time','A lot of the time',NULL);
 INSERT INTO `question` (questionId,questionText,shortDesc,ratingOption1,ratingOption2,ratingOption3,ratingOption4) VALUES (38,'Students treat their peers with respect. (e.g., listen when peers are talking).','Respectful Peer Treatment','Never','Some of the time','A lot of the time',NULL);
 COMMIT;
-
-GRANT SELECT, INSERT, DELETE, UPDATE, TRIGGER ON TABLE `safetywalkthrough`.* TO 'safety_app';
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;

@@ -4,6 +4,7 @@ import android.arch.persistence.db.SupportSQLiteDatabase;
 import android.arch.persistence.room.Database;
 import android.arch.persistence.room.Room;
 import android.arch.persistence.room.RoomDatabase;
+import android.arch.persistence.room.migration.Migration;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
@@ -40,7 +41,7 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
-@Database(entities = {Location.class, Question.class, QuestionMapping.class, Response.class, School.class, User.class, Walkthrough.class}, version = 2)
+@Database(entities = {Location.class, Question.class, QuestionMapping.class, Response.class, School.class, User.class, Walkthrough.class}, version = 3)
 public abstract class AppDatabase extends RoomDatabase {
 
     private static AppDatabase INSTANCE;
@@ -118,6 +119,7 @@ public abstract class AppDatabase extends RoomDatabase {
                                 }
                             }
                         })
+                        .addMigrations(MIGRATION_2_3)
                         .build();
 
             }
@@ -128,4 +130,31 @@ public abstract class AppDatabase extends RoomDatabase {
     public static void destroyInstance() {
         INSTANCE = null;
     }
+
+    static final Migration MIGRATION_2_3 = new Migration(2, 3) {
+        @Override
+        public void migrate(SupportSQLiteDatabase database) {
+            // Create new responses table with new primary key constraints
+            database.execSQL("CREATE TABLE responses_tmp (responseId INTEGER NOT NULL, isActionItem INTEGER NOT NULL, image TEXT, " +
+                    "locationId INTEGER NOT NULL, timestamp TEXT, rating INTEGER NOT NULL, priority INTEGER NOT NULL, " +
+                    "actionPlan TEXT, questionId INTEGER NOT NULL, userId INTEGER NOT NULL, walkthroughId INTEGER NOT NULL, " +
+                    "PRIMARY KEY(responseId, walkthroughId, locationId, questionId), " +
+                    "FOREIGN KEY(walkthroughId) REFERENCES walkthroughs(walkthroughId) ON UPDATE NO ACTION ON DELETE CASCADE, " +
+                    "FOREIGN KEY(userId) REFERENCES user(userId) ON UPDATE NO ACTION ON DELETE NO ACTION, " +
+                    "FOREIGN KEY(locationId) REFERENCES location(locationId) ON UPDATE NO ACTION ON DELETE NO ACTION, " +
+                    "FOREIGN KEY(questionId) REFERENCES question(questionId) ON UPDATE NO ACTION ON DELETE NO ACTION)");
+
+            // Copy old data into the new responses table
+            database.execSQL("INSERT INTO responses_tmp (responseId, isActionItem, image, locationId, timestamp, rating, priority, " +
+                    "actionPlan, questionId, userId, walkthroughId) " +
+                    "SELECT responseId, isActionItem, image, locationId, timestamp, rating, priority, actionPlan, " +
+                    "questionId, userId, walkthroughId FROM responses");
+
+            // Drop the old responses table
+            database.execSQL("DROP TABLE responses");
+
+            // Rename the new responses table to the old name
+            database.execSQL("ALTER TABLE responses_tmp RENAME TO responses");
+        }
+    };
 }
