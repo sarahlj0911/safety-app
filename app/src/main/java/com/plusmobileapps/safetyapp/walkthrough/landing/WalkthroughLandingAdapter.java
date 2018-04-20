@@ -1,5 +1,6 @@
 package com.plusmobileapps.safetyapp.walkthrough.landing;
 
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -54,8 +55,11 @@ public class WalkthroughLandingAdapter extends RecyclerView.Adapter<WalkthroughL
                 header.setVisibility(View.VISIBLE);
                 header.setText(R.string.viewholder_header_inprogress);
                 holder.dismissButton.setVisibility(View.VISIBLE);
-            } else if(position == 0) {
+            }
+
+            if(position == 0) {
                 header.setVisibility(View.VISIBLE);
+                holder.getDismissButton().setChecked(false);
                 header.setText(R.string.viewholder_header_completed);
             } else if(position == 1 && walkthroughs.get(walkthroughs.size() - 1).isInProgress()) {
                 header.setVisibility(View.VISIBLE);
@@ -70,7 +74,7 @@ public class WalkthroughLandingAdapter extends RecyclerView.Adapter<WalkthroughL
             holder.getTitle().setText(walkthrough.getName());
 
             if (!walkthrough.isInProgress()) {
-                holder.getDismissButton().setVisibility(View.INVISIBLE);
+                holder.getDismissButton().setVisibility(View.GONE);
             }
 
 
@@ -83,6 +87,7 @@ public class WalkthroughLandingAdapter extends RecyclerView.Adapter<WalkthroughL
             }
         }
     }
+
 
     @Override
     public int getItemCount() {
@@ -156,7 +161,6 @@ public class WalkthroughLandingAdapter extends RecyclerView.Adapter<WalkthroughL
             return header;
         }
 
-        public int getReversePosition() { return this.reversePosition;}
         public void setReversePosition(int reversePosition) { this.reversePosition = reversePosition; }
 
     }
