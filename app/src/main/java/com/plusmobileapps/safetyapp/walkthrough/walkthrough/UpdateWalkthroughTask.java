@@ -53,12 +53,16 @@ public class UpdateWalkthroughTask extends AsyncTask<Integer, Void, Boolean> {
     @Override
     protected Boolean doInBackground(Integer... walkthroughIds) {
         this.walkthroughId = walkthroughIds[0];
+
         AppDatabase db = AppDatabase.getAppDatabase(MyApplication.getAppContext());
         WalkthroughDao walkthroughDao = db.walkthroughDao();
         QuestionMappingDao questionMappingDao = db.questionMappingDao();
         ResponseDao responseDao = db.responseDao();
         Walkthrough walkthrough = walkthroughDao.getByWalkthroughId(walkthroughId.toString());
 
+        if (walkthrough.getPercentComplete() == 100) {
+            return true;
+        }
         // Determine how many total questions there are for this walkthrough
         Double questionCount = ((Integer)questionMappingDao.getQuestionCount()).doubleValue();
         Log.d(TAG, "Question count: " + questionCount);
