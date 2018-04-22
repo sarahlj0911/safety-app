@@ -406,7 +406,7 @@ public class DownloadTask extends AsyncTask<Void, Integer, DownloadTask.Result> 
             }
         }
 
-        cleanup(rs, stmt, conn);
+        cleanupSimple(rs, stmt, conn);
     }
 
     private int getMaxResponseId(List<Response> remoteResponses) {
@@ -420,7 +420,7 @@ public class DownloadTask extends AsyncTask<Void, Integer, DownloadTask.Result> 
         return max;
     }
 
-    private void cleanup(ResultSet rs, Statement stmt, Connection conn) {
+    private void cleanupSimple(ResultSet rs, Statement stmt, Connection conn) {
         try {
             if (rs != null) {
                 rs.close();

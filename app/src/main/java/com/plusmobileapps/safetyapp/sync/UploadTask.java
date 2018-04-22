@@ -22,7 +22,7 @@ public class UploadTask {
     // An account type, in the form of a domain name
     public static final String ACCOUNT_TYPE = "safetyapp.com";
     // The account name
-    public static final String ACCOUNT = "default_account";
+    public static final String ACCOUNT = "safetyapp";
     // Instance fields
     Account account;
     ContentResolver mResolver;
@@ -53,15 +53,13 @@ public class UploadTask {
         Account newAccount = new Account(ACCOUNT, ACCOUNT_TYPE);
         // Get an instance of the Android account manager
         AccountManager accountManager = (AccountManager) context.getSystemService(ACCOUNT_SERVICE);
-        /*
-         * Add the account and account type, no password or user data
-         * If successful, return the Account object, otherwise report an error.
-         */
+
         if (accountManager.addAccountExplicitly(newAccount, null, null)) {
-            /*
-             * If you don't set android:syncable="true" in your <provider> element in the manifest,
+
+             /* If you don't set android:syncable="true" in your <provider> element in the manifest,
              * then call context.setIsSyncable(account, AUTHORITY, 1) here.
-             */
+             * */
+
         } else {
             Log.d(TAG, "Account already exists or some other error occurred.");
         }
