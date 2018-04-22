@@ -11,11 +11,16 @@ import com.plusmobileapps.safetyapp.data.entity.Question;
 import com.plusmobileapps.safetyapp.data.entity.Response;
 import com.plusmobileapps.safetyapp.walkthrough.walkthrough.question.WalkthroughContentFragment;
 
+import java.sql.Timestamp;
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -142,8 +147,11 @@ public class WalkthroughPresenter implements WalkthroughContract.Presenter {
             response.setWalkthroughId(walkthroughId);
             response.setLocationId(locationId);
         }
-        //String timeStamp = DateFormat.getDateTimeInstance().format(new Date());
-        String timeStamp = new Date().toString();
+
+        DateFormat dateFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz YYYY");
+        dateFormat.setTimeZone(TimeZone.getTimeZone("US/Arizona"));
+        String timeStamp = dateFormat.format(new Date());
+
         response.setTimeStamp(timeStamp);
         return response;
     }
