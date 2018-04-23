@@ -380,25 +380,25 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
             remoteWalkthroughs.add(walkthrough);
 
-            Response response = new Response();
-            response.setResponseId(rs.getInt("RESPONSE_ID"));
-            response.setWalkthroughId(rs.getInt("WALKTHROUGH_ID"));
-            response.setUserId(1);
-            response.setLocationId(rs.getInt("LOCATION_ID"));
-            response.setQuestionId(rs.getInt("QUESTION_ID"));
-            response.setActionPlan(rs.getString("ACTION_PLAN"));
-            response.setPriority(rs.getInt("PRIORITY"));
-            response.setRating(rs.getInt("RATING"));
-            //response.setTimeStamp(rs.getString("TIMESTAMP"));
             Timestamp remoteResponseTimestamp = rs.getTimestamp("TIMESTAMP");
-            Date responseTimestamp = new Date(remoteResponseTimestamp.getTime());
+            if (remoteResponseTimestamp != null) {
+                Response response = new Response();
+                response.setResponseId(rs.getInt("RESPONSE_ID"));
+                response.setWalkthroughId(rs.getInt("WALKTHROUGH_ID"));
+                response.setUserId(1);
+                response.setLocationId(rs.getInt("LOCATION_ID"));
+                response.setQuestionId(rs.getInt("QUESTION_ID"));
+                response.setActionPlan(rs.getString("ACTION_PLAN"));
+                response.setPriority(rs.getInt("PRIORITY"));
+                response.setRating(rs.getInt("RATING"));
 
-            response.setTimeStamp(responseTimestamp.toString());
-            response.setIsActionItem(rs.getInt("IS_ACTION_ITEM"));
-            response.setImagePath(rs.getString("IMAGE_PATH"));
+                Date responseTimestamp = new Date(remoteResponseTimestamp.getTime());
+                response.setTimeStamp(responseTimestamp.toString());
+                response.setIsActionItem(rs.getInt("IS_ACTION_ITEM"));
+                response.setImagePath(rs.getString("IMAGE_PATH"));
 
-            remoteResponses.add(response);
-
+                remoteResponses.add(response);
+            }
         }
 
         for (Walkthrough w : remoteWalkthroughs) {
