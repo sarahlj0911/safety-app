@@ -6,6 +6,8 @@ import android.arch.persistence.room.ForeignKey;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 
+import com.plusmobileapps.safetyapp.util.DateTimeUtil;
+
 import java.util.Date;
 
 @Entity(tableName = "walkthroughs",
@@ -39,8 +41,7 @@ public class Walkthrough {
     public Walkthrough( String name) {
         this.name = name;
         percentComplete = 0.0;
-        Date date = new Date();
-        createdDate = date.toString();
+        createdDate = DateTimeUtil.getDateTimeString();
         lastUpdatedDate = createdDate;
         schoolId = 1;
         isDeleted = 0;
