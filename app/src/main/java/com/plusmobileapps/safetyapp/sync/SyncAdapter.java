@@ -370,12 +370,10 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
             walkthrough.setWalkthroughId(rs.getInt("WALKTHROUGH_ID"));
 
             Timestamp lastUpdatedTimestamp = rs.getTimestamp("LAST_UPDATED_DATE");
-            Date lastUpdatedDate = new Date(lastUpdatedTimestamp.getTime());
-            walkthrough.setLastUpdatedDate(lastUpdatedDate.toString());
+            walkthrough.setLastUpdatedDate(DateTimeUtil.getDateTimeString(lastUpdatedTimestamp.getTime()));
 
             Timestamp createdTimestamp = rs.getTimestamp("CREATED_DATE");
-            Date createdDate = new Date(createdTimestamp.getTime());
-            walkthrough.setCreatedDate(createdDate.toString());
+            walkthrough.setCreatedDate(DateTimeUtil.getDateTimeString(createdTimestamp.getTime()));
 
             walkthrough.setPercentComplete(rs.getFloat("PERCENT_COMPLETE"));
 
