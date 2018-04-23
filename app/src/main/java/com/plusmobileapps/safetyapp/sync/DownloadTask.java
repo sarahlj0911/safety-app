@@ -17,6 +17,7 @@ import com.plusmobileapps.safetyapp.data.entity.Response;
 import com.plusmobileapps.safetyapp.data.entity.School;
 import com.plusmobileapps.safetyapp.data.entity.User;
 import com.plusmobileapps.safetyapp.data.entity.Walkthrough;
+import com.plusmobileapps.safetyapp.util.DateTimeUtil;
 import com.plusmobileapps.safetyapp.util.Utils;
 
 import java.sql.Connection;
@@ -352,9 +353,8 @@ public class DownloadTask extends AsyncTask<Void, Integer, DownloadTask.Result> 
             response.setRating(rs.getInt("RATING"));
 
             Timestamp remoteResponseTimestamp = rs.getTimestamp("TIMESTAMP");
-            Date responseTimestamp = new Date(remoteResponseTimestamp.getTime());
 
-            response.setTimeStamp(responseTimestamp.toString());
+            response.setTimeStamp(DateTimeUtil.getDateTimeString(remoteResponseTimestamp.getTime()));
             response.setIsActionItem(rs.getInt("IS_ACTION_ITEM"));
             response.setImagePath(rs.getString("IMAGE_PATH"));
 

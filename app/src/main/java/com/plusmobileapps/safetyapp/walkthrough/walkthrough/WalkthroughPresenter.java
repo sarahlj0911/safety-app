@@ -9,6 +9,7 @@ import com.plusmobileapps.safetyapp.data.ResponseUniqueIdFactory;
 import com.plusmobileapps.safetyapp.data.dao.ResponseDao;
 import com.plusmobileapps.safetyapp.data.entity.Question;
 import com.plusmobileapps.safetyapp.data.entity.Response;
+import com.plusmobileapps.safetyapp.util.DateTimeUtil;
 import com.plusmobileapps.safetyapp.walkthrough.walkthrough.question.WalkthroughContentFragment;
 
 import java.sql.Timestamp;
@@ -148,11 +149,7 @@ public class WalkthroughPresenter implements WalkthroughContract.Presenter {
             response.setLocationId(locationId);
         }
 
-        DateFormat dateFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz YYYY");
-        dateFormat.setTimeZone(TimeZone.getTimeZone("US/Arizona"));
-        String timeStamp = dateFormat.format(new Date());
-
-        response.setTimeStamp(timeStamp);
+        response.setTimeStamp(DateTimeUtil.getDateTimeString());
         return response;
     }
 
