@@ -7,6 +7,7 @@ import com.plusmobileapps.safetyapp.data.AppDatabase;
 import com.plusmobileapps.safetyapp.data.dao.WalkthroughDao;
 import com.plusmobileapps.safetyapp.data.entity.Walkthrough;
 import com.plusmobileapps.safetyapp.sync.UploadTask;
+import com.plusmobileapps.safetyapp.util.DateTimeUtil;
 
 import java.util.Date;
 
@@ -24,7 +25,7 @@ public class CompleteWalkthrough extends AsyncTask<Void, Void, Walkthrough> {
         this.walkthrough = walkthrough;
         this.presenter = presenter;
         walkthrough.setPercentComplete(100);
-        walkthrough.setLastUpdatedDate((new Date()).toString());
+        walkthrough.setLastUpdatedDate(DateTimeUtil.getDateTimeString());
     }
 
     @Override
