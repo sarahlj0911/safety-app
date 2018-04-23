@@ -18,6 +18,7 @@ import com.plusmobileapps.safetyapp.data.dao.WalkthroughDao;
 import com.plusmobileapps.safetyapp.data.entity.Response;
 import com.plusmobileapps.safetyapp.data.entity.Walkthrough;
 import com.plusmobileapps.safetyapp.sync.UploadTask;
+import com.plusmobileapps.safetyapp.util.DateTimeUtil;
 
 import java.util.Date;
 import java.util.List;
@@ -56,9 +57,7 @@ public class UpdateWalkthroughTask extends AsyncTask<Integer, Void, Boolean> {
         Double percentComplete = responseCount / questionCount * 100.0;
         Log.d(TAG, "Walkthrough percent complete: " + percentComplete);
 
-        Date date = new Date();
-        String lastUpdatedDate = date.toString();
-        walkthrough.setLastUpdatedDate(lastUpdatedDate);
+        walkthrough.setLastUpdatedDate(DateTimeUtil.getDateTimeString());
         walkthrough.setPercentComplete(percentComplete);
 
         walkthroughDao.update(walkthrough);

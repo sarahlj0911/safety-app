@@ -17,6 +17,7 @@ import com.plusmobileapps.safetyapp.data.entity.Response;
 import com.plusmobileapps.safetyapp.data.entity.School;
 import com.plusmobileapps.safetyapp.data.entity.User;
 import com.plusmobileapps.safetyapp.data.entity.Walkthrough;
+import com.plusmobileapps.safetyapp.util.DateTimeUtil;
 import com.plusmobileapps.safetyapp.util.Utils;
 
 import java.sql.Connection;
@@ -330,12 +331,10 @@ public class DownloadTask extends AsyncTask<Void, Integer, DownloadTask.Result> 
             walkthrough.setWalkthroughId(rs.getInt("WALKTHROUGH_ID"));
 
             Timestamp lastUpdatedTimestamp = rs.getTimestamp("LAST_UPDATED_DATE");
-            Date lastUpdatedDate = new Date(lastUpdatedTimestamp.getTime());
-            walkthrough.setLastUpdatedDate(lastUpdatedDate.toString());
+            walkthrough.setLastUpdatedDate(DateTimeUtil.getDateTimeString(lastUpdatedTimestamp.getTime()));
 
             Timestamp createdTimestamp = rs.getTimestamp("CREATED_DATE");
-            Date createdDate = new Date(createdTimestamp.getTime());
-            walkthrough.setCreatedDate(createdDate.toString());
+            walkthrough.setCreatedDate(DateTimeUtil.getDateTimeString(createdTimestamp.getTime()));
 
             walkthrough.setPercentComplete(rs.getFloat("PERCENT_COMPLETE"));
 
@@ -352,9 +351,8 @@ public class DownloadTask extends AsyncTask<Void, Integer, DownloadTask.Result> 
             response.setRating(rs.getInt("RATING"));
 
             Timestamp remoteResponseTimestamp = rs.getTimestamp("TIMESTAMP");
-            Date responseTimestamp = new Date(remoteResponseTimestamp.getTime());
 
-            response.setTimeStamp(responseTimestamp.toString());
+            response.setTimeStamp(DateTimeUtil.getDateTimeString(remoteResponseTimestamp.getTime()));
             response.setIsActionItem(rs.getInt("IS_ACTION_ITEM"));
             response.setImagePath(rs.getString("IMAGE_PATH"));
 
