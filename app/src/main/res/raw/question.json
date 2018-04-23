@@ -10,7 +10,7 @@
     },
     {
         "questionId": "2",
-        "questionText": "Count signs with positive behavioral expecations of students.\r\n",
+        "questionText": "Count signs with positive behavioral expectations of students.\r\n",
         "ratingOption1": "None",
         "ratingOption2": "1 or more",
         "ratingOption3": "",
@@ -100,7 +100,7 @@
     },
     {
         "questionId": "12",
-        "questionText": "Count evidence of substance use. Look for bottles, cans, or paraphernalia that once held alccohol, prescriptions, or illicit drugs.",
+        "questionText": "Count evidence of substance use. Look for bottles, cans, or paraphernalia that once held alcohol, prescriptions, or illicit drugs.",
         "ratingOption1": "None",
         "ratingOption2": "1 or more",
         "ratingOption3": "",
