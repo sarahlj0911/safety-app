@@ -25,6 +25,7 @@ import com.plusmobileapps.safetyapp.data.entity.Response;
 import com.plusmobileapps.safetyapp.data.entity.School;
 import com.plusmobileapps.safetyapp.data.entity.User;
 import com.plusmobileapps.safetyapp.data.entity.Walkthrough;
+import com.plusmobileapps.safetyapp.util.DateTimeUtil;
 import com.plusmobileapps.safetyapp.util.Utils;
 
 import java.sql.Connection;
@@ -35,7 +36,11 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by Robert Beerman on 2/25/2018.
@@ -90,6 +95,17 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
     private static final String QUESTION_MAPPING_SQL = "REPLACE INTO question_mapping " +
             "(mappingId, schoolId, locationId, questionId) VALUES (?, ?, ?, ?)";
     private static final String SELECT_SCHOOL_SQL = "SELECT schoolId FROM schools WHERE schoolName = ?";
+
+    private static final String GET_WALKTHROUGHS_AND_RESPONSES_SQL =
+            "select w.walkthroughId AS WALKTHROUGH_ID, w.userId AS WALKTHROUGH_USER, " +
+                    "w.name AS NAME, w.lastUpdatedDate AS LAST_UPDATED_DATE, w.createdDate AS CREATED_DATE, " +
+                    "w.percentComplete AS PERCENT_COMPLETE, " +
+                    "r.responseId AS RESPONSE_ID, r.locationId AS LOCATION_ID, r.questionId AS QUESTION_ID, " +
+                    "r.actionPlan AS ACTION_PLAN, r.priority AS PRIORITY, r.rating AS RATING, r.timestamp AS TIMESTAMP, " +
+                    "r.isActionItem AS IS_ACTION_ITEM, r.image AS IMAGE_PATH " +
+                    "from safetywalkthrough.walkthroughs w " +
+                    "left outer join safetywalkthrough.responses r on w.schoolId = r.schoolId and w.walkthroughId = r.walkthroughId " +
+                    "where w.schoolId = ?";
 
     /**
      * Set up the sync adapter
@@ -175,8 +191,15 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
         }
 
         syncLocationsAndQuestions(remoteSchoolId);
+
+        try {
+            downloadWalkthroughsAndResponses(remoteSchoolId);
+        } catch (SQLException sqle) {
+            sqle.printStackTrace();
+            Log.e(TAG, "Problem downloading waltkhrough data: " + sqle.getMessage());
+        }
         //deleteRemoteWalkthroughs(remoteSchoolId, remoteUserId);
-        syncWalkthroughsAndResponses(remoteSchoolId, remoteUserId);
+        uploadWalkthroughsAndResponses(remoteSchoolId, remoteUserId);
     }
 
     private void deleteRemoteWalkthroughs(int remoteSchoolId, int remoteUserId) {
@@ -221,7 +244,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
         }
     }
 
-    private void syncWalkthroughsAndResponses(int remoteSchoolId, int remoteUserId) {
+    private void uploadWalkthroughsAndResponses(int remoteSchoolId, int remoteUserId) {
         List<Statement> statements = new ArrayList<>();
         List<ResultSet> resultSets = new ArrayList<>();
         List<Walkthrough> activeWalkthroughs = walkthroughDao.getAll();
@@ -282,6 +305,8 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                     List<Response> responses = responseDao.getAllByWalkthroughId(walkthrough.getWalkthroughId());
 
                     for (Response response : responses) {
+                        java.util.Date responseTimestamp = Utils.convertStringToDate(response.getTimeStamp());
+                        Timestamp newResponseTimeStamp = new Timestamp(responseTimestamp.getTime());
                         updateResponseStmt.setInt(1, response.getResponseId());
                         updateResponseStmt.setInt(2, remoteSchoolId);
                         updateResponseStmt.setInt(3, remoteUserId);
@@ -291,13 +316,15 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                         updateResponseStmt.setString(7, response.getActionPlan());
                         updateResponseStmt.setInt(8, response.getPriority());
                         updateResponseStmt.setInt(9, response.getRating());
-                        updateResponseStmt.setString(10, response.getTimeStamp());
+                        //updateResponseStmt.setString(10, response.getTimeStamp());
+                        updateResponseStmt.setTimestamp(10, newResponseTimeStamp);
                         updateResponseStmt.setInt(11, response.getIsActionItem());
                         updateResponseStmt.setString(12, response.getImagePath());
                         updateResponseStmt.setString(13, response.getActionPlan());
                         updateResponseStmt.setInt(14, response.getPriority());
                         updateResponseStmt.setInt(15, response.getRating());
-                        updateResponseStmt.setString(16, response.getTimeStamp());
+                        //updateResponseStmt.setString(16, response.getTimeStamp());
+                        updateResponseStmt.setTimestamp(16, newResponseTimeStamp);
                         updateResponseStmt.setInt(17, response.getIsActionItem());
                         updateResponseStmt.setString(18, response.getImagePath());
                         //Log.d(TAG, updateResponseStmt.toString());
@@ -322,6 +349,117 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
         } finally {
             cleanup(resultSets, statements, conn);
         }
+    }
+
+    private void downloadWalkthroughsAndResponses(int schoolId) throws SQLException {
+        PreparedStatement stmt;
+        ResultSet rs;
+
+        List<Walkthrough> localWalkthroughs = walkthroughDao.getAll();
+        Set<Walkthrough> remoteWalkthroughs = new HashSet<>(6);
+        List<Response> remoteResponses = new ArrayList<>();
+
+        conn = DriverManager.getConnection(URL, APP_ID, PASS);
+        stmt = conn.prepareStatement(GET_WALKTHROUGHS_AND_RESPONSES_SQL);
+        Log.d(TAG, "Looking up walkthroughs for schoolId: " + schoolId);
+        stmt.setInt(1, schoolId);
+        rs = stmt.executeQuery();
+
+        while (rs.next()) {
+            Walkthrough walkthrough = new Walkthrough(rs.getString("NAME"));
+            walkthrough.setWalkthroughId(rs.getInt("WALKTHROUGH_ID"));
+
+            Timestamp lastUpdatedTimestamp = rs.getTimestamp("LAST_UPDATED_DATE");
+            walkthrough.setLastUpdatedDate(DateTimeUtil.getDateTimeString(lastUpdatedTimestamp.getTime()));
+
+            Timestamp createdTimestamp = rs.getTimestamp("CREATED_DATE");
+            walkthrough.setCreatedDate(DateTimeUtil.getDateTimeString(createdTimestamp.getTime()));
+
+            walkthrough.setPercentComplete(rs.getFloat("PERCENT_COMPLETE"));
+
+            remoteWalkthroughs.add(walkthrough);
+
+            Response response = new Response();
+            response.setResponseId(rs.getInt("RESPONSE_ID"));
+            response.setWalkthroughId(rs.getInt("WALKTHROUGH_ID"));
+            response.setUserId(1);
+            response.setLocationId(rs.getInt("LOCATION_ID"));
+            response.setQuestionId(rs.getInt("QUESTION_ID"));
+            response.setActionPlan(rs.getString("ACTION_PLAN"));
+            response.setPriority(rs.getInt("PRIORITY"));
+            response.setRating(rs.getInt("RATING"));
+            //response.setTimeStamp(rs.getString("TIMESTAMP"));
+            Timestamp remoteResponseTimestamp = rs.getTimestamp("TIMESTAMP");
+
+
+            response.setTimeStamp(DateTimeUtil.getDateTimeString(remoteResponseTimestamp.getTime()));
+            response.setIsActionItem(rs.getInt("IS_ACTION_ITEM"));
+            response.setImagePath(rs.getString("IMAGE_PATH"));
+
+            remoteResponses.add(response);
+
+        }
+
+        for (Walkthrough w : remoteWalkthroughs) {
+            Log.d(TAG, w.toString());
+        }
+
+        int maxLocalResponseId = prefManager.getLastResponseUniqueId();
+        int maxRemoteResponseId = getMaxResponseId(remoteResponses);
+
+        if (maxRemoteResponseId > maxLocalResponseId) {
+            prefManager.setLastResponseUniqueId(maxRemoteResponseId);
+        }
+
+        // If no remote walkthroughs for the school, there's nothing to download
+        for (Walkthrough localWalkthrough : localWalkthroughs) {
+            Iterator<Walkthrough> iter = remoteWalkthroughs.iterator();
+
+            while (iter.hasNext()) {
+                Walkthrough remoteWalkthrough = iter.next();
+                if (remoteWalkthrough.equals(localWalkthrough)) {
+                    Log.d(TAG, "Walkthroughs are equal: remote=[" + remoteWalkthrough.getName() + "], local=[" + localWalkthrough.getName() + "]");
+                    java.util.Date remoteLastUpdate = Utils.convertStringToDate(remoteWalkthrough.getLastUpdatedDate());
+                    java.util.Date localLastUpdate = Utils.convertStringToDate(localWalkthrough.getLastUpdatedDate());
+
+                    if (remoteLastUpdate.before(localLastUpdate)) {
+                        Log.d(TAG, "Removing remote walkthrough from set");
+                        iter.remove();
+                    }
+                }
+            }
+
+            Log.d(TAG, "remoteWalkthoughs.size(): " + remoteWalkthroughs.size());
+        }
+
+        if (remoteWalkthroughs.size() > 0) {
+            Walkthrough[] walkthroughsArr = remoteWalkthroughs.toArray(new Walkthrough[0]);
+            walkthroughDao.insertAll(walkthroughsArr);
+
+            for (Walkthrough remoteWalkthrough : remoteWalkthroughs) {
+                List<Response> responses = new ArrayList<>();
+                for (Response remoteResponse : remoteResponses) {
+                    if (remoteResponse.getWalkthroughId() == remoteWalkthrough.getWalkthroughId()) {
+                        responses.add(remoteResponse);
+                    }
+                }
+
+                responseDao.insertAll(responses);
+            }
+        }
+
+        cleanupSimple(rs, stmt, conn);
+    }
+
+    private int getMaxResponseId(List<Response> remoteResponses) {
+        int max = 0;
+
+        for (Response r : remoteResponses) {
+            Log.d(TAG, r.toString());
+            if (r.getResponseId() > max) { max = r.getResponseId(); }
+        }
+
+        return max;
     }
 
     private void syncLocationsAndQuestions(int remoteSchoolId) {
@@ -540,6 +678,25 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
         } catch (SQLException sqle) {
             sqle.printStackTrace();
             Log.e(TAG, sqle.getMessage());
+        }
+    }
+
+    private void cleanupSimple(ResultSet rs, Statement stmt, Connection conn) {
+        try {
+            if (rs != null) {
+                rs.close();
+            }
+
+            if (stmt != null) {
+                stmt.close();
+            }
+
+            if (conn != null) {
+                conn.close();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            Log.e(TAG, e.getMessage());
         }
     }
 }
