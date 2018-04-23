@@ -350,7 +350,11 @@ public class DownloadTask extends AsyncTask<Void, Integer, DownloadTask.Result> 
             response.setActionPlan(rs.getString("ACTION_PLAN"));
             response.setPriority(rs.getInt("PRIORITY"));
             response.setRating(rs.getInt("RATING"));
-            response.setTimeStamp(rs.getString("TIMESTAMP"));
+
+            Timestamp remoteResponseTimestamp = rs.getTimestamp("TIMESTAMP");
+            Date responseTimestamp = new Date(remoteResponseTimestamp.getTime());
+
+            response.setTimeStamp(responseTimestamp.toString());
             response.setIsActionItem(rs.getInt("IS_ACTION_ITEM"));
             response.setImagePath(rs.getString("IMAGE_PATH"));
 

@@ -304,6 +304,8 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                     List<Response> responses = responseDao.getAllByWalkthroughId(walkthrough.getWalkthroughId());
 
                     for (Response response : responses) {
+                        java.util.Date responseTimestamp = Utils.convertStringToDate(response.getTimeStamp());
+                        Timestamp newResponseTimeStamp = new Timestamp(responseTimestamp.getTime());
                         updateResponseStmt.setInt(1, response.getResponseId());
                         updateResponseStmt.setInt(2, remoteSchoolId);
                         updateResponseStmt.setInt(3, remoteUserId);
@@ -313,13 +315,15 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                         updateResponseStmt.setString(7, response.getActionPlan());
                         updateResponseStmt.setInt(8, response.getPriority());
                         updateResponseStmt.setInt(9, response.getRating());
-                        updateResponseStmt.setString(10, response.getTimeStamp());
+                        //updateResponseStmt.setString(10, response.getTimeStamp());
+                        updateResponseStmt.setTimestamp(10, newResponseTimeStamp);
                         updateResponseStmt.setInt(11, response.getIsActionItem());
                         updateResponseStmt.setString(12, response.getImagePath());
                         updateResponseStmt.setString(13, response.getActionPlan());
                         updateResponseStmt.setInt(14, response.getPriority());
                         updateResponseStmt.setInt(15, response.getRating());
-                        updateResponseStmt.setString(16, response.getTimeStamp());
+                        //updateResponseStmt.setString(16, response.getTimeStamp());
+                        updateResponseStmt.setTimestamp(16, newResponseTimeStamp);
                         updateResponseStmt.setInt(17, response.getIsActionItem());
                         updateResponseStmt.setString(18, response.getImagePath());
                         //Log.d(TAG, updateResponseStmt.toString());
@@ -385,7 +389,11 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
             response.setActionPlan(rs.getString("ACTION_PLAN"));
             response.setPriority(rs.getInt("PRIORITY"));
             response.setRating(rs.getInt("RATING"));
-            response.setTimeStamp(rs.getString("TIMESTAMP"));
+            //response.setTimeStamp(rs.getString("TIMESTAMP"));
+            Timestamp remoteResponseTimestamp = rs.getTimestamp("TIMESTAMP");
+            Date responseTimestamp = new Date(remoteResponseTimestamp.getTime());
+
+            response.setTimeStamp(responseTimestamp.toString());
             response.setIsActionItem(rs.getInt("IS_ACTION_ITEM"));
             response.setImagePath(rs.getString("IMAGE_PATH"));
 

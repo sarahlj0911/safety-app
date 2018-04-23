@@ -200,8 +200,8 @@ public class WalkthroughPresenter implements WalkthroughContract.Presenter {
 
         @Override
         protected void onPostExecute(Boolean saved) {
-            //new UpdateWalkthroughTask().execute(walkthroughId);
-            new UpdateWalkthroughTask(view).execute(walkthroughId);
+            new UpdateWalkthroughTask().execute(walkthroughId);
+            //new UpdateWalkthroughTask(view).execute(walkthroughId);
         }
 
     }
