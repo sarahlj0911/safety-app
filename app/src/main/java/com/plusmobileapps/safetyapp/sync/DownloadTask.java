@@ -17,6 +17,7 @@ import com.plusmobileapps.safetyapp.data.entity.Response;
 import com.plusmobileapps.safetyapp.data.entity.School;
 import com.plusmobileapps.safetyapp.data.entity.User;
 import com.plusmobileapps.safetyapp.data.entity.Walkthrough;
+import com.plusmobileapps.safetyapp.util.DateTimeUtil;
 import com.plusmobileapps.safetyapp.util.Utils;
 
 import java.sql.Connection;
@@ -330,31 +331,35 @@ public class DownloadTask extends AsyncTask<Void, Integer, DownloadTask.Result> 
             walkthrough.setWalkthroughId(rs.getInt("WALKTHROUGH_ID"));
 
             Timestamp lastUpdatedTimestamp = rs.getTimestamp("LAST_UPDATED_DATE");
-            Date lastUpdatedDate = new Date(lastUpdatedTimestamp.getTime());
-            walkthrough.setLastUpdatedDate(lastUpdatedDate.toString());
+            walkthrough.setLastUpdatedDate(DateTimeUtil.getDateTimeString(lastUpdatedTimestamp.getTime()));
 
             Timestamp createdTimestamp = rs.getTimestamp("CREATED_DATE");
-            Date createdDate = new Date(createdTimestamp.getTime());
-            walkthrough.setCreatedDate(createdDate.toString());
+            walkthrough.setCreatedDate(DateTimeUtil.getDateTimeString(createdTimestamp.getTime()));
 
             walkthrough.setPercentComplete(rs.getFloat("PERCENT_COMPLETE"));
 
             remoteWalkthroughs.add(walkthrough);
 
-            Response response = new Response();
-            response.setResponseId(rs.getInt("RESPONSE_ID"));
-            response.setWalkthroughId(rs.getInt("WALKTHROUGH_ID"));
-            response.setUserId(1);
-            response.setLocationId(rs.getInt("LOCATION_ID"));
-            response.setQuestionId(rs.getInt("QUESTION_ID"));
-            response.setActionPlan(rs.getString("ACTION_PLAN"));
-            response.setPriority(rs.getInt("PRIORITY"));
-            response.setRating(rs.getInt("RATING"));
-            response.setTimeStamp(rs.getString("TIMESTAMP"));
-            response.setIsActionItem(rs.getInt("IS_ACTION_ITEM"));
-            response.setImagePath(rs.getString("IMAGE_PATH"));
+            Timestamp remoteResponseTimestamp = rs.getTimestamp("TIMESTAMP");
+            if (remoteResponseTimestamp != null) {
+                Response response = new Response();
+                response.setResponseId(rs.getInt("RESPONSE_ID"));
+                response.setWalkthroughId(rs.getInt("WALKTHROUGH_ID"));
+                response.setUserId(1);
+                response.setLocationId(rs.getInt("LOCATION_ID"));
+                response.setQuestionId(rs.getInt("QUESTION_ID"));
+                response.setActionPlan(rs.getString("ACTION_PLAN"));
+                response.setPriority(rs.getInt("PRIORITY"));
+                response.setRating(rs.getInt("RATING"));
 
-            remoteResponses.add(response);
+                Date responseTimestamp = new Date(remoteResponseTimestamp.getTime());
+
+                response.setTimeStamp(DateTimeUtil.getDateTimeString(remoteResponseTimestamp.getTime()));
+                response.setIsActionItem(rs.getInt("IS_ACTION_ITEM"));
+                response.setImagePath(rs.getString("IMAGE_PATH"));
+
+                remoteResponses.add(response);
+            }
 
         }
 
@@ -406,7 +411,7 @@ public class DownloadTask extends AsyncTask<Void, Integer, DownloadTask.Result> 
             }
         }
 
-        cleanup(rs, stmt, conn);
+        cleanupSimple(rs, stmt, conn);
     }
 
     private int getMaxResponseId(List<Response> remoteResponses) {
@@ -420,7 +425,7 @@ public class DownloadTask extends AsyncTask<Void, Integer, DownloadTask.Result> 
         return max;
     }
 
-    private void cleanup(ResultSet rs, Statement stmt, Connection conn) {
+    private void cleanupSimple(ResultSet rs, Statement stmt, Connection conn) {
         try {
             if (rs != null) {
                 rs.close();

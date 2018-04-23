@@ -41,7 +41,7 @@ delete from safetywalkthrough.question_mapping;
 delete from safetywalkthrough.walkthroughs
 where schoolId = 3;
 
-delete from safetywalkthrough.responses
+delete from safetywalkthrough.responses;
 where schoolId = 1;
 
 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
@@ -80,3 +80,6 @@ ALTER TABLE safetywalkthrough.responses ADD PRIMARY KEY (`responseId`, `walkthro
 update safetywalkthrough.walkthroughs set percentComplete  = ((11 / 99) * 100) where walkthroughId = 1 and schoolId = 3;
 
 delete from safetywalkthrough.responses where schoolId = 1 and responseId = 9;
+
+
+SELECT MAX(walkthroughId) + 1 FROM safetywalkthrough.walkthroughs;

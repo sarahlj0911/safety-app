@@ -9,13 +9,19 @@ import com.plusmobileapps.safetyapp.data.ResponseUniqueIdFactory;
 import com.plusmobileapps.safetyapp.data.dao.ResponseDao;
 import com.plusmobileapps.safetyapp.data.entity.Question;
 import com.plusmobileapps.safetyapp.data.entity.Response;
+import com.plusmobileapps.safetyapp.util.DateTimeUtil;
 import com.plusmobileapps.safetyapp.walkthrough.walkthrough.question.WalkthroughContentFragment;
 
+import java.sql.Timestamp;
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -142,9 +148,8 @@ public class WalkthroughPresenter implements WalkthroughContract.Presenter {
             response.setWalkthroughId(walkthroughId);
             response.setLocationId(locationId);
         }
-        //String timeStamp = DateFormat.getDateTimeInstance().format(new Date());
-        String timeStamp = new Date().toString();
-        response.setTimeStamp(timeStamp);
+
+        response.setTimeStamp(DateTimeUtil.getDateTimeString());
         return response;
     }
 
@@ -200,8 +205,8 @@ public class WalkthroughPresenter implements WalkthroughContract.Presenter {
 
         @Override
         protected void onPostExecute(Boolean saved) {
-            //new UpdateWalkthroughTask().execute(walkthroughId);
-            new UpdateWalkthroughTask(view).execute(walkthroughId);
+            new UpdateWalkthroughTask().execute(walkthroughId);
+            //new UpdateWalkthroughTask(view).execute(walkthroughId);
         }
 
     }
