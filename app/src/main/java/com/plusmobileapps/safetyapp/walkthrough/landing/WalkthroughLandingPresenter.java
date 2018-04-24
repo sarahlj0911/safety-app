@@ -11,6 +11,7 @@ public class WalkthroughLandingPresenter implements WalkthroughLandingContract.P
     private List<Walkthrough> walkthroughs;
     private Walkthrough walkthrough;
 
+
     public WalkthroughLandingPresenter(WalkthroughLandingContract.View view) {
         this.view = view;
         view.setPresenter(this);
@@ -52,6 +53,10 @@ public class WalkthroughLandingPresenter implements WalkthroughLandingContract.P
 
     }
 
+    @Override
+    public void setWalkthroughCompleted(Walkthrough selectedWalkthrough, WalkthroughLandingContract.Presenter presenter) {
+        new CompleteWalkthrough(selectedWalkthrough, this).execute();
+    }
 
     private void setupLandingUi() {
         view.showNoWalkThrough(walkthroughs.size() == 0);
@@ -61,7 +66,6 @@ public class WalkthroughLandingPresenter implements WalkthroughLandingContract.P
     @Override
     public void confirmCreateWalkthroughClicked(String title) {
         walkthrough = new Walkthrough(title);
-
         new SaveNewWalkthrough(walkthrough, view).execute();
     }
 
@@ -70,7 +74,7 @@ public class WalkthroughLandingPresenter implements WalkthroughLandingContract.P
         view.showTutorial();
     }
 
-    private WalkthroughListLoadingListener listener = new WalkthroughListLoadingListener() {
+    public WalkthroughListLoadingListener listener = new WalkthroughListLoadingListener() {
         @Override
         public void onWalkthroughListLoaded(List<Walkthrough> allWalkthroughs) {
             walkthroughs = allWalkthroughs;

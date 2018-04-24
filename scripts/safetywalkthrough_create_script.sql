@@ -101,7 +101,7 @@ CREATE TABLE `safetywalkthrough`.`responses` (
   `actionPlan` VARCHAR(256) NULL DEFAULT NULL,
   `priority` INT NULL DEFAULT NULL,
   `rating` INT NULL DEFAULT NULL,
-  `timestamp` VARCHAR(32) NULL DEFAULT NULL,
+  `timestamp` DATETIME DEFAULT NULL,
   `isActionItem` INT NULL DEFAULT 0,
   `image` VARCHAR(256) NULL DEFAULT NULL,
 PRIMARY KEY (`responseId`, `walkthroughId`, `schoolId`, `locationId`, `questionId`),

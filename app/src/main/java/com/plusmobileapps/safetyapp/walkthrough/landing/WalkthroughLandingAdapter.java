@@ -1,10 +1,12 @@
 package com.plusmobileapps.safetyapp.walkthrough.landing;
 
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -22,6 +24,7 @@ public class WalkthroughLandingAdapter extends RecyclerView.Adapter<WalkthroughL
     public static final int ITEM_TYPE_HEADER = 0;
     private Walkthrough walkthrough;
     private WalkthroughLandingFragment.WalkthroughLandingItemListener itemListener;
+
     private List<Walkthrough> walkthroughs;
 
     public WalkthroughLandingAdapter(List<Walkthrough> walkthroughs, WalkthroughLandingFragment.WalkthroughLandingItemListener itemListener) {
@@ -46,12 +49,17 @@ public class WalkthroughLandingAdapter extends RecyclerView.Adapter<WalkthroughL
             int i = walkthroughs.size() - position - 1;
             walkthrough = walkthroughs.get(i);
             TextView header = holder.getHeader();
+            holder.setReversePosition(i);
 
             if(walkthrough.isInProgress()) {
                 header.setVisibility(View.VISIBLE);
                 header.setText(R.string.viewholder_header_inprogress);
-            } else if(position == 0) {
+                holder.dismissButton.setVisibility(View.VISIBLE);
+            }
+
+            if(position == 0) {
                 header.setVisibility(View.VISIBLE);
+                holder.getDismissButton().setChecked(false);
                 header.setText(R.string.viewholder_header_completed);
             } else if(position == 1 && walkthroughs.get(walkthroughs.size() - 1).isInProgress()) {
                 header.setVisibility(View.VISIBLE);
@@ -65,6 +73,11 @@ public class WalkthroughLandingAdapter extends RecyclerView.Adapter<WalkthroughL
             holder.getTime().setText(walkthrough.getTime(walkthrough.getLastUpdatedDate()));
             holder.getTitle().setText(walkthrough.getName());
 
+            if (!walkthrough.isInProgress()) {
+                holder.getDismissButton().setVisibility(View.GONE);
+            }
+
+
             //handle progress bar
             if (walkthrough.isInProgress()) {
                 holder.getProgressBar().setVisibility(View.VISIBLE);
@@ -75,6 +88,7 @@ public class WalkthroughLandingAdapter extends RecyclerView.Adapter<WalkthroughL
         }
     }
 
+
     @Override
     public int getItemCount() {
         return walkthroughs.size();
@@ -84,6 +98,8 @@ public class WalkthroughLandingAdapter extends RecyclerView.Adapter<WalkthroughL
         this.walkthroughs = walkthroughs;
     }
 
+    public List<Walkthrough> getWalkthroughs() { return this.walkthroughs; }
+
     public class CardViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private final TextView time;
         private final TextView date;
@@ -91,6 +107,8 @@ public class WalkthroughLandingAdapter extends RecyclerView.Adapter<WalkthroughL
         private final TextView modified;
         private final ProgressBar progressBar;
         private final TextView header;
+        private final CheckBox dismissButton;
+        private int reversePosition = 0;
 
         public CardViewHolder(View view) {
             super(view);
@@ -100,7 +118,8 @@ public class WalkthroughLandingAdapter extends RecyclerView.Adapter<WalkthroughL
             modified = view.findViewById(R.id.viewholder_landing_modified);
             progressBar = view.findViewById(R.id.viewholder_landing_progressbar);
             header = view.findViewById(R.id.viewholder_title);
-
+            dismissButton = view.findViewById(R.id.dismissCheckBox);
+            dismissButton.setOnClickListener(dismissListener);
             view.setOnClickListener(this);
         }
 
@@ -108,6 +127,13 @@ public class WalkthroughLandingAdapter extends RecyclerView.Adapter<WalkthroughL
         public void onClick(View view) {
             itemListener.onWalkthroughClicked(getAdapterPosition());
         }
+
+        private View.OnClickListener dismissListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                itemListener.onDismissButtonClicked(reversePosition, dismissButton);
+            }
+        };
 
         public TextView getTime() {
             return time;
@@ -125,6 +151,8 @@ public class WalkthroughLandingAdapter extends RecyclerView.Adapter<WalkthroughL
             return modified;
         }
 
+        public CheckBox getDismissButton() { return dismissButton; }
+
         public ProgressBar getProgressBar() {
             return progressBar;
         }
@@ -132,6 +160,8 @@ public class WalkthroughLandingAdapter extends RecyclerView.Adapter<WalkthroughL
         public TextView getHeader() {
             return header;
         }
+
+        public void setReversePosition(int reversePosition) { this.reversePosition = reversePosition; }
 
     }
 }
