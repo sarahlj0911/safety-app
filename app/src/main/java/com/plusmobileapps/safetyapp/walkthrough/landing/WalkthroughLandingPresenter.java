@@ -66,7 +66,9 @@ public class WalkthroughLandingPresenter implements WalkthroughLandingContract.P
     @Override
     public void confirmCreateWalkthroughClicked(String title) {
         if(walkthroughs.size() > 0) {
-            walkthroughs.get(walkthroughs.size() - 1).setPercentComplete(100);
+            Walkthrough oldWalkthrough = walkthroughs.get(walkthroughs.size() - 1);
+            oldWalkthrough.setPercentComplete(100);
+            new SaveWalkthroughTask(oldWalkthrough).execute();
         }
         walkthrough = new Walkthrough(title);
         new SaveNewWalkthrough(walkthrough, view).execute();
