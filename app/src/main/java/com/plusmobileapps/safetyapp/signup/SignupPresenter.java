@@ -41,7 +41,6 @@ public class SignupPresenter implements SignupContract.Presenter {
     @Override
     public void start() {
         isSaved = true;
-        new GetSchoolsTask(listener).execute();
     }
 
     private void setupSchoolSpinner() {

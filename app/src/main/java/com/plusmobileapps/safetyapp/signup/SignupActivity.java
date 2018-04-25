@@ -1,7 +1,10 @@
 package com.plusmobileapps.safetyapp.signup;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.sip.SipSession;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AlertDialog;
@@ -15,6 +18,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -22,6 +26,7 @@ import com.plusmobileapps.safetyapp.PrefManager;
 import com.plusmobileapps.safetyapp.R;
 import com.plusmobileapps.safetyapp.data.entity.School;
 import com.plusmobileapps.safetyapp.main.MainActivity;
+import com.plusmobileapps.safetyapp.sync.DownloadCallback;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -29,7 +34,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
-public class SignupActivity extends AppCompatActivity implements SignupContract.View {
+public class SignupActivity extends AppCompatActivity implements SignupContract.View, DownloadCallback {
 
     public static final String TAG = "SignupActivity";
     private SignupContract.Presenter presenter;
@@ -41,6 +46,8 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
     private ArrayAdapter<String> schoolSpinnerList;
     private EditText newSchool;
     private boolean schoolExists;
+    private SchoolDownloadFragment schoolDownloadFragment;
+    boolean downloading;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +56,9 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
         presenter = new SignupPresenter(this);
         Button saveSignupBtn = findViewById(R.id.button_save_signup);
         saveSignupBtn.setOnClickListener(saveSignupClickListener);
+
+        schoolDownloadFragment = SchoolDownloadFragment.getInstance(getFragmentManager());
+        schoolDownloadFragment.setCallback(this);
         schoolList = new ArrayList<String>();
         schoolSpinner = (Spinner)findViewById(R.id.spinner_signup_school_name);
         newSchool = (EditText)findViewById(R.id.new_school_text_box);
@@ -219,5 +229,53 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
 
         }
     };
+
+    @Override
+    public void updateFromDownload(String result) {
+        downloading = true;
+        Log.d(TAG, "Result from GetSchoolsTask: " + result);
+    }
+
+    @Override
+    public NetworkInfo getActiveNetworkInfo() {
+        ConnectivityManager connectivityManager =
+                (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+
+        return networkInfo;
+    }
+
+    @Override
+    public void onProgressUpdate(int progressCode, int percentComplete) {
+        switch(progressCode) {
+            // You can add UI behavior for progress updates here.
+            case DownloadCallback.Progress.ERROR:
+
+                break;
+            case DownloadCallback.Progress.CONNECT_SUCCESS:
+
+                break;
+            case DownloadCallback.Progress.GET_INPUT_STREAM_SUCCESS:
+
+                break;
+            case DownloadCallback.Progress.PROCESS_INPUT_STREAM_IN_PROGRESS:
+
+                break;
+            case DownloadCallback.Progress.PROCESS_INPUT_STREAM_SUCCESS:
+
+                break;
+        }
+    }
+
+    @Override
+    public void finishDownloading() {
+        downloading = false;
+
+        if (schoolDownloadFragment != null) {
+            schoolDownloadFragment.cancelGetSchools();
+        }
+    }
+
 
 }
