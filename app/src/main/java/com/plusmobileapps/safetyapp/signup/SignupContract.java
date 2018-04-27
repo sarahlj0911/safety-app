@@ -20,7 +20,7 @@ public interface SignupContract {
         void displayNoNameError(boolean show);
         void displayNoSchoolError(boolean show);
         void launchHomeScreen();
-        void populateSchoolSpinner(List<School> schools);
+        void populateSchoolSpinner(ArrayList<String> schools);
     }
 
     interface Presenter extends BasePresenter {

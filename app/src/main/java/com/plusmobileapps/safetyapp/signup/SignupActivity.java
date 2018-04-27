@@ -26,7 +26,6 @@ import com.plusmobileapps.safetyapp.PrefManager;
 import com.plusmobileapps.safetyapp.R;
 import com.plusmobileapps.safetyapp.data.entity.School;
 import com.plusmobileapps.safetyapp.main.MainActivity;
-import com.plusmobileapps.safetyapp.sync.DownloadCallback;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -34,7 +33,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
-public class SignupActivity extends AppCompatActivity implements SignupContract.View, DownloadCallback {
+public class SignupActivity extends AppCompatActivity implements SignupContract.View, SignupDownloadCallback {
 
     public static final String TAG = "SignupActivity";
     private SignupContract.Presenter presenter;
@@ -59,6 +58,8 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
 
         schoolDownloadFragment = SchoolDownloadFragment.getInstance(getFragmentManager());
         schoolDownloadFragment.setCallback(this);
+
+
         schoolList = new ArrayList<String>();
         schoolSpinner = (Spinner)findViewById(R.id.spinner_signup_school_name);
         newSchool = (EditText)findViewById(R.id.new_school_text_box);
@@ -74,6 +75,7 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
     @Override
     protected void onResume() {
         super.onResume();
+        downloadSchools();
         presenter.start();
     }
 
@@ -91,16 +93,20 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
     }
 
     @Override
-    public void populateSchoolSpinner(List<School> schools) {
+    public void populateSchoolSpinner(ArrayList<String> schools) {
+        schoolList.remove("");
+        schoolList.remove(getString(R.string.new_school));
         for(int i = 0; i < schools.size(); i++) {
-            schoolList.add(schools.get(i).getSchoolName().toString());
+            schoolList.add(schools.get(i));
+            System.out.println(schoolList.get(i));
         }
+        schoolList.add("");
         schoolList.add(getString(R.string.new_school));
-        Log.d(TAG, "Populating spinner with " + schools.size() + " schools");
+        Log.d(TAG, "Populating spinner with " + schoolList.size() + " schools");
         schoolSpinnerList = new ArrayAdapter<String>(this, R.layout.fragment_spinner_item, schoolList);
         schoolSpinnerList.setDropDownViewResource(R.layout.fragment_spinner_item);
         schoolSpinner.setAdapter(schoolSpinnerList);
-
+        schoolSpinner.setSelection(0);
         schoolSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -230,10 +236,19 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
         }
     };
 
+    private void downloadSchools() {
+        if(!downloading && schoolDownloadFragment != null) {
+            schoolDownloadFragment.getSchools();
+            downloading = true;
+        }
+    }
+
     @Override
-    public void updateFromDownload(String result) {
+    public ArrayList<String> updateFromDownload(String result, ArrayList<String> schoolList) {
         downloading = true;
         Log.d(TAG, "Result from GetSchoolsTask: " + result);
+        populateSchoolSpinner(schoolList);
+        return schoolList;
     }
 
     @Override
@@ -247,22 +262,22 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
     }
 
     @Override
-    public void onProgressUpdate(int progressCode, int percentComplete) {
+        public void onProgressUpdate(int progressCode, int percentComplete) {
         switch(progressCode) {
             // You can add UI behavior for progress updates here.
-            case DownloadCallback.Progress.ERROR:
+            case SignupDownloadCallback.Progress.ERROR:
 
                 break;
-            case DownloadCallback.Progress.CONNECT_SUCCESS:
+            case SignupDownloadCallback.Progress.CONNECT_SUCCESS:
 
                 break;
-            case DownloadCallback.Progress.GET_INPUT_STREAM_SUCCESS:
+            case SignupDownloadCallback.Progress.GET_INPUT_STREAM_SUCCESS:
 
                 break;
-            case DownloadCallback.Progress.PROCESS_INPUT_STREAM_IN_PROGRESS:
+            case SignupDownloadCallback.Progress.PROCESS_INPUT_STREAM_IN_PROGRESS:
 
                 break;
-            case DownloadCallback.Progress.PROCESS_INPUT_STREAM_SUCCESS:
+            case SignupDownloadCallback.Progress.PROCESS_INPUT_STREAM_SUCCESS:
 
                 break;
         }
@@ -276,6 +291,5 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
             schoolDownloadFragment.cancelGetSchools();
         }
     }
-
 
 }

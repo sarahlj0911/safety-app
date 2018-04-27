@@ -28,8 +28,7 @@ public class SignupPresenter implements SignupContract.Presenter {
     private SignupContract.View view;
     private boolean isSaved;
     private String errorMessage;
-
-    private List<School> schools;
+    private ArrayList<String> schools;
 
     SignupPresenter(SignupContract.View view) {
         this.view = view;
@@ -41,10 +40,6 @@ public class SignupPresenter implements SignupContract.Presenter {
     @Override
     public void start() {
         isSaved = true;
-    }
-
-    private void setupSchoolSpinner() {
-        view.populateSchoolSpinner(schools);
     }
 
     @Override
@@ -129,17 +124,4 @@ public class SignupPresenter implements SignupContract.Presenter {
     public void schoolNameTextAdded() {
         view.displayNoSchoolError(false);
     }
-
-    private SignupLoadingListener listener = new SignupLoadingListener() {
-        @Override
-        public void onSignupLoaded(List<School> allSchools) {
-            schools = allSchools;
-            setupSchoolSpinner();
-        }
-    };
-
-    interface SignupLoadingListener {
-        void onSignupLoaded(List<School> allSchools);
-    }
-
 }

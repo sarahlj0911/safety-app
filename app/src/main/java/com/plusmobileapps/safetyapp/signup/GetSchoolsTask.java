@@ -8,10 +8,7 @@ import android.util.Log;
 import com.plusmobileapps.safetyapp.BuildConfig;
 import com.plusmobileapps.safetyapp.MyApplication;
 import com.plusmobileapps.safetyapp.PrefManager;
-import com.plusmobileapps.safetyapp.data.AppDatabase;
-import com.plusmobileapps.safetyapp.data.dao.SchoolDao;
 import com.plusmobileapps.safetyapp.data.entity.School;
-import com.plusmobileapps.safetyapp.sync.DownloadCallback;
 
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -19,13 +16,13 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
+import java.util.ArrayList;
 
 import java.sql.Connection;
 
 
 public class GetSchoolsTask extends AsyncTask<Void, Void, GetSchoolsTask.Result> {
 
-    private SignupPresenter.SignupLoadingListener listener;
     private static final String TAG = "GetSchoolsTask";
 
     // Connection properties
@@ -36,30 +33,32 @@ public class GetSchoolsTask extends AsyncTask<Void, Void, GetSchoolsTask.Result>
     private static final String SELECT_SCHOOLS_SQL = "SELECT DISTINCT schoolName, schoolId FROM schools";
 
     private Connection connection;
-    private AppDatabase db;
     private School school;
-    private List<School> schools;
-    private DownloadCallback callback;
+    private ArrayList<String> schools = new ArrayList<String>();
+    private SignupDownloadCallback callback;
     private PrefManager prefManager;
 
-    public GetSchoolsTask(DownloadCallback callback) {
+    private SignupContract.View view;
+
+    public GetSchoolsTask(SignupDownloadCallback callback) {
         setCallback(callback);
     }
 
-    void setCallback(DownloadCallback callback) {
+    void setCallback(SignupDownloadCallback callback) {
         this.callback = callback;
-    }
-
-    public GetSchoolsTask(SignupPresenter.SignupLoadingListener listener) {
-        this.listener = listener;
     }
 
     static class Result {
         public String resultValue;
+        public List<String> schoolList;
         public Exception exception;
 
         public Result(String resultValue) {
             this.resultValue = resultValue;
+        }
+        public Result(String resultValue, ArrayList<String> schoolList) {
+            this.resultValue = resultValue;
+            this.schoolList = schoolList;
         }
 
         public Result(Exception exception) {
@@ -71,16 +70,15 @@ public class GetSchoolsTask extends AsyncTask<Void, Void, GetSchoolsTask.Result>
     protected void onPreExecute() {
         if (callback != null) {
             NetworkInfo networkInfo = callback.getActiveNetworkInfo();
-
             if (networkInfo == null || !networkInfo.isConnected()
                     || (networkInfo.getType() != ConnectivityManager.TYPE_WIFI)) {
                 // If no connectivity, cancel task and update Callback with null data
                 Log.d(TAG, "No connectivity. Cancelling download.");
-                callback.updateFromDownload(null);
+                callback.updateFromDownload(null, null);
                 cancel(true);
             } else {
                 prefManager = new PrefManager(MyApplication.getAppContext());
-                callback.updateFromDownload("Starting download...");
+                callback.updateFromDownload("Starting Schools download...", schools);
             }
         }
     }
@@ -92,13 +90,13 @@ public class GetSchoolsTask extends AsyncTask<Void, Void, GetSchoolsTask.Result>
         if(!isCancelled()) {
             Log.d(TAG, "Loading Schools...");
             try {
-                getSchoolList();
-                result = new Result("Schools Downloaded");
+                result = new Result("Schools Downloaded", downloadSchoolList());
             } catch(Exception e) {
                 result = new Result(e);
+                e.printStackTrace();
+                Log.e(TAG, e.getMessage());
             }
         }
-
         return result;
     }
 
@@ -107,9 +105,9 @@ public class GetSchoolsTask extends AsyncTask<Void, Void, GetSchoolsTask.Result>
 
         if(result != null && callback != null) {
             if(result.exception != null) {
-                callback.updateFromDownload(result.exception.getMessage());
+                callback.updateFromDownload(result.exception.getMessage(), null);
             } else if(result.resultValue != null) {
-                callback.updateFromDownload(result.resultValue);
+                callback.updateFromDownload(result.resultValue, schools);
                 Log.d(TAG, "Done loading schools.");
             }
         }
@@ -122,10 +120,9 @@ public class GetSchoolsTask extends AsyncTask<Void, Void, GetSchoolsTask.Result>
 
     }
 
-    private void getSchoolList() throws SQLException {
+    private ArrayList<String> downloadSchoolList() throws SQLException {
         PreparedStatement statement;
         ResultSet resultSet;
-
         connection = DriverManager.getConnection(URL, APP_ID, PASS);
         statement = connection.prepareStatement(SELECT_SCHOOLS_SQL);
         Log.d(TAG, "Looking up all schools in remote database...");
@@ -133,14 +130,12 @@ public class GetSchoolsTask extends AsyncTask<Void, Void, GetSchoolsTask.Result>
 
         while(resultSet.next()) {
             school = new School(0, null);
-            school.setSchoolId(resultSet.getInt("schooolId"));
             school.setSchoolName(resultSet.getString("schoolName"));
-            schools.add(school);
+            schools.add(school.getSchoolName());
         }
 
-        for(School s: schools) {
-            Log.d(TAG, school.getSchoolName() + " " + school.getSchoolId());
-        }
+        closeDatabase(resultSet, statement, connection);
+        return schools;
     }
 
     private void closeDatabase(ResultSet resultSet, Statement statement, Connection connection) {
@@ -159,4 +154,5 @@ public class GetSchoolsTask extends AsyncTask<Void, Void, GetSchoolsTask.Result>
             Log.e(TAG, e.getMessage());
         }
     }
+
 }

@@ -9,11 +9,11 @@ import com.plusmobileapps.safetyapp.sync.DownloadCallback;
 public class SchoolDownloadFragment extends Fragment {
     public static final String TAG = "SchoolDownloadFragment";
 
-    public void setCallback(DownloadCallback callback) {
+    public void setCallback(SignupDownloadCallback callback) {
         this.callback = callback;
     }
 
-    private DownloadCallback callback;
+    private SignupDownloadCallback callback;
     private GetSchoolsTask getSchoolsTask;
 
     public static SchoolDownloadFragment getInstance(FragmentManager fragmentManager) {
@@ -33,6 +33,7 @@ public class SchoolDownloadFragment extends Fragment {
     public void onDestroy() {
         cancelGetSchools();
         super.onDestroy();
+
         callback = null;
     }
 
@@ -47,5 +48,4 @@ public class SchoolDownloadFragment extends Fragment {
             getSchoolsTask.cancel(true);
         }
     }
-
 }
