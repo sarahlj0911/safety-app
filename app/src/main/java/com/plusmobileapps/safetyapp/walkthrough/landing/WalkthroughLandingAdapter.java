@@ -51,40 +51,29 @@ public class WalkthroughLandingAdapter extends RecyclerView.Adapter<WalkthroughL
             TextView header = holder.getHeader();
             holder.setReversePosition(i);
 
-            if(walkthrough.isInProgress()) {
+            if(walkthrough.isInProgress() && position == 0) {
                 header.setVisibility(View.VISIBLE);
                 header.setText(R.string.viewholder_header_inprogress);
                 holder.dismissButton.setVisibility(View.VISIBLE);
-            }
-
-            if(position == 0) {
-                header.setVisibility(View.VISIBLE);
-                holder.getDismissButton().setChecked(false);
-                header.setText(R.string.viewholder_header_completed);
-            } else if(position == 1 && walkthroughs.get(walkthroughs.size() - 1).isInProgress()) {
-                header.setVisibility(View.VISIBLE);
-                header.setText(R.string.viewholder_header_completed);
+                holder.getProgressBar().setVisibility(View.VISIBLE);
+                holder.getProgressBar().setProgress((int)walkthrough.getPercentComplete());
             } else {
-                header.setVisibility(View.GONE);
+                header.setText(R.string.viewholder_header_completed);
+                holder.dismissButton.setVisibility(View.GONE);
+                holder.getProgressBar().setVisibility(View.INVISIBLE);
+                if(position == 0) {
+                    header.setVisibility(View.VISIBLE);
+                } else if(position == 1 && walkthroughs.get(walkthroughs.size() - 1).isInProgress()) {
+                    header.setVisibility(View.VISIBLE);
+                } else {
+                    header.setVisibility(View.GONE);
+                }
             }
 
             holder.getModified().setText(R.string.walkthrough_last_modified);
             holder.getDate().setText(walkthrough.getDate(walkthrough.getLastUpdatedDate()));
             holder.getTime().setText(walkthrough.getTime(walkthrough.getLastUpdatedDate()));
             holder.getTitle().setText(walkthrough.getName());
-
-            if (!walkthrough.isInProgress()) {
-                holder.getDismissButton().setVisibility(View.GONE);
-            }
-
-
-            //handle progress bar
-            if (walkthrough.isInProgress()) {
-                holder.getProgressBar().setVisibility(View.VISIBLE);
-                holder.getProgressBar().setProgress((int)walkthrough.getPercentComplete());
-            } else {
-                holder.getProgressBar().setVisibility(View.INVISIBLE);
-            }
         }
     }
 

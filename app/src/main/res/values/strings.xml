@@ -97,7 +97,7 @@
     <string name="no_walkthrough_text">You don\'t have any walkthroughs.</string>
     <string name="viewholder_header_completed">Completed</string>
     <string name="viewholder_header_inprogress">In Progress</string>
-    <string name="walkthrough_in_progress_dialog_message">You have an unfinished walkthrough. Creating a new walkthrough will delete the unfinished one. Are you sure you want to create a new walkthrough?</string>
+    <string name="walkthrough_in_progress_dialog_message">You have an unfinished walkthrough. Creating a new walkthrough will mark the unfinished walkthrough as complete. Are you sure you want to create a new walkthrough?</string>
 
     <!--action item landing-->
     <string name="dismiss_action_item">Action item was dismissed</string>
