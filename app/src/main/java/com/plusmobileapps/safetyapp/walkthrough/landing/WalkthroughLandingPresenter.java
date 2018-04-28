@@ -1,6 +1,8 @@
 package com.plusmobileapps.safetyapp.walkthrough.landing;
 
 import com.plusmobileapps.safetyapp.data.entity.Walkthrough;
+import com.plusmobileapps.safetyapp.util.DateTimeUtil;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,7 +33,6 @@ public class WalkthroughLandingPresenter implements WalkthroughLandingContract.P
 
     @Override
     public void deleteInProgressWalkthroughConfirmed() {
-        new DeleteWalkthrough(walkthroughs.get(walkthroughs.size() - 1), view).execute();
         createNewWalkthrough();
     }
 
@@ -65,8 +66,14 @@ public class WalkthroughLandingPresenter implements WalkthroughLandingContract.P
 
     @Override
     public void confirmCreateWalkthroughClicked(String title) {
+        Walkthrough oldWalkthrough = null;
+        if(walkthroughs.size() > 0) {
+            oldWalkthrough = walkthroughs.get(walkthroughs.size() - 1);
+            oldWalkthrough.setPercentComplete(100);
+            oldWalkthrough.setLastUpdatedDate(DateTimeUtil.getDateTimeString());
+        }
         walkthrough = new Walkthrough(title);
-        new SaveNewWalkthrough(walkthrough, view).execute();
+        new SaveNewWalkthrough(walkthrough, oldWalkthrough, view).execute();
     }
 
     @Override
