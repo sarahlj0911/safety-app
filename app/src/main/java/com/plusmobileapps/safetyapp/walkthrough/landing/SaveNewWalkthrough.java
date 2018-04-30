@@ -1,6 +1,7 @@
 package com.plusmobileapps.safetyapp.walkthrough.landing;
 
 import android.os.AsyncTask;
+import android.support.annotation.Nullable;
 
 import com.plusmobileapps.safetyapp.MyApplication;
 import com.plusmobileapps.safetyapp.data.AppDatabase;
@@ -15,10 +16,12 @@ public class SaveNewWalkthrough extends AsyncTask<Void, Void, Walkthrough> {
     private AppDatabase db;
     private Walkthrough walkthrough;
     private Long walkthroughId;
+    private Walkthrough oldWalkthrough;
     private WalkthroughLandingContract.View view;
 
-    public SaveNewWalkthrough(Walkthrough walkthrough, WalkthroughLandingContract.View view) {
+    public SaveNewWalkthrough(Walkthrough walkthrough, @Nullable Walkthrough oldWalkthrough, WalkthroughLandingContract.View view) {
         this.walkthrough = walkthrough;
+        this.oldWalkthrough = oldWalkthrough;
         this.view = view;
     }
 
@@ -26,6 +29,9 @@ public class SaveNewWalkthrough extends AsyncTask<Void, Void, Walkthrough> {
     protected Walkthrough doInBackground(Void... voids) {
         db = AppDatabase.getAppDatabase(MyApplication.getAppContext());
         WalkthroughDao dao = db.walkthroughDao();
+        if (oldWalkthrough != null) {
+            dao.insert(oldWalkthrough);
+        }
         walkthroughId = dao.insert(walkthrough);
         walkthrough.setWalkthroughId(walkthroughId.intValue());
         return walkthrough;
