@@ -116,7 +116,8 @@ public class WalkthroughLandingFragment extends Fragment
             presenter.firstAppLaunch();
         }
 
-        downloadData();
+        // TODO Uncomment the following line to enable multi-user functionality.
+        //downloadData();
 
         Log.d(TAG, "Resumed; should start presenter and upload data");
 
