@@ -2,7 +2,9 @@ package com.plusmobileapps.safetyapp.signup;
 
 import com.plusmobileapps.safetyapp.BasePresenter;
 import com.plusmobileapps.safetyapp.BaseView;
+import com.plusmobileapps.safetyapp.data.entity.School;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -18,6 +20,7 @@ public interface SignupContract {
         void displayNoNameError(boolean show);
         void displayNoSchoolError(boolean show);
         void launchHomeScreen();
+        void populateSchoolSpinner(ArrayList<String> schools);
     }
 
     interface Presenter extends BasePresenter {
