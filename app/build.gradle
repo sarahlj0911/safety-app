@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 27
-    buildToolsVersion "$rootProject.ext.buildToolsVersion"
+    buildToolsVersion '28.0.3'
     defaultConfig {
         applicationId "com.plusmobileapps.safetyapp"
         minSdkVersion 19
