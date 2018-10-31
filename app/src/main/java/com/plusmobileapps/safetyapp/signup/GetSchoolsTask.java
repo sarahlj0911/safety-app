@@ -56,6 +56,7 @@ public class GetSchoolsTask extends AsyncTask<Void, Void, GetSchoolsTask.Result>
         public Result(String resultValue) {
             this.resultValue = resultValue;
         }
+
         public Result(String resultValue, ArrayList<String> schoolList) {
             this.resultValue = resultValue;
             this.schoolList = schoolList;
@@ -87,11 +88,11 @@ public class GetSchoolsTask extends AsyncTask<Void, Void, GetSchoolsTask.Result>
     protected GetSchoolsTask.Result doInBackground(Void... voids) {
         Result result = null;
 
-        if(!isCancelled()) {
+        if (!isCancelled()) {
             Log.d(TAG, "Loading Schools...");
             try {
                 result = new Result("Schools Downloaded", downloadSchoolList());
-            } catch(Exception e) {
+            } catch (Exception e) {
                 result = new Result(e);
                 e.printStackTrace();
                 Log.e(TAG, e.getMessage());
@@ -103,10 +104,10 @@ public class GetSchoolsTask extends AsyncTask<Void, Void, GetSchoolsTask.Result>
     @Override
     protected void onPostExecute(Result result) {
 
-        if(result != null && callback != null) {
-            if(result.exception != null) {
+        if (result != null && callback != null) {
+            if (result.exception != null) {
                 callback.updateFromDownload(result.exception.getMessage(), null);
-            } else if(result.resultValue != null) {
+            } else if (result.resultValue != null) {
                 callback.updateFromDownload(result.resultValue, schools);
                 Log.d(TAG, "Done loading schools.");
             }
@@ -128,7 +129,7 @@ public class GetSchoolsTask extends AsyncTask<Void, Void, GetSchoolsTask.Result>
         Log.d(TAG, "Looking up all schools in remote database...");
         resultSet = statement.executeQuery();
 
-        while(resultSet.next()) {
+        while (resultSet.next()) {
             school = new School(0, null);
             school.setSchoolName(resultSet.getString("schoolName"));
             schools.add(school.getSchoolName());
@@ -140,13 +141,13 @@ public class GetSchoolsTask extends AsyncTask<Void, Void, GetSchoolsTask.Result>
 
     private void closeDatabase(ResultSet resultSet, Statement statement, Connection connection) {
         try {
-            if(resultSet != null) {
+            if (resultSet != null) {
                 resultSet.close();
             }
-            if(statement != null) {
+            if (statement != null) {
                 statement.close();
             }
-            if(connection != null) {
+            if (connection != null) {
                 connection.close();
             }
         } catch (SQLException e) {

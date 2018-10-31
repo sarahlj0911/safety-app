@@ -1,4 +1,5 @@
 package com.plusmobileapps.safetyapp.data.entity;
+
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.ForeignKey;
@@ -13,18 +14,18 @@ import android.arch.persistence.room.PrimaryKey;
 
 @Entity(tableName = "responses",
         primaryKeys = {"responseId", "walkthroughId", "locationId", "questionId"},
-        foreignKeys =  {
-            @ForeignKey(entity = Walkthrough.class,
+        foreignKeys = {
+                @ForeignKey(entity = Walkthrough.class,
                         parentColumns = "walkthroughId",
                         childColumns = "walkthroughId",
                         onDelete = ForeignKey.CASCADE),
-            @ForeignKey(entity = User.class,
+                @ForeignKey(entity = User.class,
                         parentColumns = "userId",
                         childColumns = "userId"),
-            @ForeignKey(entity = Location.class,
+                @ForeignKey(entity = Location.class,
                         parentColumns = "locationId",
                         childColumns = "locationId"),
-            @ForeignKey(entity = Question.class,
+                @ForeignKey(entity = Question.class,
                         parentColumns = "questionId",
                         childColumns = "questionId"),
         })
@@ -120,15 +121,25 @@ public class Response {
     }
 
 
-    public int getUserId() { return this.userId; }
+    public int getUserId() {
+        return this.userId;
+    }
 
-    public int getWalkthroughId() { return this.walkthroughId; }
+    public int getWalkthroughId() {
+        return this.walkthroughId;
+    }
 
-    public String getLocationName() { return this.locationName; }
+    public String getLocationName() {
+        return this.locationName;
+    }
 
-    public String getTitle() { return this.title; }
+    public String getTitle() {
+        return this.title;
+    }
 
-    public String getRatingText() { return this.ratingText; }
+    public String getRatingText() {
+        return this.ratingText;
+    }
 
     public boolean isPersisted() {
         return this.persisted;
@@ -175,10 +186,12 @@ public class Response {
         this.questionId = questionId;
     }
 
-    public void setWalkthroughId(int walkthroughId) { this.walkthroughId = walkthroughId; }
+    public void setWalkthroughId(int walkthroughId) {
+        this.walkthroughId = walkthroughId;
+    }
 
     public boolean isActionItem() {
-        if(isActionItem == 0) {
+        if (isActionItem == 0) {
             return false;
         }
         return true;
@@ -192,11 +205,17 @@ public class Response {
         this.imagePath = imagePath;
     }
 
-    public void setLocationName(String locationName) { this.locationName = locationName; }
+    public void setLocationName(String locationName) {
+        this.locationName = locationName;
+    }
 
-    public void setTitle(String title) { this.title = title; }
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
-    public void setRatingText(String ratingText) { this.ratingText = ratingText; }
+    public void setRatingText(String ratingText) {
+        this.ratingText = ratingText;
+    }
 
     public void setIsPersisted(boolean persisted) {
         this.persisted = persisted;

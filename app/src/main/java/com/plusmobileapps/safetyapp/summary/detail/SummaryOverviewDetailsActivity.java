@@ -75,7 +75,7 @@ public class SummaryOverviewDetailsActivity extends AppCompatActivity {
     private void createPresenter(Fragment fragment) {
         if (fragment instanceof SummaryOverviewContract.View) {
             new SummaryOverviewPresenter((SummaryOverviewContract.View) fragment);
-        } else if (fragment instanceof SummaryDetailsContract.View){
+        } else if (fragment instanceof SummaryDetailsContract.View) {
             new SummaryDetailsPresenter((SummaryDetailsContract.View) fragment);
         }
     }

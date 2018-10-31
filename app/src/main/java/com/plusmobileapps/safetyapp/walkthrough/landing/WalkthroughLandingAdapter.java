@@ -45,25 +45,25 @@ public class WalkthroughLandingAdapter extends RecyclerView.Adapter<WalkthroughL
     @Override
     public void onBindViewHolder(final CardViewHolder holder, int position) {
         Log.d(TAG, "In onBindViewHolder");
-        if(walkthroughs.size() > 0) {
+        if (walkthroughs.size() > 0) {
             int i = walkthroughs.size() - position - 1;
             walkthrough = walkthroughs.get(i);
             TextView header = holder.getHeader();
             holder.setReversePosition(i);
 
-            if(walkthrough.isInProgress() && position == 0) {
+            if (walkthrough.isInProgress() && position == 0) {
                 header.setVisibility(View.VISIBLE);
                 header.setText(R.string.viewholder_header_inprogress);
                 holder.dismissButton.setVisibility(View.VISIBLE);
                 holder.getProgressBar().setVisibility(View.VISIBLE);
-                holder.getProgressBar().setProgress((int)walkthrough.getPercentComplete());
+                holder.getProgressBar().setProgress((int) walkthrough.getPercentComplete());
             } else {
                 header.setText(R.string.viewholder_header_completed);
                 holder.dismissButton.setVisibility(View.GONE);
                 holder.getProgressBar().setVisibility(View.INVISIBLE);
-                if(position == 0) {
+                if (position == 0) {
                     header.setVisibility(View.VISIBLE);
-                } else if(position == 1 && walkthroughs.get(walkthroughs.size() - 1).isInProgress()) {
+                } else if (position == 1 && walkthroughs.get(walkthroughs.size() - 1).isInProgress()) {
                     header.setVisibility(View.VISIBLE);
                 } else {
                     header.setVisibility(View.GONE);
@@ -87,7 +87,9 @@ public class WalkthroughLandingAdapter extends RecyclerView.Adapter<WalkthroughL
         this.walkthroughs = walkthroughs;
     }
 
-    public List<Walkthrough> getWalkthroughs() { return this.walkthroughs; }
+    public List<Walkthrough> getWalkthroughs() {
+        return this.walkthroughs;
+    }
 
     public class CardViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private final TextView time;
@@ -140,7 +142,9 @@ public class WalkthroughLandingAdapter extends RecyclerView.Adapter<WalkthroughL
             return modified;
         }
 
-        public CheckBox getDismissButton() { return dismissButton; }
+        public CheckBox getDismissButton() {
+            return dismissButton;
+        }
 
         public ProgressBar getProgressBar() {
             return progressBar;
@@ -150,7 +154,9 @@ public class WalkthroughLandingAdapter extends RecyclerView.Adapter<WalkthroughL
             return header;
         }
 
-        public void setReversePosition(int reversePosition) { this.reversePosition = reversePosition; }
+        public void setReversePosition(int reversePosition) {
+            this.reversePosition = reversePosition;
+        }
 
     }
 }

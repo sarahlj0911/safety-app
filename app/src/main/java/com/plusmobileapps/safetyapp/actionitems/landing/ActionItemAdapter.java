@@ -23,7 +23,7 @@ public class ActionItemAdapter extends RecyclerView.Adapter<ActionItemAdapter.Vi
 
     private List<Response> actionItems;
 
-    public ActionItemAdapter(List<Response> actionItems, ActionItemsFragment.ActionItemListener itemListener){
+    public ActionItemAdapter(List<Response> actionItems, ActionItemsFragment.ActionItemListener itemListener) {
         this.actionItems = actionItems;
         this.itemListener = itemListener;
     }
@@ -45,7 +45,7 @@ public class ActionItemAdapter extends RecyclerView.Adapter<ActionItemAdapter.Vi
         holder.getLocation().setText(actionItem.getLocationName());
         holder.getTitle().setText(actionItem.getTitle());
 
-        if(actionItem.getImagePath() != null){
+        if (actionItem.getImagePath() != null) {
             File file = new File(actionItem.getImagePath());
             Picasso.get().load(file).into(holder.getImageView());
         }

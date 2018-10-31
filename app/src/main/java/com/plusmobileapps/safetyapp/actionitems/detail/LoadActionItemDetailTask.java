@@ -41,7 +41,7 @@ public class LoadActionItemDetailTask extends AsyncTask<Void, Void, Response> {
 
         if (rating == 1) {
             ratingText = question.getRatingOption1();
-        } else if (rating == 2 ) {
+        } else if (rating == 2) {
             ratingText = question.getRatingOption2();
         } else if (rating == 3) {
             ratingText = question.getRatingOption3();

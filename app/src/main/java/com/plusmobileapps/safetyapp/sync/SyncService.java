@@ -18,9 +18,9 @@ public class SyncService extends Service {
     @Override
     public void onCreate() {
         /*
-        * Create the sync adapter as a singleton.
-        * Set the sync adapter as syncable
-        * Disallow parallel syncs
+         * Create the sync adapter as a singleton.
+         * Set the sync adapter as syncable
+         * Disallow parallel syncs
          */
         synchronized (sSyncAdapterLock) {
             if (sSyncAdapter == null) {
@@ -33,8 +33,8 @@ public class SyncService extends Service {
     @Override
     public IBinder onBind(Intent intent) {
         /*
-        * Get the object that allows external processes to call on PerformSync().
-        * The object is created in the base class code when the SyncAdapter constructors call super()
+         * Get the object that allows external processes to call on PerformSync().
+         * The object is created in the base class code when the SyncAdapter constructors call super()
          */
         return sSyncAdapter.getSyncAdapterBinder();
     }

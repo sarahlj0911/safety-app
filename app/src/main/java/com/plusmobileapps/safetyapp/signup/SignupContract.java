@@ -16,17 +16,25 @@ public interface SignupContract {
 
     interface View extends BaseView<Presenter> {
         void displayInvalidEmailError(boolean show);
+
         void displayNoEmailError(boolean show);
+
         void displayNoNameError(boolean show);
+
         void displayNoSchoolError(boolean show);
+
         void launchHomeScreen();
+
         void populateSchoolSpinner(ArrayList<String> schools);
     }
 
     interface Presenter extends BasePresenter {
         void processFormInput(Map<String, String> formInput);
+
         void nameTextAdded();
+
         void emailTextAdded();
+
         void schoolNameTextAdded();
     }
 }

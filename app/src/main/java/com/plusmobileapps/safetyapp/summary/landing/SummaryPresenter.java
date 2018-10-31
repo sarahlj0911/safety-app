@@ -1,6 +1,7 @@
 package com.plusmobileapps.safetyapp.summary.landing;
 
 import java.util.ArrayList;
+
 import com.plusmobileapps.safetyapp.data.entity.Walkthrough;
 
 public class SummaryPresenter implements SummaryContract.Presenter {

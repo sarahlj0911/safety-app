@@ -58,14 +58,14 @@ public class DownloadTask extends AsyncTask<Void, Integer, DownloadTask.Result> 
 
     private static final String GET_WALKTHROUGHS_AND_RESPONSES_SQL =
             "select w.walkthroughId AS WALKTHROUGH_ID, w.userId AS WALKTHROUGH_USER, " +
-            "w.name AS NAME, w.lastUpdatedDate AS LAST_UPDATED_DATE, w.createdDate AS CREATED_DATE, " +
-            "w.percentComplete AS PERCENT_COMPLETE, " +
-            "r.responseId AS RESPONSE_ID, r.locationId AS LOCATION_ID, r.questionId AS QUESTION_ID, " +
-            "r.actionPlan AS ACTION_PLAN, r.priority AS PRIORITY, r.rating AS RATING, r.timestamp AS TIMESTAMP, " +
-            "r.isActionItem AS IS_ACTION_ITEM, r.image AS IMAGE_PATH " +
-            "from safetywalkthrough.walkthroughs w " +
-            "left outer join safetywalkthrough.responses r on w.schoolId = r.schoolId and w.walkthroughId = r.walkthroughId " +
-            "where w.schoolId = ?";
+                    "w.name AS NAME, w.lastUpdatedDate AS LAST_UPDATED_DATE, w.createdDate AS CREATED_DATE, " +
+                    "w.percentComplete AS PERCENT_COMPLETE, " +
+                    "r.responseId AS RESPONSE_ID, r.locationId AS LOCATION_ID, r.questionId AS QUESTION_ID, " +
+                    "r.actionPlan AS ACTION_PLAN, r.priority AS PRIORITY, r.rating AS RATING, r.timestamp AS TIMESTAMP, " +
+                    "r.isActionItem AS IS_ACTION_ITEM, r.image AS IMAGE_PATH " +
+                    "from safetywalkthrough.walkthroughs w " +
+                    "left outer join safetywalkthrough.responses r on w.schoolId = r.schoolId and w.walkthroughId = r.walkthroughId " +
+                    "where w.schoolId = ?";
 
     private Connection conn;
     private AppDatabase db;
@@ -168,7 +168,7 @@ public class DownloadTask extends AsyncTask<Void, Integer, DownloadTask.Result> 
 
                 getWalkthroughsAndResponses(remoteSchoolId);
                 result = new Result("Success!");
-            } catch(Exception e) {
+            } catch (Exception e) {
                 result = new Result(e);
             }
 
@@ -215,7 +215,7 @@ public class DownloadTask extends AsyncTask<Void, Integer, DownloadTask.Result> 
                 } while (nextSchoolIdRs.next());
             }
 
-            Log.d(TAG, "Inserting school with values [" + remoteId + ", " + schoolName +"]");
+            Log.d(TAG, "Inserting school with values [" + remoteId + ", " + schoolName + "]");
             String insertSchoolSql = INSERT_SCHOOL_SQL;
             insertSchoolStmt = conn.prepareStatement(insertSchoolSql);
             statements.add(insertSchoolStmt);
@@ -302,7 +302,7 @@ public class DownloadTask extends AsyncTask<Void, Integer, DownloadTask.Result> 
                     remoteId = rs.getInt(1);
                 } while (rs.next());
             }
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             Log.e(TAG, "Problem syncing user data: " + e.getMessage());
         } finally {
@@ -416,7 +416,9 @@ public class DownloadTask extends AsyncTask<Void, Integer, DownloadTask.Result> 
 
         for (Response r : remoteResponses) {
             Log.d(TAG, r.toString());
-            if (r.getResponseId() > max) { max = r.getResponseId(); }
+            if (r.getResponseId() > max) {
+                max = r.getResponseId();
+            }
         }
 
         return max;

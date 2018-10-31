@@ -21,7 +21,7 @@ public class SummaryAdapter extends RecyclerView.Adapter<SummaryAdapter.ViewHold
 
     private SummaryFragment.SummaryItemListener itemListener;
 
-    public SummaryAdapter(ArrayList<Walkthrough> walkthroughs, SummaryFragment.SummaryItemListener itemListener){
+    public SummaryAdapter(ArrayList<Walkthrough> walkthroughs, SummaryFragment.SummaryItemListener itemListener) {
         this.summaries = walkthroughs;
         this.itemListener = itemListener;
     }
@@ -83,6 +83,7 @@ public class SummaryAdapter extends RecyclerView.Adapter<SummaryAdapter.ViewHold
         public TextView getTitle() {
             return title;
         }
+
         public TextView getDateTime() {
             return dateTime;
         }

@@ -15,6 +15,7 @@ public interface SummaryDetailsContract {
 
     interface Presenter extends BasePresenter {
         void loadDetails();
+
         void setTitle(String title);
     }
 

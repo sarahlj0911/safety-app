@@ -17,7 +17,7 @@ import com.plusmobileapps.safetyapp.walkthrough.walkthrough.WalkthroughActivity;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LocationActivity extends AppCompatActivity implements LocationContract.View{
+public class LocationActivity extends AppCompatActivity implements LocationContract.View {
     private static final String TAG = "LocationActivity";
     public static final String EXTRA_WALKTHROUGH_LOCATION_NAME = "walkthrough_name";
     public static final String EXTRA_WALKTHROUGH_ID = "walkthrough_Id";

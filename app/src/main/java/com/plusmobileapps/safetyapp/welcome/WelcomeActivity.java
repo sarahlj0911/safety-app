@@ -41,7 +41,7 @@ public class WelcomeActivity extends AppCompatActivity {
         // Checking for first time launch - before calling setContentView()
         prefManager = new PrefManager(this);
         if (prefManager.isTutorialSeen()) {
-            if(prefManager.isUserSignedUp()) {
+            if (prefManager.isUserSignedUp()) {
                 launchMainScreen();
             } else {
                 launchSignupScreen();
@@ -55,7 +55,7 @@ public class WelcomeActivity extends AppCompatActivity {
         btnBack = findViewById(R.id.welcome_btn_back);
         btnNext = findViewById(R.id.welcome_btn_next);
 
-        layouts = new int[] {
+        layouts = new int[]{
                 R.layout.welcome_slide1,
                 R.layout.welcome_slide2,
                 R.layout.welcome_slide3,
