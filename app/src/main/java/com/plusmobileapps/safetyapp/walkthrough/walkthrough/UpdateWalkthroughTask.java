@@ -31,7 +31,7 @@ public class UpdateWalkthroughTask extends AsyncTask<Integer, Void, Boolean> {
     private Integer walkthroughId;
 
     //public UpdateWalkthroughTask(WalkthroughContract.View view) {
-        //context = ((AppCompatActivity) view).getApplicationContext();
+    //context = ((AppCompatActivity) view).getApplicationContext();
     //}
 
 

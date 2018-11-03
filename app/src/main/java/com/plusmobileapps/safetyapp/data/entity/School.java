@@ -28,15 +28,27 @@ public class School {
     }
 
     //getters
-    public int getSchoolId() { return this.schoolId; }
-    public String getSchoolName() { return this.schoolName; }
+    public int getSchoolId() {
+        return this.schoolId;
+    }
+
+    public String getSchoolName() {
+        return this.schoolName;
+    }
+
     public int getRemoteId() {
         return this.remoteId;
     }
 
     //setters
-    public void setSchoolId(int schoolId) { this.schoolId = schoolId; }
-    public void setSchoolName(String schoolName) { this.schoolName = schoolName;}
+    public void setSchoolId(int schoolId) {
+        this.schoolId = schoolId;
+    }
+
+    public void setSchoolName(String schoolName) {
+        this.schoolName = schoolName;
+    }
+
     public void setRemoteId(int remoteId) {
         this.remoteId = remoteId;
     }

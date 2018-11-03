@@ -24,7 +24,7 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHo
     private LocationActivity.LocationItemListener itemListener;
     private List<Location> locations;
 
-    public LocationAdapter(ArrayList<Location> walkthroughs, LocationActivity.LocationItemListener itemListener){
+    public LocationAdapter(ArrayList<Location> walkthroughs, LocationActivity.LocationItemListener itemListener) {
         this.locations = walkthroughs;
         this.itemListener = itemListener;
     }
@@ -43,7 +43,7 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHo
 
         holder.getWalkthroughTitle().setText(location.getName());
         holder.getCheckmark().setVisibility(location.isFinished() ? View.VISIBLE : View.INVISIBLE);
-        if (location.getProgress() > 0){
+        if (location.getProgress() > 0) {
             holder.getProgressBar().setVisibility(View.VISIBLE);
             holder.getProgressBar().setProgress(location.getProgress());
         } else {
@@ -70,7 +70,7 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHo
         private final Context context;
 
         public ViewHolder(View view) {
-            super (view);
+            super(view);
             context = itemView.getContext();
             walkthroughTitle = view.findViewById(R.id.viewholder_title_location);
             progressBar = view.findViewById(R.id.viewholder_progressbar_location);
@@ -83,6 +83,7 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHo
                 }
             });
         }
+
         public TextView getWalkthroughTitle() {
             return walkthroughTitle;
         }
@@ -91,7 +92,7 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHo
             return progressBar;
         }
 
-        public ImageView getCheckmark(){
+        public ImageView getCheckmark() {
             return checkmark;
         }
 

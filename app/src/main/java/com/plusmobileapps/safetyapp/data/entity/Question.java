@@ -1,4 +1,5 @@
 package com.plusmobileapps.safetyapp.data.entity;
+
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
@@ -32,7 +33,6 @@ public class Question {
     private String shortDesc;
 
 
-
     public Question(int questionId, String questionText, String shortDesc, String ratingOption1, String ratingOption2, String ratingOption3, String ratingOption4) {
         this.questionId = questionId;
         this.questionText = questionText;
@@ -52,15 +52,25 @@ public class Question {
         return questionText;
     }
 
-    public String getShortDesc() { return shortDesc; }
+    public String getShortDesc() {
+        return shortDesc;
+    }
 
-    public String getRatingOption1() { return ratingOption1; }
+    public String getRatingOption1() {
+        return ratingOption1;
+    }
 
-    public String getRatingOption2() { return ratingOption2; }
+    public String getRatingOption2() {
+        return ratingOption2;
+    }
 
-    public String getRatingOption3() { return ratingOption3; }
+    public String getRatingOption3() {
+        return ratingOption3;
+    }
 
-    public String getRatingOption4() { return ratingOption4; }
+    public String getRatingOption4() {
+        return ratingOption4;
+    }
 
     //Setters
     public void setQuestionId(int id) {

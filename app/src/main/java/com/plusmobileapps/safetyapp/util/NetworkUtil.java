@@ -21,8 +21,8 @@ public class NetworkUtil {
     /**
      * Will show a snack bar whenever the network state changes on the device
      *
-     * @param context   the fragment or activity context
-     * @param view      the view on which to show the snack bar
+     * @param context the fragment or activity context
+     * @param view    the view on which to show the snack bar
      */
     public static NetworkChangeReceiver registerNetworkListener(@NonNull Context context, @NonNull View view, final WalkthroughLandingContract.View walkthroughLandingFragment) {
         final Snackbar snackbar = Snackbar.make(view, context.getString(R.string.network_unavailable), Snackbar.LENGTH_INDEFINITE);
