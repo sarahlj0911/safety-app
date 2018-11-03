@@ -25,7 +25,7 @@ public class ActionItemPresenter implements ActionItemContract.Presenter {
 
     @Override
     public void loadActionItems(boolean forceUpdate) {
-        if(forceUpdate) {
+        if (forceUpdate) {
             new LoadActionItemTask(this, actionItems).execute();
         } else {
             showActionItems();

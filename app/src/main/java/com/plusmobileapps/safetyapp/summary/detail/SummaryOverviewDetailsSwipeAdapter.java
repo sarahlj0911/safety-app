@@ -17,10 +17,10 @@ public class SummaryOverviewDetailsSwipeAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         switch (position) {
             case 0:
-                Log.d(TAG,"Loading new overview fragment instance");
+                Log.d(TAG, "Loading new overview fragment instance");
                 return SummaryOverviewFragment.newInstance();
             case 1:
-                Log.d(TAG,"Loading new details fragment instance");
+                Log.d(TAG, "Loading new details fragment instance");
                 return SummaryDetailsFragment.newInstance();
             default:
                 return null;

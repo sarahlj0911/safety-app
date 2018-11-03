@@ -15,7 +15,7 @@ public class MainSwipeAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        switch (position){
+        switch (position) {
             case 0:
                 return factory.getWalkthroughLandingFragment();
             case 1:

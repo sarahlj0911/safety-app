@@ -236,7 +236,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
             } else {
                 Log.i(TAG, "Inconsistent walkthrough deletion counts; not deleting local walkthroughs");
             }
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             Log.e(TAG, "Problem deleting walkthroughs: " + e.getMessage());
         } finally {
@@ -266,7 +266,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
             lastSyncDateTimeRs = getLastSyncDateTimeStmt.executeQuery();
             resultSets.add(lastSyncDateTimeRs);
 
-            while(lastSyncDateTimeRs.next()) {
+            while (lastSyncDateTimeRs.next()) {
                 lastSyncDateTime = lastSyncDateTimeRs.getTimestamp(1);
             }
 
@@ -343,7 +343,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
             conn.rollback();
 
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             Log.e(TAG, "Problem syncing walkthrough or response data: " + e.getMessage());
         } finally {
@@ -456,7 +456,9 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
         for (Response r : remoteResponses) {
             Log.d(TAG, r.toString());
-            if (r.getResponseId() > max) { max = r.getResponseId(); }
+            if (r.getResponseId() > max) {
+                max = r.getResponseId();
+            }
         }
 
         return max;
@@ -507,7 +509,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
             conn.commit();
 
             conn.rollback();
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             Log.e(TAG, "Problem syncing location or question data: " + e.getMessage());
         } finally {
@@ -554,7 +556,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                     } while (nextSchoolIdRs.next());
                 }
 
-                Log.d(TAG, "Inserting school with values [" + remoteId + ", " + schoolName +"]");
+                Log.d(TAG, "Inserting school with values [" + remoteId + ", " + schoolName + "]");
                 String insertSchoolSql = INSERT_SCHOOL_SQL;
                 insertSchoolStmt = conn.prepareStatement(insertSchoolSql);
                 statements.add(insertSchoolStmt);
@@ -572,7 +574,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                     remoteId = rs.getInt(1);
                 } while (rs.next());
             }
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             Log.e(TAG, "Problem syncing school data: " + e.getMessage());
         } finally {
@@ -644,7 +646,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                     remoteId = rs.getInt(1);
                 } while (rs.next());
             }
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             Log.e(TAG, "Problem syncing user data: " + e.getMessage());
         } finally {

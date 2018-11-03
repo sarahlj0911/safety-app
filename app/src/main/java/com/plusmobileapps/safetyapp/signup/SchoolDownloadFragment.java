@@ -44,7 +44,7 @@ public class SchoolDownloadFragment extends Fragment {
     }
 
     public void cancelGetSchools() {
-        if(getSchoolsTask != null) {
+        if (getSchoolsTask != null) {
             getSchoolsTask.cancel(true);
         }
     }

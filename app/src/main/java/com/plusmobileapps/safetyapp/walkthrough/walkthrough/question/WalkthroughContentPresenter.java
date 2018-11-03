@@ -17,7 +17,7 @@ public class WalkthroughContentPresenter implements WalkthroughFragmentContract.
 
     Response response;
 
-    public WalkthroughContentPresenter(WalkthroughFragmentContract.View view ) {
+    public WalkthroughContentPresenter(WalkthroughFragmentContract.View view) {
         this.view = view;
         view.setPresenter(this);
     }
@@ -31,13 +31,13 @@ public class WalkthroughContentPresenter implements WalkthroughFragmentContract.
             view.enableActionPlan(true);
         }
 
-        if(response.getPriority() != -1) {
+        if (response.getPriority() != -1) {
             view.showPriority(Priority.values()[response.getPriority()]);
         }
-        if(!response.getActionPlan().equals("")) {
+        if (!response.getActionPlan().equals("")) {
             view.showActionPlan(response.getActionPlan());
         }
-        if(response.getRating() != -1) {
+        if (response.getRating() != -1) {
             view.showRating(response.getRating());
         }
 

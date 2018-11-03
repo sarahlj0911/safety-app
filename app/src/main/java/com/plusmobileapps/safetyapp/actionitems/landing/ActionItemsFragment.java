@@ -73,7 +73,7 @@ public class ActionItemsFragment extends Fragment implements ActionItemContract.
     /**
      * method called from the presenter to load all the action items data
      *
-     * @param actionItems   list of all action items to pass to adapter
+     * @param actionItems list of all action items to pass to adapter
      */
     @Override
     public void showActionItems(List<Response> actionItems) {
@@ -84,7 +84,7 @@ public class ActionItemsFragment extends Fragment implements ActionItemContract.
     @Override
     public void showNoActionItems(boolean show) {
         TextView noActionItemText = getView().findViewById(R.id.no_action_items);
-        recyclerView.setVisibility(!show ? View.VISIBLE : View.GONE );
+        recyclerView.setVisibility(!show ? View.VISIBLE : View.GONE);
         if (noActionItemText != null) {
             noActionItemText.setVisibility(show ? View.VISIBLE : View.GONE);
         }
@@ -93,7 +93,7 @@ public class ActionItemsFragment extends Fragment implements ActionItemContract.
     /**
      * launch the intent for the ActionItemDetailActivity
      *
-     * @param actionItemId  primary key for the ActionItem
+     * @param actionItemId primary key for the ActionItem
      */
     @Override
     public void showActionItemDetailUi(String actionItemId) {
@@ -112,7 +112,7 @@ public class ActionItemsFragment extends Fragment implements ActionItemContract.
                     .setAction(getString(R.string.action_undo), new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                           presenter.undoDismissal();
+                            presenter.undoDismissal();
                         }
                     });
 
@@ -129,7 +129,7 @@ public class ActionItemsFragment extends Fragment implements ActionItemContract.
     /**
      * called from the presenter to toggle the loading state of the view
      *
-     * @param active    boolean to toggle progress indicator
+     * @param active boolean to toggle progress indicator
      */
     @Override
     public void setProgressIndicator(boolean active) {
@@ -157,6 +157,7 @@ public class ActionItemsFragment extends Fragment implements ActionItemContract.
      */
     public interface ActionItemListener {
         void onActionItemClicked(int position);
+
         void onDismissButtonClicked(int position);
     }
 

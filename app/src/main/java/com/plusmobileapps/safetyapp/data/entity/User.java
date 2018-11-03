@@ -7,14 +7,14 @@ import android.arch.persistence.room.PrimaryKey;
 
 /**
  * Created by aaronmusengo on 1/23/18.
- *
+ * <p>
  * Updated by Robert Beerman on 2/19/18.
  */
 
 @Entity(tableName = "user",
         foreignKeys = @ForeignKey(entity = School.class,
-                    parentColumns = "schoolId",
-                    childColumns = "schoolId"))
+                parentColumns = "schoolId",
+                childColumns = "schoolId"))
 public class User {
     @PrimaryKey
     private int userId;

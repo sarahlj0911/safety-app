@@ -1,6 +1,7 @@
 package com.plusmobileapps.safetyapp.summary.landing;
 
 import java.util.ArrayList;
+
 import com.plusmobileapps.safetyapp.data.entity.Walkthrough;
 
 public class FakeSummaryModel {
@@ -24,7 +25,7 @@ public class FakeSummaryModel {
         walkthroughs.add(walkthrough1);
     }
 
-    public ArrayList<Walkthrough> getSummaries(){
+    public ArrayList<Walkthrough> getSummaries() {
         return walkthroughs;
     }
 }

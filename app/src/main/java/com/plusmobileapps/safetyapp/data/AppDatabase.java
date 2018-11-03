@@ -71,7 +71,7 @@ public abstract class AppDatabase extends RoomDatabase {
                             public void onCreate(@NonNull SupportSQLiteDatabase db) {
                                 super.onCreate(db);
 
-                                ArrayList<Integer> jsonFiles = new ArrayList<Integer>(){{
+                                ArrayList<Integer> jsonFiles = new ArrayList<Integer>() {{
                                     add(R.raw.location);
                                     add(R.raw.question);
                                     add(R.raw.question_mapping);
@@ -99,17 +99,20 @@ public abstract class AppDatabase extends RoomDatabase {
                                     Gson gson = new Gson();
                                     switch (rawResId) {
                                         case R.raw.location:
-                                            Type locationType = new TypeToken<ArrayList<Location>>(){}.getType();
+                                            Type locationType = new TypeToken<ArrayList<Location>>() {
+                                            }.getType();
                                             List<Location> locations = gson.fromJson(json, locationType);
                                             new InsertLocationsTask(locations).execute();
                                             break;
                                         case R.raw.question:
-                                            Type questionType = new TypeToken<ArrayList<Question>>(){}.getType();
+                                            Type questionType = new TypeToken<ArrayList<Question>>() {
+                                            }.getType();
                                             List<Question> questions = gson.fromJson(json, questionType);
                                             new InsertQuestionsTask(questions).execute();
                                             break;
                                         case R.raw.question_mapping:
-                                            Type questionMappingType = new TypeToken<ArrayList<QuestionMapping>>(){}.getType();
+                                            Type questionMappingType = new TypeToken<ArrayList<QuestionMapping>>() {
+                                            }.getType();
                                             List<QuestionMapping> questionMappings = gson.fromJson(json, questionMappingType);
                                             new InsertQuestionMappingTask(questionMappings).execute();
                                             break;

@@ -61,8 +61,8 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
 
 
         schoolList = new ArrayList<String>();
-        schoolSpinner = (Spinner)findViewById(R.id.spinner_signup_school_name);
-        newSchool = (EditText)findViewById(R.id.new_school_text_box);
+        schoolSpinner = (Spinner) findViewById(R.id.spinner_signup_school_name);
+        newSchool = (EditText) findViewById(R.id.new_school_text_box);
 
         nameInput = findViewById(R.id.signup_name);
         emailInput = findViewById(R.id.signup_email);
@@ -96,7 +96,7 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
     public void populateSchoolSpinner(ArrayList<String> schools) {
         schoolList.remove("");
         schoolList.remove(getString(R.string.new_school));
-        for(int i = 0; i < schools.size(); i++) {
+        for (int i = 0; i < schools.size(); i++) {
             schoolList.add(schools.get(i));
             System.out.println(schoolList.get(i));
         }
@@ -110,7 +110,7 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
         schoolSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                if(getString(R.string.new_school).equals(schoolSpinner.getSelectedItem().toString())) {
+                if (getString(R.string.new_school).equals(schoolSpinner.getSelectedItem().toString())) {
                     newSchool.setVisibility(View.VISIBLE);
                     schoolSpinner.setVisibility(View.GONE);
                     schoolExists = false;
@@ -127,7 +127,6 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
     }
 
 
-
     private View.OnClickListener saveSignupClickListener = new View.OnClickListener() {
 
         @Override
@@ -135,7 +134,7 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
             HashMap<String, String> formInput = new HashMap<>();
             String school;
 
-            if(schoolExists) {
+            if (schoolExists) {
                 Spinner schoolInput = findViewById(R.id.spinner_signup_school_name);
                 school = schoolInput.getSelectedItem().toString();
                 Log.d(TAG, "Chosen School: " + school);
@@ -237,7 +236,7 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
     };
 
     private void downloadSchools() {
-        if(!downloading && schoolDownloadFragment != null) {
+        if (!downloading && schoolDownloadFragment != null) {
             schoolDownloadFragment.getSchools();
             downloading = true;
         }
@@ -262,8 +261,8 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
     }
 
     @Override
-        public void onProgressUpdate(int progressCode, int percentComplete) {
-        switch(progressCode) {
+    public void onProgressUpdate(int progressCode, int percentComplete) {
+        switch (progressCode) {
             // You can add UI behavior for progress updates here.
             case SignupDownloadCallback.Progress.ERROR:
 

@@ -27,7 +27,7 @@ public class ActionItemDetailPresenter implements ActionItemDetailContract.Prese
 
     @Override
     public void backButtonClicked() {
-        if(isActionItemEdited()) {
+        if (isActionItemEdited()) {
             view.showConfirmationExitDialog();
         } else {
             view.finishActivity();
@@ -104,7 +104,7 @@ public class ActionItemDetailPresenter implements ActionItemDetailContract.Prese
     @Override
     public void saveButtonClicked() {
 
-        if(isActionItemEdited()) {
+        if (isActionItemEdited()) {
             new SaveActionItemDetailTask(editedResponse, view).execute();
         } else {
             view.finishActivity();

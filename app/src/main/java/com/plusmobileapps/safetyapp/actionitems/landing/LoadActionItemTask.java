@@ -51,7 +51,7 @@ public class LoadActionItemTask extends AsyncTask<Void, Void, List<Response>> {
     @Override
     protected void onPostExecute(List<Response> actionItems) {
         super.onPostExecute(actionItems);
-        
+
         this.actionItems = actionItems;
         presenter.setActionItems(actionItems);
         presenter.loadActionItems(false);

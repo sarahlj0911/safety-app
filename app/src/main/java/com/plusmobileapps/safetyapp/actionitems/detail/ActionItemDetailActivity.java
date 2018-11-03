@@ -26,7 +26,7 @@ import java.io.File;
  */
 public class ActionItemDetailActivity extends AppCompatActivity
         implements EditPriorityDialogFragment.PriorityDialogListener,
-                    ActionItemDetailContract.View {
+        ActionItemDetailContract.View {
 
     public static final String EXTRA_ACTION_ITEM_ID = "ACTION_ITEM_ID";
 
@@ -41,7 +41,7 @@ public class ActionItemDetailActivity extends AppCompatActivity
     private TextView detailTimeStampTextView;
     private TextView titleTextView;
     private ImageView imageView;
-    
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -116,7 +116,7 @@ public class ActionItemDetailActivity extends AppCompatActivity
         locationTextView.setText(response.getLocationName());
         titleTextView.setText(response.getTitle());
 
-        if(response.getImagePath() != null) {
+        if (response.getImagePath() != null) {
             File file = new File(response.getImagePath());
             Picasso.get().load(file).into(imageView);
         }

@@ -60,7 +60,7 @@ public class Authenticator extends AbstractAccountAuthenticator {
     // Checking features for the account is not supported
     @Override
     public Bundle hasFeatures(AccountAuthenticatorResponse r, Account account, String[] strings)
-        throws NetworkErrorException {
+            throws NetworkErrorException {
         throw new UnsupportedOperationException();
     }
 }

@@ -165,7 +165,7 @@ public class WalkthroughLandingFragment extends Fragment
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
         params.addRule(RelativeLayout.ALIGN_PARENT_START);
-        int margin = ((Number) (getResources().getDisplayMetrics().density *12)).intValue();
+        int margin = ((Number) (getResources().getDisplayMetrics().density * 12)).intValue();
         params.setMargins(margin, margin, margin, margin);
 
         ViewTarget target = new ViewTarget(R.id.floatingActionButton, getActivity());
@@ -224,7 +224,7 @@ public class WalkthroughLandingFragment extends Fragment
                         Dialog dialogObj = Dialog.class.cast(dialog);
                         TextInputLayout textInputLayout = dialogObj.findViewById(R.id.edit_text_create_walkthrough);
                         String walkthroughTitle = textInputLayout.getEditText().getText().toString();
-                        if(walkthroughTitle != null & walkthroughTitle.length() >= MINIMUM_CHARACTER_NAME) {
+                        if (walkthroughTitle != null & walkthroughTitle.length() >= MINIMUM_CHARACTER_NAME) {
                             presenter.confirmCreateWalkthroughClicked(walkthroughTitle);
                             dialog.dismiss();
                         } else {
@@ -311,6 +311,7 @@ public class WalkthroughLandingFragment extends Fragment
 
     public interface WalkthroughLandingItemListener {
         void onWalkthroughClicked(int position);
+
         void onDismissButtonClicked(int position, CheckBox dismissButton);
     }
 
@@ -364,7 +365,7 @@ public class WalkthroughLandingFragment extends Fragment
 
     @Override
     public void onProgressUpdate(int progressCode, int percentComplete) {
-        switch(progressCode) {
+        switch (progressCode) {
             // You can add UI behavior for progress updates here.
             case DownloadCallback.Progress.ERROR:
 
