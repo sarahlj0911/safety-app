@@ -94,11 +94,16 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
 
     @Override
     public void populateSchoolSpinner(ArrayList<String> schools) {
-        schoolList.remove("");
+      /*  schoolList.remove("");
         schoolList.remove(getString(R.string.new_school));
         for (int i = 0; i < schools.size(); i++) {
             schoolList.add(schools.get(i));
             System.out.println(schoolList.get(i));
+        if(schools.size()>0 ) {
+            for (int i = 0; i < schools.size(); i++) {
+                schoolList.add(schools.get(i));
+                System.out.println(schoolList.get(i));
+            }
         }
         schoolList.add("");
         schoolList.add(getString(R.string.new_school));
@@ -124,7 +129,7 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
 
             }
         });
-    }
+    */}
 
 
     private View.OnClickListener saveSignupClickListener = new View.OnClickListener() {
