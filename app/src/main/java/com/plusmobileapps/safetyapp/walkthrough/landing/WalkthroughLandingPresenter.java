@@ -23,7 +23,7 @@ public class WalkthroughLandingPresenter implements WalkthroughLandingContract.P
     @Override
     public void start() {
         new LoadWalkthroughs(listener).execute();
-     }
+    }
 
     @Override
     public void walkthroughClicked(int position) {
@@ -38,8 +38,8 @@ public class WalkthroughLandingPresenter implements WalkthroughLandingContract.P
 
     @Override
     public void createNewWalkthroughIconClicked() {
-        if(walkthroughs.size() > 0) {
-            if(walkthroughs.get(walkthroughs.size() - 1).isInProgress()) {
+        if (walkthroughs.size() > 0) {
+            if (walkthroughs.get(walkthroughs.size() - 1).isInProgress()) {
                 view.showInProcessConfirmationDialog();
             } else {
                 createNewWalkthrough();
@@ -67,7 +67,7 @@ public class WalkthroughLandingPresenter implements WalkthroughLandingContract.P
     @Override
     public void confirmCreateWalkthroughClicked(String title) {
         Walkthrough oldWalkthrough = null;
-        if(walkthroughs.size() > 0) {
+        if (walkthroughs.size() > 0) {
             oldWalkthrough = walkthroughs.get(walkthroughs.size() - 1);
             oldWalkthrough.setPercentComplete(100);
             oldWalkthrough.setLastUpdatedDate(DateTimeUtil.getDateTimeString());

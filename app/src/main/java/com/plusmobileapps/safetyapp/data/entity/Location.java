@@ -1,4 +1,5 @@
 package com.plusmobileapps.safetyapp.data.entity;
+
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Ignore;
@@ -53,9 +54,13 @@ public class Location {
         return this.locationInstruction;
     }
 
-    public boolean isFinished() { return this.isFinished; }
+    public boolean isFinished() {
+        return this.isFinished;
+    }
 
-    public int getProgress() { return this.progess; }
+    public int getProgress() {
+        return this.progess;
+    }
 
     //Setters
     public void setId(int id) {

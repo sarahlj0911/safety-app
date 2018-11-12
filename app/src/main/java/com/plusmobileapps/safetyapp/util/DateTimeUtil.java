@@ -13,6 +13,7 @@ public class DateTimeUtil {
 
     /**
      * format date time string to MST time zone
+     *
      * @return
      */
     public static String getDateTimeString() {

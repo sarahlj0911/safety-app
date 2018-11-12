@@ -235,7 +235,7 @@ public class WalkthroughContentFragment extends Fragment
 
     @Override
     public void showPhoto(String imagePath) {
-        if(imagePath != null) {
+        if (imagePath != null) {
             File file = new File(imagePath);
             Picasso.get().load(file).into(cameraButton);
         }

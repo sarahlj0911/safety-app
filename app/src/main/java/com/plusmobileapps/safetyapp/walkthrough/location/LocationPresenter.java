@@ -21,7 +21,7 @@ public class LocationPresenter implements LocationContract.Presenter {
         this.walkthroughId = walkthroughId;
         try {
             this.locations = loadLocations.get();
-        } catch (InterruptedException | ExecutionException e)  {
+        } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
         view.setPresenter(this);

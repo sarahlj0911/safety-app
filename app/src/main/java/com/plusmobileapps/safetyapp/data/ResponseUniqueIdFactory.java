@@ -7,7 +7,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class ResponseUniqueIdFactory {
 
-    public static int getId(){
+    public static int getId() {
         final PrefManager prefManager = new PrefManager(MyApplication.getAppContext());
         final int index = prefManager.getLastResponseUniqueId();
         AtomicInteger seq = new AtomicInteger(index);

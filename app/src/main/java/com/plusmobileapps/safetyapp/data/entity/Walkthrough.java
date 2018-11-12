@@ -12,8 +12,8 @@ import java.util.Date;
 
 @Entity(tableName = "walkthroughs",
         foreignKeys = @ForeignKey(entity = School.class,
-                                  parentColumns = "schoolId",
-                                  childColumns = "schoolId"))
+                parentColumns = "schoolId",
+                childColumns = "schoolId"))
 public class Walkthrough {
 
     @PrimaryKey(autoGenerate = true)
@@ -38,7 +38,7 @@ public class Walkthrough {
     @ColumnInfo(name = "isDeleted")
     private int isDeleted;
 
-    public Walkthrough( String name) {
+    public Walkthrough(String name) {
         this.name = name;
         percentComplete = 0.0;
         createdDate = DateTimeUtil.getDateTimeString();
@@ -48,17 +48,29 @@ public class Walkthrough {
     }
 
     //Getters
-    public int getWalkthroughId() { return this.walkthroughId; }
+    public int getWalkthroughId() {
+        return this.walkthroughId;
+    }
 
-    public String getName() { return this.name; }
+    public String getName() {
+        return this.name;
+    }
 
-    public double getPercentComplete() { return this.percentComplete; }
+    public double getPercentComplete() {
+        return this.percentComplete;
+    }
 
-    public String getCreatedDate() { return this.createdDate; }
+    public String getCreatedDate() {
+        return this.createdDate;
+    }
 
-    public String  getLastUpdatedDate() { return this.lastUpdatedDate; }
+    public String getLastUpdatedDate() {
+        return this.lastUpdatedDate;
+    }
 
-    public int getSchoolId() { return this.schoolId; }
+    public int getSchoolId() {
+        return this.schoolId;
+    }
 
     public int getIsDeleted() {
         return this.isDeleted;
@@ -72,10 +84,10 @@ public class Walkthrough {
 
     public String getTime(String date) {
         String[] tmp = date.split(" ");
-        int hour =  Integer.parseInt(tmp[3].substring(0, 2));
-        if(hour < 12) {
+        int hour = Integer.parseInt(tmp[3].substring(0, 2));
+        if (hour < 12) {
             return tmp[3].substring(0, 5) + " AM";
-        } else if(hour == 12) {
+        } else if (hour == 12) {
             return tmp[3].substring(0, 5) + " PM";
         } else {
             return hour - 12 + tmp[3].substring(2, 5) + " PM";
@@ -99,7 +111,7 @@ public class Walkthrough {
         this.percentComplete = percentComplete;
     }
 
-    public void setCreatedDate(String  createdDate) {
+    public void setCreatedDate(String createdDate) {
         this.createdDate = createdDate;
     }
 

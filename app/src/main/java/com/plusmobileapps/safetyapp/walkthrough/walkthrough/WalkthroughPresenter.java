@@ -54,7 +54,7 @@ public class WalkthroughPresenter implements WalkthroughContract.Presenter {
 
     @Override
     public void loadQuestions(int locationId) {
-       new WalkthroughQuestionModel(locationId, view, this).execute();
+        new WalkthroughQuestionModel(locationId, view, this).execute();
     }
 
     @Override
@@ -80,7 +80,7 @@ public class WalkthroughPresenter implements WalkthroughContract.Presenter {
     }
 
     private Response getNextResponseToShow() {
-        if ( (currentIndex >= 0) && (currentIndex < responses.size()) ) {
+        if ((currentIndex >= 0) && (currentIndex < responses.size())) {
             return responses.get(currentIndex);
         } else {
             return null;
@@ -96,7 +96,7 @@ public class WalkthroughPresenter implements WalkthroughContract.Presenter {
 
     @Override
     public void previousQuestionClicked() {
-        if(currentIndex == 0) {
+        if (currentIndex == 0) {
             view.showConfirmationDialog();
             return;
         }
@@ -104,7 +104,7 @@ public class WalkthroughPresenter implements WalkthroughContract.Presenter {
         Response currentResponse = getCurrentResponse();
         if (currentIndex == responses.size()) {
             responses.add(currentResponse);
-        } else{
+        } else {
             responses.set(currentIndex, currentResponse);
         }
 
@@ -119,14 +119,14 @@ public class WalkthroughPresenter implements WalkthroughContract.Presenter {
         Response response = getCurrentResponse();
 
         //check if response has already been added
-        if(responses.size() >= currentIndex + 1) {
+        if (responses.size() >= currentIndex + 1) {
             responses.set(currentIndex, response);
         } else if (currentIndex == responses.size()) {
             responses.add(response);
         }
 
         //if you're at the last question
-        if(currentIndex + 1 == questions.size()) {
+        if (currentIndex + 1 == questions.size()) {
             Log.i(TAG, "End of questions, saving " + responses.size() + " responses");
             saveResponses(true);
             return;
@@ -141,7 +141,7 @@ public class WalkthroughPresenter implements WalkthroughContract.Presenter {
 
     private Response getCurrentResponse() {
         Response response = view.getCurrentResponse();
-        if(response.getResponseId() == 0) {
+        if (response.getResponseId() == 0) {
             Log.d(TAG, "Getting a new response and setting everything blindly...");
             response.setResponseId(ResponseUniqueIdFactory.getId());
             response.setUserId(1);
@@ -179,7 +179,7 @@ public class WalkthroughPresenter implements WalkthroughContract.Presenter {
         save.responses = responses;
         save.execute(walkthroughId);
 
-        if(finish) {
+        if (finish) {
             view.closeWalkthrough();
         }
     }

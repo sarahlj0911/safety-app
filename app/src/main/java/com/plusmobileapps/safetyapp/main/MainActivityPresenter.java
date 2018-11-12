@@ -25,10 +25,10 @@ public class MainActivityPresenter implements MainActivityContract.Presenter {
             case 1:
                 view.changeNavHighlight(R.id.navigation_dashboard);
                 break;
-           //Removed summary for MVP
-          //  case 2:
-          //      view.changeNavHighlight(R.id.navigation_history);
-          //      break;
+            //Removed summary for MVP
+            //  case 2:
+            //      view.changeNavHighlight(R.id.navigation_history);
+            //      break;
             default:
                 break;
         }

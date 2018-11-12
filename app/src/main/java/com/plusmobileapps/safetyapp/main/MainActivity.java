@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
         setSupportActionBar(toolbar);
         setAppBarTitle(0);
 
-         // Turn on periodic syncing
+        // Turn on periodic syncing
         contentResolver = getContentResolver();
         account = CreateSyncAccount(this);
         ContentResolver.setSyncAutomatically(account, AUTHORITY, true);
@@ -148,7 +148,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
         // Checks the orientation of the screen
         if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
             Toast.makeText(this, "landscape", Toast.LENGTH_SHORT).show();
-        } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT){
+        } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
             Toast.makeText(this, "portrait", Toast.LENGTH_SHORT).show();
         }
     }
