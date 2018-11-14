@@ -133,8 +133,8 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
                     presenter.navButtonClicked(1);
                     return true;
                 //case R.id.navigation_history:
-                //    presenter.navButtonClicked(2);
-                //    return true;
+                  //  presenter.navButtonClicked(2);
+                    //return true;
             }
             return false;
         }
