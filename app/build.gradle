@@ -1,7 +1,13 @@
 apply plugin: 'com.android.application'
+apply plugin: 'com.amazonaws.appsync'
 
 android {
     compileSdkVersion 28
+
+    compileOptions {
+    sourceCompatibility JavaVersion.VERSION_1_8
+    targetCompatibility JavaVersion.VERSION_1_8
+    }
 
     buildToolsVersion '28.0.3'
     defaultConfig {
@@ -12,6 +18,8 @@ android {
         versionName "1.1"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
+        multiDexEnabled true
+        lintOptions { abortOnError false }
     }
     buildTypes {
         release {
@@ -31,6 +39,12 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
+    //Base SDK
+    implementation 'com.amazonaws:aws-android-sdk-core:2.8.+'
+    //AppSync SDK
+    implementation 'com.amazonaws:aws-android-sdk-appsync:2.6.+'
+    implementation 'org.eclipse.paho:org.eclipse.paho.client.mqttv3:1.2.0'
+    implementation 'org.eclipse.paho:org.eclipse.paho.android.service:1.1.1'
     androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
@@ -51,8 +65,15 @@ dependencies {
     implementation 'jp.wasabeef:recyclerview-animators:2.3.0'
 
     //room library
-    implementation "android.arch.persistence.room:runtime:1.1.1"
-    annotationProcessor "android.arch.persistence.room:compiler:1.1.1"
+    def room_version = "1.1.1"
+    implementation "android.arch.persistence.room:runtime:$room_version"
+    annotationProcessor "android.arch.persistence.room:compiler:$room_version" // use kapt for Kotlin
+      // optional - RxJava support for Room
+    implementation "android.arch.persistence.room:rxjava2:$room_version"
+      // optional - Guava support for Room, including Optional and ListenableFuture
+    implementation "android.arch.persistence.room:guava:$room_version"
+      // Test helpers
+    testImplementation "android.arch.persistence.room:testing:$room_version"
 
     //walkthrough tutorial library
     implementation 'com.github.amlcurran.showcaseview:library:5.4.3'
