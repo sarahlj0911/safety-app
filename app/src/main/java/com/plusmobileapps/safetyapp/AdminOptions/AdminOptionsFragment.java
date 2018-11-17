@@ -16,6 +16,7 @@ import com.plusmobileapps.safetyapp.R;
 import com.plusmobileapps.safetyapp.actionitems.detail.ActionItemDetailActivity;
 import com.plusmobileapps.safetyapp.actionitems.landing.ActionItemAdapter;
 import com.plusmobileapps.safetyapp.actionitems.landing.ActionItemContract;
+import com.plusmobileapps.safetyapp.actionitems.landing.ActionItemsFragment;
 import com.plusmobileapps.safetyapp.data.entity.Response;
 
 
@@ -31,11 +32,74 @@ public class AdminOptionsFragment extends Fragment implements ActionItemContract
     protected ActionItemAdapter adapter;
     private ActionItemContract.Presenter presenter;
 
+
     public AdminOptionsFragment(){
         //constructor
+    }
+    public static AdminOptionsFragment newInstance() {
+        return new AdminOptionsFragment();
+    }
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    public android.view.View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
+        android.view.View rootView = inflater.inflate(R.layout.activity_admin_options, container, false);
+        rootView.setTag(TAG);
+
+        adapter = new ActionItemAdapter(new ArrayList<Response>(0), itemListener);
+
+        recyclerView = rootView.findViewById(R.id.action_items_recyclerview);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        recyclerView.setAdapter(adapter);
+        recyclerView.setItemAnimator(new SlideInRightAnimator());
+
+        return rootView;
+
+    }
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        presenter.start();
+    }
+
+
+
+        ActionItemsFragment.ActionItemListener itemListener = new ActionItemsFragment.ActionItemListener() {
+            @Override
+            public void onActionItemClicked(int position) {
+                presenter.openActionItemDetail(position);
+            }
+
+            @Override
+            public void onDismissButtonClicked(int position) {
+                presenter.dismissButtonClicked(position);
+            }
+        };
+
+        /**
+         * Interface for the recyclerview items being clicked
+         */
+        public interface ActionItemListener {
+            void onActionItemClicked(int position);
+
+            void onDismissButtonClicked(int position);
+        }
     }
 
 
 
 
-}
+
+
+
+
+
+
+
+
+

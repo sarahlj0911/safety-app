@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.plusmobileapps.safetyapp.AdminOptions.Fragment.AdminOptionsPresenter;
 import com.plusmobileapps.safetyapp.R;
 import com.plusmobileapps.safetyapp.actionitems.landing.ActionItemPresenter;
 import com.plusmobileapps.safetyapp.summary.landing.SummaryPresenter;
@@ -74,7 +75,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
     private void setUpPresenters(MainActivityFragmentFactory factory) {
         new WalkthroughLandingPresenter(factory.getWalkthroughLandingFragment());
         new ActionItemPresenter(factory.getActionItemsFragment());
-        new SummaryPresenter(factory.getSummaryFragment());
+        new AdminOptionsPresenter(factory.getAdminOptionsFragment());
     }
 
     private void findViewsById() {
