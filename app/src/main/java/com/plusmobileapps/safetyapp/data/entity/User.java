@@ -5,6 +5,8 @@ import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.ForeignKey;
 import android.arch.persistence.room.PrimaryKey;
 
+import java.util.Date;
+
 /**
  * Created by aaronmusengo on 1/23/18.
  * <p>
@@ -34,6 +36,9 @@ public class User {
     @ColumnInfo(name = "remoteId")
     private int remoteId;
 
+    @ColumnInfo(name = "lastLogin")
+    private Date lastLogin;
+
     // TODO Add isRegistered field
 
     public User(int userId, int schoolId, String emailAddress, String userName, String role) {
@@ -43,6 +48,7 @@ public class User {
         this.role = role;
         this.userName = userName;
         this.remoteId = 0;
+        this.lastLogin = new Date();
     }
 
     //Getters
@@ -69,6 +75,8 @@ public class User {
     public int getRemoteId() {
         return remoteId;
     }
+
+    public Date getLastLogin() { return lastLogin; }
 
     //Setters
     public void setUserId(int userId) {
@@ -98,4 +106,6 @@ public class User {
     public boolean isRegistered() {
         return remoteId > 0;
     }
+
+    public void resetLastLogin() { lastLogin = new Date(); }
 }
