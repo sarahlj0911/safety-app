@@ -1,37 +1,27 @@
 package com.plusmobileapps.safetyapp.signup;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.net.sip.SipSession;
 import android.support.design.widget.TextInputLayout;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ProgressBar;
 import android.widget.Spinner;
-import android.widget.TextView;
 
 import com.plusmobileapps.safetyapp.PrefManager;
 import com.plusmobileapps.safetyapp.R;
-import com.plusmobileapps.safetyapp.data.entity.School;
 import com.plusmobileapps.safetyapp.main.MainActivity;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 
 public class SignupActivity extends AppCompatActivity implements SignupContract.View, SignupDownloadCallback {
 
@@ -53,7 +43,7 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
         presenter = new SignupPresenter(this);
-        Button saveSignupBtn = findViewById(R.id.button_save_signup);
+        Button saveSignupBtn = findViewById(R.id.create_user);
         saveSignupBtn.setOnClickListener(saveSignupClickListener);
 
         schoolDownloadFragment = SchoolDownloadFragment.getInstance(getFragmentManager());

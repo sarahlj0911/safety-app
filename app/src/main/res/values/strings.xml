@@ -2,6 +2,7 @@
     <string name="app_name">SAfETy App</string>
     <string name="title_walkthrough">Walkthroughs</string>
     <string name="title_action_items">Action Items</string>
+    <string name="title_admin_options">Admin Options</string>
     <string name="title_action_item_detail">Action Item Detail</string>
     <string name="title_summary">Summary</string>
     <string name="title_locations">Locations</string>
@@ -113,6 +114,11 @@
     <string name="walkthrough_last_modified">Last Modified:</string>
 
     <string name="network_unavailable">Offline, get back online for sync to work</string>
+    <string name="school_id_code">School ID Code</string>
+    <string name="school_id">School ID</string>
+    <string name="new_users_temporary_password">New Users Temporary Password</string>
+    <string name="new_user_id">New User ID</string>
+    <string name="create_new_user">Create New User</string>
 
 </resources>
 

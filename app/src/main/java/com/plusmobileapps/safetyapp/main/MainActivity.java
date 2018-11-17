@@ -104,7 +104,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
                 setToolbarTitle(getString(R.string.title_action_items));
                 break;
             case 2:
-                setToolbarTitle(getString(R.string.title_summary));
+                setToolbarTitle(getString(R.string.title_admin_options));
                 break;
             default:
                 break;
@@ -131,6 +131,9 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
                     return true;
                 case R.id.navigation_dashboard:
                     presenter.navButtonClicked(1);
+                    return true;
+                case R.id.navigation_admin_function:
+                    presenter.navButtonClicked(2);
                     return true;
                 //case R.id.navigation_history:
                   //  presenter.navButtonClicked(2);

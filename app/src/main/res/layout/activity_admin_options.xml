@@ -33,9 +33,10 @@
         android:layout_marginTop="56dp">
 
         <EditText
+            android:id="@+id/Username"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
-            android:hint="@string/hint_name"
+            android:hint="Create User name"
             android:inputType="text" />
 
     </android.support.design.widget.TextInputLayout>
@@ -49,10 +50,11 @@
         android:layout_marginTop="8dp">
 
         <EditText
+            android:id="@+id/Password"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
-            android:hint="@string/hint_email"
+            android:hint="Create Password"
             android:inputType="text|textEmailAddress" />
 
     </android.support.design.widget.TextInputLayout>
@@ -120,6 +122,7 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="50dp"
-        android:text="@string/btn_signup" />
+        android:text="@string/btn_signup"
+        tools:text="Create User" />
 
 </RelativeLayout>
