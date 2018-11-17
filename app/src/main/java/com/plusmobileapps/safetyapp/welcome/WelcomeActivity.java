@@ -48,7 +48,7 @@ public class WelcomeActivity extends AppCompatActivity {
             if (prefManager.isUserSignedUp()) {
                 curUser = userDao.getUser();
                 launchMainScreen();
-                curUser.resetLastLogin();
+                curUser.setLastLogin(1);
             } else {
                 launchSignupScreen();
             }

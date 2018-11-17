@@ -37,7 +37,7 @@ public class User {
     private int remoteId;
 
     @ColumnInfo(name = "lastLogin")
-    private Date lastLogin;
+    private long lastLogin;
 
     // TODO Add isRegistered field
 
@@ -48,7 +48,7 @@ public class User {
         this.role = role;
         this.userName = userName;
         this.remoteId = 0;
-        this.lastLogin = new Date();
+        setLastLogin(lastLogin);
     }
 
     //Getters
@@ -76,7 +76,7 @@ public class User {
         return remoteId;
     }
 
-    public Date getLastLogin() { return lastLogin; }
+    public long getLastLogin() { return lastLogin; }
 
     //Setters
     public void setUserId(int userId) {
@@ -103,9 +103,9 @@ public class User {
         this.remoteId = remoteId;
     }
 
+    public void setLastLogin(long lastLogin) { this.lastLogin = new Date().getTime(); }
+
     public boolean isRegistered() {
         return remoteId > 0;
     }
-
-    public void resetLastLogin() { lastLogin = new Date(); }
 }

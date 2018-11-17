@@ -634,8 +634,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                 insertUserStmt.setString(3, user.getUserName());
                 insertUserStmt.setString(4, email);
                 insertUserStmt.setString(5, user.getRole());
-                java.sql.Date lastLogin = new java.sql.Date(user.getLastLogin().getTime());
-                insertUserStmt.setDate(6, lastLogin);
+                insertUserStmt.setLong(6, user.getLastLogin());
                 insertUserStmt.execute();
 
                 // Commit insert
@@ -659,7 +658,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
     }
 
     private void deleteUser(User user) {
-        long lastTime = user.getLastLogin().getTime();
+        long lastTime = user.getLastLogin();
         long curTime = new Date().getTime();
 
         long week = 1000 * 60 * 60 * 24 * 7;
