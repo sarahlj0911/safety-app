@@ -1,14 +1,9 @@
 package com.plusmobileapps.safetyapp;
-
 import com.plusmobileapps.safetyapp.data.entity.Admin;
 import com.plusmobileapps.safetyapp.signup.SignupActivity;
-
 import org.junit.Test;
-
 import java.util.ArrayList;
-
 import static org.junit.Assert.assertEquals;
-
 /**
  * Example local unit test, which will execute on the development machine (host).
  *
@@ -27,7 +22,7 @@ public class ShareefUnitTests {
     }
     @Test
     public void adminTest() throws Exception {
-        Admin c = new Admin();
+        Admin c = new Admin(1,22,"s","asas","ad");
         c.setEmailAddress("bobby@yahoo.com");
         c.setRemoteId(3);
         c.setUserName("bobby");
@@ -35,14 +30,11 @@ public class ShareefUnitTests {
         c.setUserId(22);
         c.setRole("admin");
         //asserts
-        
         assertEquals(3,c.getRemoteId());
         assertEquals("bobby@yahoo.com",c.getEmailAddress());
         assertEquals("bobby",c.getUserName());
         assertEquals(1111,c.getSchoolId());
         assertEquals(22,c.getUserId());
         assertEquals("admin",c.getRole());
-
     }
-
 }
