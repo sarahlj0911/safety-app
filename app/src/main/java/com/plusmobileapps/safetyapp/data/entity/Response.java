@@ -5,6 +5,7 @@ import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.ForeignKey;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
+import android.support.annotation.NonNull;
 
 
 /**
@@ -191,10 +192,7 @@ public class Response {
     }
 
     public boolean isActionItem() {
-        if (isActionItem == 0) {
-            return false;
-        }
-        return true;
+        return isActionItem != 0;
     }
 
     public void setUserId(int userId) {
@@ -225,36 +223,32 @@ public class Response {
     public boolean equals(Object obj) {
         if (obj instanceof Response) {
             Response response = (Response) obj;
-            if (response.getActionPlan().equals(actionPlan) &&
+            return response.getActionPlan().equals(actionPlan) &&
                     response.getLocationId() == locationId &&
                     response.getQuestionId() == questionId &&
-                    response.getWalkthroughId() == walkthroughId
-                    ) {
-                return true;
-            }
+                    response.getWalkthroughId() == walkthroughId;
         }
         return false;
     }
 
+    @NonNull
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("Response{");
-        sb.append("responseId=").append(responseId);
-        sb.append(", isActionItem=").append(isActionItem);
-        sb.append(", imagePath='").append(imagePath).append('\'');
-        sb.append(", locationId=").append(locationId);
-        sb.append(", timeStamp='").append(timeStamp).append('\'');
-        sb.append(", rating=").append(rating);
-        sb.append(", priority=").append(priority);
-        sb.append(", actionPlan='").append(actionPlan).append('\'');
-        sb.append(", questionId=").append(questionId);
-        sb.append(", userId=").append(userId);
-        sb.append(", walkthroughId=").append(walkthroughId);
-        sb.append(", locationName='").append(locationName).append('\'');
-        sb.append(", title='").append(title).append('\'');
-        sb.append(", persisted='").append(persisted).append('\'');
-        sb.append('}');
-        return sb.toString();
+        return "Response{" + "responseId=" + responseId +
+                ", isActionItem=" + isActionItem +
+                ", imagePath='" + imagePath + '\'' +
+                ", locationId=" + locationId +
+                ", timeStamp='" + timeStamp + '\'' +
+                ", rating=" + rating +
+                ", priority=" + priority +
+                ", actionPlan='" + actionPlan + '\'' +
+                ", questionId=" + questionId +
+                ", userId=" + userId +
+                ", walkthroughId=" + walkthroughId +
+                ", locationName='" + locationName + '\'' +
+                ", title='" + title + '\'' +
+                ", persisted='" + persisted + '\'' +
+                '}';
     }
 }
 

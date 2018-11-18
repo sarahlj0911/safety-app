@@ -48,7 +48,7 @@ import java.util.Set;
 
 public class SyncAdapter extends AbstractThreadedSyncAdapter {
     private static final String TAG = "SyncAdapter";
-    public static final String COM_MYSQL_JDBC_DRIVER = "com.mysql.jdbc.Driver";
+    private static final String COM_MYSQL_JDBC_DRIVER = "com.mysql.jdbc.Driver";
 
     // Global variables
     private ContentResolver mContentResolver;
@@ -557,8 +557,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                 }
 
                 Log.d(TAG, "Inserting school with values [" + remoteId + ", " + schoolName + "]");
-                String insertSchoolSql = INSERT_SCHOOL_SQL;
-                insertSchoolStmt = conn.prepareStatement(insertSchoolSql);
+                insertSchoolStmt = conn.prepareStatement(INSERT_SCHOOL_SQL);
                 statements.add(insertSchoolStmt);
                 insertSchoolStmt.setInt(1, remoteId);
                 insertSchoolStmt.setString(2, schoolName);
@@ -602,8 +601,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
             conn.setAutoCommit(false);
             Log.i(TAG, "Successfully connected to database");
 
-            String selectUserSql = SELECT_USER_ID_FROM_USER_SQL;
-            selectUserStmt = conn.prepareStatement(selectUserSql);
+            selectUserStmt = conn.prepareStatement(SELECT_USER_ID_FROM_USER_SQL);
             statements.add(selectUserStmt);
             selectUserStmt.setString(1, email);
 
@@ -626,8 +624,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
                 Log.d(TAG, "Inserting user with values [" + remoteId + ", " + user.getUserName() +
                         ", " + email + ", " + user.getRole() + ", " + remoteSchoolId + "]");
-                String insertUserSql = INSERT_USER_SQL;
-                insertUserStmt = conn.prepareStatement(insertUserSql);
+                insertUserStmt = conn.prepareStatement(INSERT_USER_SQL);
                 statements.add(insertUserStmt);
                 insertUserStmt.setInt(1, remoteId);
                 insertUserStmt.setInt(2, remoteSchoolId);
