@@ -113,6 +113,7 @@
     <string name="walkthrough_last_modified">Last Modified:</string>
 
     <string name="network_unavailable">Offline, get back online for sync to work</string>
+    <string name="title_activity_authenticator">AuthenticatorActivity</string>
 
 </resources>
 

@@ -13,21 +13,22 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
-import android.widget.TextView;
 import android.widget.Toast;
 
+import com.amazonaws.mobile.client.AWSMobileClient;
+import com.amazonaws.mobileconnectors.pinpoint.PinpointConfiguration;
+import com.amazonaws.mobileconnectors.pinpoint.PinpointManager;
 import com.plusmobileapps.safetyapp.R;
 import com.plusmobileapps.safetyapp.actionitems.landing.ActionItemPresenter;
 import com.plusmobileapps.safetyapp.summary.landing.SummaryPresenter;
 import com.plusmobileapps.safetyapp.walkthrough.landing.WalkthroughLandingPresenter;
 
 public class MainActivity extends AppCompatActivity implements MainActivityContract.View {
+    public static PinpointManager pinpointManager; // AWS capture session starts and stops
     private static final String TAG = "MainActivity";
-    private TextView mTextMessage;
 
     private ViewPager viewPager;
     private BottomNavigationView navigation;
-    private String walkthroughFragmentTitle = "";
     private MainActivityPresenter presenter;
 
     // SyncAdapter Constants
@@ -69,6 +70,31 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
         account = CreateSyncAccount(this);
         ContentResolver.setSyncAutomatically(account, AUTHORITY, true);
         ContentResolver.addPeriodicSync(account, AUTHORITY, Bundle.EMPTY, SYNC_INTERVAL);
+
+        /* AWS Startup Services */
+        AWSMobileClient.getInstance().initialize(this, awsStartupResult -> Log.d("YourMainActivity", "AWSMobileClient is instantiated and you are connected to AWS!")).execute();
+
+        /* Initialize AWS Mobile Client */
+        AWSMobileClient.getInstance().initialize(this).execute();
+
+        PinpointConfiguration config = new PinpointConfiguration(
+                MainActivity.this,
+                AWSMobileClient.getInstance().getCredentialsProvider(),
+                AWSMobileClient.getInstance().getConfiguration()
+        );
+        pinpointManager = new PinpointManager(config);
+        pinpointManager.getSessionClient().startSession();
+        pinpointManager.getAnalyticsClient().submitEvents();
+    }
+
+    @Override
+    protected void onStop() {
+        // call the superclass method first
+        super.onStop();
+
+        /* AWS Stop/Send Session Analytics */
+        pinpointManager.getSessionClient().stopSession();
+        pinpointManager.getAnalyticsClient().submitEvents();
     }
 
     private void setUpPresenters(MainActivityFragmentFactory factory) {
@@ -78,7 +104,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
     }
 
     private void findViewsById() {
-        mTextMessage = findViewById(R.id.message);
+        findViewById(R.id.message); // Returns a TextView object
         navigation = findViewById(R.id.navigation);
         viewPager = findViewById(R.id.view_pager);
     }
@@ -117,9 +143,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
         }
     }
 
-    /**
-     * Handle clicks of the bottom navigation
-     */
+    /** Handle clicks of the bottom navigation */
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
@@ -153,9 +177,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
         }
     }
 
-    /**
-     * Handle ViewPager page change events
-     */
+    /** Handle ViewPager page change events */
     private ViewPager.OnPageChangeListener pageChangeListener = new ViewPager.OnPageChangeListener() {
         @Override
         public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -174,9 +196,10 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
         }
     };
 
+
+    // TODO May delete later
     /**
      * Create a new dummy account for the sync adapter
-     *
      * @param context The application context
      */
     public static Account CreateSyncAccount(Context context) {
@@ -189,6 +212,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
          * If successful, return the Account object, otherwise report an error.
          */
         if (accountManager.addAccountExplicitly(newAccount, null, null)) {
+            return newAccount; // Temporary
             /*
              * If you don't set android:syncable="true" in your <provider> element in the manifest,
              * then call context.setIsSyncable(account, AUTHORITY, 1) here.
