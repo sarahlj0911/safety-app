@@ -19,6 +19,9 @@ public class Admin {
     @PrimaryKey
     private int userId;
 
+    @PrimaryKey
+    private User userArray[];
+
     @ColumnInfo(name = "userName")
     private String userName;
 
@@ -93,6 +96,16 @@ public class Admin {
 
     public void setRemoteId(int remoteId) {
         this.remoteId = remoteId;
+    }
+
+    public void deleteUser(User user) {
+        User arr=[userArray.length-2];
+        for(int i=0;i<userArray.length;i++){
+            if(user==userArray[i]){
+                userArray[i]=null;
+            }
+        }
+
     }
 
     public boolean isRegistered() {
