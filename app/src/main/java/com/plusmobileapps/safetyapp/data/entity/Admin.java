@@ -98,14 +98,15 @@ public class Admin {
         this.remoteId = remoteId;
     }
 
-    public void deleteUser(User user) {
+    public String deleteUser(User user) {
         User arr=[userArray.length-2];
         for(int i=0;i<userArray.length;i++){
             if(user==userArray[i]){
                 userArray[i]=null;
             }
         }
-
+        String output="Successfully deleted"
+        return output;
     }
 
     public boolean isRegistered() {
