@@ -62,4 +62,18 @@ public class ShareefUnitTests {
        String check= c.deleteUser(user);
        assertEquals("Succesfully deleted",check);
     }
+    public void adminT() throws Exception {
+        Admin addy = new Admin(1,22,"s","asas","ad");
+       String address= addy.getEmailAddress();
+       int id=addy.getRemoteId();
+       String role=addy.getRole();
+       int schoolid=addy.getSchoolId();
+       int userId=addy.getUserId();
+      String name= addy.getUserName();
+      assertEquals("s",address);
+      assertEquals("ad",role);
+      assertEquals(1,userId);
+      assertEquals("asas",name);
+
+    }
 }
