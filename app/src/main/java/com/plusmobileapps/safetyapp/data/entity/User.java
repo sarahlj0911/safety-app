@@ -9,6 +9,7 @@ import android.arch.persistence.room.PrimaryKey;
  * Created by aaronmusengo on 1/23/18.
  * <p>
  * Updated by Robert Beerman on 2/19/18.
+ * Updated by Bart Skoczylas 11/17/18
  */
 
 @Entity(tableName = "user",
@@ -33,6 +34,12 @@ public class User {
 
     @ColumnInfo(name = "remoteId")
     private int remoteId;
+	
+	@ColumnInfo(name = "salt")
+    private byte[] salt;
+	
+	@ColumnInfo(name = "encryptedPassword")
+    private int encryptedPassword;
 
     // TODO Add isRegistered field
 
@@ -69,6 +76,14 @@ public class User {
     public int getRemoteId() {
         return remoteId;
     }
+	
+	public int getSalt() {
+        return salt;
+    }
+	
+	public int getEncryptedPassword() {
+        return encryptedPassword;
+    }
 
     //Setters
     public void setUserId(int userId) {
@@ -94,6 +109,14 @@ public class User {
     public void setRemoteId(int remoteId) {
         this.remoteId = remoteId;
     }
+	
+	public void setSalt() {
+		this.salt = PasswordUtils.getSalt();
+	}
+	
+	public void setEncryptedPassword(myPassword) {
+		this.encryptedPassword = PasswordUtils.generateSecurePassword(myPassword, salt);
+	}
 
     public boolean isRegistered() {
         return remoteId > 0;
