@@ -51,6 +51,9 @@ dependencies {
     //amazon web services sdk
     implementation ('com.amazonaws:aws-android-sdk-mobile-client:2.7.+@aar') { transitive = true }
 
+    //dynamodb
+    implementation 'com.amazonaws:aws-android-sdk-ddb-mapper:2.7.+'
+
     //good library to easily animate the recycler view **updated
     implementation 'jp.wasabeef:recyclerview-animators:2.3.0'
 
