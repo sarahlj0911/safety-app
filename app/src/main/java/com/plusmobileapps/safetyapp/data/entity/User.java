@@ -11,6 +11,7 @@ import java.util.Date;
  * Created by aaronmusengo on 1/23/18.
  * <p>
  * Updated by Robert Beerman on 2/19/18.
+ * Updated by Bart Skoczylas 11/17/18
  */
 
 @Entity(tableName = "user",
@@ -38,6 +39,7 @@ public class User {
 
     @ColumnInfo(name = "lastLogin")
     private long lastLogin;
+
 
     // TODO Add isRegistered field
 
@@ -102,6 +104,8 @@ public class User {
     public void setRemoteId(int remoteId) {
         this.remoteId = remoteId;
     }
+	
+
 
     public void setLastLogin(long lastLogin) { this.lastLogin = new Date().getTime(); }
 
