@@ -73,7 +73,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
     public static final String SELECT_USER_ID_FROM_USER_SQL = "SELECT userId FROM user WHERE emailAddress = ?";
     public static final String SELECT_MAX_USER_ID_SQL = "SELECT MAX(userId) FROM user";
     public static final String INSERT_USER_SQL = "INSERT INTO user (userId, schoolId, userName, " +
-            "emailAddress, role) VALUES (?, ?, ?, ?, ?)";
+            "emailAddress, role, lastLogin) VALUES (?, ?, ?, ?, ?, ?)";
     private static final String DELETE_WALKTHROUGH_SQL = "DELETE FROM walkthroughs " +
             "WHERE schoolId = ? AND userId = ? AND walkthroughId = ?";
     private static final String GET_LAST_SYNC_DATETIME_SQL = "SELECT MAX(lastUpdatedDate) " +
@@ -625,7 +625,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                 }
 
                 Log.d(TAG, "Inserting user with values [" + remoteId + ", " + user.getUserName() +
-                        ", " + email + ", " + user.getRole() + ", " + remoteSchoolId + "]");
+                        ", " + email + ", " + user.getRole() + ", " + remoteSchoolId + ", " + user.getLastLogin() + "]");
                 String insertUserSql = INSERT_USER_SQL;
                 insertUserStmt = conn.prepareStatement(insertUserSql);
                 statements.add(insertUserStmt);
@@ -634,6 +634,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                 insertUserStmt.setString(3, user.getUserName());
                 insertUserStmt.setString(4, email);
                 insertUserStmt.setString(5, user.getRole());
+                insertUserStmt.setLong(6, user.getLastLogin());
                 insertUserStmt.execute();
 
                 // Commit insert
@@ -654,6 +655,17 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
         }
 
         return remoteId;
+    }
+
+    private void deleteUser(User user) {
+        long lastTime = user.getLastLogin();
+        long curTime = new Date().getTime();
+
+        long week = 1000 * 60 * 60 * 24 * 7;
+
+        if ((curTime - lastTime) >= week) {
+            userDao.delete(user);
+        }
     }
 
     private void cleanup(List<ResultSet> resultSets, List<Statement> statements, Connection conn) {
