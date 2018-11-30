@@ -62,7 +62,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_main);
         findViewsById();
         MainActivityFragmentFactory factory = new MainActivityFragmentFactory();
@@ -85,7 +84,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
         ContentResolver.setSyncAutomatically(account, AUTHORITY, true);
         ContentResolver.addPeriodicSync(account, AUTHORITY, Bundle.EMPTY, SYNC_INTERVAL);
 
-        //amazon web services start
         AWSMobileClient.getInstance().initialize(this, new AWSStartupHandler() {
             @Override
             public void onComplete(AWSStartupResult awsStartupResult) {
@@ -93,7 +91,8 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
             }
         }).execute();
 
-        //AWSMobileClient.getInstance().initialize(this).execute();
+        // AWSMobileClient enables AWS user credentials to access your table
+        AWSMobileClient.getInstance().initialize(this).execute();
 
         AWSCredentialsProvider credentialsProvider = AWSMobileClient.getInstance().getCredentialsProvider();
         AWSConfiguration configuration = AWSMobileClient.getInstance().getConfiguration();
@@ -106,6 +105,9 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
                 .dynamoDBClient(dynamoDBClient)
                 .awsConfiguration(configuration)
                 .build();
+        Log.d("YourMainActivity", "some more stuff");
+        createUserInfoItem();
+
     }
 
     private void setUpPresenters(MainActivityFragmentFactory factory) {
@@ -237,5 +239,25 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
         Log.d(TAG, "Sync account created!");
 
         return newAccount;
+    }
+
+    public void createUserInfoItem() {
+        final UserInfoDO item = new UserInfoDO();
+
+        item.setUserId("bart-test");
+        item.setName("bart");
+        item.setTitle("student");
+        item.setLanguage("eng");
+        item.setLocation("asu");
+        Log.d("AWS", "createUserInfoItem");
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                dynamoDBMapper.save(item);
+                // Item saved
+                Log.d("AWS", "item added");
+            }
+        }).start();
     }
 }
