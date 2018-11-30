@@ -12,6 +12,7 @@ import android.text.Html;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.style.ImageSpan;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,9 +20,9 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.plusmobileapps.safetyapp.main.MainActivity;
 import com.plusmobileapps.safetyapp.PrefManager;
 import com.plusmobileapps.safetyapp.R;
+import com.plusmobileapps.safetyapp.main.MainActivity;
 import com.plusmobileapps.safetyapp.signup.SignupActivity;
 
 public class WelcomeActivity extends AppCompatActivity {
@@ -40,10 +41,15 @@ public class WelcomeActivity extends AppCompatActivity {
 
         // Checking for first time launch - before calling setContentView()
         prefManager = new PrefManager(this);
+        Log.d("Myapp","Tutorial is not seen yet");
         if (prefManager.isTutorialSeen()) {
+            Log.d("Myapp","Tutorial seen");
             if (prefManager.isUserSignedUp()) {
+                Log.d("Myapp","User is signed up");
+                Log.d("Myapp","Launching main screen");
                 launchMainScreen();
             } else {
+                Log.d("Myapp","Launching signup screen");
                 launchSignupScreen();
             }
         }
@@ -74,6 +80,7 @@ public class WelcomeActivity extends AppCompatActivity {
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.d("Myapp","Back button clicked!");
                 int current = getItem(-1);
                 if (current > -1) {
                     welcomeViewPager.setCurrentItem(current);
@@ -93,6 +100,7 @@ public class WelcomeActivity extends AppCompatActivity {
                 } else {
                     prefManager.setIsTutorialSeen(true);
                     //launchHomeScreen();
+                    Log.d("Myapp","Launching home screen 2");
                     launchSignupScreen();
                 }
             }
@@ -124,11 +132,14 @@ public class WelcomeActivity extends AppCompatActivity {
 
     private void launchSignupScreen() {
         startActivity(new Intent(WelcomeActivity.this, SignupActivity.class));
+        Log.d("Myapp","Finishing signup");
         finish();
+
     }
 
     private void launchMainScreen() {
         startActivity(new Intent(WelcomeActivity.this, MainActivity.class));
+        Log.d("Myapp","Finishing Main screen");
         finish();
     }
 
