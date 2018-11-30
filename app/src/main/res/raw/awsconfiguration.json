@@ -20,12 +20,12 @@
   "PinpointAnalytics": {
     "Default": {
       "AppId": "88c0e6da0f9c4158a1e648d8747d1c9b",
-      "Region": "us-east-1"
+      "Region": "us-west-2"
     }
   },
   "PinpointTargeting": {
     "Default": {
-      "Region": "us-east-1"
+      "Region": "us-west-2"
     }
   }
 }
