@@ -165,12 +165,12 @@ public class WelcomeActivity extends AppCompatActivity {
 
         @Override
         public void onPageScrolled(int arg0, float arg1, int arg2) {
-
+            Log.d("Myapp","Page Scrolled");
         }
 
         @Override
         public void onPageScrollStateChanged(int arg0) {
-
+            Log.d("Myapp","Page scroll state changed");
         }
     };
 
@@ -206,6 +206,7 @@ public class WelcomeActivity extends AppCompatActivity {
         public int getCount() {
             return layouts.length;
         }
+        Log.d("Myapp","getcount")
 
         @Override
         public boolean isViewFromObject(View view, Object obj) {
@@ -217,6 +218,7 @@ public class WelcomeActivity extends AppCompatActivity {
         public void destroyItem(ViewGroup container, int position, Object object) {
             View view = (View) object;
             container.removeView(view);
+            Log.d("Myapp","Item Destroyed");
         }
     }
 }
