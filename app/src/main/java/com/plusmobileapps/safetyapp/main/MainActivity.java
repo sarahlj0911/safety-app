@@ -242,8 +242,9 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
     }
 
     public void createUserInfoItem() {
-        final UserInfoDO item = new UserInfoDO();
 
+        //an example to demonstrate a dynamoDB push to amazon web servers
+        final UserInfoDO item = new UserInfoDO();
         item.setUserId("bart-test");
         item.setName("bart");
         item.setTitle("student");
