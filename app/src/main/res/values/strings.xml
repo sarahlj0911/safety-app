@@ -118,6 +118,7 @@
     <string name="temporary_password">Temporary Password</string>
     <string name="school">School</string>
     <string name="create_user">Create User</string>
+    <string name="Admin_settings">Admin Settings</string>
 
 </resources>
 
