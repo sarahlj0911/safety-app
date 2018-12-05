@@ -113,6 +113,12 @@
     <string name="walkthrough_last_modified">Last Modified:</string>
 
     <string name="network_unavailable">Offline, get back online for sync to work</string>
+    <string name="please_enter_the_information_of_the_new_user">Please enter the information of the new user:</string>
+    <string name="username">Username</string>
+    <string name="temporary_password">Temporary Password</string>
+    <string name="school">School</string>
+    <string name="create_user">Create User</string>
+    <string name="Admin_settings">Admin Settings</string>
 
 </resources>
 

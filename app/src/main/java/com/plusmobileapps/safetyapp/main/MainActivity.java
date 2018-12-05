@@ -4,6 +4,7 @@ import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -12,9 +13,13 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.plusmobileapps.safetyapp.AdminSettings;
 
 import com.amazonaws.auth.AWSCredentialsProvider;
 import com.amazonaws.mobile.client.AWSStartupHandler;
@@ -241,6 +246,28 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
         return newAccount;
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.drop_down_menu,menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+
+        switch(item.getItemId()){
+            case R.id.settings_menu:
+                //settings selected
+                Intent adminsettings = new Intent(this, AdminSettings.class);
+                startActivity(adminsettings);
+                break;
+        }
+
+
+        return super.onOptionsItemSelected(item);
+    }
+
+
     public void createUserInfoItem() {
 
         //an example to demonstrate a dynamoDB push to amazon web servers
@@ -261,4 +288,5 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
             }
         }).start();
     }
+
 }
