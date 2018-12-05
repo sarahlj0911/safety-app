@@ -5,10 +5,13 @@ import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.ForeignKey;
 import android.arch.persistence.room.PrimaryKey;
 
+import java.util.Date;
+
 /**
  * Created by aaronmusengo on 1/23/18.
  * <p>
  * Updated by Robert Beerman on 2/19/18.
+ * Updated by Bart Skoczylas 11/17/18
  */
 
 @Entity(tableName = "user",
@@ -34,6 +37,10 @@ public class User {
     @ColumnInfo(name = "remoteId")
     private int remoteId;
 
+    @ColumnInfo(name = "lastLogin")
+    private long lastLogin;
+
+
     // TODO Add isRegistered field
 
     public User(int userId, int schoolId, String emailAddress, String userName, String role) {
@@ -43,6 +50,7 @@ public class User {
         this.role = role;
         this.userName = userName;
         this.remoteId = 0;
+        setLastLogin(lastLogin);
     }
 
     //Getters
@@ -70,6 +78,8 @@ public class User {
         return remoteId;
     }
 
+    public long getLastLogin() { return lastLogin; }
+
     //Setters
     public void setUserId(int userId) {
         this.userId = userId;
@@ -94,6 +104,10 @@ public class User {
     public void setRemoteId(int remoteId) {
         this.remoteId = remoteId;
     }
+	
+
+
+    public void setLastLogin(long lastLogin) { this.lastLogin = new Date().getTime(); }
 
     public boolean isRegistered() {
         return remoteId > 0;

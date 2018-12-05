@@ -19,6 +19,8 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.plusmobileapps.safetyapp.data.dao.UserDao;
+import com.plusmobileapps.safetyapp.data.entity.User;
 import com.plusmobileapps.safetyapp.main.MainActivity;
 import com.plusmobileapps.safetyapp.PrefManager;
 import com.plusmobileapps.safetyapp.R;
@@ -33,6 +35,8 @@ public class WelcomeActivity extends AppCompatActivity {
     private int[] layouts;
     private Button btnBack, btnNext;
     private PrefManager prefManager;
+    private User curUser;
+    private UserDao userDao;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +46,9 @@ public class WelcomeActivity extends AppCompatActivity {
         prefManager = new PrefManager(this);
         if (prefManager.isTutorialSeen()) {
             if (prefManager.isUserSignedUp()) {
+                curUser = userDao.getUser();
                 launchMainScreen();
+                curUser.setLastLogin(1);
             } else {
                 launchSignupScreen();
             }
