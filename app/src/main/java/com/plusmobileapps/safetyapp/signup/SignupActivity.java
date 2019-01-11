@@ -32,6 +32,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 public class SignupActivity extends AppCompatActivity implements SignupContract.View, SignupDownloadCallback {
 
@@ -60,16 +61,16 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
         schoolDownloadFragment.setCallback(this);
 
 
-        schoolList = new ArrayList<String>();
-        schoolSpinner = (Spinner) findViewById(R.id.spinner_signup_school_name);
-        newSchool = (EditText) findViewById(R.id.new_school_text_box);
+        schoolList = new ArrayList<>();
+        schoolSpinner = findViewById(R.id.spinner_signup_school_name);
+        newSchool = findViewById(R.id.new_school_text_box);
 
         nameInput = findViewById(R.id.signup_name);
         emailInput = findViewById(R.id.signup_email);
         newSchool = findViewById(R.id.new_school_text_box);
 
-        nameInput.getEditText().addTextChangedListener(nameListener);
-        emailInput.getEditText().addTextChangedListener(emailListener);
+        Objects.requireNonNull(nameInput.getEditText()).addTextChangedListener(nameListener);
+        Objects.requireNonNull(emailInput.getEditText()).addTextChangedListener(emailListener);
     }
 
     @Override
@@ -151,8 +152,8 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
 
             Spinner roleInput = findViewById(R.id.spinner_signup_role);
 
-            String name = nameInput.getEditText().getText().toString();
-            String email = emailInput.getEditText().getText().toString();
+            String name = Objects.requireNonNull(nameInput.getEditText()).getText().toString();
+            String email = Objects.requireNonNull(emailInput.getEditText()).getText().toString();
 
             String role = roleInput.getSelectedItem().toString();
 
