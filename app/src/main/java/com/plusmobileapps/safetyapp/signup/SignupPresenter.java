@@ -23,6 +23,7 @@ public class SignupPresenter implements SignupContract.Presenter {
     public static final String EMAIL_INPUT = "email";
     public static final String SCHOOL_NAME_INPUT = "school_name";
     public static final String ROLE_INPUT = "role";
+    public static final String PASSWORD_INPUT = "password";
 
     private static final String TAG = "SignupPresenter";
     private SignupContract.View view;
@@ -95,9 +96,10 @@ public class SignupPresenter implements SignupContract.Presenter {
         String userName = formInput.get(NAME_INPUT);
         String email = formInput.get(EMAIL_INPUT);
         String role = formInput.get(ROLE_INPUT);
+        String password = formInput.get(PASSWORD_INPUT);
 
 
-        User user = new User(1, 1, email, userName, role);
+        User user = new User(1, 1, email, userName, role, password);
 
         AsyncTask<Void, Void, Boolean> saveUserTask = new SaveUserTask(user).execute();
 

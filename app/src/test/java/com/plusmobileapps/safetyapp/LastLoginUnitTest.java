@@ -15,14 +15,14 @@ import java.util.Date;
 public class LastLoginUnitTest {
     @Test
     public void lastLoginRetrievesDates() throws Exception {
-        User tempUser = new User(1,1,"hi@yahoo.com", "temp", "student");
+        User tempUser = new User(1,1,"hi@yahoo.com", "temp", "student", "temp");
         Date tempDate = new Date();
         assertEquals(tempDate.getTime(), tempUser.getLastLogin());
     }
 
     @Test
     public void setLastLoginResetsDate() throws Exception {
-        User tempUser = new User(1,1,"hi@yahoo.com", "temp", "student");
+        User tempUser = new User(1,1,"hi@yahoo.com", "temp", "student", "temp");
         Date tempDate = new Date();
         assertEquals(tempDate.getTime(), tempUser.getLastLogin());
         for (int i = 0; i < 100000000; i++) {
@@ -40,7 +40,7 @@ public class LastLoginUnitTest {
 
     @Test
     public void lastLoginDeletionComparison() throws Exception {
-        User tempUser = new User(1,1,"hi@yahoo.com", "temp", "student");
+        User tempUser = new User(1,1,"hi@yahoo.com", "temp", "student", "temp");
         Date tempDate = new Date(20);
         long week = 1000 * 60 * 60 * 24 * 7;
         boolean delete = false;

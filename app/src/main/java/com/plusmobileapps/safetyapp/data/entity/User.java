@@ -40,16 +40,20 @@ public class User {
     @ColumnInfo(name = "lastLogin")
     private long lastLogin;
 
+    @ColumnInfo(name = "password")
+    private String password;
+
 
     // TODO Add isRegistered field
 
-    public User(int userId, int schoolId, String emailAddress, String userName, String role) {
+    public User(int userId, int schoolId, String emailAddress, String userName, String role, String password) {
         this.userId = userId;
         this.schoolId = schoolId;
         this.emailAddress = emailAddress;
         this.role = role;
         this.userName = userName;
         this.remoteId = 0;
+        this.password = password;
         setLastLogin(lastLogin);
     }
 
@@ -80,6 +84,10 @@ public class User {
 
     public long getLastLogin() { return lastLogin; }
 
+    public String getPassword() {
+        return password;
+    }
+
     //Setters
     public void setUserId(int userId) {
         this.userId = userId;
@@ -104,12 +112,14 @@ public class User {
     public void setRemoteId(int remoteId) {
         this.remoteId = remoteId;
     }
-	
-
 
     public void setLastLogin(long lastLogin) { this.lastLogin = new Date().getTime(); }
 
     public boolean isRegistered() {
         return remoteId > 0;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }
