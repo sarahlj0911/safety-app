@@ -4,6 +4,8 @@ import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Spinner;
 
+import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBMapper;
+import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
 import com.plusmobileapps.safetyapp.data.entity.School;
 import com.plusmobileapps.safetyapp.data.entity.User;
 
@@ -108,6 +110,14 @@ public class SignupPresenter implements SignupContract.Presenter {
             Log.d(TAG, e.getMessage());
             errorMessage = "Unable to save input";
         }
+        AmazonDynamoDBClient dynamoDBClient = new AmazonDynamoDBClient(credentialsProvider);
+
+        this.dynamoDBMapper = DynamoDBMapper.builder()
+                .dynamoDBClient(dynamoDBClient)
+                .awsConfiguration(configuration)
+                .build();
+        Log.d("YourMainActivity", "some more stuff");
+        createUserInfoItem();
     }
 
     @Override
