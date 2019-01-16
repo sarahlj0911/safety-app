@@ -9,17 +9,19 @@
         android:id="@+id/button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:onClick="yesOnClick"
         android:text="Yes"
-        tools:layout_editor_absoluteX="84dp"
-        tools:layout_editor_absoluteY="259dp" />
+        tools:layout_editor_absoluteX="85dp"
+        tools:layout_editor_absoluteY="284dp" />
 
     <Button
         android:id="@+id/button2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:onClick="noOnClick"
         android:text="No"
-        tools:layout_editor_absoluteX="211dp"
-        tools:layout_editor_absoluteY="259dp" />
+        tools:layout_editor_absoluteX="212dp"
+        tools:layout_editor_absoluteY="284dp" />
 
     <EditText
         android:id="@+id/editText2"
@@ -28,7 +30,7 @@
         android:ems="10"
         android:inputType="textPersonName"
         android:text="Are you sure?"
-        tools:layout_editor_absoluteX="84dp"
-        tools:layout_editor_absoluteY="153dp" />
+        tools:layout_editor_absoluteX="85dp"
+        tools:layout_editor_absoluteY="183dp" />
 
 </android.support.constraint.ConstraintLayout>
