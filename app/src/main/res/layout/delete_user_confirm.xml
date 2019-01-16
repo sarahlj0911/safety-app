@@ -33,4 +33,22 @@
         tools:layout_editor_absoluteX="85dp"
         tools:layout_editor_absoluteY="183dp" />
 
+    <Button
+        android:id="@+id/button3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Button"
+        tools:layout_editor_absoluteX="76dp"
+        tools:layout_editor_absoluteY="428dp" />
+
+    <EditText
+        android:id="@+id/editText3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text="Name"
+        tools:layout_editor_absoluteX="114dp"
+        tools:layout_editor_absoluteY="373dp" />
+
 </android.support.constraint.ConstraintLayout>
