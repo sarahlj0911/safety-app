@@ -4,6 +4,11 @@ import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Spinner;
 
+import com.amazonaws.auth.AWSCredentialsProvider;
+import com.amazonaws.mobile.client.AWSMobileClient;
+import com.amazonaws.mobile.client.AWSStartupHandler;
+import com.amazonaws.mobile.client.AWSStartupResult;
+import com.amazonaws.mobile.config.AWSConfiguration;
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
 import com.plusmobileapps.safetyapp.data.entity.School;
@@ -110,6 +115,20 @@ public class SignupPresenter implements SignupContract.Presenter {
             Log.d(TAG, e.getMessage());
             errorMessage = "Unable to save input";
         }
+
+        AWSMobileClient.getInstance().initialize(this, new AWSStartupHandler() {
+            @Override
+            public void onComplete(AWSStartupResult awsStartupResult) {
+                Log.d("YourMainActivity", "AWSMobileClient is instantiated and you are connected to AWS!");
+            }
+        }).execute();
+
+        // AWSMobileClient enables AWS user credentials to access your table
+        AWSMobileClient.getInstance().initialize(this).execute();
+
+        AWSCredentialsProvider credentialsProvider = AWSMobileClient.getInstance().getCredentialsProvider();
+        AWSConfiguration configuration = AWSMobileClient.getInstance().getConfiguration();
+
         AmazonDynamoDBClient dynamoDBClient = new AmazonDynamoDBClient(credentialsProvider);
 
         this.dynamoDBMapper = DynamoDBMapper.builder()
