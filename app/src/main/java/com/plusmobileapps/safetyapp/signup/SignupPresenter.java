@@ -4,15 +4,11 @@ import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Spinner;
 
-import com.amazonaws.auth.AWSCredentialsProvider;
-import com.amazonaws.mobile.client.AWSMobileClient;
-import com.amazonaws.mobile.client.AWSStartupHandler;
-import com.amazonaws.mobile.client.AWSStartupResult;
-import com.amazonaws.mobile.config.AWSConfiguration;
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
 import com.plusmobileapps.safetyapp.data.entity.School;
 import com.plusmobileapps.safetyapp.data.entity.User;
+import com.plusmobileapps.safetyapp.main.UserInfoDO;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -30,6 +26,7 @@ public class SignupPresenter implements SignupContract.Presenter {
     public static final String EMAIL_INPUT = "email";
     public static final String SCHOOL_NAME_INPUT = "school_name";
     public static final String ROLE_INPUT = "role";
+    DynamoDBMapper dynamoDBMapper;
 
     private static final String TAG = "SignupPresenter";
     private SignupContract.View view;
@@ -115,28 +112,25 @@ public class SignupPresenter implements SignupContract.Presenter {
             Log.d(TAG, e.getMessage());
             errorMessage = "Unable to save input";
         }
+        //an example to demonstrate a dynamoDB push to amazon web servers
+        final UserInfoDO item = new UserInfoDO();
+        //adds use
+        item.setUserId("new user Id");
+        item.setName("New name");
+        item.setTitle("student");
+        item.setLanguage("eng");
+        item.setLocation("asu");
+        Log.d("AWS", "createUserInfoItem");
 
-        AWSMobileClient.getInstance().initialize(this, new AWSStartupHandler() {
+        new Thread(new Runnable() {
             @Override
-            public void onComplete(AWSStartupResult awsStartupResult) {
-                Log.d("YourMainActivity", "AWSMobileClient is instantiated and you are connected to AWS!");
+            public void run() {
+                dynamoDBMapper.save(item);
+                // Item saved
+                Log.d("AWS", "item added");
             }
-        }).execute();
+        }).start();
 
-        // AWSMobileClient enables AWS user credentials to access your table
-        AWSMobileClient.getInstance().initialize(this).execute();
-
-        AWSCredentialsProvider credentialsProvider = AWSMobileClient.getInstance().getCredentialsProvider();
-        AWSConfiguration configuration = AWSMobileClient.getInstance().getConfiguration();
-
-        AmazonDynamoDBClient dynamoDBClient = new AmazonDynamoDBClient(credentialsProvider);
-
-        this.dynamoDBMapper = DynamoDBMapper.builder()
-                .dynamoDBClient(dynamoDBClient)
-                .awsConfiguration(configuration)
-                .build();
-        Log.d("YourMainActivity", "some more stuff");
-        createUserInfoItem();
     }
 
     @Override
