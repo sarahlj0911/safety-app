@@ -37,8 +37,8 @@ public class WalkthroughActivity extends AppCompatActivity implements Walkthroug
     FragmentManager fragmentManager;
     WalkthroughPresenter presenter = new WalkthroughPresenter(this);
 
-    private int locationId;
-    private int walkthroughId;
+    int locationId;
+    int walkthroughId;
     private WalkthroughContentPresenter currentContentPresenter;
     private WalkthroughContentPresenter previousContentPresenter;
     private WalkthroughContentFragment fragment;
@@ -156,9 +156,24 @@ public class WalkthroughActivity extends AppCompatActivity implements Walkthroug
     }
 
     @Override
-    public void closeWalkthrough() {
+
+        final walkthroughDO item = new walkthroughDO();
+        item.walkthroughID(walkthroughId);
+        item.locationID(locationId);
+
+        Log.d("AWS", "createWT");
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                dynamoDBMapper.save(item);
+                // Item saved
+                Log.d("AWS", "item added");
+            }
+        }).start();
+
         finish();
-    }
+
 
     @Override
     public void onBackPressed() {
