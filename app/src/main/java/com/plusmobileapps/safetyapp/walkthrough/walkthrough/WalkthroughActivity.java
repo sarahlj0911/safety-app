@@ -155,24 +155,6 @@ public class WalkthroughActivity extends AppCompatActivity implements Walkthroug
         questionCount.setText(text);
     }
 
-    @Override
-
-        final walkthroughDO item = new walkthroughDO();
-        item.walkthroughID(walkthroughId);
-        item.locationID(locationId);
-
-        Log.d("AWS", "createWT");
-
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                dynamoDBMapper.save(item);
-                // Item saved
-                Log.d("AWS", "item added");
-            }
-        }).start();
-
-        finish();
 
 
     @Override
