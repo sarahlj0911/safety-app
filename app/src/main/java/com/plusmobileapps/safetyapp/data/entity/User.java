@@ -122,4 +122,18 @@ public class User {
     public void setPassword(String password) {
         this.password = password;
     }
+
+    //Authentication
+
+    public boolean checkPassword(String pass)
+    {
+        if (pass.equals(this.password))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
 }
