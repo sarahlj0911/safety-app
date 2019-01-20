@@ -94,6 +94,18 @@
     <!--actionitem detail page-->
     <string name="exit_confirmation_no_save">Are you sure you want to exit without saving your changes?</string>
     <string name="confirmation">Confirmation</string>
+
+    <!--actionitem new page-->
+    <string name="inputFieldTitle">Title</string>
+    <string name="inputFieldDate">Date</string>
+    <string name="inputFieldDetail">Description</string>
+    <string name="buttonSaveAction">Save</string>
+    <string name="actionItemImage">Action Item Photo</string>
+    <string name="textViewStatus">Status</string>
+
+
+
+
     <!--walkthrough landing text-->
     <string name="no_walkthrough_text">You don\'t have any walkthroughs.</string>
     <string name="viewholder_header_completed">Completed</string>
