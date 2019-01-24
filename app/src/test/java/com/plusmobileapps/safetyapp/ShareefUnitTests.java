@@ -15,11 +15,11 @@ import static org.junit.Assert.assertEquals;
  */
 public class ShareefUnitTests {
     @Test
-    public void addition_isCorrect() throws Exception {
+    public void addition_isCorrect() {
         assertEquals(4, 2 + 2);
     }
     @Test
-    public void schoolSpinner() throws Exception {
+    public void schoolSpinner() {
        ArrayList<String> testy= new ArrayList<String>();
         new SignupActivity().populateSchoolSpinner(testy);
         assertEquals(testy,testy);

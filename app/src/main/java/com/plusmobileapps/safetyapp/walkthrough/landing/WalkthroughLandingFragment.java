@@ -221,7 +221,7 @@ public class WalkthroughLandingFragment extends Fragment
                 positiveButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Dialog dialogObj = Dialog.class.cast(dialog);
+                        Dialog dialogObj = (Dialog) dialog;
                         TextInputLayout textInputLayout = dialogObj.findViewById(R.id.edit_text_create_walkthrough);
                         String walkthroughTitle = textInputLayout.getEditText().getText().toString();
                         if (walkthroughTitle != null & walkthroughTitle.length() >= MINIMUM_CHARACTER_NAME) {
