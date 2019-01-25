@@ -53,7 +53,7 @@ public class WelcomeActivity extends AppCompatActivity {
                 }
                 catch (NullPointerException e) {
                     System.err.println("Error: NullPointerException for user. Reverting to login screen.");
-                    launchSignupScreen();
+                    launchSignupScreen(); // TODO launchLoginScreen
                 }
             }
             else {
