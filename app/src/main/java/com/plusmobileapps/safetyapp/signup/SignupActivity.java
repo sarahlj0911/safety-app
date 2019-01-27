@@ -1,6 +1,5 @@
 package com.plusmobileapps.safetyapp.signup;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
@@ -20,6 +19,7 @@ import android.widget.Spinner;
 
 import com.plusmobileapps.safetyapp.PrefManager;
 import com.plusmobileapps.safetyapp.R;
+import com.plusmobileapps.safetyapp.login.LoginActivity;
 import com.plusmobileapps.safetyapp.main.MainActivity;
 
 import java.util.ArrayList;
@@ -70,7 +70,7 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
         emailField.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                if (!hasFocus) hideKeyboard(); }
+                if (!hasFocus) hideKeyboard(v); }
         });
 
 
@@ -299,21 +299,22 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
     /**
      * Added by Jeremy Powell 1/24/2019
      */
-    public void buttonLogInClicked(View view) {
+    public void buttonGotoLogInClicked(View view) {
         android.util.Log.d(TAG, "Debug: Login Button Clicked");
-        // TODO go to login_activity
+        startActivity(new Intent(SignupActivity.this, LoginActivity.class));
     }
 
 
     /**
      * Hides the keyboard
-     * REF: https://stackoverflow.com/questions/4165414/how-to-hide-soft-keyboard-on-android-after-clicking-outside-edittext
+     * REF: https://stackoverflow.com/questions/1109022/close-hide-the-android-soft-keyboard#
      * Added by Jeremy Powell 1/24/2019
      */
     //
-    public void hideKeyboard() {
-        InputMethodManager inputMethodManager = (InputMethodManager) this.getSystemService(Activity.INPUT_METHOD_SERVICE);
-        inputMethodManager.hideSoftInputFromWindow(this.getCurrentFocus().getWindowToken(), 0);
+    public void hideKeyboard(View v) {
+        if (v != null) {
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(v.getWindowToken(), 0); }
     }
 
 }

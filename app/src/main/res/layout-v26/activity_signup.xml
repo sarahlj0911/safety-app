@@ -37,7 +37,7 @@
             android:layout_height="wrap_content"
             android:hint="@string/hint_name"
             android:inputType="text"
-            tools:ignore="Autofill" />
+            android:autofillHints="Enter your name" />
 
     </android.support.design.widget.TextInputLayout>
 
@@ -55,8 +55,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
             android:hint="@string/hint_email"
-            android:inputType="text|textEmailAddress"
-            tools:ignore="Autofill" />
+            android:inputType="text|textEmailAddress" />
 
     </android.support.design.widget.TextInputLayout>
 
@@ -67,7 +66,7 @@
         android:layout_below="@+id/buttonLogIn"
         android:layout_alignStart="@+id/label_signup_role"
         android:layout_marginTop="50dp"
-        android:text="@string/text_signup_school_name"
+        android:text="School"
         android:textColor="@android:color/black"
         android:textSize="18sp" />
 
@@ -90,8 +89,7 @@
         android:layout_alignTop="@+id/spinner_signup_school_name"
         android:visibility="invisible"
         android:paddingTop="7dp"
-        android:textSize="18sp"
-        />
+        android:textSize="18sp"/>
 
     <TextView
         android:id="@+id/label_signup_role"

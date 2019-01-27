@@ -52,7 +52,7 @@ public class WelcomeActivity extends AppCompatActivity {
                     curUser.setLastLogin(1);
                 }
                 catch (NullPointerException e) {
-                    System.err.println("Error: NullPointerException for user. Reverting to login screen.");
+                    System.err.println("Error: NullPointerException for user. Reverting to LoginActivity screen.");
                     launchSignupScreen(); // TODO launchLoginScreen
                 }
             }
