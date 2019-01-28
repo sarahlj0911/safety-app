@@ -20,9 +20,9 @@
     <application
         android:name=".MyApplication"
         android:allowBackup="false"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/ic_launcher_concept"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@mipmap/ic_launcher_concept_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar"
         tools:ignore="GoogleAppIndexingWarning">
@@ -69,10 +69,16 @@
         </provider>
 
         <activity
+            android:name=".login.LoginActivity"
+            android:screenOrientation="portrait" />
+
+        <activity
             android:name=".signup.SignupActivity"
             android:screenOrientation="portrait" />
 
-        <service android:name=".sync.AuthenticatorService">
+        <service android:name=".sync.AuthenticatorService"
+            android:permission=""
+            tools:ignore="ExportedService">
             <intent-filter>
                 <action android:name="android.accounts.AccountAuthenticator" />
             </intent-filter>
@@ -91,7 +97,9 @@
         <service
             android:name=".sync.SyncService"
             android:exported="true"
-            android:process=":sync">
+            android:process=":sync"
+            android:permission=""
+            tools:ignore="ExportedService">
             <intent-filter>
                 <action android:name="android.content.SyncAdapter" />
             </intent-filter>
@@ -101,7 +109,7 @@
                 android:resource="@xml/syncadapter" />
         </service>
 
-        <activity android:name=".AdminSettings"></activity>
+        <activity android:name=".AdminSettings" />
     </application>
 
 </manifest>
