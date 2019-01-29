@@ -1,38 +1,36 @@
-package com.plusmobileapps.safetyapp.signup;
+package com.plusmobileapps.safetyapp.login;
 
 import com.plusmobileapps.safetyapp.BasePresenter;
 import com.plusmobileapps.safetyapp.BaseView;
 
-import java.util.ArrayList;
 import java.util.Map;
 
 /**
- * Created by Robert Beerman on 2/17/2018.
+ * Created by Jeremy Powell on 1/28/2019.
  */
 
-public interface SignupContract {
+public interface LoginContract {
 
     interface View extends BaseView<Presenter> {
         void displayInvalidEmailError(boolean show);
-
         void displayNoEmailError(boolean show);
-
-        void displayNoNameError(boolean show);
-
-        void displayNoSchoolError(boolean show);
-
+        void displayNoPasswordError(boolean show);
         void launchHomeScreen();
-
-        void populateSchoolSpinner(ArrayList<String> schools);
     }
 
     interface Presenter extends BasePresenter {
         void processFormInput(Map<String, String> formInput);
 
-        void nameTextAdded();
-
         void emailTextAdded();
+        void passwordTextAdded();
 
-        void schoolNameTextAdded();
+        void displayInvalidEmailError();
+
+        void displayNoEmailError();
+
+        void displayNoPasswordError();
+
+        void launchHomeScreen();
     }
+
 }

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_toRightOf="@id/label_signup_role"
+    android:layout_toEndOf="@id/label_signup_role"
     android:gravity="center_horizontal"
     tools:context="com.plusmobileapps.safetyapp.signup.SignupActivity">
 
@@ -55,7 +55,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
             android:hint="@string/hint_email"
-            android:inputType="text|textEmailAddress" />
+            android:inputType="text|textEmailAddress"
+            android:importantForAutofill="no" />
 
     </android.support.design.widget.TextInputLayout>
 
@@ -63,10 +64,10 @@
         android:id="@+id/label_signup_school_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/buttonLogIn"
+        android:layout_below="@+id/signup_email"
         android:layout_alignStart="@+id/label_signup_role"
-        android:layout_marginTop="50dp"
-        android:text="School"
+        android:layout_marginTop="40dp"
+        android:text="@string/label_signup_school_name"
         android:textColor="@android:color/black"
         android:textSize="18sp" />
 
@@ -89,7 +90,8 @@
         android:layout_alignTop="@+id/spinner_signup_school_name"
         android:visibility="invisible"
         android:paddingTop="7dp"
-        android:textSize="18sp"/>
+        android:textSize="18sp"
+        android:importantForAutofill="no" />
 
     <TextView
         android:id="@+id/label_signup_role"
@@ -123,32 +125,5 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="50dp"
         android:text="@string/btn_signup" />
-
-    <Button
-        android:id="@+id/buttonLogIn"
-        android:layout_width="100dp"
-        android:layout_height="40dp"
-        android:layout_below="@+id/textView10"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginStart="55dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginEnd="55dp"
-        android:onClick="buttonGotoLogInClicked"
-        android:text="@string/button_loginGo" />
-
-    <TextView
-        android:id="@+id/textView10"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/signup_email"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginStart="0dp"
-        android:layout_marginTop="15dp"
-        android:layout_marginEnd="0dp"
-        android:text="@string/text_login"
-        android:textAlignment="center"
-        android:textSize="16sp" />
 
 </RelativeLayout>

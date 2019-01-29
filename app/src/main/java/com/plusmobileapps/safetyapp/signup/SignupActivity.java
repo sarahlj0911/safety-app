@@ -19,7 +19,6 @@ import android.widget.Spinner;
 
 import com.plusmobileapps.safetyapp.PrefManager;
 import com.plusmobileapps.safetyapp.R;
-import com.plusmobileapps.safetyapp.login.LoginActivity;
 import com.plusmobileapps.safetyapp.main.MainActivity;
 
 import java.util.ArrayList;
@@ -289,21 +288,10 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
     @Override
     public void finishDownloading() {
         downloading = false;
-
         if (schoolDownloadFragment != null) {
             schoolDownloadFragment.cancelGetSchools();
         }
     }
-
-
-    /**
-     * Added by Jeremy Powell 1/24/2019
-     */
-    public void buttonGotoLogInClicked(View view) {
-        android.util.Log.d(TAG, "Debug: Login Button Clicked");
-        startActivity(new Intent(SignupActivity.this, LoginActivity.class));
-    }
-
 
     /**
      * Hides the keyboard

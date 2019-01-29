@@ -2,11 +2,10 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 28
-
     buildToolsVersion '28.0.3'
     defaultConfig {
         applicationId "com.plusmobileapps.safetyapp"
-        minSdkVersion 19
+        minSdkVersion 21
         targetSdkVersion 28
         versionCode 3
         versionName "1.1"
@@ -27,10 +26,12 @@ android {
             buildConfigField("String", "SYNC_PASS", "\"<insert password>\"")
         }
     }
+    productFlavors {
+    }
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
     androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
@@ -57,7 +58,7 @@ dependencies {
     implementation 'jp.wasabeef:recyclerview-animators:2.3.0'
 
     //room library
-    implementation "android.arch.persistence.room:runtime:1.1.1"
+    implementation 'android.arch.persistence.room:runtime:1.1.1'
     annotationProcessor "android.arch.persistence.room:compiler:1.1.1"
 
     //walkthrough tutorial library
@@ -67,6 +68,7 @@ dependencies {
     implementation 'com.squareup.picasso:picasso:2.71828'
 
     //test
+
     // Dependencies for local unit tests
     testImplementation "junit:junit:$rootProject.ext.junitVersion"
     testImplementation "org.mockito:mockito-all:$rootProject.ext.mockitoVersion"

@@ -1,9 +1,6 @@
 package com.plusmobileapps.safetyapp.walkthrough.landing;
 
-import android.accounts.Account;
-import android.accounts.AccountManager;
 import android.app.Dialog;
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -23,7 +20,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 
@@ -41,8 +37,7 @@ import com.plusmobileapps.safetyapp.walkthrough.location.LocationActivity;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static android.content.Context.ACCOUNT_SERVICE;
+import java.util.Objects;
 
 public class WalkthroughLandingFragment extends Fragment
         implements OnShowcaseEventListener, WalkthroughLandingContract.View, DownloadCallback {
@@ -50,7 +45,7 @@ public class WalkthroughLandingFragment extends Fragment
     public static String EXTRA_WALKTHROUGH_NAME = "walkthrough_name";
     private static final int MINIMUM_CHARACTER_NAME = 2;
 
-    private static ShowcaseView showcaseView;
+    private ShowcaseView showcaseView;
     private static final String TAG = "WalkthruLandingFragment";
     private PrefManager prefManager;
     private View overlay;
@@ -110,7 +105,7 @@ public class WalkthroughLandingFragment extends Fragment
     @Override
     public void onResume() {
         super.onResume();
-        prefManager = new PrefManager(getContext());
+        prefManager = new PrefManager(Objects.requireNonNull(getContext()));
 
         if (!prefManager.getHasSeenCreateWalkthroughTutorial()) {
             presenter.firstAppLaunch();
@@ -134,7 +129,7 @@ public class WalkthroughLandingFragment extends Fragment
     @Override
     public void showWalkthroughs(List<Walkthrough> walkthroughs) {
         Log.d(TAG, "In showWalkthroughs. walkthroughs.size = " + walkthroughs.size());
-        fab.setVisibility(View.VISIBLE);
+        fab.setVisibility(View.VISIBLE); // TODO Issue
         adapter.replaceData(walkthroughs);
         adapter.notifyDataSetChanged();
     }

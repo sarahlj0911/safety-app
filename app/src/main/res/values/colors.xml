@@ -1,13 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#F44336</color>
+    <color name="colorPrimary">#E2572E</color>
+    <color name="colorPrimaryDark">#C24622</color>
+    <color name="colorAccent">#FF3E2E</color>
     <color name="paper">#E0E0E0</color>
     <color name="actionItemRed">#F44336</color>
     <color name="actionItemGreen">#4CAF50</color>
     <color name="actionItemYellow">#FFEB3B</color>
     <color name="divider">#9E9E9E</color>
+    <color name="placeholder_light">#B2FFFFFF</color>
+    <color name="status_bar_dark_transparent">#34000000</color>
+    <color name="text_unfocus">#B3FFFFFF</color>
+    <color name="error">#C50000</color>
+    <color name="login_button_text_click">#EA4E1B</color>
+
+
+
 
     <!-- Welcome pages dot colors -->
     <color name="dot_active_welcome">#303F9F</color>

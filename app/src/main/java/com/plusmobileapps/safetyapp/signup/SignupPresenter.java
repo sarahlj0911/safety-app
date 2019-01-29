@@ -2,16 +2,13 @@ package com.plusmobileapps.safetyapp.signup;
 
 import android.os.AsyncTask;
 import android.util.Log;
-import android.widget.Spinner;
 
 import com.plusmobileapps.safetyapp.data.entity.School;
 import com.plusmobileapps.safetyapp.data.entity.User;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
-import java.util.List;
-import java.util.ArrayList;
 
 /**
  * Created by Robert Beerman on 2/17/2018.
@@ -19,10 +16,10 @@ import java.util.ArrayList;
 
 public class SignupPresenter implements SignupContract.Presenter {
 
-    public static final String NAME_INPUT = "name";
-    public static final String EMAIL_INPUT = "email";
-    public static final String SCHOOL_NAME_INPUT = "school_name";
-    public static final String ROLE_INPUT = "role";
+    static final String NAME_INPUT = "name";
+    static final String EMAIL_INPUT = "email";
+    static final String SCHOOL_NAME_INPUT = "school_name";
+    static final String ROLE_INPUT = "role";
 
     private static final String TAG = "SignupPresenter";
     private SignupContract.View view;
@@ -46,24 +43,28 @@ public class SignupPresenter implements SignupContract.Presenter {
     public void processFormInput(Map<String, String> formInput) {
         boolean isValidInput = true;
         String name = formInput.get(NAME_INPUT);
-        if (isEmpty(name)) {
-            view.displayNoNameError(true);
-            isValidInput = false;
-        } else {
-            view.displayNoNameError(false);
+        if (name != null) {
+            if (isEmpty(name)) {
+                view.displayNoNameError(true);
+                isValidInput = false;
+            } else {
+                view.displayNoNameError(false);
+            }
         }
 
         Log.d(TAG, "School Name is: " + formInput.get(SCHOOL_NAME_INPUT));
 
         String email = formInput.get(EMAIL_INPUT);
-        if (isEmpty(email)) {
-            view.displayNoEmailError(true);
-            isValidInput = false;
-        } else if (!email.contains("@")) {
-            view.displayInvalidEmailError(true);
-            isValidInput = false;
-        } else {
-            view.displayNoEmailError(false);
+        if (email != null) {
+            if (isEmpty(email)) {
+                view.displayNoEmailError(true);
+                isValidInput = false;
+            } else if (!email.contains("@")) {
+                view.displayInvalidEmailError(true);
+                isValidInput = false;
+            } else {
+                view.displayNoEmailError(false);
+            }
         }
 
         if (isValidInput) {
