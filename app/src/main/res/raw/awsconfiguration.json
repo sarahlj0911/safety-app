@@ -12,14 +12,6 @@
   "IdentityManager": {
     "Default": {}
   },
-  "CognitoUserPool": {
-    "Default": {
-      "PoolId": "us-west-2_3KvLblMyN",
-      "AppClientId": "1p97ciklq4r2fbapn15s0fignt",
-      "AppClientSecret": "1ft9vtbauounq3vhlaelukluluc8qdru438iahuirqg5dscn56oh",
-      "Region": "us-west-2"
-    }
-  },
   "S3TransferUtility": {
     "Default": {
       "Bucket": "safetyapp-userfiles-mobilehub-2118900508",

@@ -74,7 +74,7 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
                 if (!hasFocus) hideKeyboard(); }
         });
 
-        FileUtil.deleteDb(this);
+        //FileUtil.deleteDb(this);
     }
 
     @Override
