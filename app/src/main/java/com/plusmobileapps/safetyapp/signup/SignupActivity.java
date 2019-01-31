@@ -21,6 +21,7 @@ import android.widget.Spinner;
 import com.plusmobileapps.safetyapp.PrefManager;
 import com.plusmobileapps.safetyapp.R;
 import com.plusmobileapps.safetyapp.main.MainActivity;
+import com.plusmobileapps.safetyapp.util.FileUtil;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -73,7 +74,7 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
                 if (!hasFocus) hideKeyboard(); }
         });
 
-
+        FileUtil.deleteDb(this);
     }
 
     @Override

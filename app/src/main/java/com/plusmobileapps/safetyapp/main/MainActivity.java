@@ -32,6 +32,7 @@ import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
 import com.plusmobileapps.safetyapp.R;
 import com.plusmobileapps.safetyapp.actionitems.landing.ActionItemPresenter;
 import com.plusmobileapps.safetyapp.summary.landing.SummaryPresenter;
+import com.plusmobileapps.safetyapp.util.FileUtil;
 import com.plusmobileapps.safetyapp.walkthrough.landing.WalkthroughLandingPresenter;
 
 
@@ -89,6 +90,8 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
         ContentResolver.setSyncAutomatically(account, AUTHORITY, true);
         ContentResolver.addPeriodicSync(account, AUTHORITY, Bundle.EMPTY, SYNC_INTERVAL);
 
+        //boolean fileDeleted = FileUtil.deleteDb(this);
+        /*
         AWSMobileClient.getInstance().initialize(this, new AWSStartupHandler() {
             @Override
             public void onComplete(AWSStartupResult awsStartupResult) {
@@ -111,7 +114,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
                 .awsConfiguration(configuration)
                 .build();
         Log.d("YourMainActivity", "some more stuff");
-        createUserInfoItem();
+        */
 
     }
 
@@ -265,28 +268,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
 
 
         return super.onOptionsItemSelected(item);
-    }
-
-
-    public void createUserInfoItem() {
-
-        //an example to demonstrate a dynamoDB push to amazon web servers
-        final UserInfoDO item = new UserInfoDO();
-        item.setUserId("bart-test");
-        item.setName("bart");
-        item.setTitle("student");
-        item.setLanguage("eng");
-        item.setLocation("asu");
-        Log.d("AWS", "createUserInfoItem");
-
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                dynamoDBMapper.save(item);
-                // Item saved
-                Log.d("AWS", "item added");
-            }
-        }).start();
     }
 
 }
