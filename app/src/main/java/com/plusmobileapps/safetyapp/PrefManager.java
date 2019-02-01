@@ -14,7 +14,7 @@ public class PrefManager {
     private Context context;
 
     // shared pref mode
-    int PRIVATE_MODE = 0;
+    private int PRIVATE_MODE = 0;
 
     // Shared preferences file name
     private static final String PREF_NAME = "safetyapp-welcome";

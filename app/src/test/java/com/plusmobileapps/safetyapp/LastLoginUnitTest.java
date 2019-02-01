@@ -14,14 +14,14 @@ import java.util.Date;
  */
 public class LastLoginUnitTest {
     @Test
-    public void lastLoginRetrievesDates() throws Exception {
+    public void lastLoginRetrievesDates() {
         User tempUser = new User(1,1,"hi@yahoo.com", "temp", "student");
         Date tempDate = new Date();
         assertEquals(tempDate.getTime(), tempUser.getLastLogin());
     }
 
     @Test
-    public void setLastLoginResetsDate() throws Exception {
+    public void setLastLoginResetsDate() {
         User tempUser = new User(1,1,"hi@yahoo.com", "temp", "student");
         Date tempDate = new Date();
         assertEquals(tempDate.getTime(), tempUser.getLastLogin());
@@ -39,7 +39,7 @@ public class LastLoginUnitTest {
     }
 
     @Test
-    public void lastLoginDeletionComparison() throws Exception {
+    public void lastLoginDeletionComparison() {
         User tempUser = new User(1,1,"hi@yahoo.com", "temp", "student");
         Date tempDate = new Date(20);
         long week = 1000 * 60 * 60 * 24 * 7;

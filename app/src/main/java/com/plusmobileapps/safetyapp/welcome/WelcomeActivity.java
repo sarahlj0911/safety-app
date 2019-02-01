@@ -46,10 +46,17 @@ public class WelcomeActivity extends AppCompatActivity {
         prefManager = new PrefManager(this);
         if (prefManager.isTutorialSeen()) {
             if (prefManager.isUserSignedUp()) {
-                curUser = userDao.getUser();
-                launchMainScreen();
-                curUser.setLastLogin(1);
-            } else {
+                try {
+                    curUser = userDao.getUser();
+                    launchMainScreen();
+                    curUser.setLastLogin(1);
+                }
+                catch (NullPointerException e) {
+                    System.err.println("Error: NullPointerException for user. Reverting to login screen.");
+                    launchSignupScreen(); // TODO launchLoginScreen
+                }
+            }
+            else {
                 launchSignupScreen();
             }
         }
@@ -175,7 +182,7 @@ public class WelcomeActivity extends AppCompatActivity {
     public class WelcomeViewPagerAdapter extends PagerAdapter {
         private LayoutInflater layoutInflater;
 
-        public WelcomeViewPagerAdapter() {
+        WelcomeViewPagerAdapter() {
         }
 
         @Override

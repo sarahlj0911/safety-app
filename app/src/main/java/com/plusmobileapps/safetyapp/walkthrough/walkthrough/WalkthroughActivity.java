@@ -53,7 +53,7 @@ public class WalkthroughActivity extends AppCompatActivity implements Walkthroug
 
         String locationName = intent.getExtras().getString(LocationActivity.EXTRA_WALKTHROUGH_LOCATION_NAME);
         setContentView(R.layout.activity_walkthrough);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.walkthrough_toolbar);
+        Toolbar toolbar = findViewById(R.id.walkthrough_toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(locationName);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);  //will make the back button appear on toolbar
@@ -150,7 +150,7 @@ public class WalkthroughActivity extends AppCompatActivity implements Walkthroug
 
     @Override
     public void showQuestionCount(int index, int total) {
-        TextView questionCount = (TextView) findViewById(R.id.question_count);
+        TextView questionCount = findViewById(R.id.question_count);
         String text = "Question: " + (index + 1) + " of " + total;
         questionCount.setText(text);
     }

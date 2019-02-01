@@ -61,6 +61,10 @@
     <string name="signup_role_prompt">Choose a role</string>
     <string name="error_create_walkthrough_name">Name requires 2 or more characters</string>
     <string name="new_school">Add New School</string>
+    <string name="button_login">Log In</string>
+    <string name="text_login">Already a user?</string>
+
+
 
     <string-array name="signup_roles">
         <item>Administrator</item>

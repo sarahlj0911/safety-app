@@ -42,7 +42,7 @@ public class SummaryFragment extends Fragment implements SummaryContract.View {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_summary, container, false);
         rootView.setTag(TAG);
-        recyclerView = (RecyclerView) rootView.findViewById(R.id.summary_recyclerview);
+        recyclerView = rootView.findViewById(R.id.summary_recyclerview);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
         adapter = new SummaryAdapter(new ArrayList<Walkthrough>(0), itemListener);
