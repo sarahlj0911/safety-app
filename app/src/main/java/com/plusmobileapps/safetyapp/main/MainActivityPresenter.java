@@ -1,6 +1,10 @@
 package com.plusmobileapps.safetyapp.main;
 
 
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
+import android.view.MenuItem;
+
 import com.plusmobileapps.safetyapp.R;
 
 public class MainActivityPresenter implements MainActivityContract.Presenter {
@@ -33,6 +37,26 @@ public class MainActivityPresenter implements MainActivityContract.Presenter {
                 break;
         }
     }
+    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
+            = new BottomNavigationView.OnNavigationItemSelectedListener() {
+
+        @Override
+        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+            switch (item.getItemId()) {
+                case R.id.navigation_walkthrough:
+                    presenter.navButtonClicked(0);
+                    return true;
+                case R.id.navigation_dashboard:
+                    presenter.navButtonClicked(1);
+                    return true;
+                //case R.id.navigation_history:
+                //    presenter.navButtonClicked(2);
+                //    return true;
+            }
+            return false;
+        }
+
+    };
 
     @Override
     public void backButtonPressed() {
