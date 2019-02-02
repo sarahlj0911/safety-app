@@ -37,6 +37,8 @@ public interface SignupContract {
 
         void emailTextAdded();
 
+        void passwordTextAdded();
+
         void schoolNameTextAdded();
     }
 }

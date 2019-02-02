@@ -18,14 +18,11 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.amazonaws.mobile.client.AWSMobileClient;
-import com.amazonaws.mobileconnectors.appsync.AWSAppSyncClient;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUser;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUserAttributes;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUserCodeDeliveryDetails;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUserPool;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.handlers.SignUpHandler;
-import com.amazonaws.regions.Regions;
 import com.plusmobileapps.safetyapp.PrefManager;
 import com.plusmobileapps.safetyapp.R;
 import com.plusmobileapps.safetyapp.main.MainActivity;
@@ -34,7 +31,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
 
-import static com.amazonaws.regions.Regions.US_EAST_1;
 import static com.amazonaws.regions.Regions.US_WEST_2;
 
 public class SignupActivity extends AppCompatActivity implements SignupContract.View, SignupDownloadCallback {
@@ -46,7 +42,7 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
     private Spinner schoolSpinner;
     private ArrayList<String> schoolList;
     private ArrayAdapter<String> schoolSpinnerList;
-    private EditText newSchool, nameField, emailField;
+    private EditText newSchool, nameField, emailField, passwordField;
     private boolean schoolExists;
     private SchoolDownloadFragment schoolDownloadFragment;
     boolean downloading;
@@ -76,6 +72,7 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
         newSchool = findViewById(R.id.new_school_text_box);
         nameField = findViewById(R.id.fieldName);
         emailField = findViewById(R.id.fieldEmail);
+        passwordField = findViewById(R.id.fieldPassword);
         statusText = findViewById(R.id.textViewStatus);
 
         nameField.setNextFocusRightId(R.id.fieldEmail);
@@ -83,10 +80,9 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
 
         Objects.requireNonNull(nameInput.getEditText()).addTextChangedListener(nameListener);
         Objects.requireNonNull(emailInput.getEditText()).addTextChangedListener(emailListener);
+        Objects.requireNonNull(passwordInput.getEditText()).addTextChangedListener(passwordListener);
 
         statusText.setText(""); // Clear status
-
-        AWSMobileClient.getInstance().initialize(getApplicationContext());
 
         initAWSUserPool();
         initSignUpHandler();
@@ -200,6 +196,7 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
             Boolean inputReady = presenter.processFormInput(formInput);
 
             if (inputReady) { // Call AWS
+                launchHomeScreen();
                 userAttributes.addAttribute("name", name);
                 userAttributes.addAttribute("email", email);
                 userAttributes.addAttribute("role", role);
@@ -228,77 +225,75 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
     }
 
     @Override
-    public void displayNoSchoolError(boolean show) {
-        schoolNameInput.setError(getString(R.string.error_school_name));
-        schoolNameInput.setErrorEnabled(show);
+    public void displayNoSchoolError(boolean show) { // TODO implement school list
+//        schoolNameInput.setError(getString(R.string.error_school_name));
+//        schoolNameInput.setErrorEnabled(show);
     }
 
     @Override
     public void displayNoPasswordError(boolean show) {
-        passwordInput.setError(getString(R.string.error_school_name));
+        passwordInput.setError(getString(R.string.error_no_password));
         passwordInput.setErrorEnabled(show);
     }
 
     @Override
     public void displayInvalidPasswordError(boolean show) {
-        passwordInput.setError(getString(R.string.error_school_name));
+        passwordInput.setError(getString(R.string.error_invalid_password));
         passwordInput.setErrorEnabled(show);
     }
 
     private TextWatcher nameListener = new TextWatcher() {
         @Override
-        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-        }
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
 
         @Override
         public void onTextChanged(CharSequence s, int start, int before, int count) {
-            presenter.nameTextAdded();
-        }
+            presenter.nameTextAdded(); }
 
         @Override
-        public void afterTextChanged(Editable s) {
-
-        }
+        public void afterTextChanged(Editable s) { }
     };
 
     private TextWatcher emailListener = new TextWatcher() {
         @Override
-        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-        }
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
 
         @Override
         public void onTextChanged(CharSequence s, int start, int before, int count) {
-            presenter.emailTextAdded();
-        }
+            presenter.emailTextAdded(); }
 
         @Override
-        public void afterTextChanged(Editable s) {
+        public void afterTextChanged(Editable s) { }
+    };
 
-        }
+    private TextWatcher passwordListener = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+            presenter.passwordTextAdded(); }
+
+        @Override
+        public void afterTextChanged(Editable s) { }
     };
 
     private TextWatcher schoolNameListener = new TextWatcher() {
         @Override
-        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-        }
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
 
         @Override
         public void onTextChanged(CharSequence s, int start, int before, int count) {
-            presenter.schoolNameTextAdded();
-        }
+            presenter.schoolNameTextAdded(); }
 
         @Override
-        public void afterTextChanged(Editable s) {
-        }
+        public void afterTextChanged(Editable s) { }
     };
 
     private void downloadSchools() {
         if (!downloading && schoolDownloadFragment != null) {
             schoolDownloadFragment.getSchools();
-            downloading = true;
-        }
+            downloading = true; }
     }
 
     @Override
@@ -342,8 +337,7 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
     public void finishDownloading() {
         downloading = false;
         if (schoolDownloadFragment != null) {
-            schoolDownloadFragment.cancelGetSchools();
-        }
+            schoolDownloadFragment.cancelGetSchools(); }
     }
 
     /**
