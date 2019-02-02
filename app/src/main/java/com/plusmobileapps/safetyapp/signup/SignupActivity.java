@@ -32,6 +32,7 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
     private SignupContract.Presenter presenter;
     private TextInputLayout nameInput;
     private TextInputLayout emailInput;
+    private TextInputLayout passwordInput;
     private TextInputLayout schoolNameInput;
     private Spinner schoolSpinner;
     private ArrayList<String> schoolList;
@@ -61,6 +62,7 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
 
         nameInput = findViewById(R.id.signup_name);
         emailInput = findViewById(R.id.signup_email);
+        passwordInput = findViewById(R.id.signup_password);
         newSchool = findViewById(R.id.new_school_text_box);
         emailField = findViewById(R.id.fieldEmail);
 
@@ -219,6 +221,23 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
         @Override
         public void onTextChanged(CharSequence s, int start, int before, int count) {
             presenter.emailTextAdded();
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+
+        }
+    };
+
+    private TextWatcher passwordListener = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+            presenter.passwordTextAdded();
         }
 
         @Override
