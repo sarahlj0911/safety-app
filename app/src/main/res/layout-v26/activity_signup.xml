@@ -87,6 +87,7 @@
         android:layout_below="@+id/signup_password"
         android:layout_alignStart="@+id/label_signup_role"
         android:layout_marginTop="40dp"
+        android:focusableInTouchMode="false"
         android:text="@string/label_signup_school_name"
         android:textColor="@android:color/black"
         android:textSize="18sp" />
@@ -98,6 +99,7 @@
         android:layout_alignStart="@+id/spinner_signup_role"
         android:layout_alignTop="@+id/label_signup_school_name"
         android:defaultFocusHighlightEnabled="false"
+        android:focusableInTouchMode="false"
         android:fadingEdge="vertical"
         android:singleLine="false"
         android:paddingTop="7dp" tools:targetApi="o"/>

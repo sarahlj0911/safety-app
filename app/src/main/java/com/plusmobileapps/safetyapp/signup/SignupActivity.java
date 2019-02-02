@@ -75,8 +75,8 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
         passwordField = findViewById(R.id.fieldPassword);
         statusText = findViewById(R.id.textViewStatus);
 
-        nameField.setNextFocusRightId(R.id.fieldEmail);
-        emailField.setNextFocusRightId(R.id.fieldPassword);
+        nameField.setNextFocusDownId(R.id.fieldEmail);
+        emailField.setNextFocusDownId(R.id.fieldPassword);
 
         Objects.requireNonNull(nameInput.getEditText()).addTextChangedListener(nameListener);
         Objects.requireNonNull(emailInput.getEditText()).addTextChangedListener(emailListener);
