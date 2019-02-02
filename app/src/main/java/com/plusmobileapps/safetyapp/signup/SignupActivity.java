@@ -16,7 +16,16 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 
+import com.amazonaws.mobile.client.AWSMobileClient;
+import com.amazonaws.mobileconnectors.appsync.AWSAppSyncClient;
+import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUser;
+import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUserAttributes;
+import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUserCodeDeliveryDetails;
+import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUserPool;
+import com.amazonaws.mobileconnectors.cognitoidentityprovider.handlers.SignUpHandler;
+import com.amazonaws.regions.Regions;
 import com.plusmobileapps.safetyapp.PrefManager;
 import com.plusmobileapps.safetyapp.R;
 import com.plusmobileapps.safetyapp.main.MainActivity;
@@ -25,22 +34,26 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
 
+import static com.amazonaws.regions.Regions.US_EAST_1;
+import static com.amazonaws.regions.Regions.US_WEST_2;
+
 public class SignupActivity extends AppCompatActivity implements SignupContract.View, SignupDownloadCallback {
 
     public static final String TAG = "SignupActivity";
     private SignupContract.Presenter presenter;
-    private TextInputLayout nameInput;
-    private TextInputLayout emailInput;
-    private TextInputLayout schoolNameInput;
+    private TextInputLayout nameInput, emailInput, passwordInput, schoolNameInput;
+    private TextView statusText;
     private Spinner schoolSpinner;
     private ArrayList<String> schoolList;
     private ArrayAdapter<String> schoolSpinnerList;
-    private EditText newSchool, emailField;
+    private EditText newSchool, nameField, emailField;
     private boolean schoolExists;
     private SchoolDownloadFragment schoolDownloadFragment;
     boolean downloading;
-
-    // TODO add button function
+    private CognitoUserPool userPool;
+    private CognitoUserAttributes userAttributes;
+    SignUpHandler signupCallback;
+    String email, name;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,26 +66,31 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
         schoolDownloadFragment = SchoolDownloadFragment.getInstance(getFragmentManager());
         schoolDownloadFragment.setCallback(this);
 
-
         schoolList = new ArrayList<>();
         schoolSpinner = findViewById(R.id.spinner_signup_school_name);
         newSchool = findViewById(R.id.new_school_text_box);
 
         nameInput = findViewById(R.id.signup_name);
         emailInput = findViewById(R.id.signup_email);
+        passwordInput = findViewById(R.id.signup_password);
         newSchool = findViewById(R.id.new_school_text_box);
+        nameField = findViewById(R.id.fieldName);
         emailField = findViewById(R.id.fieldEmail);
+        statusText = findViewById(R.id.textViewStatus);
+
+        nameField.setNextFocusRightId(R.id.fieldEmail);
+        emailField.setNextFocusRightId(R.id.fieldPassword);
 
         Objects.requireNonNull(nameInput.getEditText()).addTextChangedListener(nameListener);
         Objects.requireNonNull(emailInput.getEditText()).addTextChangedListener(emailListener);
 
-        emailField.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (!hasFocus) hideKeyboard(v); }
-        });
+        statusText.setText(""); // Clear status
 
+        AWSMobileClient.getInstance().initialize(getApplicationContext());
 
+        initAWSUserPool();
+        initSignUpHandler();
+        userAttributes = new CognitoUserAttributes();
     }
 
     @Override
@@ -80,6 +98,12 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
         super.onResume();
         downloadSchools();
         presenter.start();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
     }
 
     @Override
@@ -92,6 +116,14 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
         PrefManager prefManager = new PrefManager(this);
         prefManager.setIsUserSignedUp(true);
         startActivity(new Intent(SignupActivity.this, MainActivity.class));
+        finish();
+    }
+
+
+    public void launchConfirmationScreen(String email) {
+        Intent intent = new Intent(SignupActivity.this, SignupConfirmActivity.class);
+        intent.putExtra("userEmail", email);
+        startActivity(intent);
         finish();
     }
 
@@ -151,20 +183,29 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
                 Log.d(TAG, "New School: " + school);
             }
 
-
             Spinner roleInput = findViewById(R.id.spinner_signup_role);
 
-            String name = Objects.requireNonNull(nameInput.getEditText()).getText().toString();
-            String email = Objects.requireNonNull(emailInput.getEditText()).getText().toString();
+            name = Objects.requireNonNull(nameInput.getEditText()).getText().toString();
+            email = Objects.requireNonNull(emailInput.getEditText()).getText().toString();
+            String password = Objects.requireNonNull(passwordInput.getEditText()).getText().toString();
 
             String role = roleInput.getSelectedItem().toString();
 
             formInput.put(SignupPresenter.NAME_INPUT, name);
             formInput.put(SignupPresenter.EMAIL_INPUT, email);
+            formInput.put(SignupPresenter.PASSWORD_INPUT, password);
             formInput.put(SignupPresenter.SCHOOL_NAME_INPUT, school);
             formInput.put(SignupPresenter.ROLE_INPUT, role);
 
-            presenter.processFormInput(formInput);
+            Boolean inputReady = presenter.processFormInput(formInput);
+
+            if (inputReady) { // Call AWS
+                userAttributes.addAttribute("name", name);
+                userAttributes.addAttribute("email", email);
+                userAttributes.addAttribute("role", role);
+
+                userPool.signUpInBackground(email, password, userAttributes, null, signupCallback);
+            }
         }
     };
 
@@ -190,6 +231,18 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
     public void displayNoSchoolError(boolean show) {
         schoolNameInput.setError(getString(R.string.error_school_name));
         schoolNameInput.setErrorEnabled(show);
+    }
+
+    @Override
+    public void displayNoPasswordError(boolean show) {
+        passwordInput.setError(getString(R.string.error_school_name));
+        passwordInput.setErrorEnabled(show);
+    }
+
+    @Override
+    public void displayInvalidPasswordError(boolean show) {
+        passwordInput.setError(getString(R.string.error_school_name));
+        passwordInput.setErrorEnabled(show);
     }
 
     private TextWatcher nameListener = new TextWatcher() {
@@ -303,6 +356,35 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
         if (v != null) {
             InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(v.getWindowToken(), 0); }
+    }
+
+    private void initAWSUserPool(){
+        String POOL_ID = "us-west-2_3KvLblMyN";
+        String APP_ClIENT_ID = "1p97ciklq4r2fbapn15s0fignt";
+        String APP_ClIENT_SECRET = "1ft9vtbauounq3vhlaelukluluc8qdru438iahuirqg5dscn56oh";
+        Context CONTEXT = this;
+
+        userPool = new CognitoUserPool(CONTEXT, POOL_ID, APP_ClIENT_ID, APP_ClIENT_SECRET, US_WEST_2);
+    }
+
+    private void initSignUpHandler(){
+        signupCallback = new SignUpHandler() {
+            @Override
+            public void onSuccess(CognitoUser user, boolean signUpConfirmationState, CognitoUserCodeDeliveryDetails cognitoUserCodeDeliveryDetails) {
+                statusText.setText("");
+                if (!signUpConfirmationState) {
+                    // User confirming via email code
+                    launchConfirmationScreen(email); }
+                else { launchHomeScreen(); }
+            }
+
+            @Override
+            public void onFailure(Exception exception) {
+                Log.d(TAG, "User sign-up failed: " + exception.toString());
+                String status = getApplicationContext().getString(R.string.status_text, name);
+                statusText.setText(status);
+            }
+        };
     }
 
 }

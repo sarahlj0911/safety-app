@@ -13,8 +13,8 @@ public class LoginPresenter implements LoginContract.Presenter {
 
     private static final String TAG = "LoginPresenter";
     private LoginContract.View view;
-    static final String EMAIL_INPUT = "name";
-    static final String PASSWORD_INPUT = "email";
+    static final String EMAIL_INPUT = "email";
+    static final String PASSWORD_INPUT = "password";
 
     LoginPresenter(LoginContract.View view) {
         this.view = view;
@@ -22,7 +22,7 @@ public class LoginPresenter implements LoginContract.Presenter {
     }
 
     @Override
-    public void processFormInput(Map<String, String> formInput) {
+    public boolean processFormInput(Map<String, String> formInput) {
         boolean isValidInput = true;
 
         // Code section by Robert Beerman
@@ -46,12 +46,7 @@ public class LoginPresenter implements LoginContract.Presenter {
                 isValidInput = false; }
             else { view.displayNoPasswordError(false); }
         }
-
-        if (isValidInput) {
-            Log.d(TAG, "Logging in " + formInput.get(EMAIL_INPUT));
-            // TODO check if input validates with an AWS account
-            view.launchHomeScreen();
-        }
+        return isValidInput;
     }
 
     @Override
@@ -65,24 +60,16 @@ public class LoginPresenter implements LoginContract.Presenter {
     }
 
     @Override
-    public void displayInvalidEmailError() {
-
-    }
+    public void displayInvalidEmailError() { }
 
     @Override
-    public void displayNoEmailError() {
-
-    }
+    public void displayNoEmailError() { }
 
     @Override
-    public void displayNoPasswordError() {
-
-    }
+    public void displayNoPasswordError() { }
 
     @Override
-    public void launchHomeScreen() {
-
-    }
+    public void launchHomeScreen() { }
 
     @Override
     public void start() { }

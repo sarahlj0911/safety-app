@@ -33,6 +33,7 @@
         android:layout_marginTop="56dp">
 
         <EditText
+            android:id="@+id/fieldName"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:hint="@string/hint_name"
@@ -60,11 +61,30 @@
 
     </android.support.design.widget.TextInputLayout>
 
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/signup_password"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/signup_email"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="8dp">
+
+        <EditText
+            android:id="@+id/fieldPassword"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:hint="@string/hint_password"
+            android:inputType="text|textPassword"
+            android:importantForAutofill="no" />
+
+    </android.support.design.widget.TextInputLayout>
+
     <TextView
         android:id="@+id/label_signup_school_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/signup_email"
+        android:layout_below="@+id/signup_password"
         android:layout_alignStart="@+id/label_signup_role"
         android:layout_marginTop="40dp"
         android:text="@string/label_signup_school_name"
@@ -125,5 +145,22 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="50dp"
         android:text="@string/btn_signup" />
+
+    <TextView
+        android:id="@+id/textViewStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/button_save_signup"
+        android:layout_below="@+id/spinner_signup_role"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="0dp"
+        android:text="@string/status_placeholder"
+        android:textAlignment="center"
+        android:textColor="@color/actionItemRed"
+        android:textStyle="bold" />
 
 </RelativeLayout>

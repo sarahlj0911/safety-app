@@ -16,7 +16,10 @@ buildscript {
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:3.3.0'
-
+        classpath 'com.amazonaws:aws-android-sdk-appsync-gradle-plugin:2.7.+'
+        classpath 'com.amazonaws:aws-android-sdk-cognitoidentityprovider:2.11.0'
+        classpath 'com.amazonaws:aws-java-sdk-core:1.11.490'
+        
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }

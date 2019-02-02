@@ -3,8 +3,10 @@ package com.plusmobileapps.safetyapp.signup;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUserPool;
 import com.plusmobileapps.safetyapp.data.entity.School;
 import com.plusmobileapps.safetyapp.data.entity.User;
+
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -18,14 +20,22 @@ public class SignupPresenter implements SignupContract.Presenter {
 
     static final String NAME_INPUT = "name";
     static final String EMAIL_INPUT = "email";
+    static final String PASSWORD_INPUT = "password";
     static final String SCHOOL_NAME_INPUT = "school_name";
     static final String ROLE_INPUT = "role";
+
+    final boolean haveUpperCase = true;
+    final boolean haveLowerCase = true;
+    final boolean haveNumber = true;
+    final boolean haveSpecialCharacter = true;
 
     private static final String TAG = "SignupPresenter";
     private SignupContract.View view;
     private boolean isSaved;
     private String errorMessage;
     private ArrayList<String> schools;
+    private CognitoUserPool userPool;
+
 
     SignupPresenter(SignupContract.View view) {
         this.view = view;
@@ -40,7 +50,7 @@ public class SignupPresenter implements SignupContract.Presenter {
     }
 
     @Override
-    public void processFormInput(Map<String, String> formInput) {
+    public Boolean processFormInput(Map<String, String> formInput) {
         boolean isValidInput = true;
         String name = formInput.get(NAME_INPUT);
         if (name != null) {
@@ -51,8 +61,6 @@ public class SignupPresenter implements SignupContract.Presenter {
                 view.displayNoNameError(false);
             }
         }
-
-        Log.d(TAG, "School Name is: " + formInput.get(SCHOOL_NAME_INPUT));
 
         String email = formInput.get(EMAIL_INPUT);
         if (email != null) {
@@ -67,10 +75,24 @@ public class SignupPresenter implements SignupContract.Presenter {
             }
         }
 
+        String password = formInput.get(PASSWORD_INPUT);
+        if (password != null) {
+            if (isEmpty(password)) {
+                view.displayNoPasswordError(true);
+                isValidInput = false;
+            } else if (!password.matches("[A-Za-z0-9 ]*") && password.length() >= 8 && !password.equals(password.toUpperCase())) {
+                view.displayInvalidPasswordError(true);
+                isValidInput = false;
+            } else {
+                view.displayNoEmailError(false);
+            }
+        }
+
         if (isValidInput) {
             saveSignupData(formInput);
-            view.launchHomeScreen();
+            return true;
         }
+        else return false;
     }
 
     private boolean isEmpty(String input) {
@@ -95,17 +117,16 @@ public class SignupPresenter implements SignupContract.Presenter {
 
         String userName = formInput.get(NAME_INPUT);
         String email = formInput.get(EMAIL_INPUT);
+        String password = formInput.get(PASSWORD_INPUT);
         String role = formInput.get(ROLE_INPUT);
 
-
         User user = new User(1, 1, email, userName, role);
-
         AsyncTask<Void, Void, Boolean> saveUserTask = new SaveUserTask(user).execute();
 
         try {
             isSaved = saveUserTask.get();
         } catch (InterruptedException | ExecutionException e) {
-            Log.d(TAG, "Problem saving user");
+            Log.d(TAG, "Issue saving user");
             Log.d(TAG, e.getMessage());
             errorMessage = "Unable to save input";
         }

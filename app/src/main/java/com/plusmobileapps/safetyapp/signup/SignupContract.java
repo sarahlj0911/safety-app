@@ -21,13 +21,17 @@ public interface SignupContract {
 
         void displayNoSchoolError(boolean show);
 
+        void displayNoPasswordError(boolean show);
+
+        void displayInvalidPasswordError(boolean show);
+
         void launchHomeScreen();
 
         void populateSchoolSpinner(ArrayList<String> schools);
     }
 
     interface Presenter extends BasePresenter {
-        void processFormInput(Map<String, String> formInput);
+        Boolean processFormInput(Map<String, String> formInput);
 
         void nameTextAdded();
 

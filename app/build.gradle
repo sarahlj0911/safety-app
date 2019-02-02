@@ -5,12 +5,15 @@ android {
     buildToolsVersion '28.0.3'
     defaultConfig {
         applicationId "com.plusmobileapps.safetyapp"
-        minSdkVersion 21
+        minSdkVersion 23
         targetSdkVersion 28
         versionCode 3
         versionName "1.1"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
+    }
+    lintOptions {
+        abortOnError false
     }
     buildTypes {
         release {
@@ -48,8 +51,25 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.2'
     implementation 'com.android.support.constraint:constraint-layout:1.1.3'
 
-    //amazon web services sdk
+    // AWS Mobile Client SDK
     implementation('com.amazonaws:aws-android-sdk-mobile-client:2.7.+@aar') { transitive = true }
+    // implementation 'com.amazonaws:aws-android-sdk-mobile-client:2.11.+'
+
+    // AWS Cognito UserPools for SignIn
+    implementation 'com.android.support:support-v4:24.+'
+    implementation('com.amazonaws:aws-android-sdk-auth-userpools:2.7.+@aar') { transitive = true }
+
+    // AWS Sign in UI Library
+    implementation 'com.android.support:appcompat-v7:24.+'
+    implementation('com.amazonaws:aws-android-sdk-auth-ui:2.7.+@aar') { transitive = true }
+
+    //Base SDK
+    implementation 'com.amazonaws:aws-android-sdk-core:2.11.+'
+
+    //AppSync SDK
+    implementation 'com.amazonaws:aws-android-sdk-appsync:2.7.+'
+    implementation 'org.eclipse.paho:org.eclipse.paho.client.mqttv3:1.2.0'
+    implementation 'org.eclipse.paho:org.eclipse.paho.android.service:1.1.1'
 
     //dynamodb
     implementation 'com.amazonaws:aws-android-sdk-ddb-mapper:2.7.+'
@@ -66,6 +86,9 @@ dependencies {
 
     //image loading library
     implementation 'com.squareup.picasso:picasso:2.71828'
+
+    implementation 'br.com.simplepass:loading-button-android:1.7.+'
+
 
     //test
 

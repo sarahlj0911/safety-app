@@ -19,6 +19,8 @@ import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.amazonaws.mobile.client.Callback;
+import com.amazonaws.mobile.client.UserStateDetails;
 import com.plusmobileapps.safetyapp.AdminSettings;
 
 import com.amazonaws.auth.AWSCredentialsProvider;
@@ -51,7 +53,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
     DynamoDBMapper dynamoDBMapper;
 
     // SyncAdapter Constants
-    // The authority for the sync adapter's content provier
+    // The authority for the sync adapter's content provider
     public static final String AUTHORITY = "com.plusmobileapps.safetyapp.provider";
     // An account type, in the form of a domain name
     public static final String ACCOUNT_TYPE = "safetyapp.com";
@@ -110,10 +112,55 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
                 .dynamoDBClient(dynamoDBClient)
                 .awsConfiguration(configuration)
                 .build();
-        Log.d("YourMainActivity", "some more stuff");
         createUserInfoItem();
-
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        AWSMobileClient.getInstance().initialize(getApplicationContext(), new Callback<UserStateDetails>() {
+            @Override
+            public void onResult(UserStateDetails userStateDetails) {
+                switch (userStateDetails.getUserState()) {
+                    case SIGNED_IN:
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Log.d("YourMainActivity", "User has signed in");
+                            }
+                        });
+                        break;
+                    case SIGNED_OUT:
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                // TODO show user not signed in prompt
+                                Log.d("YourMainActivity", "User not signed in");
+                            }
+                        });
+                        break;
+                    case SIGNED_OUT_USER_POOLS_TOKENS_INVALID:
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                // TODO show user inactive signed out prompt
+                                Log.d("YourMainActivity", "User has been signed out");
+                            }
+                        });
+                        break;
+                    default:
+                        AWSMobileClient.getInstance().signOut();
+                        break;
+                }
+            }
+
+            @Override
+            public void onError(Exception e) {
+                Log.e("INIT", e.toString());
+            }
+        });
+    }
+
 
     private void setUpPresenters(MainActivityFragmentFactory factory) {
         new WalkthroughLandingPresenter(factory.getWalkthroughLandingFragment());

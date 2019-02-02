@@ -53,10 +53,13 @@
     <string name="hint_name">Name</string>
     <string name="error_name">Name is required</string>
     <string name="hint_email">Email</string>
+    <string name="hint_password">Password</string>
     <string name="error_email_none">Email is required</string>
     <string name="error_email_invalid">Invalid email</string>
     <string name="hint_school_name">School Name</string>
     <string name="error_school_name">School name is required</string>
+    <string name="error_no_password">Password is required</string>
+    <string name="error_invalid_password">Password must contain a number, an uppercase and special character </string>
     <string name="label_signup_role">Role</string>
     <string name="label_signup_school_name">School</string>
     <string name="btn_signup">Let\'s get started!</string>
@@ -67,6 +70,17 @@
     <string name="button_loginGo">Go To Login</string>
     <string name="text_login">Already a user?</string>
     <string name="text_signup_school_name">School</string>
+    <string name="status_placeholder">Signup Status</string>
+    <string name="status_text">"Unable to sign up %1$s \n AWS Error"</string>
+
+
+    <!-- Signup Confirmation Page Strings -->
+    <string name="signup_confirm_title">Almost There!</string>
+    <string name="signup_confirm_description">A confirmation email has been sent to %1$s. Please enter the code you receive in the field below.</string>
+    <string name="signup_code">Code</string>
+    <string name="signup_status">Incorrect Confirmation Code</string>
+    <string name="signup_confirm_button">Confirm</string>
+
 
     <!-- Login Page Strings -->
     <string name="login_field_email_placeholder">Email</string>
@@ -100,7 +114,6 @@
     <string name="tab_overview">Overview Tab</string>
     <string name="tab_details">Details Tab</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_walkthrough">WalkthroughActivity</string>
     <string name="action_settings">Settings</string>

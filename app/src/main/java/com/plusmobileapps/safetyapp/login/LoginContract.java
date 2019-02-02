@@ -19,7 +19,7 @@ public interface LoginContract {
     }
 
     interface Presenter extends BasePresenter {
-        void processFormInput(Map<String, String> formInput);
+        boolean processFormInput(Map<String, String> formInput);
 
         void emailTextAdded();
         void passwordTextAdded();

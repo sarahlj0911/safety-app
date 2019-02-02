@@ -1,0 +1,13 @@
+{
+    "AppSyncApiName": "safteyapp",
+    "AuthCognitoUserPoolId": {
+        "Fn::GetAtt": [
+            "authcognito4f5cd58b",
+            "Outputs.UserPoolId"
+        ]
+    },
+    "schemaGraphql": "s3://safetyapp-20190131221139-deployment/amplify-appsync-files/schema.graphql.1548998252084",
+    "ResolverBucket": "safetyapp-20190131221139-deployment",
+    "ResolverRootKey": "amplify-appsync-files",
+    "DeploymentTimestamp": "1548998252084"
+}
