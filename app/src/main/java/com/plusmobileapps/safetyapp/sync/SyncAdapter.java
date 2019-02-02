@@ -625,7 +625,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                 }
 
                 Log.d(TAG, "Inserting user with values [" + remoteId + ", " + user.getUserName() +
-                        ", " + email + ", " + user.getRole() + ", " + remoteSchoolId + ", " + user.getLastLogin() + "]");
+                        ", " + email + ", " + user.getRole() + ", " + remoteSchoolId + ", " + user.getLastLogin() + user.getPassword() + "]");
                 String insertUserSql = INSERT_USER_SQL;
                 insertUserStmt = conn.prepareStatement(insertUserSql);
                 statements.add(insertUserStmt);
@@ -635,6 +635,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                 insertUserStmt.setString(4, email);
                 insertUserStmt.setString(5, user.getRole());
                 insertUserStmt.setLong(6, user.getLastLogin());
+                insertUserStmt.setString(7, user.getPassword());
                 insertUserStmt.execute();
 
                 // Commit insert
