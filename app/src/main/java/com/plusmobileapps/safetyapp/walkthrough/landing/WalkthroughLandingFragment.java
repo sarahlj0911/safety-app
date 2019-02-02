@@ -2,6 +2,7 @@ package com.plusmobileapps.safetyapp.walkthrough.landing;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.ContentResolver;
 import android.content.Context;
@@ -130,18 +131,18 @@ public class WalkthroughLandingFragment extends Fragment
 
         NetworkUtil.unregisterNetworkListener(rootView.getContext(), networkChangeReceiver);
     }
-
+    
     @Override
     public void showWalkthroughs(List<Walkthrough> walkthroughs) {
         Log.d(TAG, "In showWalkthroughs. walkthroughs.size = " + walkthroughs.size());
-        fab.setVisibility(View.VISIBLE);
+        fab.show();
         adapter.replaceData(walkthroughs);
         adapter.notifyDataSetChanged();
     }
 
     @Override
     public void openWalkthrough(int id, String title) {
-        fab.setVisibility(View.GONE);
+        fab.hide();
         Intent intent = new Intent(getContext(), LocationActivity.class);
         intent.putExtra(LocationActivity.EXTRA_WALKTHROUGH_ID, id);
         intent.putExtra(EXTRA_WALKTHROUGH_NAME, title);
