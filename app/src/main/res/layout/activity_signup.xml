@@ -46,9 +46,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/signup_name"
         android:layout_alignStart="@+id/signup_name"
-        android:layout_centerVertical="true"
-        android:layout_marginStart="1dp"
-        android:layout_marginTop="-26dp">
+        android:layout_centerVertical="true">
 
         <EditText
             android:id="@+id/fieldEmail"
@@ -56,9 +54,24 @@
             android:layout_height="wrap_content"
             android:layout_alignStart="@+id/signup_email"
             android:layout_alignTop="@+id/signup_email"
-            android:layout_marginTop="24dp"
             android:hint="@string/hint_email"
             android:inputType="text|textEmailAddress" />
+
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/signup_password"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/signup_email"
+        android:layout_centerHorizontal="true">
+
+        <EditText
+            android:id="@+id/fieldPassword"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:hint="@string/hint_password"
+            android:inputType="text|textPassword" />
 
     </android.support.design.widget.TextInputLayout>
 
@@ -69,7 +82,7 @@
         android:layout_below="@+id/buttonLogIn"
         android:layout_alignStart="@+id/label_signup_role"
         android:layout_marginStart="0dp"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="29dp"
         android:text="School"
         android:textColor="@android:color/black"
         android:textSize="18sp" />
@@ -133,7 +146,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="21dp"
+        android:layout_marginBottom="179dp"
         android:text="@string/btn_signup" />
 
     <Button
@@ -143,9 +156,9 @@
         android:layout_below="@+id/textView10"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginStart="52dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginEnd="58dp"
+        android:layout_marginStart="55dp"
+        android:layout_marginTop="3dp"
+        android:layout_marginEnd="55dp"
         android:onClick="buttonLogInClicked"
         android:text="@string/button_login" />
 
@@ -162,24 +175,5 @@
         android:text="@string/text_login"
         android:textAlignment="center"
         android:textSize="16sp" />
-
-    <android.support.design.widget.TextInputLayout
-        android:id="@+id/signup_password"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/signup_email"
-        android:layout_alignStart="@+id/signup_name"
-        android:hint="@string/hint_password">
-
-        <EditText
-            android:id="@+id/fieldPassword"
-            android:layout_width="300dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:ems="10"
-            android:hint="Password"
-            android:inputType="textPassword" />
-
-    </android.support.design.widget.TextInputLayout>
 
 </RelativeLayout>

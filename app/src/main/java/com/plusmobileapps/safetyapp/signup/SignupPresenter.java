@@ -67,6 +67,14 @@ public class SignupPresenter implements SignupContract.Presenter {
             view.displayNoEmailError(false);
         }
 
+        String password = formInput.get(PASSWORD_INPUT);
+        if (isEmpty(email)) {
+            view.displayNoPasswordError(true);
+            isValidInput = false;
+        } else {
+            view.displayNoPasswordError(false);
+        }
+
         if (isValidInput) {
             saveSignupData(formInput);
             view.launchHomeScreen();
@@ -125,5 +133,10 @@ public class SignupPresenter implements SignupContract.Presenter {
     @Override
     public void schoolNameTextAdded() {
         view.displayNoSchoolError(false);
+    }
+
+    @Override
+    public void passwordTextAdded() {
+        view.displayNoPasswordError(false);
     }
 }

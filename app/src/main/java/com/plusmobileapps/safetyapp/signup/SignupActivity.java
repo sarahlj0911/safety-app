@@ -37,7 +37,7 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
     private Spinner schoolSpinner;
     private ArrayList<String> schoolList;
     private ArrayAdapter<String> schoolSpinnerList;
-    private EditText newSchool, emailField;
+    private EditText newSchool, emailField, passwordField;
     private boolean schoolExists;
     private SchoolDownloadFragment schoolDownloadFragment;
     boolean downloading;
@@ -65,11 +65,19 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
         passwordInput = findViewById(R.id.signup_password);
         newSchool = findViewById(R.id.new_school_text_box);
         emailField = findViewById(R.id.fieldEmail);
+        passwordField = findViewById(R.id.fieldPassword);
 
         Objects.requireNonNull(nameInput.getEditText()).addTextChangedListener(nameListener);
         Objects.requireNonNull(emailInput.getEditText()).addTextChangedListener(emailListener);
+        Objects.requireNonNull(passwordInput.getEditText()).addTextChangedListener(passwordListener);
 
         emailField.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus) hideKeyboard(); }
+        });
+
+        passwordField.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (!hasFocus) hideKeyboard(); }
@@ -159,6 +167,7 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
 
             String name = Objects.requireNonNull(nameInput.getEditText()).getText().toString();
             String email = Objects.requireNonNull(emailInput.getEditText()).getText().toString();
+            String password = Objects.requireNonNull(passwordInput.getEditText()).getText().toString();
 
             String role = roleInput.getSelectedItem().toString();
 
@@ -166,6 +175,7 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
             formInput.put(SignupPresenter.EMAIL_INPUT, email);
             formInput.put(SignupPresenter.SCHOOL_NAME_INPUT, school);
             formInput.put(SignupPresenter.ROLE_INPUT, role);
+            formInput.put(SignupPresenter.PASSWORD_INPUT, password);
 
             presenter.processFormInput(formInput);
         }
@@ -187,6 +197,12 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
     public void displayNoNameError(boolean show) {
         nameInput.setError(getString(R.string.error_name));
         nameInput.setErrorEnabled(show);
+    }
+
+    @Override
+    public void displayNoPasswordError(boolean show) {
+        passwordInput.setError(getString(R.string.error_name));
+        passwordInput.setErrorEnabled(show);
     }
 
     @Override

@@ -23,6 +23,8 @@ public interface SignupContract {
 
         void displayNoSchoolError(boolean show);
 
+        void displayNoPasswordError(boolean show);
+
         void launchHomeScreen();
 
         void populateSchoolSpinner(ArrayList<String> schools);
@@ -36,5 +38,7 @@ public interface SignupContract {
         void emailTextAdded();
 
         void schoolNameTextAdded();
+
+        void passwordTextAdded();
     }
 }

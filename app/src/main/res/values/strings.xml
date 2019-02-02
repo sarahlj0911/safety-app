@@ -54,6 +54,8 @@
     <string name="hint_email">Email</string>
     <string name="error_email_none">Email is required</string>
     <string name="error_email_invalid">Invalid email</string>
+    <string name="error_password_none">Password is required</string>
+    <string name="hint_password">Password</string>
     <string name="hint_school_name">School Name</string>
     <string name="error_school_name">School name is required</string>
     <string name="label_signup_role">Role</string>
