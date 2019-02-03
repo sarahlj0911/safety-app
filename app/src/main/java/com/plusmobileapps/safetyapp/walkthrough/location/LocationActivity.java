@@ -92,6 +92,13 @@ public class LocationActivity extends AppCompatActivity implements LocationContr
         presenter.backButtonPressed();
     }
 
+    public void viewTickets() {
+
+    }
+    public void viewHistory() {
+
+    }
+
     @Override
     public void navigateBack() {
         finish();
