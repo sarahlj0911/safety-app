@@ -1,7 +1,5 @@
 package com.plusmobileapps.safetyapp.login;
 
-import android.util.Log;
-
 import java.util.Map;
 import java.util.Objects;
 
@@ -39,7 +37,6 @@ public class LoginPresenter implements LoginContract.Presenter {
             }
         }
 
-        // NEVER SAVE A PASSWORD IN A VARIABLE
         if (formInput.get(PASSWORD_INPUT) != null) {
             if (isEmpty(Objects.requireNonNull(formInput.get(PASSWORD_INPUT)))) {
                 view.displayNoPasswordError(true);

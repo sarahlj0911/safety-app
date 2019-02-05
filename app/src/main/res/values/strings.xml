@@ -67,6 +67,7 @@
     <string name="error_create_walkthrough_name">Name requires 2 or more characters</string>
     <string name="new_school">Add New School</string>
     <string name="button_login">Login</string>
+    <string name="button_login_status">Login Status</string>
     <string name="button_loginGo">Go To Login</string>
     <string name="text_login">Already a user?</string>
     <string name="text_signup_school_name">School</string>
@@ -90,6 +91,11 @@
     <string name="login_text_register">New User?</string>
     <string name="login_button_register">Sign Up</string>
     <string name="error_password_none">Password is required</string>
+    <string name="login_code_title">Account Verification</string>
+    <string name="login_code_button_send_email">Resend Email</string>
+    <string name="login_code_button_confirm">Confirm</string>
+    <string name="login_code_status_placeholder">Code Status</string>
+
 
 
     <string-array name="signup_roles">
@@ -149,6 +155,12 @@
     <string name="school">School</string>
     <string name="create_user">Create User</string>
     <string name="Admin_settings">Admin Settings</string>
+    <string name="login_button_error_aws_user_exists">Incorrect Password</string>
+    <string name="login_button_error_aws_error">Connection Issue with AWS</string>
+    <string name="login_button_user_not_found">User Not Found</string>
+    <string name="login_button_error_verify">Need to Verify Account \n CONTINUE PROCESS HERE</string>
+    <string name="authorization_code_input_field">Enter your code here</string>
+    <string name="authorization_code_des">You still need to verify your account. Please follow the steps from the email that was previously sent to you</string>
 
 </resources>
 

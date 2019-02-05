@@ -7,6 +7,8 @@ android {
         applicationId "com.plusmobileapps.safetyapp"
         minSdkVersion 23
         targetSdkVersion 28
+        renderscriptTargetApi 19
+        renderscriptSupportModeEnabled true
         versionCode 3
         versionName "1.1"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -73,6 +75,9 @@ dependencies {
 
     //dynamodb
     implementation 'com.amazonaws:aws-android-sdk-ddb-mapper:2.7.+'
+
+    // Blur Background
+    implementation 'com.github.jrvansuita:GaussianBlur:+'
 
     //good library to easily animate the recycler view **updated
     implementation 'jp.wasabeef:recyclerview-animators:2.3.0'

@@ -82,7 +82,7 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
         Objects.requireNonNull(emailInput.getEditText()).addTextChangedListener(emailListener);
         Objects.requireNonNull(passwordInput.getEditText()).addTextChangedListener(passwordListener);
 
-        statusText.setText(""); // Clear status
+        statusText.setText("");
 
         initAWSUserPool();
         initSignUpHandler();
@@ -196,12 +196,12 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
             Boolean inputReady = presenter.processFormInput(formInput);
 
             if (inputReady) { // Call AWS
-                launchHomeScreen();
                 userAttributes.addAttribute("name", name);
                 userAttributes.addAttribute("email", email);
                 userAttributes.addAttribute("role", role);
 
                 userPool.signUpInBackground(email, password, userAttributes, null, signupCallback);
+                // launchHomeScreen();
             }
         }
     };
