@@ -33,11 +33,12 @@
         android:layout_marginTop="56dp">
 
         <EditText
+            android:id="@+id/fieldName"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:hint="@string/hint_name"
             android:inputType="text"
-            tools:ignore="Autofill" />
+            tools:ignore="Autofill"/>
 
     </android.support.design.widget.TextInputLayout>
 
@@ -60,14 +61,34 @@
 
     </android.support.design.widget.TextInputLayout>
 
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/signup_password"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/signup_email"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="8dp">
+
+        <EditText
+            android:id="@+id/fieldPassword"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:hint="@string/hint_password"
+            android:inputType="text|textPassword"
+            tools:ignore="Autofill" />
+
+    </android.support.design.widget.TextInputLayout>
+
     <TextView
         android:id="@+id/label_signup_school_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/signup_email"
+        android:layout_below="@+id/signup_password"
         android:layout_alignStart="@+id/label_signup_role"
-        android:layout_marginTop="80dp"
-        android:text="@string/text_signup_school_name"
+        android:layout_marginTop="40dp"
+        android:focusableInTouchMode="false"
+        android:text="@string/label_signup_school_name"
         android:textColor="@android:color/black"
         android:textSize="18sp" />
 
@@ -78,6 +99,7 @@
         android:layout_alignStart="@+id/spinner_signup_role"
         android:layout_alignTop="@+id/label_signup_school_name"
         android:defaultFocusHighlightEnabled="false"
+        android:focusableInTouchMode="false"
         android:fadingEdge="vertical"
         android:singleLine="false"
         android:paddingTop="7dp" tools:targetApi="o"/>
@@ -91,10 +113,8 @@
         android:visibility="invisible"
         android:paddingTop="7dp"
         android:textSize="18sp"
-        android:importantForAutofill="no"
-        tools:targetApi="o"
-        android:inputType=""
-        tools:ignore="LabelFor" />
+        tools:ignore="Autofill,LabelFor"
+        android:inputType="" />
 
     <TextView
         android:id="@+id/label_signup_role"
@@ -114,12 +134,11 @@
         android:layout_alignBaseline="@+id/label_signup_role"
         android:layout_alignBottom="@+id/label_signup_role"
         android:layout_alignEnd="@+id/signup_email"
-        android:defaultFocusHighlightEnabled="false"
         android:entries="@array/signup_roles"
         android:fadingEdge="vertical"
         android:paddingTop="7dp"
         android:prompt="@string/signup_role_prompt"
-        tools:targetApi="o" />
+        tools:ignore="Autofill" />
 
     <Button
         android:id="@+id/button_save_signup"
@@ -129,5 +148,22 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="50dp"
         android:text="@string/btn_signup" />
+
+    <TextView
+        android:id="@+id/textViewStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/button_save_signup"
+        android:layout_below="@+id/spinner_signup_role"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="0dp"
+        android:text="@string/status_placeholder"
+        android:textAlignment="center"
+        android:textColor="@color/actionItemRed"
+        android:textStyle="bold" />
 
 </RelativeLayout>

@@ -49,7 +49,7 @@
     <string name="welcome5_footer">Next, we need some information about you and your school…</string>
 
     <!-- Signup page strings -->
-    <string name="title_signup">SAfETy Walkthrough Sign Up</string>
+    <string name="title_signup">Sign Up</string>
     <string name="hint_name">Name</string>
     <string name="error_name">Name is required</string>
     <string name="hint_email">Email</string>
