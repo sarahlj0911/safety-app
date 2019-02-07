@@ -56,8 +56,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
             android:hint="@string/hint_email"
-            android:inputType="text|textEmailAddress"
-            android:importantForAutofill="no" />
+            android:importantForAutofill="no"
+            android:inputType="textEmailAddress" />
 
     </android.support.design.widget.TextInputLayout>
 
