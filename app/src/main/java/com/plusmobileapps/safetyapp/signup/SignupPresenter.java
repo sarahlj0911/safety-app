@@ -11,6 +11,7 @@ import com.plusmobileapps.safetyapp.data.entity.User;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
+import java.util.regex.Pattern;
 
 /**
  * Created by Robert Beerman on 2/17/2018.
@@ -23,11 +24,6 @@ public class SignupPresenter implements SignupContract.Presenter {
     static final String PASSWORD_INPUT = "password";
     static final String SCHOOL_NAME_INPUT = "school_name";
     static final String ROLE_INPUT = "role";
-
-    final boolean haveUpperCase = true;
-    final boolean haveLowerCase = true;
-    final boolean haveNumber = true;
-    final boolean haveSpecialCharacter = true;
 
     private static final String TAG = "SignupPresenter";
     private SignupContract.View view;
@@ -52,6 +48,7 @@ public class SignupPresenter implements SignupContract.Presenter {
     @Override
     public Boolean processFormInput(Map<String, String> formInput) {
         boolean isValidInput = true;
+
         String name = formInput.get(NAME_INPUT);
         if (name != null) {
             if (isEmpty(name)) {
@@ -72,6 +69,7 @@ public class SignupPresenter implements SignupContract.Presenter {
                 isValidInput = false;
             } else {
                 view.displayNoEmailError(false);
+                view.displayInvalidEmailError(false);
             }
         }
 
@@ -80,11 +78,8 @@ public class SignupPresenter implements SignupContract.Presenter {
             if (isEmpty(password)) {
                 view.displayNoPasswordError(true);
                 isValidInput = false;
-            } else if (!password.matches("[A-Za-z0-9 ]*") && password.length() >= 8 && !password.equals(password.toUpperCase())) {
-                view.displayInvalidPasswordError(true);
-                isValidInput = false;
             } else {
-                view.displayNoEmailError(false);
+                view.displayNoPasswordError(false);
             }
         }
 

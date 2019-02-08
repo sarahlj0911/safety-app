@@ -11,7 +11,6 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -23,15 +22,17 @@ import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUserAttribu
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUserCodeDeliveryDetails;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUserPool;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.handlers.SignUpHandler;
+import com.plusmobileapps.safetyapp.AwsServices;
 import com.plusmobileapps.safetyapp.PrefManager;
 import com.plusmobileapps.safetyapp.R;
 import com.plusmobileapps.safetyapp.main.MainActivity;
+
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
 
-import static com.amazonaws.regions.Regions.US_WEST_2;
 
 public class SignupActivity extends AppCompatActivity implements SignupContract.View, SignupDownloadCallback {
 
@@ -48,7 +49,9 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
     boolean downloading;
     private CognitoUserPool userPool;
     private CognitoUserAttributes userAttributes;
-    SignUpHandler signupCallback;
+    private AwsServices awsServices;
+    private Context CONTEXT = this;
+    private SignUpHandler signupCallback;
     String email, name;
 
     @Override
@@ -84,6 +87,7 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
 
         statusText.setText("");
 
+        awsServices = new AwsServices();
         initAWSUserPool();
         initSignUpHandler();
         userAttributes = new CognitoUserAttributes();
@@ -198,7 +202,7 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
             if (inputReady) { // Call AWS
                 userAttributes.addAttribute("name", name);
                 userAttributes.addAttribute("email", email);
-                userAttributes.addAttribute("role", role);
+                userAttributes.addAttribute("custom:role", role);
 
                 userPool.signUpInBackground(email, password, userAttributes, null, signupCallback);
                 // launchHomeScreen();
@@ -239,6 +243,12 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
     @Override
     public void displayInvalidPasswordError(boolean show) {
         passwordInput.setError(getString(R.string.error_invalid_password));
+        passwordInput.setErrorEnabled(show);
+    }
+
+    @Override
+    public void displayInvalidPasswordLengthError(boolean show) {
+        passwordInput.setError(getString(R.string.error_invalid_password_length));
         passwordInput.setErrorEnabled(show);
     }
 
@@ -340,25 +350,8 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
             schoolDownloadFragment.cancelGetSchools(); }
     }
 
-    /**
-     * Hides the keyboard
-     * REF: https://stackoverflow.com/questions/1109022/close-hide-the-android-soft-keyboard#
-     * Added by Jeremy Powell 1/24/2019
-     */
-    //
-    public void hideKeyboard(View v) {
-        if (v != null) {
-            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-            imm.hideSoftInputFromWindow(v.getWindowToken(), 0); }
-    }
-
     private void initAWSUserPool(){
-        String POOL_ID = "us-west-2_3KvLblMyN";
-        String APP_ClIENT_ID = "1p97ciklq4r2fbapn15s0fignt";
-        String APP_ClIENT_SECRET = "1ft9vtbauounq3vhlaelukluluc8qdru438iahuirqg5dscn56oh";
-        Context CONTEXT = this;
-
-        userPool = new CognitoUserPool(CONTEXT, POOL_ID, APP_ClIENT_ID, APP_ClIENT_SECRET, US_WEST_2);
+        userPool = new CognitoUserPool(CONTEXT, awsServices.getPOOL_ID(), awsServices.getAPP_ClIENT_ID(), awsServices.getAPP_ClIENT_SECRET(), awsServices.getREGION());
     }
 
     private void initSignUpHandler(){
@@ -366,17 +359,24 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
             @Override
             public void onSuccess(CognitoUser user, boolean signUpConfirmationState, CognitoUserCodeDeliveryDetails cognitoUserCodeDeliveryDetails) {
                 statusText.setText("");
-                if (!signUpConfirmationState) {
-                    // User confirming via email code
+                if (!signUpConfirmationState) { // User confirming via email code
                     launchConfirmationScreen(email); }
                 else { launchHomeScreen(); }
             }
 
             @Override
             public void onFailure(Exception exception) {
-                Log.d(TAG, "User sign-up failed: " + exception.toString());
-                String status = getApplicationContext().getString(R.string.status_text, name);
-                statusText.setText(status);
+                String e = exception.toString();
+                Log.d(TAG, "User sign-up failed: " + e);
+                String error;
+                if (e.toLowerCase().contains("constraint: member")) {
+                    error = "Password must be at least 8 characters";
+                } else if (e.toLowerCase().contains("policy:")) {
+                    error = StringUtils.substringBetween(e, "policy:", " (Service");
+                } else if (e.toLowerCase().contains("usernameexistsexception")) {
+                    error = StringUtils.substringBetween(e, "UsernameExistsException:", " (Service");
+                } else error = getApplicationContext().getString(R.string.status_text, name);
+                statusText.setText(error);
             }
         };
     }

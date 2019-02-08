@@ -21,6 +21,8 @@ import android.widget.Toast;
 
 import com.amazonaws.mobile.client.Callback;
 import com.amazonaws.mobile.client.UserStateDetails;
+import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUser;
+import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUserPool;
 import com.plusmobileapps.safetyapp.AdminSettings;
 
 import com.amazonaws.auth.AWSCredentialsProvider;
@@ -31,6 +33,7 @@ import com.amazonaws.mobile.config.AWSConfiguration;
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
 
+import com.plusmobileapps.safetyapp.AwsServices;
 import com.plusmobileapps.safetyapp.R;
 import com.plusmobileapps.safetyapp.actionitems.landing.ActionItemPresenter;
 import com.plusmobileapps.safetyapp.summary.landing.SummaryPresenter;
@@ -44,6 +47,10 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
     private static final String TAG = "MainActivity";
     private TextView mTextMessage;
 
+    private AwsServices awsServices;
+    private CognitoUserPool userPool;
+    private Context CONTEXT = this;
+    private CognitoUser user;
     private ViewPager viewPager;
     private BottomNavigationView navigation;
     private String walkthroughFragmentTitle = "";
@@ -113,6 +120,9 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
                 .awsConfiguration(configuration)
                 .build();
         createUserInfoItem();
+        awsServices = new AwsServices();
+        userPool = new CognitoUserPool(CONTEXT, awsServices.getPOOL_ID(), awsServices.getAPP_ClIENT_ID(), awsServices.getAPP_ClIENT_SECRET(), awsServices.getREGION());
+        user = userPool.getUser("shadow13524@gmail.com");
     }
 
     @Override
@@ -159,6 +169,13 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
                 Log.e("INIT", e.toString());
             }
         });
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Log.d("YourMainActivity", "User has been signed out");
+        user.signOut();
     }
 
 

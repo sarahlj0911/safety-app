@@ -59,7 +59,8 @@
     <string name="hint_school_name">School Name</string>
     <string name="error_school_name">School name is required</string>
     <string name="error_no_password">Password is required</string>
-    <string name="error_invalid_password">Password must contain a number, an uppercase and special character </string>
+    <string name="error_invalid_password">Password must contain a number, an uppercase, and a special character </string>
+    <string name="error_invalid_password_length">Password must be 8 characters long </string>
     <string name="label_signup_role">Role</string>
     <string name="label_signup_school_name">School</string>
     <string name="btn_signup">Let\'s get started!</string>
@@ -72,7 +73,7 @@
     <string name="text_login">Already a user?</string>
     <string name="text_signup_school_name">School</string>
     <string name="status_placeholder">Signup Status</string>
-    <string name="status_text">"Unable to sign up %1$s \n AWS Error"</string>
+    <string name="status_text">"Unable to Sign Up %1$s \n AWS Error"</string>
 
 
     <!-- Signup Confirmation Page Strings -->
@@ -156,11 +157,13 @@
     <string name="create_user">Create User</string>
     <string name="Admin_settings">Admin Settings</string>
     <string name="login_button_error_aws_user_exists">Incorrect Password</string>
+    <string name="login_button_error_aws_new_password">Password Reset Required</string>
     <string name="login_button_error_aws_error">Connection Issue with AWS</string>
     <string name="login_button_user_not_found">User Not Found</string>
-    <string name="login_button_error_verify">Need to Verify Account \n CONTINUE PROCESS HERE</string>
+    <string name="login_button_error_verify">Need to Verify Account \n Continue Process? </string>
     <string name="authorization_code_input_field">Enter your code here</string>
-    <string name="authorization_code_des">You still need to verify your account. Please follow the steps from the email that was previously sent to you</string>
+    <string name="authorization_code_des">You still need to verify your account. Please enter the code that was previously sent to you.</string>
+    <string name="code_listener_button_confirm">CONFIRM</string>
 
 </resources>
 

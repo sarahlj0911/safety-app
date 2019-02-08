@@ -28,6 +28,8 @@ public interface SignupContract {
         void launchHomeScreen();
 
         void populateSchoolSpinner(ArrayList<String> schools);
+
+        void displayInvalidPasswordLengthError(boolean b);
     }
 
     interface Presenter extends BasePresenter {
