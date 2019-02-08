@@ -113,7 +113,8 @@
         android:visibility="invisible"
         android:paddingTop="7dp"
         android:textSize="18sp"
-        android:importantForAutofill="no" />
+        android:importantForAutofill="no"
+        tools:ignore="LabelFor,TextFields" />
 
     <TextView
         android:id="@+id/label_signup_role"

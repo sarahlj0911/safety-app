@@ -38,7 +38,8 @@
             android:layout_height="wrap_content"
             android:hint="@string/hint_name"
             android:inputType="text"
-            tools:ignore="Autofill"/>
+            android:autofillHints="Enter your name"
+            tools:targetApi="o" />
 
     </android.support.design.widget.TextInputLayout>
 
@@ -56,8 +57,9 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
             android:hint="@string/hint_email"
+            android:importantForAutofill="no"
             android:inputType="textEmailAddress"
-            tools:ignore="Autofill" />
+            tools:targetApi="o"/>
 
     </android.support.design.widget.TextInputLayout>
 
@@ -76,7 +78,8 @@
             android:layout_marginTop="24dp"
             android:hint="@string/hint_password"
             android:inputType="text|textPassword"
-            tools:ignore="Autofill" />
+            android:importantForAutofill="no"
+            tools:targetApi="o"/>
 
     </android.support.design.widget.TextInputLayout>
 
@@ -113,8 +116,9 @@
         android:visibility="invisible"
         android:paddingTop="7dp"
         android:textSize="18sp"
-        tools:ignore="Autofill,LabelFor"
-        android:inputType="" />
+        android:importantForAutofill="no"
+        tools:targetApi="o"
+        tools:ignore="LabelFor,TextFields" />
 
     <TextView
         android:id="@+id/label_signup_role"
@@ -134,11 +138,12 @@
         android:layout_alignBaseline="@+id/label_signup_role"
         android:layout_alignBottom="@+id/label_signup_role"
         android:layout_alignEnd="@+id/signup_email"
+        android:defaultFocusHighlightEnabled="false"
         android:entries="@array/signup_roles"
         android:fadingEdge="vertical"
         android:paddingTop="7dp"
         android:prompt="@string/signup_role_prompt"
-        tools:ignore="Autofill" />
+        tools:targetApi="o" />
 
     <Button
         android:id="@+id/button_save_signup"
@@ -165,5 +170,21 @@
         android:textAlignment="center"
         android:textColor="@color/actionItemRed"
         android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/alertView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="0dp"
+        android:layout_marginEnd="0dp"
+        android:layout_marginBottom="0dp"
+        android:text=""
+        android:textSize="20sp"
+        android:visibility="invisible" />
 
 </RelativeLayout>
