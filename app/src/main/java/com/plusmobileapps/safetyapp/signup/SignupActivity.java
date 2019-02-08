@@ -1,11 +1,13 @@
 package com.plusmobileapps.safetyapp.signup;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -25,6 +27,7 @@ import com.amazonaws.mobileconnectors.cognitoidentityprovider.handlers.SignUpHan
 import com.plusmobileapps.safetyapp.AwsServices;
 import com.plusmobileapps.safetyapp.PrefManager;
 import com.plusmobileapps.safetyapp.R;
+import com.plusmobileapps.safetyapp.login.LoginActivity;
 import com.plusmobileapps.safetyapp.main.MainActivity;
 
 import org.apache.commons.lang3.StringUtils;
@@ -39,7 +42,7 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
     public static final String TAG = "SignupActivity";
     private SignupContract.Presenter presenter;
     private TextInputLayout nameInput, emailInput, passwordInput, schoolNameInput;
-    private TextView statusText;
+    private TextView statusText, alertView;
     private Spinner schoolSpinner;
     private ArrayList<String> schoolList;
     private ArrayAdapter<String> schoolSpinnerList;
@@ -76,7 +79,9 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
         nameField = findViewById(R.id.fieldName);
         emailField = findViewById(R.id.fieldEmail);
         passwordField = findViewById(R.id.fieldPassword);
+
         statusText = findViewById(R.id.textViewStatus);
+        alertView = findViewById(R.id.alertView);
 
         nameField.setNextFocusDownId(R.id.fieldEmail);
         emailField.setNextFocusDownId(R.id.fieldPassword);
@@ -116,6 +121,11 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
         PrefManager prefManager = new PrefManager(this);
         prefManager.setIsUserSignedUp(true);
         startActivity(new Intent(SignupActivity.this, MainActivity.class));
+        finish();
+    }
+
+    public void launchSignupScreen() {
+        startActivity(new Intent(SignupActivity.this, LoginActivity.class));
         finish();
     }
 
@@ -360,7 +370,19 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
             public void onSuccess(CognitoUser user, boolean signUpConfirmationState, CognitoUserCodeDeliveryDetails cognitoUserCodeDeliveryDetails) {
                 statusText.setText("");
                 if (!signUpConfirmationState) { // User confirming via email code
-                    launchConfirmationScreen(email); }
+                    AlertDialog.Builder builder = new AlertDialog.Builder(SignupActivity.this);
+                    builder.setCancelable(true);
+                    builder.setTitle("Account Created");
+                    builder.setMessage("Almost there! A confirmation email has been sent to "+email+ ".");
+                    builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            alertView.setVisibility(View.VISIBLE);
+                            launchSignupScreen();
+                        }
+                    });
+                    builder.show();
+                }
                 else { launchHomeScreen(); }
             }
 

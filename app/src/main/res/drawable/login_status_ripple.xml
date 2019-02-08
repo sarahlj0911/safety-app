@@ -21,6 +21,7 @@
         android:state_pressed="true"
         android:color="@color/login_button_text_click">
         <shape>
+            <corners android:radius="50dp" />
             <solid
                 android:color="#FFFFFF"
                 android:background= "@android:color/transparent"/>
