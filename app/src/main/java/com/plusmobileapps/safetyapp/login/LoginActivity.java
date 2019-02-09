@@ -18,6 +18,8 @@ import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -377,6 +379,7 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         backgroundBlur.setVisibility(View.VISIBLE);
         codeAuthWindow.setVisibility(View.VISIBLE);
         buttonDismissCodeView.setClickable(true);
+//        codeAuthorizationView(true);
     }
 
     private Bitmap takeScreenshot(){
@@ -393,10 +396,38 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
      * Added by Jeremy Powell 1/24/2019
      */
     //
-    public void hideKeyboard(View v) {
+    private void hideKeyboard(View v) {
         if (v != null) {
             InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(v.getWindowToken(), 0); }
+    }
+
+    private void codeAuthorizationView(boolean on){
+        if (on) {
+            Bitmap backgroundCapture = takeScreenshot();
+            backgroundBlur.setImageBitmap(new BlurUtils().blur(LoginActivity.this, backgroundCapture, 25f));
+            backgroundBlur.setImageAlpha(0);
+            codeAuthWindow.setAlpha(0.0f);
+            backgroundBlur.setVisibility(View.VISIBLE);
+            codeAuthWindow.setVisibility(View.VISIBLE);
+            buttonDismissCodeView.setClickable(true);
+            AlphaAnimation anim = new AlphaAnimation(0.0f, 1.0f);
+            anim.setDuration(1000);
+            anim.setRepeatCount(0);
+            anim.setRepeatMode(Animation.REVERSE);
+            codeAuthWindow.startAnimation(anim);
+            backgroundBlur.startAnimation(anim);
+        }
+        else {
+            backgroundBlur.setVisibility(View.INVISIBLE);
+            codeAuthWindow.setVisibility(View.INVISIBLE);
+            buttonDismissCodeView.setClickable(false);
+            showCodeView = false;
+            AlphaAnimation anim = new AlphaAnimation(1.0f, 0.0f);
+            anim.setDuration(1000);
+            codeAuthWindow.startAnimation(anim);
+            backgroundBlur.startAnimation(anim);
+        }
     }
 
 }
