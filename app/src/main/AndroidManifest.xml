@@ -102,6 +102,7 @@
         </service>
 
         <activity android:name=".AdminSettings"></activity>
+        <activity android:name=".util.exportPdf"></activity>
     </application>
 
 </manifest>

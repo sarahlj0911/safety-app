@@ -4,11 +4,17 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.Toast;
 
 import static android.widget.Toast.*;
 
 public class AdminSettings extends AppCompatActivity {
+    protected CheckBox ActionItembox;
+    protected CheckBox WalkthroughCommentsbox;
+
+    protected CheckBox Picsbox;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
