@@ -54,6 +54,7 @@
     <string name="error_name">Name is required</string>
     <string name="hint_email">Email</string>
     <string name="hint_password">Password</string>
+    <string name="hint_password_check">Retype Password</string>
     <string name="error_email_none">Email is required</string>
     <string name="error_email_invalid">Invalid email</string>
     <string name="hint_school_name">School Name</string>
@@ -61,6 +62,7 @@
     <string name="error_no_password">Password is required</string>
     <string name="error_invalid_password">Password must contain a number, an uppercase, and a special character </string>
     <string name="error_invalid_password_length">Password must be 8 characters long </string>
+    <string name="error_invalid_password_no_match">Passwords do not match </string>
     <string name="label_signup_role">Role</string>
     <string name="label_signup_school_name">School</string>
     <string name="btn_signup">Let\'s get started!</string>

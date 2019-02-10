@@ -30,6 +30,10 @@ public interface SignupContract {
         void populateSchoolSpinner(ArrayList<String> schools);
 
         void displayInvalidPasswordLengthError(boolean b);
+
+        void displayNoPasswordCheckErrorNoMatch(boolean b);
+
+        void displayNoPasswordCheckError(boolean b);
     }
 
     interface Presenter extends BasePresenter {

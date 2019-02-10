@@ -22,6 +22,7 @@ public class SignupPresenter implements SignupContract.Presenter {
     static final String NAME_INPUT = "name";
     static final String EMAIL_INPUT = "email";
     static final String PASSWORD_INPUT = "password";
+    static final String PASSWORD_INPUT_CHECK = "passwordCheck";
     static final String SCHOOL_NAME_INPUT = "school_name";
     static final String ROLE_INPUT = "role";
 
@@ -53,40 +54,62 @@ public class SignupPresenter implements SignupContract.Presenter {
         if (name != null) {
             if (isEmpty(name)) {
                 view.displayNoNameError(true);
-                isValidInput = false;
-            } else {
-                view.displayNoNameError(false);
-            }
+                isValidInput = false; }
+            else {
+                view.displayNoNameError(false); } }
+        else {
+            view.displayNoNameError(true);
+            isValidInput = false;
         }
 
         String email = formInput.get(EMAIL_INPUT);
         if (email != null) {
             if (isEmpty(email)) {
                 view.displayNoEmailError(true);
-                isValidInput = false;
-            } else if (!email.contains("@")) {
+                isValidInput = false; }
+            else if (!email.contains("@")) {
                 view.displayInvalidEmailError(true);
-                isValidInput = false;
-            } else {
+                isValidInput = false; }
+            else {
                 view.displayNoEmailError(false);
-                view.displayInvalidEmailError(false);
-            }
+                view.displayInvalidEmailError(false); } }
+        else {
+            view.displayNoEmailError(true);
+            isValidInput = false;
         }
 
-        String password = formInput.get(PASSWORD_INPUT);
+            String password = formInput.get(PASSWORD_INPUT);
         if (password != null) {
             if (isEmpty(password)) {
                 view.displayNoPasswordError(true);
-                isValidInput = false;
-            } else {
-                view.displayNoPasswordError(false);
-            }
+                isValidInput = false; }
+            else {
+                view.displayNoPasswordError(false); } }
+        else {
+            view.displayNoPasswordError(true);
+            isValidInput = false;
         }
+
+        String passwordCheck = formInput.get(PASSWORD_INPUT_CHECK);
+        if (passwordCheck != null) {
+            if (isEmpty(passwordCheck)) {
+                view.displayNoPasswordCheckError(true);
+                isValidInput = false; }
+            else if (!passwordCheck.equals(password)) {
+                view.displayNoPasswordCheckErrorNoMatch(true);
+                isValidInput = false; }
+            else {
+                view.displayNoPasswordCheckError(false);
+                view.displayNoPasswordCheckErrorNoMatch(false); } }
+        else {
+            view.displayNoPasswordCheckError(true);
+            isValidInput = false;
+        }
+
 
         if (isValidInput) {
             saveSignupData(formInput);
-            return true;
-        }
+            return true; }
         else return false;
     }
 

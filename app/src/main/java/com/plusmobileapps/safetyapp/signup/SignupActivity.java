@@ -41,9 +41,9 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
 
     public static final String TAG = "SignupActivity";
     private SignupContract.Presenter presenter;
-    private TextInputLayout nameInput, emailInput, passwordInput, schoolNameInput;
+    private TextInputLayout nameInput, emailInput, passwordInput, passwordCheckInput, InputschoolNameInput;
     private TextView statusText, alertView;
-    private Spinner schoolSpinner;
+    private Spinner schoolSpinner, roleSpinner;
     private ArrayList<String> schoolList;
     private ArrayAdapter<String> schoolSpinnerList;
     private EditText newSchool, nameField, emailField, passwordField;
@@ -70,11 +70,13 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
 
         schoolList = new ArrayList<>();
         schoolSpinner = findViewById(R.id.spinner_signup_school_name);
+        roleSpinner = findViewById(R.id.spinner_signup_role);
         newSchool = findViewById(R.id.new_school_text_box);
 
         nameInput = findViewById(R.id.signup_name);
         emailInput = findViewById(R.id.signup_email);
         passwordInput = findViewById(R.id.signup_password);
+        passwordCheckInput = findViewById(R.id.signup_password_check);
         newSchool = findViewById(R.id.new_school_text_box);
         nameField = findViewById(R.id.fieldName);
         emailField = findViewById(R.id.fieldEmail);
@@ -82,9 +84,6 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
 
         statusText = findViewById(R.id.textViewStatus);
         alertView = findViewById(R.id.alertView);
-
-        nameField.setNextFocusDownId(R.id.fieldEmail);
-        emailField.setNextFocusDownId(R.id.fieldPassword);
 
         Objects.requireNonNull(nameInput.getEditText()).addTextChangedListener(nameListener);
         Objects.requireNonNull(emailInput.getEditText()).addTextChangedListener(emailListener);
@@ -175,6 +174,11 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
         public void onClick(View v) {
             HashMap<String, String> formInput = new HashMap<>();
             String school;
+            statusText.setText("");
+            nameInput.clearFocus();
+            emailInput.clearFocus();
+            passwordInput.clearFocus();
+            passwordCheckInput.clearFocus();
 
             if (schoolExists) {
                 Spinner schoolInput = findViewById(R.id.spinner_signup_school_name);
@@ -185,17 +189,17 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
                 Log.d(TAG, "New School: " + school);
             }
 
-            Spinner roleInput = findViewById(R.id.spinner_signup_role);
-
             name = Objects.requireNonNull(nameInput.getEditText()).getText().toString();
             email = Objects.requireNonNull(emailInput.getEditText()).getText().toString();
             String password = Objects.requireNonNull(passwordInput.getEditText()).getText().toString();
+            String passwordCheck = Objects.requireNonNull(passwordCheckInput.getEditText()).getText().toString();
 
-            String role = roleInput.getSelectedItem().toString();
+            String role = roleSpinner.getSelectedItem().toString();
 
             formInput.put(SignupPresenter.NAME_INPUT, name);
             formInput.put(SignupPresenter.EMAIL_INPUT, email);
             formInput.put(SignupPresenter.PASSWORD_INPUT, password);
+            formInput.put(SignupPresenter.PASSWORD_INPUT_CHECK, passwordCheck);
             formInput.put(SignupPresenter.SCHOOL_NAME_INPUT, school);
             formInput.put(SignupPresenter.ROLE_INPUT, role);
 
@@ -249,6 +253,18 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
     }
 
     @Override
+    public void displayNoPasswordCheckError(boolean show) {
+        passwordCheckInput.setError(getString(R.string.error_no_password));
+        passwordCheckInput.setErrorEnabled(show);
+    }
+
+    @Override
+    public void displayNoPasswordCheckErrorNoMatch(boolean show) {
+        passwordCheckInput.setError(getString(R.string.error_invalid_password_no_match));
+        passwordCheckInput.setErrorEnabled(show);
+    }
+
+    @Override
     public void displayInvalidPasswordLengthError(boolean show) {
         passwordInput.setError(getString(R.string.error_invalid_password_length));
         passwordInput.setErrorEnabled(show);
@@ -289,6 +305,8 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
         @Override
         public void afterTextChanged(Editable s) { }
     };
+
+
 
     private TextWatcher schoolNameListener = new TextWatcher() {
         @Override

@@ -9,7 +9,6 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.annotation.ColorInt;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
@@ -18,8 +17,11 @@ import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.animation.AccelerateInterpolator;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
+import android.view.animation.AnimationSet;
+import android.view.animation.DecelerateInterpolator;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -367,19 +369,20 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
 
     public void buttonDismissAuthCodeClicked(View view) {
         hideKeyboard(view);
+        showCodeView = false;
+        buttonDismissCodeView.setClickable(false);
         backgroundBlur.setVisibility(View.INVISIBLE);
         codeAuthWindow.setVisibility(View.INVISIBLE);
-        buttonDismissCodeView.setClickable(false);
-        showCodeView = false;
+        // codeAuthorizationAnimation(false, 200);
     }
 
     public void showCodeAuthorizationView() {
         Bitmap backgroundCapture = takeScreenshot();
         backgroundBlur.setImageBitmap(new BlurUtils().blur(LoginActivity.this, backgroundCapture, 25f));
+        buttonDismissCodeView.setClickable(true);
         backgroundBlur.setVisibility(View.VISIBLE);
         codeAuthWindow.setVisibility(View.VISIBLE);
-        buttonDismissCodeView.setClickable(true);
-//        codeAuthorizationView(true);
+        //codeAuthorizationAnimation(true, 500);
     }
 
     private Bitmap takeScreenshot(){
@@ -402,32 +405,44 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
             imm.hideSoftInputFromWindow(v.getWindowToken(), 0); }
     }
 
-    private void codeAuthorizationView(boolean on){
-        if (on) {
-            Bitmap backgroundCapture = takeScreenshot();
-            backgroundBlur.setImageBitmap(new BlurUtils().blur(LoginActivity.this, backgroundCapture, 25f));
-            backgroundBlur.setImageAlpha(0);
-            codeAuthWindow.setAlpha(0.0f);
-            backgroundBlur.setVisibility(View.VISIBLE);
-            codeAuthWindow.setVisibility(View.VISIBLE);
-            buttonDismissCodeView.setClickable(true);
-            AlphaAnimation anim = new AlphaAnimation(0.0f, 1.0f);
-            anim.setDuration(1000);
-            anim.setRepeatCount(0);
-            anim.setRepeatMode(Animation.REVERSE);
-            codeAuthWindow.startAnimation(anim);
-            backgroundBlur.startAnimation(anim);
-        }
+    private void codeAuthorizationAnimation(final boolean fadeIn, int duration){
+        final AnimationSet animation = new AnimationSet(false); // change to false
+        animation.setRepeatCount(1);
+        if (fadeIn) {
+            AlphaAnimation fadeInAni = new AlphaAnimation(0.0f, 1.0f);
+            fadeInAni.setInterpolator(new DecelerateInterpolator());
+            fadeInAni.setDuration(duration);
+            animation.addAnimation(fadeInAni);
+            backgroundBlur.setAnimation(animation);
+            codeAuthWindow.setAnimation(animation); }
         else {
-            backgroundBlur.setVisibility(View.INVISIBLE);
-            codeAuthWindow.setVisibility(View.INVISIBLE);
-            buttonDismissCodeView.setClickable(false);
-            showCodeView = false;
-            AlphaAnimation anim = new AlphaAnimation(1.0f, 0.0f);
-            anim.setDuration(1000);
-            codeAuthWindow.startAnimation(anim);
-            backgroundBlur.startAnimation(anim);
-        }
+            Animation fadeOutAni = new AlphaAnimation(1.0f, 0.0f);
+            fadeOutAni.setInterpolator(new AccelerateInterpolator());
+            fadeOutAni.setDuration(duration);
+            animation.addAnimation(fadeOutAni);
+            backgroundBlur.setAnimation(animation);
+            codeAuthWindow.setAnimation(animation); }
+
+        animation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+                if (fadeIn) {
+                    backgroundBlur.setVisibility(View.VISIBLE);
+                    codeAuthWindow.setVisibility(View.VISIBLE); }
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                if (!fadeIn) {
+                    backgroundBlur.setVisibility(View.INVISIBLE);
+                    codeAuthWindow.setVisibility(View.INVISIBLE); }
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) { }
+        });
+
+        animation.start();
     }
 
 }
