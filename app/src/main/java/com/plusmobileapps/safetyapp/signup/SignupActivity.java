@@ -129,14 +129,6 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
         finish();
     }
 
-
-    public void launchConfirmationScreen(String email) {
-        Intent intent = new Intent(SignupActivity.this, SignupConfirmActivity.class);
-        intent.putExtra("userEmail", email);
-        startActivity(intent);
-        finish();
-    }
-
     @Override
     public void populateSchoolSpinner(ArrayList<String> schools) {
       /*  schoolList.remove("");

@@ -28,7 +28,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".signup.SignupConfirmActivity"></activity>
 
         <service android:name="org.eclipse.paho.android.service.MqttService" />
 
