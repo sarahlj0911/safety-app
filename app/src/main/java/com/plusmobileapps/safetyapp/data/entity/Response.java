@@ -191,10 +191,7 @@ public class Response {
     }
 
     public boolean isActionItem() {
-        if (isActionItem == 0) {
-            return false;
-        }
-        return true;
+        return isActionItem != 0;
     }
 
     public void setUserId(int userId) {
@@ -225,13 +222,10 @@ public class Response {
     public boolean equals(Object obj) {
         if (obj instanceof Response) {
             Response response = (Response) obj;
-            if (response.getActionPlan().equals(actionPlan) &&
+            return response.getActionPlan().equals(actionPlan) &&
                     response.getLocationId() == locationId &&
                     response.getQuestionId() == questionId &&
-                    response.getWalkthroughId() == walkthroughId
-                    ) {
-                return true;
-            }
+                    response.getWalkthroughId() == walkthroughId;
         }
         return false;
     }

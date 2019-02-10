@@ -1,0 +1,51 @@
+{
+  "UserAgent": "MobileHub/1.0",
+  "Version": "1.0",
+  "CredentialsProvider": {
+    "CognitoIdentity": {
+      "Default": {
+        "PoolId": "us-west-2:be9ffed8-7295-43ab-90db-611f7955539d",
+        "Region": "us-west-2"
+      }
+    }
+  },
+  "IdentityManager": {
+    "Default": {}
+  },
+  "CognitoUserPool": {
+    "Default": {
+      "PoolId": "us-west-2_syFk4QKhg",
+      "AppClientId": "3pptkcueao8997ksu6j36qp91a",
+      "AppClientSecret": "oco57o3j8v895h9hf92eenfk1f9c4p45mbo46c06e114ljliaa3",
+      "Region": "us-west-2"
+    }
+  },
+  "S3TransferUtility": {
+    "Default": {
+      "Bucket": "safetyapp-userfiles-mobilehub-2118900508",
+      "Region": "us-west-2"
+    }
+  },
+  "DynamoDBObjectMapper": {
+    "Default": {
+      "Region": "us-west-2"
+    }
+  },
+  "PinpointAnalytics": {
+    "Default": {
+      "AppId": "88c0e6da0f9c4158a1e648d8747d1c9b",
+      "Region": "us-east-1"
+    }
+  },
+  "PinpointTargeting": {
+    "Default": {
+      "Region": "us-east-1"
+    }
+  },
+  "UserFileManager": {
+    "Default": {
+      "Bucket": "safetyapp-userfiles-mobilehub-2118900508",
+      "Region": "us-west-2"
+    }
+  }
+}

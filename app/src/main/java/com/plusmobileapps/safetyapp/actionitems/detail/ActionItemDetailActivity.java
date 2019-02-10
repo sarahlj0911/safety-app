@@ -48,7 +48,7 @@ public class ActionItemDetailActivity extends AppCompatActivity
         setContentView(R.layout.activity_action_item_detail);
 
         presenter = new ActionItemDetailPresenter(this);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.action_item_detail_toolbar);
+        Toolbar toolbar = findViewById(R.id.action_item_detail_toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(R.string.title_action_item_detail);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
