@@ -172,13 +172,25 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         @Override
         public void onSuccess() {
             Log.d(TAG, "Code was sent!");
-            runOnUiThread(new Runnable() {
+
+            final Runnable clearView = new Runnable() { public void run() {
+                buttonDismissAuthCodeClicked(codeAuthWindow);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        buttonLoginStatus.setText(R.string.login_button_user_confirmed);
+                        buttonLoginStatus.setClickable(false);}
+                }); }
+            };
+
+            Handler viewHandler = new Handler(getBaseContext().getMainLooper());
+            viewHandler.post( new Runnable() {
                 @Override
-                public void run() {
-                    buttonDismissAuthCodeClicked(codeAuthWindow);
-                    buttonLoginStatus.setText(R.string.login_button_user_confirmed);
-                }
-            });
+                public void run() { buttonCode.setText(getString(R.string.code_authorization_confirmed)); }} );
+            buttonCode.setTextColor(Color.WHITE);
+            buttonCode.setBackgroundResource(R.drawable.code_confirm_button_green);
+            codeAuthWindow.setBackgroundResource(R.drawable.code_authorization_success);
+            viewHandler.postDelayed(clearView, 2000);
         }
 
         @SuppressLint("SetTextI18n")

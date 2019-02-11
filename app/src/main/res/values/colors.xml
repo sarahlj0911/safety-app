@@ -14,6 +14,8 @@
     <color name="text_unfocus">#B3FFFFFF</color>
     <color name="error">#C50000</color>
     <color name="login_button_text_click">#EA4F1B</color>
+    <color name="code_authorization_code_success">#66AB17</color>
+
 
 
 
