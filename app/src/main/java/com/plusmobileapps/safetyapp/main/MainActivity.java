@@ -32,6 +32,7 @@ import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
 import com.plusmobileapps.safetyapp.R;
 import com.plusmobileapps.safetyapp.actionitems.landing.ActionItemPresenter;
 import com.plusmobileapps.safetyapp.summary.landing.SummaryPresenter;
+import com.plusmobileapps.safetyapp.util.exportPdf;
 import com.plusmobileapps.safetyapp.walkthrough.landing.WalkthroughLandingPresenter;
 
 
@@ -260,6 +261,9 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
                 //settings selected
                 Intent adminsettings = new Intent(this, AdminSettings.class);
                 startActivity(adminsettings);
+            case R.id.Exportpdf:
+                Intent exportpdf = new Intent(this, exportPdf.class);
+                startActivity(exportpdf);
                 break;
         }
 

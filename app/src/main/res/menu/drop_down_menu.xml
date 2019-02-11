@@ -4,5 +4,8 @@
         android:id="@+id/settings_menu"
 
         android:title="@string/Admin_settings" />
+    <item
+        android:id="@+id/Exportpdf"
+        android:title="Export To Document"/>
 
 </menu>
