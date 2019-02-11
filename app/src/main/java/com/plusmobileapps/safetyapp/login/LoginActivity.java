@@ -10,6 +10,7 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.TextInputLayout;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -238,8 +239,7 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
                     user = userPool.getUser(email);
                     buttonLoginStatus.setText(getString(R.string.login_button_error_verify));
                     buttonLoginStatus.setClickable(true);
-                    showCodeView = true;
-                }
+                    showCodeView = true; }
                 else {
                     Log.d(TAG, "AWS Sign-in Failure: " +continuation.getChallengeName());
                     buttonLoginStatus.setText(getString(R.string.login_button_error_aws_user_exists));
@@ -266,6 +266,9 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
                     buttonLoginStatus.setText(getString(R.string.login_button_error_verify));
                     buttonLoginStatus.setClickable(true);
                     showCodeView = true; }
+                else if (ex.toLowerCase().contains("unable to resolve host")) {
+                    buttonLoginStatus.setText(getString(R.string.login_button_error_AWS_connection_issue));
+                }
                 else buttonLoginStatus.setText(String.format("%s%s", getString(R.string.login_button_error_aws_error), exception));
                 handler.postDelayed(failureAnimation, 2000);
                 handler.postDelayed(resetButton, 5000); }
@@ -345,6 +348,12 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
     public void buttonRegisterClicked(View view) {
         android.util.Log.d(TAG, "Debug: Login Register Clicked");
         startActivity(new Intent(LoginActivity.this, SignupActivity.class));
+
+        // OPTION TO FADE IN SIGN-IN PAGE BELOW INSTEAD OF THE ABOVE INTENT
+//        Intent signUp = new Intent(LoginActivity.this, SignupActivity.class);
+//        Bundle bundle = ActivityOptionsCompat.makeCustomAnimation(this,
+//                android.R.anim.fade_in, android.R.anim.fade_out).toBundle();
+//        startActivity(signUp, bundle);
     }
 
     public void buttonStatusClicked(View view){
