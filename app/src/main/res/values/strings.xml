@@ -131,6 +131,7 @@
     <string name="view_history">View History</string>
     <string name="add_user">Add User</string>
     <string name="delete_user">Delete User</string>
+    <string name="new_ticket">New Ticket</string>
 
 </resources>
 
