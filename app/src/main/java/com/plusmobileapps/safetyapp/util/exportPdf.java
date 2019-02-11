@@ -19,7 +19,7 @@ public class exportPdf extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_export_pdf);
         ActionItembox = findViewById(R.id.checkBoxActionItems);
-        WalkthroughCommentsbox =findViewById(R.id.WalkthroughCommentsChkbox);
+        WalkthroughCommentsbox = findViewById(R.id.WalkthroughCommentsChkbox);
         Picsbox = findViewById(R.id.PhotoChkBox);
 
     }

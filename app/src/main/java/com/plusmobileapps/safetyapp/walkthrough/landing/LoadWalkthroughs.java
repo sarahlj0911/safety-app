@@ -29,6 +29,7 @@ public class LoadWalkthroughs extends AsyncTask<Void, Void, List<Walkthrough>> {
 
     @Override
     protected List<Walkthrough> doInBackground(Void... voids) {
+        //Might need this
         Log.d(TAG, "Loading walkthroughs...");
         db = AppDatabase.getAppDatabase((MyApplication.getAppContext()));
         WalkthroughDao dao = db.walkthroughDao();

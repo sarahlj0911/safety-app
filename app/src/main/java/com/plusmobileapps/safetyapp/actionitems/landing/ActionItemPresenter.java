@@ -35,11 +35,14 @@ public class ActionItemPresenter implements ActionItemContract.Presenter {
 
     @Override
     public void openActionItemDetail(int position) {
+
+        //this is how to access the data for each action items
         String responseId = Integer.toString(actionItems.get(position).getResponseId());
         view.showActionItemDetailUi(responseId);
     }
 
     private void showActionItems() {
+
         List<Response> responses = new ArrayList<>(0);
 
         responses.addAll(actionItems);
