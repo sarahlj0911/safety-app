@@ -30,6 +30,7 @@ import android.widget.ImageView;
 
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoDevice;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUser;
+import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUserCodeDeliveryDetails;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUserPool;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUserSession;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.continuations.AuthenticationContinuation;
@@ -38,6 +39,7 @@ import com.amazonaws.mobileconnectors.cognitoidentityprovider.continuations.Chal
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.continuations.MultiFactorAuthenticationContinuation;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.handlers.AuthenticationHandler;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.handlers.GenericHandler;
+import com.amazonaws.mobileconnectors.cognitoidentityprovider.handlers.VerificationHandler;
 import com.plusmobileapps.safetyapp.AwsServices;
 import com.plusmobileapps.safetyapp.BlurUtils;
 import com.plusmobileapps.safetyapp.PrefManager;
@@ -155,19 +157,11 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
     @Override
     public void setPresenter(LoginContract.Presenter presenter) { this.presenter = presenter; }
 
-
-    private void sendCode() {
-        new Thread(new Runnable() {
-            public void run() {
-                user.confirmSignUp(codeInput.getText().toString(), true, confirmCodeHandler);
-            }
-        }).start();
-    }
-
     private void initAWSUserPool(){
         userPool = new CognitoUserPool(CONTEXT, awsServices.getPOOL_ID(), awsServices.getAPP_ClIENT_ID(), awsServices.getAPP_ClIENT_SECRET(), awsServices.getREGION());
     }
 
+    // Code Confirmation Handler
     GenericHandler confirmCodeHandler = new GenericHandler() {
         @Override
         public void onSuccess() {
@@ -204,6 +198,33 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
                 public void run() { buttonCode.setText("Incorrect Code"); }} );
             buttonCode.setTextColor(Color.WHITE);
             buttonCode.setBackgroundResource(R.drawable.code_confirm_button_red);}
+    };
+
+    // Resend Code Confirmation Code Handler
+    VerificationHandler resendConfirmationCodeHandler = new VerificationHandler() {
+
+        @Override
+        public void onSuccess(CognitoUserCodeDeliveryDetails verificationCodeDeliveryMedium) {
+            Handler viewHandler = new Handler(getBaseContext().getMainLooper());
+            viewHandler.post( new Runnable() {
+                @Override
+                public void run() { buttonCode.setText(getString(R.string.login_code_button_sent)); }} );
+            buttonCode.setTextColor(Color.WHITE);
+            buttonCode.setBackgroundResource(R.drawable.code_confirm_button_green);
+            codeAuthWindow.setBackgroundResource(R.drawable.code_authorization_success);
+        }
+
+        @Override
+        public void onFailure(Exception exception) {
+            Log.d(TAG, "AWS Code Email Send Failure: " +exception);
+            Handler viewHandler = new Handler(getBaseContext().getMainLooper());
+            viewHandler.post( new Runnable() {
+                @Override
+                public void run() { buttonCode.setText(getString(R.string.login_code_button_error)); }} );
+            buttonCode.setTextColor(Color.WHITE);
+            buttonCode.setBackgroundResource(R.drawable.code_confirm_button_red);
+            codeAuthWindow.setBackgroundResource(R.drawable.code_authorization_fail);
+        }
     };
 
 
@@ -350,7 +371,6 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
 
         // Check login with AWS
         if (validInput) {
-            //loginButton.setBackground(Color.TRANSPARENT); TODO
             loginButton.startAnimation();
             userPool.getUser(email).getSessionInBackground(authenticationHandler); // Sign in the user
         }
@@ -382,11 +402,19 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         android.util.Log.d(TAG, "Debug: Confirm Code Button Pressed");
         codeInput.clearFocus();
         if (buttonCode.getText().toString().toLowerCase().contains("confirm")) {
-            sendCode();
+            new Thread(new Runnable() {
+                public void run() {
+                    user.confirmSignUp(codeInput.getText().toString(), true, confirmCodeHandler);
+                }
+            }).start();
         }
-        //else {
-            // TODO Resend verification code
-        //}
+        else if (buttonCode.getText().toString().toLowerCase().contains("resend")) {
+            new Thread(new Runnable() {
+                public void run() {
+                    user.resendConfirmationCode(resendConfirmationCodeHandler);
+                }
+            }).start();
+        }
     }
 
     public void buttonDismissAuthCodeClicked(View view) {

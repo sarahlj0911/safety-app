@@ -95,10 +95,11 @@
     <string name="login_button_register">Sign Up</string>
     <string name="error_password_none">Password is required</string>
     <string name="login_code_title">Account Verification</string>
-    <string name="login_code_button_send_email">Resend Email</string>
+    <string name="login_code_button_send_email">Resend Code</string>
     <string name="login_code_button_confirm">Confirm</string>
     <string name="login_code_status_placeholder">Code Status</string>
-
+    <string name="login_code_button_sent">Code Sent</string>
+    <string name="login_code_button_error">Issue Sending Code</string>
 
 
     <string-array name="signup_roles">
