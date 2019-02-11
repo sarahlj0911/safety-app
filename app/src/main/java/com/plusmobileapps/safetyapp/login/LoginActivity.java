@@ -368,6 +368,7 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
 
     public void buttonConfirmCodeClicked(View view){
         android.util.Log.d(TAG, "Debug: Confirm Code Button Pressed");
+        codeInput.clearFocus();
         if (buttonCode.getText().toString().toLowerCase().contains("confirm")) {
             sendCode();
         }
