@@ -97,30 +97,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
 
 
         //boolean fileDeleted = FileUtil.deleteDb(this);
-        /*
-        AWSMobileClient.getInstance().initialize(this, new AWSStartupHandler() {
-            @Override
-            public void onComplete(AWSStartupResult awsStartupResult) {
-                Log.d("YourMainActivity", "AWSMobileClient is instantiated and you are connected to AWS!");
-            }
-        }).execute();
-
-        // AWSMobileClient enables AWS user credentials to access your table
-        AWSMobileClient.getInstance().initialize(this).execute();
-
-        AWSCredentialsProvider credentialsProvider = AWSMobileClient.getInstance().getCredentialsProvider();
-        AWSConfiguration configuration = AWSMobileClient.getInstance().getConfiguration();
-
-
-        // Add code to instantiate a AmazonDynamoDBClient
-        AmazonDynamoDBClient dynamoDBClient = new AmazonDynamoDBClient(credentialsProvider);
-
-        this.dynamoDBMapper = DynamoDBMapper.builder()
-                .dynamoDBClient(dynamoDBClient)
-                .awsConfiguration(configuration)
-                .build();
-        Log.d("YourMainActivity", "some more stuff");
-        */
 
     }
 
