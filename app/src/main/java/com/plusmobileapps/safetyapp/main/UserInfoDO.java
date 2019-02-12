@@ -19,6 +19,7 @@ public class UserInfoDO {
     private String _location;
     private String _name;
     private String _title;
+    private String _tempPassword;
 
     @DynamoDBHashKey(attributeName = "userId")
     @DynamoDBAttribute(attributeName = "userId")
@@ -61,5 +62,9 @@ public class UserInfoDO {
     public void setTitle(final String _title) {
         this._title = _title;
     }
+
+    @DynamoDBAttribute(attributeName = "Password")
+    public String get_tempPassword(){return _tempPassword;}
+    public void setTempPassword(final String _tempPassword){this._tempPassword= _tempPassword;}
 
 }
