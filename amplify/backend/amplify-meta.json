@@ -1,0 +1,74 @@
+{
+	"providers": {
+		"awscloudformation": {
+			"AuthRoleName": "safetyapp-20190131221139-authRole",
+			"UnauthRoleArn": "arn:aws:iam::932483573997:role/safetyapp-20190131221139-unauthRole",
+			"AuthRoleArn": "arn:aws:iam::932483573997:role/safetyapp-20190131221139-authRole",
+			"Region": "us-west-2",
+			"DeploymentBucketName": "safetyapp-20190131221139-deployment",
+			"UnauthRoleName": "safetyapp-20190131221139-unauthRole",
+			"StackName": "safetyapp-20190131221139",
+			"StackId": "arn:aws:cloudformation:us-west-2:932483573997:stack/safetyapp-20190131221139/db533970-25df-11e9-9da7-06dcf5c4ac1e"
+		}
+	},
+	"auth": {
+		"cognito4f5cd58b": {
+			"service": "Cognito",
+			"providerPlugin": "awscloudformation",
+			"providerMetadata": {
+				"s3TemplateURL": "https://s3.amazonaws.com/safetyapp-20190131221139-deployment/amplify-cfn-templates/auth/cognito4f5cd58b-cloudformation-template.yml",
+				"logicalId": "authcognito4f5cd58b"
+			},
+			"lastPushTimeStamp": "2019-02-01T05:23:01.137Z",
+			"output": {
+				"AppClientSecret": "541h39tb8ems4k3goi8fn1alv9rkja01sl26r747p4cith6i5f4",
+				"UserPoolId": "us-west-2_o9Lf96l9Q",
+				"AppClientIDWeb": "46udap05sph53f9ago63psol57",
+				"AppClientID": "lt9r45uuqmpo3cdk0q4bkk840",
+				"IdentityPoolId": "us-west-2:685a1094-393f-412e-85c0-f627e798dc32",
+				"IdentityPoolName": "cognito4f5cd58b_identitypool_4f5cd58b",
+				"UserPoolName": "cognito4f5cd58b_userpool_4f5cd58b"
+			},
+			"lastPushDirHash": "BQ/1sE/FgteeTV7lOHUb/Pc8KWk="
+		}
+	},
+	"api": {
+		"safteyapp": {
+			"service": "AppSync",
+			"providerPlugin": "awscloudformation",
+			"output": {
+				"securityType": "AMAZON_COGNITO_USER_POOLS",
+				"GraphQLAPIIdOutput": "zni2tghz7nevdodc4r4xwzbdf4",
+				"GraphQLAPIEndpointOutput": "https://taxffomadbfnbccnsjnfjdkqoa.appsync-api.us-west-2.amazonaws.com/graphql",
+				"GraphQLAPIKeyOutput": "da2-yrae22lb7zhv7hvwfu2p5cdsxy",
+				"AuthCognitoUserPoolIdOutput": "us-west-2_o9Lf96l9Q",
+				"AuthCognitoUserPoolNativeClientId": "See UserPool: us-west-2_o9Lf96l9Q",
+				"AuthCognitoUserPoolJSClientId": "See UserPool: us-west-2_o9Lf96l9Q"
+			},
+			"providerMetadata": {
+				"s3TemplateURL": "https://s3.amazonaws.com/safetyapp-20190131221139-deployment/amplify-cfn-templates/api/cloudformation-template.json",
+				"logicalId": "apisafteyapp"
+			},
+			"lastPushTimeStamp": "2019-02-01T05:23:01.137Z",
+			"lastPushDirHash": "q3xt9PfCwWU7TnxMJUpvFeRDlFg="
+		}
+	},
+	"hosting": {
+		"S3AndCloudFront": {
+			"service": "S3AndCloudFront",
+			"providerPlugin": "awscloudformation",
+			"providerMetadata": {
+				"s3TemplateURL": "https://s3.amazonaws.com/safetyapp-20190131221139-deployment/amplify-cfn-templates/hosting/template.json",
+				"logicalId": "hostingS3AndCloudFront"
+			},
+			"lastPushTimeStamp": "2019-02-01T05:23:01.137Z",
+			"output": {
+				"S3BucketSecureURL": "https://safteyapp-20190131221604-hostingbucket.s3.amazonaws.com",
+				"WebsiteURL": "http://safteyapp-20190131221604-hostingbucket.s3-website-us-west-2.amazonaws.com",
+				"Region": "us-west-2",
+				"HostingBucketName": "safteyapp-20190131221604-hostingbucket"
+			},
+			"lastPushDirHash": "+QCpJOpM9362ESigiJy14yNXdqg="
+		}
+	}
+}
