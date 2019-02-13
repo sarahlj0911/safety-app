@@ -102,6 +102,8 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
         // AWSMobileClient enables AWS user credentials to access your table
 
         AWSMobileClient.getInstance().initialize(this).execute();
+
+
         FileUtil.upload(this, "uploads/appDB.db", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db");
         FileUtil.upload(this, "uploads/appDB.db-shm", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db-shm");
         FileUtil.upload(this, "uploads/appDB.db-wal", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db-wal");

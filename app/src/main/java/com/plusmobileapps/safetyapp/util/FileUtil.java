@@ -47,6 +47,41 @@ public class FileUtil {
         return true;
     }
 
+    public static boolean download(Context context, String file, String path) {
+        TransferUtility transferUtility =
+                TransferUtility.builder()
+                        .context(context)
+                        .awsConfiguration(AWSMobileClient.getInstance().getConfiguration())
+                        .s3Client(new AmazonS3Client(AWSMobileClient.getInstance().getCredentialsProvider()))
+                        .build();
+
+        TransferObserver downloadObserver =
+                transferUtility.download(file, new File(path));
+
+        downloadObserver.setTransferListener(new TransferListener() {
+
+            @Override
+            public void onStateChanged(int id, TransferState state) {
+                if (TransferState.COMPLETED == state) {
+                    // Handle a completed upload.
+                }
+            }
+
+            @Override
+            public void onProgressChanged(int id, long bytesCurrent, long bytesTotal) {
+                float percentDonef = ((float) bytesCurrent / (float) bytesTotal) * 100;
+                int percentDone = (int) percentDonef;
+            }
+
+            @Override
+            public void onError(int id, Exception ex) {
+                // Handle errors
+            }
+
+        });
+        return true;
+    }
+
 
     public static void upload(Context context, String file, String path) {
 
