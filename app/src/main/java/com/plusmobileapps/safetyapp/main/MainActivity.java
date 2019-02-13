@@ -103,13 +103,15 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
 
         AWSMobileClient.getInstance().initialize(this).execute();
 
-
+        /*
         FileUtil.upload(this, "uploads/appDB.db", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db");
         FileUtil.upload(this, "uploads/appDB.db-shm", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db-shm");
         FileUtil.upload(this, "uploads/appDB.db-wal", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db-wal");
-
-
+*/
         //boolean fileDeleted = FileUtil.deleteDb(this);
+
+        FileUtil.download(this, "uploads/appDB.db", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db");
+
 
     }
 
