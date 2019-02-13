@@ -47,12 +47,6 @@ public class FileUtil {
         return true;
     }
 
-    public static boolean deleteFromS3(Context context) {
-        AWSCredentials credentials =
-
-        return true;
-    }
-
 
     public static void upload(Context context, String file, String path) {
 
