@@ -2,8 +2,10 @@ package com.plusmobileapps.safetyapp.signup;
 
 import com.plusmobileapps.safetyapp.BasePresenter;
 import com.plusmobileapps.safetyapp.BaseView;
+import com.plusmobileapps.safetyapp.data.entity.School;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -21,29 +23,17 @@ public interface SignupContract {
 
         void displayNoSchoolError(boolean show);
 
-        void displayNoPasswordError(boolean show);
-
-        void displayInvalidPasswordError(boolean show);
-
         void launchHomeScreen();
 
         void populateSchoolSpinner(ArrayList<String> schools);
-
-        void displayInvalidPasswordLengthError(boolean b);
-
-        void displayNoPasswordCheckErrorNoMatch(boolean b);
-
-        void displayNoPasswordCheckError(boolean b);
     }
 
     interface Presenter extends BasePresenter {
-        Boolean processFormInput(Map<String, String> formInput);
+        void processFormInput(Map<String, String> formInput);
 
         void nameTextAdded();
 
         void emailTextAdded();
-
-        void passwordTextAdded();
 
         void schoolNameTextAdded();
     }

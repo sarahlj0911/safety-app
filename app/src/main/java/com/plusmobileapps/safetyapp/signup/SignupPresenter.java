@@ -2,16 +2,16 @@ package com.plusmobileapps.safetyapp.signup;
 
 import android.os.AsyncTask;
 import android.util.Log;
+import android.widget.Spinner;
 
-import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUserPool;
 import com.plusmobileapps.safetyapp.data.entity.School;
 import com.plusmobileapps.safetyapp.data.entity.User;
 
-
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
-import java.util.regex.Pattern;
+import java.util.List;
+import java.util.ArrayList;
 
 /**
  * Created by Robert Beerman on 2/17/2018.
@@ -19,20 +19,16 @@ import java.util.regex.Pattern;
 
 public class SignupPresenter implements SignupContract.Presenter {
 
-    static final String NAME_INPUT = "name";
-    static final String EMAIL_INPUT = "email";
-    static final String PASSWORD_INPUT = "password";
-    static final String PASSWORD_INPUT_CHECK = "passwordCheck";
-    static final String SCHOOL_NAME_INPUT = "school_name";
-    static final String ROLE_INPUT = "role";
+    public static final String NAME_INPUT = "name";
+    public static final String EMAIL_INPUT = "email";
+    public static final String SCHOOL_NAME_INPUT = "school_name";
+    public static final String ROLE_INPUT = "role";
 
     private static final String TAG = "SignupPresenter";
     private SignupContract.View view;
     private boolean isSaved;
     private String errorMessage;
     private ArrayList<String> schools;
-    private CognitoUserPool userPool;
-
 
     SignupPresenter(SignupContract.View view) {
         this.view = view;
@@ -47,70 +43,33 @@ public class SignupPresenter implements SignupContract.Presenter {
     }
 
     @Override
-    public Boolean processFormInput(Map<String, String> formInput) {
+    public void processFormInput(Map<String, String> formInput) {
         boolean isValidInput = true;
-
         String name = formInput.get(NAME_INPUT);
-        if (name != null) {
-            if (isEmpty(name)) {
-                view.displayNoNameError(true);
-                isValidInput = false; }
-            else {
-                view.displayNoNameError(false); } }
-        else {
+        if (isEmpty(name)) {
             view.displayNoNameError(true);
             isValidInput = false;
+        } else {
+            view.displayNoNameError(false);
         }
+
+        Log.d(TAG, "School Name is: " + formInput.get(SCHOOL_NAME_INPUT));
 
         String email = formInput.get(EMAIL_INPUT);
-        if (email != null) {
-            if (isEmpty(email)) {
-                view.displayNoEmailError(true);
-                isValidInput = false; }
-            else if (!email.contains("@")) {
-                view.displayInvalidEmailError(true);
-                isValidInput = false; }
-            else {
-                view.displayNoEmailError(false);
-                view.displayInvalidEmailError(false); } }
-        else {
+        if (isEmpty(email)) {
             view.displayNoEmailError(true);
             isValidInput = false;
-        }
-
-            String password = formInput.get(PASSWORD_INPUT);
-        if (password != null) {
-            if (isEmpty(password)) {
-                view.displayNoPasswordError(true);
-                isValidInput = false; }
-            else {
-                view.displayNoPasswordError(false); } }
-        else {
-            view.displayNoPasswordError(true);
+        } else if (!email.contains("@")) {
+            view.displayInvalidEmailError(true);
             isValidInput = false;
+        } else {
+            view.displayNoEmailError(false);
         }
-
-        String passwordCheck = formInput.get(PASSWORD_INPUT_CHECK);
-        if (passwordCheck != null) {
-            if (isEmpty(passwordCheck)) {
-                view.displayNoPasswordCheckError(true);
-                isValidInput = false; }
-            else if (!passwordCheck.equals(password)) {
-                view.displayNoPasswordCheckErrorNoMatch(true);
-                isValidInput = false; }
-            else {
-                view.displayNoPasswordCheckError(false);
-                view.displayNoPasswordCheckErrorNoMatch(false); } }
-        else {
-            view.displayNoPasswordCheckError(true);
-            isValidInput = false;
-        }
-
 
         if (isValidInput) {
             saveSignupData(formInput);
-            return true; }
-        else return false;
+            view.launchHomeScreen();
+        }
     }
 
     private boolean isEmpty(String input) {
@@ -135,16 +94,17 @@ public class SignupPresenter implements SignupContract.Presenter {
 
         String userName = formInput.get(NAME_INPUT);
         String email = formInput.get(EMAIL_INPUT);
-        String password = formInput.get(PASSWORD_INPUT);
         String role = formInput.get(ROLE_INPUT);
 
+
         User user = new User(1, 1, email, userName, role);
+
         AsyncTask<Void, Void, Boolean> saveUserTask = new SaveUserTask(user).execute();
 
         try {
             isSaved = saveUserTask.get();
         } catch (InterruptedException | ExecutionException e) {
-            Log.d(TAG, "Issue saving user");
+            Log.d(TAG, "Problem saving user");
             Log.d(TAG, e.getMessage());
             errorMessage = "Unable to save input";
         }
@@ -161,10 +121,7 @@ public class SignupPresenter implements SignupContract.Presenter {
     }
 
     @Override
-    public void passwordTextAdded() { view.displayNoSchoolError(false); }
-
-    @Override
-    public void schoolNameTextAdded() { view.displayNoSchoolError(false); }
-
-
+    public void schoolNameTextAdded() {
+        view.displayNoSchoolError(false);
+    }
 }

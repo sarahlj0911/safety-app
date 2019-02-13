@@ -7,39 +7,30 @@
         android:name="android.hardware.camera"
         android:required="false" />
 
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" /> <!-- SyncAdapter permissions -->
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <!-- SyncAdapter permissions -->
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.READ_SYNC_SETTINGS" />
     <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS" />
     <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-    <uses-permission android:name="android.permission.WAKE_LOCK" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
 
     <!-- TODO: Change allowBackup to true when the db is finalized -->
-
-
     <application
         android:name=".MyApplication"
         android:allowBackup="false"
-        android:icon="@mipmap/ic_launcher_concept"
+        android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_concept_round"
+        android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar"
         tools:ignore="GoogleAppIndexingWarning">
-
-        <service android:name="org.eclipse.paho.android.service.MqttService" />
-
         <activity
-            android:name=".SplashActivity"
-            android:label="@string/app_name_only"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.Launcher">
+            android:name=".welcome.WelcomeActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -47,19 +38,10 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".welcome.WelcomeActivity"
-            android:label="@string/app_name_only"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.Walkthrough"></activity>
-        <activity
             android:name=".walkthrough.walkthrough.WalkthroughActivity"
             android:label="@string/title_activity_walkthrough"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".login.LoginActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.Clean" />
         <activity
             android:name=".main.MainActivity"
             android:screenOrientation="portrait" />
@@ -74,7 +56,9 @@
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".walkthrough.location.LocationActivity"
-            android:screenOrientation="portrait" /> <!-- FileProvider for picture files -->
+            android:screenOrientation="portrait" />
+
+        <!-- FileProvider for picture files -->
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="com.plusmobileapps.safetyapp.fileprovider"
@@ -93,10 +77,7 @@
             android:name=".signup.SignupActivity"
             android:screenOrientation="portrait" />
 
-        <service
-            android:name=".sync.AuthenticatorService"
-            android:permission=""
-            tools:ignore="ExportedService">
+        <service android:name=".sync.AuthenticatorService">
             <intent-filter>
                 <action android:name="android.accounts.AccountAuthenticator" />
             </intent-filter>
@@ -115,9 +96,7 @@
         <service
             android:name=".sync.SyncService"
             android:exported="true"
-            android:permission=""
-            android:process=":sync"
-            tools:ignore="ExportedService">
+            android:process=":sync">
             <intent-filter>
                 <action android:name="android.content.SyncAdapter" />
             </intent-filter>
@@ -127,7 +106,7 @@
                 android:resource="@xml/syncadapter" />
         </service>
 
-        <activity android:name=".AdminSettings" />
+        <activity android:name=".AdminSettings"></activity>
     </application>
 
 </manifest>

@@ -10,7 +10,7 @@ import com.plusmobileapps.safetyapp.data.entity.User;
 import java.util.Date;
 
 /**
- * Unit Test for newly added last LoginActivity functionality
+ * Unit Test for newly added last login functionality
  */
 public class LastLoginUnitTest {
     @Test

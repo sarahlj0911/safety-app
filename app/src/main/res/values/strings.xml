@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">SAfETy App</string>
-    <string name="app_name_only">SAfETy</string>
     <string name="title_walkthrough">Walkthroughs</string>
     <string name="title_action_items">Action Items</string>
     <string name="title_action_item_detail">Action Item Detail</string>
@@ -46,58 +45,24 @@
     <string name="welcome5_title">A couple final tips&#8230;</string>
     <string name="welcome5_item1">It is best to conduct the observations when students and staff are using the space as they normally would.</string>
     <string name="welcome5_item2">Ideally the walkthrough will be completed in one day by the same person or persons. If this is not possible, try to complete the walkthrough during one week.</string>
-    <string name="welcome5_footer">Next, we need some information about you and your school…</string>
+    <string name="welcome5_footer">Next, we need some information about you and your school...</string>
 
     <!-- Signup page strings -->
-    <string name="title_signup">Sign Up</string>
+    <string name="title_signup">SAfETy Walkthrough Sign Up</string>
     <string name="hint_name">Name</string>
     <string name="error_name">Name is required</string>
     <string name="hint_email">Email</string>
-    <string name="hint_password">Password</string>
-    <string name="hint_password_check">Retype Password</string>
     <string name="error_email_none">Email is required</string>
     <string name="error_email_invalid">Invalid email</string>
     <string name="hint_school_name">School Name</string>
     <string name="error_school_name">School name is required</string>
-    <string name="error_no_password">Password is required</string>
-    <string name="error_invalid_password">Password must contain a number, an uppercase, and a special character </string>
-    <string name="error_invalid_password_length">Password must be 8 characters long </string>
-    <string name="error_invalid_password_no_match">Passwords do not match </string>
     <string name="label_signup_role">Role</string>
-    <string name="label_signup_school_name">School</string>
     <string name="btn_signup">Let\'s get started!</string>
     <string name="signup_role_prompt">Choose a role</string>
     <string name="error_create_walkthrough_name">Name requires 2 or more characters</string>
     <string name="new_school">Add New School</string>
-    <string name="button_login">Login</string>
-    <string name="button_login_status">Login Status</string>
-    <string name="button_loginGo">Go To Login</string>
+    <string name="button_login">Log In</string>
     <string name="text_login">Already a user?</string>
-    <string name="text_signup_school_name">School</string>
-    <string name="status_placeholder">Signup Status</string>
-    <string name="status_text">"Unable to Sign Up %1$s \n AWS Error"</string>
-
-
-    <!-- Signup Confirmation Page Strings -->
-    <string name="signup_confirm_title">Almost There!</string>
-    <string name="signup_confirm_description">A confirmation email has been sent to %1$s. Please enter the code you receive in the field below.</string>
-    <string name="signup_code">Code</string>
-    <string name="signup_status">Incorrect Confirmation Code</string>
-    <string name="signup_confirm_button">Confirm</string>
-
-
-    <!-- Login Page Strings -->
-    <string name="login_field_email_placeholder">Email</string>
-    <string name="Login_field_password_placeholder">Password</string>
-    <string name="login_image_background_description">background</string>
-    <string name="login_image_logo_description">Register</string>
-    <string name="login_text_register">New User?</string>
-    <string name="login_button_register">Sign Up</string>
-    <string name="error_password_none">Password is required</string>
-    <string name="login_code_title">Account Verification</string>
-    <string name="login_code_button_send_email">Resend Email</string>
-    <string name="login_code_button_confirm">Confirm</string>
-    <string name="login_code_status_placeholder">Code Status</string>
 
 
 
@@ -123,6 +88,7 @@
     <string name="tab_overview">Overview Tab</string>
     <string name="tab_details">Details Tab</string>
 
+    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_walkthrough">WalkthroughActivity</string>
     <string name="action_settings">Settings</string>
@@ -132,7 +98,6 @@
     <!--actionitem detail page-->
     <string name="exit_confirmation_no_save">Are you sure you want to exit without saving your changes?</string>
     <string name="confirmation">Confirmation</string>
-
     <!--walkthrough landing text-->
     <string name="no_walkthrough_text">You don\'t have any walkthroughs.</string>
     <string name="viewholder_header_completed">Completed</string>
@@ -158,15 +123,6 @@
     <string name="school">School</string>
     <string name="create_user">Create User</string>
     <string name="Admin_settings">Admin Settings</string>
-    <string name="login_button_error_aws_user_exists">Incorrect Password</string>
-    <string name="login_button_user_confirmed">Account Confirmed!\nLogin Again</string>
-    <string name="login_button_error_aws_new_password">Password Reset Required</string>
-    <string name="login_button_error_aws_error">Connection Issue with AWS</string>
-    <string name="login_button_user_not_found">User Not Found</string>
-    <string name="login_button_error_verify">Need to Verify Account\nContinue Process? </string>
-    <string name="authorization_code_input_field">Enter your code here</string>
-    <string name="authorization_code_des">You still need to verify your account. Please enter the code that was previously emailed to you.</string>
-    <string name="code_listener_button_confirm">CONFIRM</string>
 
 </resources>
 

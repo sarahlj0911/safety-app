@@ -2,20 +2,16 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 28
+
     buildToolsVersion '28.0.3'
     defaultConfig {
         applicationId "com.plusmobileapps.safetyapp"
-        minSdkVersion 23
+        minSdkVersion 19
         targetSdkVersion 28
-        renderscriptTargetApi 19
-        renderscriptSupportModeEnabled true
         versionCode 3
         versionName "1.1"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
-    }
-    lintOptions {
-        abortOnError false
     }
     buildTypes {
         release {
@@ -31,12 +27,10 @@ android {
             buildConfigField("String", "SYNC_PASS", "\"<insert password>\"")
         }
     }
-    productFlavors {
-    }
 }
 
 dependencies {
-    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
     androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
@@ -52,46 +46,23 @@ dependencies {
     implementation "com.android.support:cardview-v7:$rootProject.ext.supportLibraryVersion"
     implementation 'com.google.code.gson:gson:2.8.2'
     implementation 'com.android.support.constraint:constraint-layout:1.1.3'
-    implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.+'
 
 
-    // AWS Mobile Client SDK
-    implementation('com.amazonaws:aws-android-sdk-mobile-client:2.7.+@aar') { transitive = true }
-    // implementation 'com.amazonaws:aws-android-sdk-mobile-client:2.11.+'
-
-    // AWS Cognito UserPools for SignIn
-    implementation 'com.android.support:support-v4:24.+'
-    implementation('com.amazonaws:aws-android-sdk-auth-userpools:2.7.+@aar') { transitive = true }
-
-    // AWS Sign in UI Library
-    implementation 'com.android.support:appcompat-v7:24.+'
-    implementation('com.amazonaws:aws-android-sdk-auth-ui:2.7.+@aar') { transitive = true }
-
-    //Base SDK
-    implementation 'com.amazonaws:aws-android-sdk-core:2.11.+'
-
-    //AppSync SDK
-    implementation 'com.amazonaws:aws-android-sdk-appsync:2.7.+'
-    implementation 'org.eclipse.paho:org.eclipse.paho.client.mqttv3:1.2.0'
-    implementation 'org.eclipse.paho:org.eclipse.paho.android.service:1.1.1'
+    //amazon web services sdk
+    implementation ('com.amazonaws:aws-android-sdk-mobile-client:2.7.+@aar') { transitive = true }
 
     //dynamodb
     implementation 'com.amazonaws:aws-android-sdk-ddb-mapper:2.7.+'
-
 
     //amazon s3
     implementation 'com.amazonaws:aws-android-sdk-s3:2.7.+'
     implementation 'com.amazonaws:aws-android-sdk-cognito:2.7.+'
 
-    // Blur Background
-    // implementation 'com.github.jrvansuita:GaussianBlur:+'
-
-
     //good library to easily animate the recycler view **updated
     implementation 'jp.wasabeef:recyclerview-animators:2.3.0'
 
     //room library
-    implementation 'android.arch.persistence.room:runtime:1.1.1'
+    implementation "android.arch.persistence.room:runtime:1.1.1"
     annotationProcessor "android.arch.persistence.room:compiler:1.1.1"
 
     //walkthrough tutorial library
@@ -100,11 +71,7 @@ dependencies {
     //image loading library
     implementation 'com.squareup.picasso:picasso:2.71828'
 
-    implementation 'br.com.simplepass:loading-button-android:1.7.+'
-
-
     //test
-
     // Dependencies for local unit tests
     testImplementation "junit:junit:$rootProject.ext.junitVersion"
     testImplementation "org.mockito:mockito-all:$rootProject.ext.mockitoVersion"

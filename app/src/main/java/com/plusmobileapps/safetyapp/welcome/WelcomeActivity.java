@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -20,12 +19,12 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.plusmobileapps.safetyapp.PrefManager;
-import com.plusmobileapps.safetyapp.R;
 import com.plusmobileapps.safetyapp.data.dao.UserDao;
 import com.plusmobileapps.safetyapp.data.entity.User;
-import com.plusmobileapps.safetyapp.login.LoginActivity;
 import com.plusmobileapps.safetyapp.main.MainActivity;
+import com.plusmobileapps.safetyapp.PrefManager;
+import com.plusmobileapps.safetyapp.R;
+import com.plusmobileapps.safetyapp.signup.SignupActivity;
 
 public class WelcomeActivity extends AppCompatActivity {
 
@@ -53,12 +52,12 @@ public class WelcomeActivity extends AppCompatActivity {
                     curUser.setLastLogin(1);
                 }
                 catch (NullPointerException e) {
-                    System.err.println("Error: NullPointerException for user. Reverting to LoginActivity.");
-                    launchLoginScreen();
+                    System.err.println("Error: NullPointerException for user. Reverting to login screen.");
+                    launchSignupScreen(); // TODO launchLoginScreen
                 }
             }
             else {
-                launchLoginScreen();
+                launchSignupScreen();
             }
         }
 
@@ -107,7 +106,7 @@ public class WelcomeActivity extends AppCompatActivity {
                 } else {
                     prefManager.setIsTutorialSeen(true);
                     //launchHomeScreen();
-                    launchLoginScreen();
+                    launchSignupScreen();
                 }
             }
         });
@@ -136,8 +135,8 @@ public class WelcomeActivity extends AppCompatActivity {
         return welcomeViewPager.getCurrentItem() + i;
     }
 
-    private void launchLoginScreen() {
-        startActivity(new Intent(WelcomeActivity.this, LoginActivity.class));
+    private void launchSignupScreen() {
+        startActivity(new Intent(WelcomeActivity.this, SignupActivity.class));
         finish();
     }
 
@@ -186,7 +185,6 @@ public class WelcomeActivity extends AppCompatActivity {
         WelcomeViewPagerAdapter() {
         }
 
-        @NonNull
         @Override
         public Object instantiateItem(ViewGroup container, int position) {
             layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
