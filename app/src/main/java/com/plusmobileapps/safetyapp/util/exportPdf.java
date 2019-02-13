@@ -8,11 +8,15 @@ import android.widget.Toast;
 import android.widget.CheckBox;
 
 import com.plusmobileapps.safetyapp.R;
+import com.plusmobileapps.safetyapp.data.entity.Response;
+
+import java.util.List;
 
 public class exportPdf extends AppCompatActivity {
     protected CheckBox ActionItembox;
     protected CheckBox WalkthroughCommentsbox;
     protected CheckBox Picsbox;
+    public DataExtractor extractor = new DataExtractor();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,6 +25,13 @@ public class exportPdf extends AppCompatActivity {
         ActionItembox = findViewById(R.id.checkBoxActionItems);
         WalkthroughCommentsbox = findViewById(R.id.WalkthroughCommentsChkbox);
         Picsbox = findViewById(R.id.PhotoChkBox);
+
+    }
+
+
+    public void export(){
+        extractor.getlist();
+
 
     }
 }
