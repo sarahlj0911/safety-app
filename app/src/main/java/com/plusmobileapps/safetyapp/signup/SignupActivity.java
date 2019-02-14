@@ -7,6 +7,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
@@ -124,7 +125,10 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
     }
 
     public void launchSignupScreen() {
-        startActivity(new Intent(SignupActivity.this, LoginActivity.class));
+        Intent signUp = new Intent(SignupActivity.this, LoginActivity.class);
+        Bundle bundle = ActivityOptionsCompat.makeCustomAnimation(this,
+                android.R.anim.fade_in, android.R.anim.fade_out).toBundle();
+        startActivity(signUp, bundle);
         finish();
     }
 
@@ -209,9 +213,7 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
                 userAttributes.addAttribute("name", name);
                 userAttributes.addAttribute("email", email);
                 userAttributes.addAttribute("custom:role", role);
-
                 userPool.signUpInBackground(email, password, userAttributes, null, signupCallback);
-                // launchHomeScreen();
             }
         }
     };
