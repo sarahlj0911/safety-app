@@ -19,6 +19,10 @@ import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.amazonaws.mobile.client.Callback;
+import com.amazonaws.mobile.client.UserStateDetails;
+import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUser;
+import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUserPool;
 import com.plusmobileapps.safetyapp.AdminSettings;
 
 import com.amazonaws.auth.AWSCredentialsProvider;
@@ -29,6 +33,7 @@ import com.amazonaws.mobile.config.AWSConfiguration;
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
 
+import com.plusmobileapps.safetyapp.AwsServices;
 import com.plusmobileapps.safetyapp.R;
 import com.plusmobileapps.safetyapp.actionitems.landing.ActionItemPresenter;
 import com.plusmobileapps.safetyapp.summary.landing.SummaryPresenter;
@@ -42,6 +47,10 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
     private static final String TAG = "MainActivity";
     private TextView mTextMessage;
 
+    private AwsServices awsServices;
+    private CognitoUserPool userPool;
+    private Context CONTEXT = this;
+    private CognitoUser user;
     private ViewPager viewPager;
     private BottomNavigationView navigation;
     private String walkthroughFragmentTitle = "";
@@ -51,7 +60,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
     DynamoDBMapper dynamoDBMapper;
 
     // SyncAdapter Constants
-    // The authority for the sync adapter's content provier
+    // The authority for the sync adapter's content provider
     public static final String AUTHORITY = "com.plusmobileapps.safetyapp.provider";
     // An account type, in the form of a domain name
     public static final String ACCOUNT_TYPE = "safetyapp.com";
@@ -112,10 +121,65 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
                 .dynamoDBClient(dynamoDBClient)
                 .awsConfiguration(configuration)
                 .build();
-        Log.d("YourMainActivity", "some more stuff");
         createUserInfoItem();
-
+        awsServices = new AwsServices();
+        userPool = new CognitoUserPool(CONTEXT, awsServices.getPOOL_ID(), awsServices.getAPP_ClIENT_ID(), awsServices.getAPP_ClIENT_SECRET(), awsServices.getREGION());
+        user = userPool.getUser("shadow13524@gmail.com");
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        AWSMobileClient.getInstance().initialize(getApplicationContext(), new Callback<UserStateDetails>() {
+            @Override
+            public void onResult(UserStateDetails userStateDetails) {
+                switch (userStateDetails.getUserState()) {
+                    case SIGNED_IN:
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Log.d("YourMainActivity", "User has signed in");
+                            }
+                        });
+                        break;
+                    case SIGNED_OUT:
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                // TODO show user not signed in prompt
+                                Log.d("YourMainActivity", "User not signed in");
+                            }
+                        });
+                        break;
+                    case SIGNED_OUT_USER_POOLS_TOKENS_INVALID:
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                // TODO show user inactive signed out prompt
+                                Log.d("YourMainActivity", "User has been signed out");
+                            }
+                        });
+                        break;
+                    default:
+                        AWSMobileClient.getInstance().signOut();
+                        break;
+                }
+            }
+
+            @Override
+            public void onError(Exception e) {
+                Log.e("INIT", e.toString());
+            }
+        });
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Log.d("YourMainActivity", "User has been signed out");
+        user.signOut();
+    }
+
 
     private void setUpPresenters(MainActivityFragmentFactory factory) {
         new WalkthroughLandingPresenter(factory.getWalkthroughLandingFragment());

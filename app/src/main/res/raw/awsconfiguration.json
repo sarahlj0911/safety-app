@@ -12,6 +12,20 @@
   "IdentityManager": {
     "Default": {}
   },
+  "CognitoUserPool": {
+    "Default": {
+      "PoolId": "us-west-2_syFk4QKhg",
+      "AppClientId": "3pptkcueao8997ksu6j36qp91a",
+      "AppClientSecret": "oco57o3j8v895h9hf92eenfk1f9c4p45mbo46c06e114ljliaa3",
+      "Region": "us-west-2"
+    }
+  },
+  "S3TransferUtility": {
+    "Default": {
+      "Bucket": "safetyapp-userfiles-mobilehub-2118900508",
+      "Region": "us-west-2"
+    }
+  },
   "DynamoDBObjectMapper": {
     "Default": {
       "Region": "us-west-2"
@@ -26,6 +40,12 @@
   "PinpointTargeting": {
     "Default": {
       "Region": "us-east-1"
+    }
+  },
+  "UserFileManager": {
+    "Default": {
+      "Bucket": "safetyapp-userfiles-mobilehub-2118900508",
+      "Region": "us-west-2"
     }
   }
 }
