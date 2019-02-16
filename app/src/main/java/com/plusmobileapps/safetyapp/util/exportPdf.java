@@ -6,9 +6,16 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 import android.widget.CheckBox;
+//import org.apache.poi.xwpf.usermodel.XWPFDocument;
+//import org.apache.poi.xwpf.usermodel.XWPFParagraph;
+//import org.apache.poi.xwpf.usermodel.XWPFRun;
+
+
 
 import com.plusmobileapps.safetyapp.R;
 import com.plusmobileapps.safetyapp.data.entity.Response;
+
+import org.w3c.dom.Document;
 
 import java.util.List;
 
@@ -17,6 +24,7 @@ public class exportPdf extends AppCompatActivity {
     protected CheckBox WalkthroughCommentsbox;
     protected CheckBox Picsbox;
     public DataExtractor extractor = new DataExtractor();
+    //public Document doc = new Document();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
