@@ -63,7 +63,7 @@ public class SummaryAdapter extends RecyclerView.Adapter<SummaryAdapter.ViewHold
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        private final TextView title = itemView.findViewById(R.id.walkthrough_title);
+        private final TextView title = itemView.findViewById(R.id.walkthroughTitle);
         private final TextView dateTime = itemView.findViewById(R.id.date_time);
         private final TextView redCount = itemView.findViewById(R.id.walkthrough_red_count);
         private final TextView greenCount = itemView.findViewById(R.id.walkthrough_green_count);

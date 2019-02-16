@@ -24,4 +24,94 @@
 
     </android.support.design.widget.AppBarLayout>
 
+    <ImageView
+        android:id="@+id/statusBar"
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:layout_below="@+id/toolbar"
+        android:contentDescription="Current priority of issue"
+        app:srcCompat="@color/actionItemGreen" />
+
+    <ImageView
+        android:id="@+id/picPlaceholder"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_below="@+id/statusBar"
+        app:srcCompat="@android:drawable/picture_frame" />
+
+    <TextView
+        android:id="@+id/finishedTitleText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/picPlaceholder"
+        android:layout_marginLeft="20dp"
+        android:text="@string/walkthrough_title"
+        android:textColor="@color/black"
+        android:textSize="30sp" />
+
+    <TextView
+        android:id="@+id/actionLocationText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/picPlaceholder"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="12dp"
+        android:layout_toRightOf="@+id/finishedTitleText"
+        android:text="Location"
+        android:textColor="@color/black" />
+
+    <TextView
+        android:id="@+id/actionDateText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/picPlaceholder"
+        android:layout_alignParentRight="true"
+        android:layout_marginStart="100dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginRight="20dp"
+        android:layout_toEndOf="@+id/actionLocationText"
+        android:text="Month Day, Year"
+        android:textColor="@color/black"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/finishedDescText"
+        android:layout_width="wrap_content"
+        android:layout_height="150dp"
+        android:layout_below="@+id/finishedTitleText"
+        android:layout_marginLeft="20dp"
+        android:text="@string/walkthrough_desc"
+        android:textColor="@color/black"
+        android:textSize="16sp" />
+
+    <ImageView
+        android:id="@+id/schoolMap"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_below="@+id/finishedDescText"
+        android:layout_marginLeft="20dp"
+        app:srcCompat="@drawable/ic_image_black_24dp" />
+
+    <TextView
+        android:id="@+id/schoolNameText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/finishedDescText"
+        android:layout_marginLeft="20dp"
+        android:layout_toRightOf="@+id/schoolMap"
+        android:text="School Name"
+        android:textColor="@color/black"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/genLocationText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/schoolNameText"
+        android:layout_marginLeft="20dp"
+        android:layout_toRightOf="@+id/schoolMap"
+        android:text="General Location"
+        android:textColor="@color/black"
+        android:textSize="18sp" />
+
 </RelativeLayout>

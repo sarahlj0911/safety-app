@@ -170,6 +170,8 @@
     <string name="authorization_code_des">You still need to verify your account. Please enter the code that was previously emailed to you.</string>
     <string name="code_listener_button_confirm">CONFIRM</string>
     <string name="code_authorization_confirmed">confirmed</string>
+    <string name="walkthrough_title">Title</string>
+    <string name="walkthrough_desc">Description</string>
 
 </resources>
 
