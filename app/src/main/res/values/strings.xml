@@ -125,13 +125,18 @@
     <string name="Admin_settings">Admin Settings</string>
     <string name="view_current_tickets">View Current Tickets</string>
     <string name="ticket_history">Ticket History</string>
-    <string name="new_ticket">New Ticket</string>
     <string name="delete_users">Delete Users</string>
     <string name="view_tickets">View Tickets</string>
     <string name="view_history">View History</string>
     <string name="add_user">Add User</string>
     <string name="delete_user">Delete User</string>
     <string name="new_ticket">New Ticket</string>
+    <string-array name="userArray">
+
+        <item>User1</item>
+        <item>User2</item>
+        <item>User3</item>
+    </string-array>
 
 </resources>
 
