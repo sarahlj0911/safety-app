@@ -62,12 +62,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/walkthrough_desc"
+        android:layout_centerInParent="true"
         android:layout_marginLeft="100dp"
         android:layout_marginTop="6dp"
         android:layout_marginRight="100dp"
         android:ems="10"
         android:fontFamily="sans-serif"
-        android:text="Pick a Status"
+        android:text="Pick a Priority"
         android:textAlignment="center"
         android:textColor="@color/black"
         android:textSize="24sp"
@@ -77,28 +78,46 @@
         android:id="@+id/walkthroughStatus"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/pickStatus">
+        android:layout_below="@+id/pickStatus"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal">
 
-        <ImageButton
+        <RadioButton
             android:id="@+id/highPriorityButton"
-            android:layout_width="wrap_content"
+            android:layout_width="1dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            app:srcCompat="@drawable/circle_red" />
+            android:buttonTint="@color/actionItemRed"
+            android:clickable="true"
+            android:text="High" />
 
-        <ImageButton
+        <RadioButton
             android:id="@+id/mediumPriorityButton"
-            android:layout_width="wrap_content"
+            android:layout_width="1dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            app:srcCompat="@drawable/circle_yellow" />
+            android:buttonTint="@color/actionItemYellow"
+            android:text="Medium" />
 
-        <ImageButton
+        <RadioButton
             android:id="@+id/lowPriorityButton"
-            android:layout_width="wrap_content"
+            android:layout_width="1dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            app:srcCompat="@drawable/circle_green" />
+            android:buttonTint="@color/actionItemGreen"
+            android:text="Low" />
+
     </RadioGroup>
+
+    <Button
+        android:id="@+id/saveButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/walkthroughStatus"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="30dp"
+        android:background="@color/colorPrimary"
+        android:text="Save" />
 
 </RelativeLayout>
