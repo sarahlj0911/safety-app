@@ -12,10 +12,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
-        android:layout_marginBottom="16dp"
         android:layout_marginEnd="16dp"
-        app:fabSize="normal"
-        android:foreground="@drawable/plus" />
+        android:layout_marginBottom="16dp"
+        android:foreground="@drawable/plus"
+        app:fabSize="normal" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/landing_walkthrough_recyclerview"
