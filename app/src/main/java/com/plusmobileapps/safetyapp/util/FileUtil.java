@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 
 import com.amazonaws.AmazonClientException;
@@ -29,6 +30,9 @@ import com.amazonaws.services.s3.model.DeleteVersionRequest;
 import com.amazonaws.services.s3.model.PutObjectResult;
 
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.file.Path;
 
 public class FileUtil {
     public static boolean deleteDb(Context context) {
@@ -47,39 +51,60 @@ public class FileUtil {
         return true;
     }
 
-    public static boolean download(Context context, String file, String path) {
-        TransferUtility transferUtility =
-                TransferUtility.builder()
-                        .context(context)
-                        .awsConfiguration(AWSMobileClient.getInstance().getConfiguration())
-                        .s3Client(new AmazonS3Client(AWSMobileClient.getInstance().getCredentialsProvider()))
-                        .build();
+    public static void download(Context context, String file, String path) {
 
-        TransferObserver downloadObserver =
-                transferUtility.download(file, new File(path));
 
-        downloadObserver.setTransferListener(new TransferListener() {
 
-            @Override
-            public void onStateChanged(int id, TransferState state) {
-                if (TransferState.COMPLETED == state) {
-                    // Handle a completed upload.
-                }
+
+            TransferUtility transferUtility =
+                    TransferUtility.builder()
+                            .context(context)
+                            .awsConfiguration(AWSMobileClient.getInstance().getConfiguration())
+                            .s3Client(new AmazonS3Client(AWSMobileClient.getInstance().getCredentialsProvider()))
+                            .build();
+
+
+
+            try {
+                File localFile = new File("/data/data/com.plusmobileapps.safetyapp/databases/appDB1.db");
+
+
+                Log.d("YourActivity", localFile.getPath());
+
+
+                TransferObserver downloadObserver =
+                        transferUtility.download(file, localFile);
+
+                Log.d("YourActivity", localFile.toString());
+
+                downloadObserver.setTransferListener(new TransferListener() {
+
+                    @Override
+                    public void onStateChanged(int id, TransferState state) {
+                        if (TransferState.COMPLETED == state) {
+                            // Handle a completed upload.
+                        }
+                    }
+
+                    @Override
+                    public void onProgressChanged(int id, long bytesCurrent, long bytesTotal) {
+                        float percentDonef = ((float) bytesCurrent / (float) bytesTotal) * 100;
+                        int percentDone = (int) percentDonef;
+                        Log.d("YourActivity", "ID:" + id + " bytesCurrent: " + bytesCurrent
+                                + " bytesTotal: " + bytesTotal + " " + percentDone + "%");
+                    }
+
+                    @Override
+                    public void onError(int id, Exception ex) {
+                        // Handle errors
+                    }
+
+                });
+            }catch(Exception e) {
+                e.printStackTrace();
             }
 
-            @Override
-            public void onProgressChanged(int id, long bytesCurrent, long bytesTotal) {
-                float percentDonef = ((float) bytesCurrent / (float) bytesTotal) * 100;
-                int percentDone = (int) percentDonef;
-            }
 
-            @Override
-            public void onError(int id, Exception ex) {
-                // Handle errors
-            }
-
-        });
-        return true;
     }
 
 
