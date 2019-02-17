@@ -51,6 +51,8 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
     //db mapper
     DynamoDBMapper dynamoDBMapper;
 
+    public String selectedSchool;
+
     // SyncAdapter Constants
     // The authority for the sync adapter's content provier
     public static final String AUTHORITY = "com.plusmobileapps.safetyapp.provider";
@@ -103,8 +105,8 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
 
         AWSMobileClient.getInstance().initialize(this).execute();
 
-
-        FileUtil.upload(this, "newSchool/appDB.db", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db");
+        selectedSchool = "newSchool";
+        FileUtil.upload(this, selectedSchool +"/appDB.db", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db");
         //FileUtil.upload(this, "uploads/appDB.db-shm", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db-shm");
         //FileUtil.upload(this, "uploads/appDB.db-wal", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db-wal");
 

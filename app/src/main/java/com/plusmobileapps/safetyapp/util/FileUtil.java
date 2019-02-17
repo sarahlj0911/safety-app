@@ -52,25 +52,17 @@ public class FileUtil {
     }
 
     public static void download(Context context, String file, String path) {
-
-
-
-
             TransferUtility transferUtility =
                     TransferUtility.builder()
                             .context(context)
                             .awsConfiguration(AWSMobileClient.getInstance().getConfiguration())
                             .s3Client(new AmazonS3Client(AWSMobileClient.getInstance().getCredentialsProvider()))
                             .build();
-
-
-
             try {
                 File localFile = new File("/data/data/com.plusmobileapps.safetyapp/databases/appDB1.db");
 
 
                 Log.d("YourActivity", localFile.getPath());
-
 
                 TransferObserver downloadObserver =
                         transferUtility.download(file, localFile);
