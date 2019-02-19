@@ -165,7 +165,7 @@
     <string name="login_button_error_aws_error">Connection Issue with AWS</string>
     <string name="login_button_user_not_found">User Not Found</string>
     <string name="login_button_error_verify">Need to Verify Account\nContinue Process?</string>
-    <string name="login_button_error_AWS_connection_issue">AWS Connection Timeout</string>
+    <string name="login_button_error_AWS_connection_issue">AWS Connection Issue</string>
     <string name="authorization_code_input_field">Enter your code here</string>
     <string name="authorization_code_des">You still need to verify your account. Please enter the code that was previously emailed to you.</string>
     <string name="code_listener_button_confirm">CONFIRM</string>

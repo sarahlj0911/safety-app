@@ -7,6 +7,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.TextInputLayout;
@@ -56,7 +58,9 @@ import br.com.simplepass.loading_button_lib.customViews.CircularProgressButton;
 public class LoginActivity extends AppCompatActivity implements LoginContract.View {
 
     public static final String TAG = "LoginActivity";
-    private boolean showCodeView;
+    private ConnectivityManager connectivityManager;
+    private NetworkInfo networkInfo;
+    private boolean showCodeView, hasInternetConnection;
     private String email, password;
     private ImageView backgroundBlur;
     private Button buttonLoginStatus, buttonDismissCodeView, buttonCode;
@@ -108,7 +112,6 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         codeAuthWindow.setVisibility(View.INVISIBLE);
         loginButton.setBackgroundResource(R.drawable.login_button_ripple);
         buttonDismissCodeView.setClickable(false);
-        buttonLoginStatus.setText("");
         buttonLoginStatus.setClickable(false);
 
         awsServices = new AwsServices();
@@ -124,6 +127,17 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         buttonLoginStatus.setText("");
         getWindow().getDecorView().clearFocus();
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        connectivityManager = (ConnectivityManager) getApplicationContext().getSystemService(CONNECTIVITY_SERVICE);
+        networkInfo = connectivityManager.getActiveNetworkInfo();
+        if (networkInfo != null && networkInfo.isConnected()) {
+            hasInternetConnection = true;
+            buttonLoginStatus.setText("");
+        }
+        else {
+            hasInternetConnection = false;
+            buttonLoginStatus.setText("You have no internet connection!\nApp services will be unavailable");
+            Log.e(TAG, "Device does not have an internet connection!");
+        }
     }
 
     @Override
@@ -370,7 +384,7 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         boolean validInput = presenter.processFormInput(formInput);
 
         // Check login with AWS
-        if (validInput) {
+        if (validInput & hasInternetConnection) {
             loginButton.startAnimation();
             userPool.getUser(email).getSessionInBackground(authenticationHandler); // Sign in the user
         }
