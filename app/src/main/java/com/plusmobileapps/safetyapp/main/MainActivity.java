@@ -47,28 +47,26 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
     private static final String TAG = "MainActivity";
     private TextView mTextMessage;
 
-    private AwsServices awsServices;
     private CognitoUserPool userPool;
-    private Context CONTEXT = this;
     private CognitoUser user;
+    private String userEmail;
     private ViewPager viewPager;
     private BottomNavigationView navigation;
     private String walkthroughFragmentTitle = "";
     private MainActivityPresenter presenter;
 
-    //db mapper
+    // DB mapper
     DynamoDBMapper dynamoDBMapper;
 
     // SyncAdapter Constants
-    // The authority for the sync adapter's content provider
-    public static final String AUTHORITY = "com.plusmobileapps.safetyapp.provider";
-    // An account type, in the form of a domain name
-    public static final String ACCOUNT_TYPE = "safetyapp.com";
-    // The account name
-    public static final String ACCOUNT = "safetyapp";
+    public static final String AUTHORITY = "com.plusmobileapps.safetyapp.provider";     // The authority for the sync adapter's content provider
+    public static final String ACCOUNT_TYPE = "safetyapp.com";                          // An account type, in the form of a domain name
+    public static final String ACCOUNT = "safetyapp";                                   // The account name
+
     public static final long SECONDS_PER_MINUTE = 60L;
     public static final long SYNC_INTERVAL_IN_MINUTES = 60L;
     public static final long SYNC_INTERVAL = SYNC_INTERVAL_IN_MINUTES * SECONDS_PER_MINUTE;
+
     // Instance fields
     Account account;
     ContentResolver contentResolver;
@@ -98,19 +96,16 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
         ContentResolver.setSyncAutomatically(account, AUTHORITY, true);
         ContentResolver.addPeriodicSync(account, AUTHORITY, Bundle.EMPTY, SYNC_INTERVAL);
 
+        // AWSMobileClient enables AWS user credentials to access your table
         AWSMobileClient.getInstance().initialize(this, new AWSStartupHandler() {
             @Override
             public void onComplete(AWSStartupResult awsStartupResult) {
-                Log.d("YourMainActivity", "AWSMobileClient is instantiated and you are connected to AWS!");
+                Log.d(TAG, "AWSMobileClient is instantiated and you are connected to AWS!");
             }
         }).execute();
 
-        // AWSMobileClient enables AWS user credentials to access your table
-        AWSMobileClient.getInstance().initialize(this).execute();
-
         AWSCredentialsProvider credentialsProvider = AWSMobileClient.getInstance().getCredentialsProvider();
         AWSConfiguration configuration = AWSMobileClient.getInstance().getConfiguration();
-
 
         // Add code to instantiate a AmazonDynamoDBClient
         AmazonDynamoDBClient dynamoDBClient = new AmazonDynamoDBClient(credentialsProvider);
@@ -120,9 +115,14 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
                 .awsConfiguration(configuration)
                 .build();
         createUserInfoItem();
-        awsServices = new AwsServices();
-        userPool = new CognitoUserPool(CONTEXT, awsServices.getPOOL_ID(), awsServices.getAPP_ClIENT_ID(), awsServices.getAPP_ClIENT_SECRET(), awsServices.getREGION());
-        user = userPool.getUser("shadow13524@gmail.com");
+
+        userPool = new AwsServices().initAWSUserPool(this);
+
+        // Get user from from login
+        Intent intent = getIntent();
+        userEmail = intent.getStringExtra("email");
+        user = userPool.getUser(userEmail);
+        Log.d(TAG, "User " +userEmail+ " has signed in");
     }
 
     @Override
@@ -136,7 +136,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                Log.d("YourMainActivity", "User has signed in");
+                                Log.d(TAG, "User has signed in");
                             }
                         });
                         break;
@@ -145,7 +145,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
                             @Override
                             public void run() {
                                 // TODO show user not signed in prompt
-                                Log.d("YourMainActivity", "User not signed in");
+                                Log.d(TAG, "User not signed in");
                             }
                         });
                         break;
@@ -154,7 +154,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
                             @Override
                             public void run() {
                                 // TODO show user inactive signed out prompt
-                                Log.d("YourMainActivity", "User has been signed out");
+                                Log.d(TAG, "User has been signed out");
                             }
                         });
                         break;
@@ -174,8 +174,8 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
     @Override
     protected void onStop() {
         super.onStop();
-        Log.d("YourMainActivity", "User has been signed out");
         user.signOut();
+        Log.d(TAG, "User " +userEmail+ " has been signed out");
     }
 
 
@@ -266,20 +266,15 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
      */
     private ViewPager.OnPageChangeListener pageChangeListener = new ViewPager.OnPageChangeListener() {
         @Override
-        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-        }
+        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) { }
 
         @Override
         public void onPageSelected(int position) {
             presenter.pageSwipedTo(position);
-
         }
 
         @Override
-        public void onPageScrollStateChanged(int state) {
-
-        }
+        public void onPageScrollStateChanged(int state) { }
     };
 
     /**
@@ -316,24 +311,22 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
         inflater.inflate(R.menu.drop_down_menu,menu);
         return super.onCreateOptionsMenu(menu);
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
 
         switch(item.getItemId()){
             case R.id.settings_menu:
-                //settings selected
-                Intent adminsettings = new Intent(this, AdminSettings.class);
-                startActivity(adminsettings);
+                // Settings selected
+                Intent adminSettings = new Intent(this, AdminSettings.class);
+                startActivity(adminSettings);
                 break;
         }
-
-
         return super.onOptionsItemSelected(item);
     }
 
 
     public void createUserInfoItem() {
-
         //an example to demonstrate a dynamoDB push to amazon web servers
         final UserInfoDO item = new UserInfoDO();
         item.setUserId("bart-test");

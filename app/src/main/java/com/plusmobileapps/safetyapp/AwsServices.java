@@ -1,5 +1,7 @@
 package com.plusmobileapps.safetyapp;
 
+import android.content.Context;
+
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUserPool;
 import com.amazonaws.regions.Regions;
 
@@ -35,4 +37,8 @@ public class AwsServices {
     }
 
     public Regions getREGION() { return REGION; }
+
+    public CognitoUserPool initAWSUserPool(Context context){
+        return new CognitoUserPool(context, POOL_ID, APP_ClIENT_ID, APP_ClIENT_SECRET, REGION);
+    }
 }

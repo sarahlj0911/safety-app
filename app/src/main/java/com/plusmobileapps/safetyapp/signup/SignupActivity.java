@@ -53,8 +53,6 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
     boolean downloading;
     private CognitoUserPool userPool;
     private CognitoUserAttributes userAttributes;
-    private AwsServices awsServices;
-    private Context CONTEXT = this;
     private SignUpHandler signupCallback;
     String email, name;
 
@@ -92,8 +90,7 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
 
         statusText.setText("");
 
-        awsServices = new AwsServices();
-        initAWSUserPool();
+        userPool = new AwsServices().initAWSUserPool(this);
         initSignUpHandler();
         userAttributes = new CognitoUserAttributes();
     }
@@ -103,12 +100,6 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
         super.onResume();
         downloadSchools();
         presenter.start();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-
     }
 
     @Override
@@ -372,10 +363,6 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
             schoolDownloadFragment.cancelGetSchools(); }
     }
 
-    private void initAWSUserPool(){
-        userPool = new CognitoUserPool(CONTEXT, awsServices.getPOOL_ID(), awsServices.getAPP_ClIENT_ID(), awsServices.getAPP_ClIENT_SECRET(), awsServices.getREGION());
-    }
-
     private void initSignUpHandler(){
         signupCallback = new SignUpHandler() {
             @Override
@@ -393,9 +380,8 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
                             launchSignupScreen();
                         }
                     });
-                    builder.show();
-                }
-                else { launchHomeScreen(); }
+                    builder.show(); }
+                else launchHomeScreen();
             }
 
             @Override

@@ -114,8 +114,7 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         buttonDismissCodeView.setClickable(false);
         buttonLoginStatus.setClickable(false);
 
-        awsServices = new AwsServices();
-        initAWSUserPool();
+        userPool = new AwsServices().initAWSUserPool(this);
         createAuthenticationHandler();
     }
 
@@ -163,17 +162,15 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
     public void launchHomeScreen() {
         PrefManager prefManager = new PrefManager(this);
         prefManager.setIsUserSignedUp(true);
-        startActivity(new Intent(LoginActivity.this, MainActivity.class));
+        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+        intent.putExtra("email", email);
+        startActivity(intent);
         finish();
     }
 
 
     @Override
     public void setPresenter(LoginContract.Presenter presenter) { this.presenter = presenter; }
-
-    private void initAWSUserPool(){
-        userPool = new CognitoUserPool(CONTEXT, awsServices.getPOOL_ID(), awsServices.getAPP_ClIENT_ID(), awsServices.getAPP_ClIENT_SECRET(), awsServices.getREGION());
-    }
 
     // Code Confirmation Handler
     GenericHandler confirmCodeHandler = new GenericHandler() {
