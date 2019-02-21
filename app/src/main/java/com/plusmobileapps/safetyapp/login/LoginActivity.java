@@ -58,6 +58,7 @@ import br.com.simplepass.loading_button_lib.customViews.CircularProgressButton;
 public class LoginActivity extends AppCompatActivity implements LoginContract.View {
 
     public static final String TAG = "LoginActivity";
+    private Bundle fadeOutActivity;
     private ConnectivityManager connectivityManager;
     private NetworkInfo networkInfo;
     private boolean showCodeView, hasInternetConnection;
@@ -72,9 +73,7 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
     private CognitoUser user;
     private CircularProgressButton loginButton;
     private Handler handler;
-    private View codeAuthWindow;
-    private Context CONTEXT = this;
-    private AwsServices awsServices;
+    private View codeAuthWindow, codeView;
 
 
     @Override
@@ -88,6 +87,7 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         setContentView(R.layout.activity_login);
 
         codeAuthWindow = findViewById(R.id.viewAuthCode);
+        codeView = findViewById(R.id.codeView);
 
         emailField = findViewById(R.id.textInputLayoutEmail);
         passwordField = findViewById(R.id.textInputLayoutPassword);
@@ -108,11 +108,11 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         Objects.requireNonNull(passwordField.getEditText()).addTextChangedListener(passwordListener);
         codeInput.addTextChangedListener(codeListener);
 
-        backgroundBlur.setVisibility(View.INVISIBLE);
-        codeAuthWindow.setVisibility(View.INVISIBLE);
         loginButton.setBackgroundResource(R.drawable.login_button_ripple);
         buttonDismissCodeView.setClickable(false);
         buttonLoginStatus.setClickable(false);
+
+        fadeOutActivity = ActivityOptionsCompat.makeCustomAnimation(this, android.R.anim.fade_in, android.R.anim.fade_out).toBundle();
 
         userPool = new AwsServices().initAWSUserPool(this);
         createAuthenticationHandler();
@@ -162,9 +162,9 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
     public void launchHomeScreen() {
         PrefManager prefManager = new PrefManager(this);
         prefManager.setIsUserSignedUp(true);
-        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-        intent.putExtra("email", email);
-        startActivity(intent);
+        Intent mainActivity = new Intent(LoginActivity.this, MainActivity.class);
+        mainActivity.putExtra("email", email);
+        startActivity(mainActivity, fadeOutActivity);
         finish();
     }
 
@@ -390,11 +390,8 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
 
     public void buttonRegisterClicked(View view) {
         android.util.Log.d(TAG, "Debug: Login Register Clicked");
-
         Intent signUp = new Intent(LoginActivity.this, SignupActivity.class);
-        Bundle bundle = ActivityOptionsCompat.makeCustomAnimation(this,
-                android.R.anim.fade_in, android.R.anim.fade_out).toBundle();
-        startActivity(signUp, bundle);
+        startActivity(signUp, fadeOutActivity);
     }
 
     public void buttonStatusClicked(View view){
@@ -430,18 +427,24 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         hideKeyboard(view);
         showCodeView = false;
         buttonDismissCodeView.setClickable(false);
-        backgroundBlur.setVisibility(View.INVISIBLE);
-        codeAuthWindow.setVisibility(View.INVISIBLE);
-        // codeAuthorizationAnimation(false, 200);
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                codeViewAnimation(false, 100);
+            }
+        });
     }
 
     public void showCodeAuthorizationView() {
-        Bitmap backgroundCapture = takeScreenshot();
-        backgroundBlur.setImageBitmap(new BlurUtils().blur(LoginActivity.this, backgroundCapture, 25f));
         buttonDismissCodeView.setClickable(true);
-        backgroundBlur.setVisibility(View.VISIBLE);
-        codeAuthWindow.setVisibility(View.VISIBLE);
-        //codeAuthorizationAnimation(true, 500);
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Bitmap backgroundCapture = takeScreenshot();
+                backgroundBlur.setImageBitmap(new BlurUtils().blur(LoginActivity.this, backgroundCapture, 25f));
+                codeViewAnimation(true, 200);
+            }
+        });
     }
 
     private Bitmap takeScreenshot(){
@@ -464,44 +467,36 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
             imm.hideSoftInputFromWindow(v.getWindowToken(), 0); }
     }
 
-    private void codeAuthorizationAnimation(final boolean fadeIn, int duration){
-        final AnimationSet animation = new AnimationSet(false); // change to false
-        animation.setRepeatCount(1);
-        if (fadeIn) {
+    private void codeViewAnimation(Boolean fadeIn, int duration){
+        AnimationSet animation = new AnimationSet(false);
+        animation.setRepeatMode(0);
+
+        if (fadeIn){
+            codeView.setVisibility(View.VISIBLE);
             AlphaAnimation fadeInAni = new AlphaAnimation(0.0f, 1.0f);
-            fadeInAni.setInterpolator(new DecelerateInterpolator());
+            fadeInAni.setInterpolator(new AccelerateInterpolator());
             fadeInAni.setDuration(duration);
             animation.addAnimation(fadeInAni);
-            backgroundBlur.setAnimation(animation);
-            codeAuthWindow.setAnimation(animation); }
+        }
         else {
-            Animation fadeOutAni = new AlphaAnimation(1.0f, 0.0f);
+            AlphaAnimation fadeOutAni = new AlphaAnimation(1.0f, 0.0f);
             fadeOutAni.setInterpolator(new AccelerateInterpolator());
             fadeOutAni.setDuration(duration);
+            fadeOutAni.setAnimationListener(new Animation.AnimationListener() {
+                @Override
+                public void onAnimationStart(Animation animation) { }
+
+                @Override
+                public void onAnimationEnd(Animation animation) {
+                    codeView.setVisibility(View.INVISIBLE);
+                }
+
+                @Override
+                public void onAnimationRepeat(Animation animation) { }
+            });
             animation.addAnimation(fadeOutAni);
-            backgroundBlur.setAnimation(animation);
-            codeAuthWindow.setAnimation(animation); }
-
-        animation.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
-                if (fadeIn) {
-                    backgroundBlur.setVisibility(View.VISIBLE);
-                    codeAuthWindow.setVisibility(View.VISIBLE); }
-            }
-
-            @Override
-            public void onAnimationEnd(Animation animation) {
-                if (!fadeIn) {
-                    backgroundBlur.setVisibility(View.INVISIBLE);
-                    codeAuthWindow.setVisibility(View.INVISIBLE); }
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) { }
-        });
-
-        animation.start();
+        }
+        codeView.startAnimation(animation);
     }
 
 }
