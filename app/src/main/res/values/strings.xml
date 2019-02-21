@@ -131,6 +131,7 @@
     <string name="add_user">Add User</string>
     <string name="delete_user">Delete User</string>
     <string name="new_ticket">New Ticket</string>
+    <string name="enter_your_email">Enter your email:</string>
     <string-array name="userArray">
 
         <item>User1</item>
