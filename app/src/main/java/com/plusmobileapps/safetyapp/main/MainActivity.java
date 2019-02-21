@@ -121,7 +121,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
                 .dynamoDBClient(dynamoDBClient)
                 .awsConfiguration(configuration)
                 .build();
-        createUserInfoItem();
         awsServices = new AwsServices();
         userPool = new CognitoUserPool(CONTEXT, awsServices.getPOOL_ID(), awsServices.getAPP_ClIENT_ID(), awsServices.getAPP_ClIENT_SECRET(), awsServices.getREGION());
         user = userPool.getUser("shadow13524@gmail.com");
@@ -327,32 +326,17 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
                 Intent adminsettings = new Intent(this, AdminSettings.class);
                 startActivity(adminsettings);
                 break;
+
+            case R.id.settings_menu_remove:
+                //settings selected
+                Intent remove_user = new Intent(this, AdminSettings.class);
+                //startActivity(remove_user);
+                break;
         }
 
 
         return super.onOptionsItemSelected(item);
     }
 
-
-    public void createUserInfoItem() {
-
-        //an example to demonstrate a dynamoDB push to amazon web servers
-        final UserInfoDO item = new UserInfoDO();
-        item.setUserId("bart-test");
-        item.setName("bart");
-        item.setTitle("student");
-        item.setLanguage("eng");
-        item.setLocation("asu");
-        Log.d("AWS", "createUserInfoItem");
-
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                dynamoDBMapper.save(item);
-                // Item saved
-                Log.d("AWS", "item added");
-            }
-        }).start();
-    }
 
 }
