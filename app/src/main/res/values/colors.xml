@@ -9,6 +9,19 @@
     <color name="actionItemYellow">#FFEB3B</color>
     <color name="divider">#9E9E9E</color>
 
+    <color name="placeholder_light">#B2FFFFFF</color>
+    <color name="status_bar_dark_transparent">#34000000</color>
+    <color name="black_light">#19000000</color>
+    <color name="text_unfocus">#B3FFFFFF</color>
+    <color name="error">#C50000</color>
+    <color name="login_button_text_click">#EA4F1B</color>
+    <color name="code_authorization_code_success">#66AB17</color>
+
+
+
+
+
+
     <!-- Welcome pages dot colors -->
     <color name="dot_active_welcome">#303F9F</color>
     <color name="dot_inactive_welcome">#ABB6F2</color>
