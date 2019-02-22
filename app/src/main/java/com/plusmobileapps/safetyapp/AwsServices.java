@@ -11,7 +11,6 @@ import static com.amazonaws.regions.Regions.US_WEST_2;
 // AWS UserType:     https://docs.aws.amazon.com/cognito-user-identity-pools/latest/APIReference/API_UserType.html
 
 public class AwsServices {
-    private CognitoUserPool userPool;
     private String POOL_ID;
     private String APP_ClIENT_ID;
     private String APP_ClIENT_SECRET;

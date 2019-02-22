@@ -24,7 +24,6 @@ import android.view.animation.AccelerateInterpolator;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
-import android.view.animation.DecelerateInterpolator;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -58,6 +57,7 @@ import br.com.simplepass.loading_button_lib.customViews.CircularProgressButton;
 public class LoginActivity extends AppCompatActivity implements LoginContract.View {
 
     public static final String TAG = "LoginActivity";
+    private View codeAuthWindow, codeView;
     private Bundle fadeOutActivity;
     private ConnectivityManager connectivityManager;
     private NetworkInfo networkInfo;
@@ -68,12 +68,12 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
     private TextInputLayout emailField, passwordField;
     private EditText emailInput, passwordInput, codeInput;
     private LoginContract.Presenter presenter;
-    private AuthenticationHandler authenticationHandler;
+    private CircularProgressButton loginButton;
+
+    // AWS
     private CognitoUserPool userPool;
     private CognitoUser user;
-    private CircularProgressButton loginButton;
     private Handler handler;
-    private View codeAuthWindow, codeView;
 
 
     @Override
@@ -115,7 +115,6 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         fadeOutActivity = ActivityOptionsCompat.makeCustomAnimation(this, android.R.anim.fade_in, android.R.anim.fade_out).toBundle();
 
         userPool = new AwsServices().initAWSUserPool(this);
-        createAuthenticationHandler();
     }
 
     @Override
@@ -134,15 +133,11 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         }
         else {
             hasInternetConnection = false;
-            buttonLoginStatus.setText("You have no internet connection!\nApp services will be unavailable");
+            buttonLoginStatus.setText("You have no internet connection!\nApp services will be unavailable.");
             Log.e(TAG, "Device does not have an internet connection!");
         }
     }
 
-    @Override
-    protected void onStop() {
-        super.onStop();
-    }
 
     public void displayInvalidEmailError(boolean show) {
         emailField.setError(getString(R.string.error_email_invalid));
@@ -151,7 +146,6 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
     public void displayNoEmailError(boolean show) {
         emailField.setError(getString(R.string.error_email_none));
         emailField.setErrorEnabled(show); }
-
 
     public void displayNoPasswordError(boolean show) {
         passwordField.setError(getString(R.string.error_password_none));
@@ -172,12 +166,90 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
     @Override
     public void setPresenter(LoginContract.Presenter presenter) { this.presenter = presenter; }
 
-    // Code Confirmation Handler
+
+    // Handler: Code Confirmation
+    AuthenticationHandler authenticationHandler = new AuthenticationHandler() {
+        // Button Animations
+        final Runnable failureAnimation = new Runnable() { public void run() {
+            if (showCodeView) { showCodeAuthorizationView(); }
+            buttonLoginStatus.setAlpha(1);
+            loginButton.doneLoadingAnimation(Color.parseColor("#ffffff"), BitmapFactory.decodeResource(getResources(), R.drawable.login_button_failed)); }
+        };
+        final Runnable waitAndLaunchMain = new Runnable() { public void run() { launchHomeScreen(); } };
+        final Runnable resetButton = new Runnable() { public void run() {
+            loginButton.revertAnimation();
+        } };
+        final Runnable successAnimation = new Runnable() { public void run() {
+            loginButton.doneLoadingAnimation(Color.parseColor("#ffffff"), BitmapFactory.decodeResource(getResources(), R.drawable.login_button_confirmed)); }
+        };
+
+        @Override
+        public void onSuccess(CognitoUserSession userSession, CognitoDevice newDevice) {
+            handler.postDelayed(successAnimation, 2000);
+            handler.postDelayed(waitAndLaunchMain, 3000);
+        }
+
+        @Override
+        public void getAuthenticationDetails(AuthenticationContinuation authenticationContinuation, String userId) {
+            Log.d(TAG, "AWS Sign-in: Getting Details");
+            AuthenticationDetails authenticationDetails = new AuthenticationDetails(userId, password, null);    // The API needs user sign-in credentials to continue
+            authenticationContinuation.setAuthenticationDetails(authenticationDetails);     // Pass the user sign-in credentials to the continuation
+            authenticationContinuation.continueTask();  // Allow the sign-in to continue
+        }
+
+        @Override
+        public void getMFACode(MultiFactorAuthenticationContinuation multiFactorAuthenticationContinuation) {
+            Log.d(TAG, "AWS Sign-in: Needs to use a multi-factor authentication method to sign in");
+            // multiFactorAuthenticationContinuation.setMfaCode(mfaVerificationCode);
+            // multiFactorAuthenticationContinuation.continueTask();
+        }
+
+        @Override
+        public void authenticationChallenge(ChallengeContinuation continuation) {
+            Log.d(TAG, "AWS Sign-in Failure: " +continuation.getChallengeName());
+            if (continuation.getChallengeName().contains("NEW_PASSWORD_REQUIRED")) {
+                user = userPool.getUser(email);
+                buttonLoginStatus.setText(getString(R.string.login_button_error_verify));
+                buttonLoginStatus.setClickable(true);
+                showCodeView = true; }
+            else {
+                Log.d(TAG, "AWS Sign-in Failure: " +continuation.getChallengeName());
+                buttonLoginStatus.setText(getString(R.string.login_button_error_aws_user_exists));
+                handler.postDelayed(failureAnimation, 2000);
+                handler.postDelayed(resetButton, 5000);
+            }
+        }
+
+        @Override
+        public void onFailure(Exception exception) {
+            String ex = exception.toString();
+            Log.d(TAG, "AWS Sign-in Failure: " +ex);
+            if (ex.toLowerCase().contains("usernotfoundexception")) {
+                buttonLoginStatus.setText(getString(R.string.login_button_user_not_found)); }
+            else if (ex.toLowerCase().contains("notauthorizedexception")) {
+                buttonLoginStatus.setText(String.format("%s\n Reset it?", getString(R.string.login_button_error_aws_user_exists)));
+                buttonLoginStatus.setClickable(true); }
+            else if (ex.toLowerCase().contains("passwordresetrequiredexception")) {
+                buttonLoginStatus.setText(getString(R.string.login_button_error_aws_new_password));
+            }
+            else if (ex.toLowerCase().contains("usernotconfirmedexception")) {
+                user = userPool.getUser(email);
+                buttonLoginStatus.setText(getString(R.string.login_button_error_verify));
+                buttonLoginStatus.setClickable(true);
+                showCodeView = true; }
+            else if (ex.toLowerCase().contains("unable to resolve host")) {
+                buttonLoginStatus.setText(getString(R.string.login_button_error_AWS_connection_issue));
+            }
+            else buttonLoginStatus.setText(String.format("%s%s", getString(R.string.login_button_error_aws_error), exception));
+            handler.postDelayed(failureAnimation, 2000);
+            handler.postDelayed(resetButton, 5000); }
+    };
+
+    // Handler: Code Confirmation
     GenericHandler confirmCodeHandler = new GenericHandler() {
         @Override
         public void onSuccess() {
             Log.d(TAG, "Code was sent!");
-
             final Runnable clearView = new Runnable() { public void run() {
                 buttonDismissAuthCodeClicked(codeAuthWindow);
                 runOnUiThread(new Runnable() {
@@ -211,9 +283,8 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
             buttonCode.setBackgroundResource(R.drawable.code_confirm_button_red);}
     };
 
-    // Resend Code Confirmation Code Handler
+    // Handler: Resend Confirmation Code
     VerificationHandler resendConfirmationCodeHandler = new VerificationHandler() {
-
         @Override
         public void onSuccess(CognitoUserCodeDeliveryDetails verificationCodeDeliveryMedium) {
             Handler viewHandler = new Handler(getBaseContext().getMainLooper());
@@ -239,87 +310,6 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
     };
 
 
-    private void createAuthenticationHandler(){
-        authenticationHandler = new AuthenticationHandler() {
-            // Button Animations
-            final Runnable failureAnimation = new Runnable() { public void run() {
-                if (showCodeView) { showCodeAuthorizationView(); }
-                buttonLoginStatus.setAlpha(1);
-                loginButton.doneLoadingAnimation(Color.parseColor("#ffffff"), BitmapFactory.decodeResource(getResources(), R.drawable.login_button_failed)); }
-            };
-            final Runnable waitAndLaunchMain = new Runnable() { public void run() { launchHomeScreen(); } };
-            final Runnable resetButton = new Runnable() { public void run() {
-                loginButton.revertAnimation();
-            } };
-            final Runnable successAnimation = new Runnable() { public void run() {
-                loginButton.doneLoadingAnimation(Color.parseColor("#ffffff"), BitmapFactory.decodeResource(getResources(), R.drawable.login_button_confirmed)); }
-            };
-
-            @Override
-            public void onSuccess(CognitoUserSession userSession, CognitoDevice newDevice) {
-                handler.postDelayed(successAnimation, 2000);
-                handler.postDelayed(waitAndLaunchMain, 3000);
-            }
-
-            @Override
-            public void getAuthenticationDetails(AuthenticationContinuation authenticationContinuation, String userId) {
-                Log.d(TAG, "AWS Sign-in: Getting Details");
-                AuthenticationDetails authenticationDetails = new AuthenticationDetails(userId, password, null);    // The API needs user sign-in credentials to continue
-                authenticationContinuation.setAuthenticationDetails(authenticationDetails);     // Pass the user sign-in credentials to the continuation
-                authenticationContinuation.continueTask();  // Allow the sign-in to continue
-            }
-
-            @Override
-            public void getMFACode(MultiFactorAuthenticationContinuation multiFactorAuthenticationContinuation) {
-                Log.d(TAG, "AWS Sign-in: Needs to use a multi-factor authentication method to sign in");
-                // multiFactorAuthenticationContinuation.setMfaCode(mfaVerificationCode);
-                // multiFactorAuthenticationContinuation.continueTask();
-            }
-
-            @Override
-            public void authenticationChallenge(ChallengeContinuation continuation) {
-                Log.d(TAG, "AWS Sign-in Failure: " +continuation.getChallengeName());
-                if (continuation.getChallengeName().contains("NEW_PASSWORD_REQUIRED")) {
-                    user = userPool.getUser(email);
-                    buttonLoginStatus.setText(getString(R.string.login_button_error_verify));
-                    buttonLoginStatus.setClickable(true);
-                    showCodeView = true; }
-                else {
-                    Log.d(TAG, "AWS Sign-in Failure: " +continuation.getChallengeName());
-                    buttonLoginStatus.setText(getString(R.string.login_button_error_aws_user_exists));
-                    handler.postDelayed(failureAnimation, 2000);
-                    handler.postDelayed(resetButton, 5000);
-                }
-            }
-
-            @Override
-            public void onFailure(Exception exception) {
-                // Sign-in failed, check exception for the cause
-                String ex = exception.toString();
-                Log.d(TAG, "AWS Sign-in Failure: " +ex);
-                if (ex.toLowerCase().contains("usernotfoundexception")) {
-                    buttonLoginStatus.setText(getString(R.string.login_button_user_not_found)); }
-                else if (ex.toLowerCase().contains("notauthorizedexception")) {
-                    buttonLoginStatus.setText(String.format("%s\n Reset it?", getString(R.string.login_button_error_aws_user_exists)));
-                    buttonLoginStatus.setClickable(true); }
-                else if (ex.toLowerCase().contains("passwordresetrequiredexception")) {
-                    buttonLoginStatus.setText(getString(R.string.login_button_error_aws_new_password));
-                }
-                else if (ex.toLowerCase().contains("usernotconfirmedexception")) {
-                    user = userPool.getUser(email);
-                    buttonLoginStatus.setText(getString(R.string.login_button_error_verify));
-                    buttonLoginStatus.setClickable(true);
-                    showCodeView = true; }
-                else if (ex.toLowerCase().contains("unable to resolve host")) {
-                    buttonLoginStatus.setText(getString(R.string.login_button_error_AWS_connection_issue));
-                }
-                else buttonLoginStatus.setText(String.format("%s%s", getString(R.string.login_button_error_aws_error), exception));
-                handler.postDelayed(failureAnimation, 2000);
-                handler.postDelayed(resetButton, 5000); }
-        };
-    }
-
-
     private TextWatcher emailListener = new TextWatcher() {
         @Override
         public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
@@ -331,7 +321,6 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         @Override
         public void afterTextChanged(Editable s) { }
     };
-
 
     private TextWatcher passwordListener = new TextWatcher() {
         @Override
@@ -346,9 +335,7 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
 
     private TextWatcher codeListener = new TextWatcher() {
         @Override
-        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-        }
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
 
         @Override
         public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -386,7 +373,6 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
             userPool.getUser(email).getSessionInBackground(authenticationHandler); // Sign in the user
         }
     }
-
 
     public void buttonRegisterClicked(View view) {
         android.util.Log.d(TAG, "Debug: Login Register Clicked");
@@ -460,7 +446,6 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
      * REF: https://stackoverflow.com/questions/1109022/close-hide-the-android-soft-keyboard#
      * Added by Jeremy Powell 1/24/2019
      */
-    //
     private void hideKeyboard(View v) {
         if (v != null) {
             InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);

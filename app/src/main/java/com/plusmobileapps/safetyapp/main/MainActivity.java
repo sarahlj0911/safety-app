@@ -22,7 +22,9 @@ import android.widget.Toast;
 import com.amazonaws.mobile.client.Callback;
 import com.amazonaws.mobile.client.UserStateDetails;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUser;
+import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUserDetails;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUserPool;
+import com.amazonaws.mobileconnectors.cognitoidentityprovider.handlers.GetDetailsHandler;
 import com.plusmobileapps.safetyapp.AdminSettings;
 
 import com.amazonaws.auth.AWSCredentialsProvider;
@@ -45,15 +47,17 @@ import com.amazonaws.mobile.client.AWSMobileClient;
 
 public class MainActivity extends AppCompatActivity implements MainActivityContract.View {
     private static final String TAG = "MainActivity";
+    private static final String AWSTAG = "AWS";
     private TextView mTextMessage;
-
-    private CognitoUserPool userPool;
-    private CognitoUser user;
-    private String userEmail;
     private ViewPager viewPager;
     private BottomNavigationView navigation;
     private String walkthroughFragmentTitle = "";
     private MainActivityPresenter presenter;
+
+    // AWS
+    private CognitoUserPool userPool;
+    private CognitoUser user;
+    private String userEmail, userRole, userSchool;
 
     // DB mapper
     DynamoDBMapper dynamoDBMapper;
@@ -100,7 +104,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
         AWSMobileClient.getInstance().initialize(this, new AWSStartupHandler() {
             @Override
             public void onComplete(AWSStartupResult awsStartupResult) {
-                Log.d(TAG, "AWSMobileClient is instantiated and you are connected to AWS!");
+                Log.d(AWSTAG, "You are connected to AWS!");
             }
         }).execute();
 
@@ -118,64 +122,29 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
 
         userPool = new AwsServices().initAWSUserPool(this);
 
-        // Get user from from login
         Intent intent = getIntent();
         userEmail = intent.getStringExtra("email");
-        user = userPool.getUser(userEmail);
-        Log.d(TAG, "User " +userEmail+ " has signed in");
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        AWSMobileClient.getInstance().initialize(getApplicationContext(), new Callback<UserStateDetails>() {
-            @Override
-            public void onResult(UserStateDetails userStateDetails) {
-                switch (userStateDetails.getUserState()) {
-                    case SIGNED_IN:
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                Log.d(TAG, "User has signed in");
-                            }
-                        });
-                        break;
-                    case SIGNED_OUT:
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                // TODO show user not signed in prompt
-                                Log.d(TAG, "User not signed in");
-                            }
-                        });
-                        break;
-                    case SIGNED_OUT_USER_POOLS_TOKENS_INVALID:
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                // TODO show user inactive signed out prompt
-                                Log.d(TAG, "User has been signed out");
-                            }
-                        });
-                        break;
-                    default:
-                        AWSMobileClient.getInstance().signOut();
-                        break;
-                }
-            }
-
-            @Override
-            public void onError(Exception e) {
-                Log.e("INIT", e.toString());
-            }
-        });
+    protected void onStart() {
+        super.onStart();
+        if (checkForActiveToken()) {
+            // Get user from from login
+            user = userPool.getUser(userEmail);
+            // TODO Sign user back in
+            user.getDetailsInBackground(getUserDetailsHandler);
+        }
+        else {
+            // TODO Prompt with "Session has timed out" -> Send to login page
+        }
     }
 
     @Override
     protected void onStop() {
         super.onStop();
         user.signOut();
-        Log.d(TAG, "User " +userEmail+ " has been signed out");
+        Log.d(AWSTAG, "User " +userEmail+ " has been signed out");
     }
 
 
@@ -334,16 +303,36 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
         item.setTitle("student");
         item.setLanguage("eng");
         item.setLocation("asu");
-        Log.d("AWS", "createUserInfoItem");
+        Log.d(AWSTAG, "createUserInfoItem");
 
         new Thread(new Runnable() {
             @Override
             public void run() {
                 dynamoDBMapper.save(item);
                 // Item saved
-                Log.d("AWS", "item added");
+                Log.d(AWSTAG, "item added");
             }
         }).start();
     }
+
+    private boolean checkForActiveToken(){
+        // TODO check if token is still valid
+        return true;
+    }
+
+    GetDetailsHandler getUserDetailsHandler = new GetDetailsHandler() {
+        @Override
+        public void onSuccess(final CognitoUserDetails list) {
+            // Successfully retrieved user details
+            userRole = list.getAttributes().getAttributes().get("custom:role");
+            userSchool = list.getAttributes().getAttributes().get("custom:school");
+            Log.d(AWSTAG, "Successfully loaded " + userEmail+ " as role " +userRole+ " at school " + userSchool);
+        }
+
+        @Override
+        public void onFailure(final Exception exception) {
+            Log.d(AWSTAG, "Failed to retrieve the user's details: " + exception);
+        }
+    };
 
 }

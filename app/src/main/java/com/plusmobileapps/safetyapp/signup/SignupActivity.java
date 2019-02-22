@@ -204,6 +204,7 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
                 userAttributes.addAttribute("name", name);
                 userAttributes.addAttribute("email", email);
                 userAttributes.addAttribute("custom:role", role);
+                userAttributes.addAttribute("custom:school", school);
                 userPool.signUpInBackground(email, password, userAttributes, null, signupCallback);
             }
         }
