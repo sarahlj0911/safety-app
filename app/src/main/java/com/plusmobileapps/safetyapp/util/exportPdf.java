@@ -33,12 +33,12 @@ public class exportPdf extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         PdfDocument document = new PdfDocument();
-        PdfDocument.PageInfo pageInfo = new PdfDocument.PageInfo.Builder(new Rect(0, 0, 100, 100), 1).create();
+        //PdfDocument.PageInfo pageInfo = new PdfDocument.PageInfo.Builder(new Rect(0, 0, 100, 100), 1).create();
 
-        PdfDocument.Page page = document.startPage(pageInfo);
-        View content = getContentView();
-        content.draw(page.getCanvas());
-        document.writeTo(getOutputStream());
+        //PdfDocument.Page page = document.startPage(pageInfo);
+        //View content = getContentView();
+        //content.draw(page.getCanvas());
+        //document.writeTo(getOutputStream());
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_export_pdf);
@@ -50,8 +50,8 @@ public class exportPdf extends AppCompatActivity {
 
 
     public void export(){
-        Results = extractor.getlist();
-        
+        //Results = extractor.getlist();
+
 
     }
 }

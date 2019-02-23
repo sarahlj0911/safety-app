@@ -11,6 +11,7 @@ import com.plusmobileapps.safetyapp.data.entity.Question;
 import com.plusmobileapps.safetyapp.data.entity.Response;
 
 import java.util.List;
+import java.util.Stack;
 
 public class DataExtractor {
 
@@ -25,16 +26,23 @@ public class DataExtractor {
         LocationDao locationDao = db.locationDao();
         QuestionDao questionDao = db.questionDao();
         List<Response> items = responseDao.getAllActionItems(1);
+        String [] titleStrings;
+        Stack info = new Stack;
 
         for (Response actionItem : items) {
             int locationId = actionItem.getLocationId();
             Location location = locationDao.getByLocationId(locationId);
             actionItem.setLocationName(location.getName());
 
+            info.push(actionItem.getTitle());
             int questionId = actionItem.getQuestionId();
+
             Question question = questionDao.getByQuestionID(questionId);
+            info.push(question.getShortDesc());
+
             String title = question.getShortDesc();
             actionItem.setTitle(title);
+            info.push(title)
 
         }
 
@@ -42,7 +50,7 @@ public class DataExtractor {
         //find where walkthrough data is stored return it as a string.
 
 
-        return items;
+        return info;
 
     }
 }
