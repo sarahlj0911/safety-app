@@ -170,6 +170,21 @@
     <string name="authorization_code_des">You still need to verify your account. Please enter the code that was previously emailed to you.</string>
     <string name="code_listener_button_confirm">CONFIRM</string>
     <string name="code_authorization_confirmed">confirmed</string>
+    <string name="delete_user">delete user</string>
+    <string name="add_user">add user</string>
+    <string name="view_current_tickets">View Current Tickets</string>
+    <string name="ticket_history">Ticket History</string>
+    <string name="string_ticket_history" />
+    <string name="new_ticket">New Ticket</string>
+    <string name="view_history">View History</string>
+    <string name="string_view_history" />
+    <string name="enter_your_name">Enter your name:</string>
+    <string name="view_tickets">View Tickets</string>
+
+    <string-array name="userArray">
+        <item>User1</item>
+        <item>User2</item>
+        <item>User3</item>
+    </string-array>
 
 </resources>
-
