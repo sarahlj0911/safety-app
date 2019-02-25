@@ -47,7 +47,7 @@
             android:name=".welcome.WelcomeActivity"
             android:label="@string/app_name_only"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.Walkthrough"></activity>
+            android:theme="@style/AppTheme.Walkthrough" />
         <activity
             android:name=".walkthrough.walkthrough.WalkthroughActivity"
             android:label="@string/title_activity_walkthrough"
@@ -57,6 +57,10 @@
             android:name=".login.LoginActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.Clean" />
+        <activity
+            android:name=".signup.SignupActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.Clean"/>
         <activity
             android:name=".main.MainActivity"
             android:screenOrientation="portrait" />
@@ -81,10 +85,6 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
-
-        <activity
-            android:name=".signup.SignupActivity"
-            android:screenOrientation="portrait" />
 
         <service
             android:name=".sync.AuthenticatorService"

@@ -14,6 +14,8 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -59,6 +61,9 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Window w = getWindow();
+        w.setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION, 2000);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_signup);
         presenter = new SignupPresenter(this);
         Button saveSignupBtn = findViewById(R.id.button_save_signup);
@@ -89,6 +94,9 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
         Objects.requireNonNull(passwordInput.getEditText()).addTextChangedListener(passwordListener);
 
         statusText.setText("");
+        ArrayAdapter adapter = ArrayAdapter.createFromResource(this, R.array.signup_roles, R.layout.activity_signup_spinner);
+        adapter.setDropDownViewResource(R.layout.activity_signup_spinner_dropdown);
+        roleSpinner.setAdapter(adapter);
 
         userPool = new AwsServices().initAWSUserPool(this);
         initSignUpHandler();
@@ -100,6 +108,12 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
         super.onResume();
         downloadSchools();
         presenter.start();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
     }
 
     @Override
@@ -264,6 +278,7 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
         passwordInput.setErrorEnabled(show);
     }
 
+
     private TextWatcher nameListener = new TextWatcher() {
         @Override
         public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
@@ -299,7 +314,6 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
         @Override
         public void afterTextChanged(Editable s) { }
     };
-
 
 
     private TextWatcher schoolNameListener = new TextWatcher() {
@@ -382,7 +396,7 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
                         }
                     });
                     builder.show(); }
-                else launchHomeScreen();
+                else {} // TODO Display message "you already have an account"
             }
 
             @Override

@@ -8,37 +8,58 @@
     android:gravity="center_horizontal"
     tools:context="com.plusmobileapps.safetyapp.signup.SignupActivity">
 
-    <android.support.design.widget.AppBarLayout
-        android:id="@+id/toolbar"
+    <ImageView
+        android:id="@+id/imageBackground"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:contentDescription="@string/login_image_logo_description"
+        android:cropToPadding="true"
+        android:scaleType="centerCrop"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/signup_background" />
+
+    <TextView
+        android:id="@+id/title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay">
-
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/main_toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            app:popupTheme="@style/AppTheme.PopupOverlay"
-            app:title="@string/title_signup" />
-
-    </android.support.design.widget.AppBarLayout>
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginEnd="20dp"
+        android:text="@string/sign_up_title"
+        android:textAlignment="center"
+        android:textColor="@android:color/white"
+        android:textSize="30sp"
+        android:textStyle="bold" />
 
     <android.support.design.widget.TextInputLayout
         android:id="@+id/signup_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/toolbar"
+        android:layout_below="@+id/title"
         android:layout_centerInParent="true"
-        android:layout_marginTop="40dp">
+        android:layout_marginTop="40dp"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:textColorHint="@android:color/white"
+        android:theme="@style/InputLayoutFieldMain"
+        app:errorTextAppearance="@style/error_appearance">
 
         <EditText
             android:id="@+id/fieldName"
+            style="@style/InputFieldMain"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
+            android:autofillHints="Enter your name"
             android:hint="@string/hint_name"
             android:inputType="text"
-            android:autofillHints="Enter your name"
+            android:singleLine="true"
+            android:textColor="@android:color/white"
             tools:targetApi="o" />
 
     </android.support.design.widget.TextInputLayout>
@@ -49,17 +70,25 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/signup_name"
         android:layout_centerInParent="true"
-        android:layout_marginTop="8dp">
+        android:layout_marginTop="8dp"
+        android:textColorHint="@android:color/white"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:theme="@style/InputLayoutFieldMain"
+        app:errorTextAppearance="@style/error_appearance">
 
         <EditText
             android:id="@+id/fieldEmail"
+            style="@style/InputFieldMain"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
             android:hint="@string/hint_email"
             android:importantForAutofill="no"
             android:inputType="textEmailAddress"
-            tools:targetApi="o"/>
+            android:singleLine="true"
+            android:textColor="@android:color/white"
+            tools:targetApi="o" />
 
     </android.support.design.widget.TextInputLayout>
 
@@ -69,17 +98,26 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/signup_email"
         android:layout_centerInParent="true"
-        android:layout_marginTop="8dp">
+        android:layout_marginTop="8dp"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:textColorHint="@android:color/white"
+        android:theme="@style/InputLayoutFieldMain"
+        app:errorTextAppearance="@style/error_appearance">
 
         <EditText
             android:id="@+id/fieldPassword"
+            style="@style/InputFieldMain"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
             android:hint="@string/hint_password"
-            android:inputType="textPassword"
             android:importantForAutofill="no"
-            tools:targetApi="o"/>
+            android:inputType="textPassword"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:textColor="@android:color/white"
+            tools:targetApi="o" />
 
     </android.support.design.widget.TextInputLayout>
 
@@ -88,19 +126,28 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/signup_password"
-        android:imeOptions="actionDone"
         android:layout_centerInParent="true"
-        android:layout_marginTop="8dp">
+        android:layout_marginTop="8dp"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:imeOptions="actionDone"
+        android:textColorHint="@android:color/white"
+        android:theme="@style/InputLayoutFieldMain"
+        app:errorTextAppearance="@style/error_appearance">
 
         <EditText
             android:id="@+id/fieldPasswordCheck"
+            style="@style/InputFieldMain"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
             android:hint="@string/hint_password_check"
-            android:importantForAutofill="no"
             android:imeOptions="actionDone"
+            android:importantForAutofill="no"
             android:inputType="textPassword"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:textColor="@android:color/white"
             tools:targetApi="o" />
 
     </android.support.design.widget.TextInputLayout>
@@ -114,7 +161,7 @@
         android:layout_marginTop="40dp"
         android:focusableInTouchMode="false"
         android:text="@string/label_signup_school_name"
-        android:textColor="@android:color/black"
+        android:textColor="@android:color/white"
         android:textSize="18sp" />
 
     <Spinner
@@ -127,7 +174,9 @@
         android:focusableInTouchMode="false"
         android:fadingEdge="vertical"
         android:singleLine="false"
-        android:paddingTop="7dp" tools:targetApi="o"/>
+        android:paddingTop="7dp"
+        android:backgroundTint="@android:color/white"
+        tools:targetApi="o"/>
 
     <EditText
         android:id="@+id/new_school_text_box"
@@ -135,24 +184,25 @@
         android:layout_height="wrap_content"
         android:layout_alignStart="@+id/spinner_signup_school_name"
         android:layout_alignTop="@+id/spinner_signup_school_name"
-        android:visibility="invisible"
         android:focusableInTouchMode="false"
-        android:paddingTop="7dp"
-        android:textSize="18sp"
         android:importantForAutofill="no"
-        tools:targetApi="o"
-        tools:ignore="LabelFor,TextFields" />
+        android:paddingTop="7dp"
+        android:textColor="@android:color/white"
+        android:textSize="18sp"
+        android:visibility="invisible"
+        tools:ignore="LabelFor,TextFields"
+        tools:targetApi="o" />
 
     <TextView
         android:id="@+id/label_signup_role"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/button_save_signup"
         android:layout_below="@+id/new_school_text_box"
+        android:layout_alignStart="@+id/button_save_signup"
         android:layout_marginTop="37dp"
         android:focusableInTouchMode="false"
         android:text="@string/label_signup_role"
-        android:textColor="@android:color/black"
+        android:textColor="@android:color/white"
         android:textSize="18sp" />
 
     <Spinner
@@ -164,11 +214,12 @@
         android:layout_alignBottom="@+id/label_signup_role"
         android:defaultFocusHighlightEnabled="false"
         android:entries="@array/signup_roles"
+        android:fadingEdge="vertical"
         android:focusable="false"
         android:focusableInTouchMode="false"
-        android:fadingEdge="vertical"
         android:paddingTop="7dp"
         android:prompt="@string/signup_role_prompt"
+        android:backgroundTint="@android:color/white"
         tools:targetApi="o" />
 
     <TextView
@@ -185,7 +236,7 @@
         android:gravity="bottom"
         android:text="@string/status_placeholder"
         android:textAlignment="center"
-        android:textColor="@color/actionItemRed"
+        android:textColor="@android:color/white"
         android:textStyle="bold" />
 
     <Button
@@ -194,7 +245,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="50dp"
+        android:layout_marginBottom="70dp"
         android:text="@string/btn_signup" />
 
     <TextView
