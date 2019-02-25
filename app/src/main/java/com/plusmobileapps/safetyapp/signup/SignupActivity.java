@@ -50,7 +50,7 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
     private ArrayList<String> schoolList;
     private ArrayAdapter<String> schoolSpinnerList;
     private EditText newSchool, nameField, emailField, passwordField;
-    private boolean schoolExists;
+    private boolean schoolExists, userSignedUp = false;
     private SchoolDownloadFragment schoolDownloadFragment;
     boolean downloading;
     private CognitoUserPool userPool;
@@ -60,6 +60,7 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.d("Debug"+TAG, "onCreate");
         super.onCreate(savedInstanceState);
         Window w = getWindow();
         w.setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION, 2000);
@@ -106,8 +107,12 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
     @Override
     protected void onResume() {
         super.onResume();
-        downloadSchools();
-        presenter.start();
+        Log.d("Debug"+TAG, "onResume");
+        if (userSignedUp) launchLoginScreen();
+        else {
+            downloadSchools();
+            presenter.start();
+        }
     }
 
     @Override
@@ -123,13 +128,14 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
 
     @Override
     public void launchHomeScreen() {
-        PrefManager prefManager = new PrefManager(this);
-        prefManager.setIsUserSignedUp(true);
-        startActivity(new Intent(SignupActivity.this, MainActivity.class));
+        Intent signUp = new Intent(SignupActivity.this, MainActivity.class);
+        Bundle bundle = ActivityOptionsCompat.makeCustomAnimation(this,
+                android.R.anim.fade_in, android.R.anim.fade_out).toBundle();
+        startActivity(signUp, bundle);
         finish();
     }
 
-    public void launchSignupScreen() {
+    public void launchLoginScreen() {
         Intent signUp = new Intent(SignupActivity.this, LoginActivity.class);
         Bundle bundle = ActivityOptionsCompat.makeCustomAnimation(this,
                 android.R.anim.fade_in, android.R.anim.fade_out).toBundle();
@@ -385,6 +391,9 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
                 statusText.setText("");
                 if (!signUpConfirmationState) { // User confirming via email code
                     AlertDialog.Builder builder = new AlertDialog.Builder(SignupActivity.this);
+                    userSignedUp = true;
+
+                    // TODO Have button go to default user email app instead
                     builder.setCancelable(true);
                     builder.setTitle("Account Created");
                     builder.setMessage("Almost there! A confirmation email has been sent to "+email+ ".");
@@ -392,11 +401,11 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             alertView.setVisibility(View.VISIBLE);
-                            launchSignupScreen();
+                            launchLoginScreen();
                         }
                     });
                     builder.show(); }
-                else {} // TODO Display message "you already have an account"
+                else launchHomeScreen();
             }
 
             @Override
