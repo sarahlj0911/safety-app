@@ -27,7 +27,7 @@ public class DataExtractor {
         QuestionDao questionDao = db.questionDao();
         List<Response> items = responseDao.getAllActionItems(1);
         String [] titleStrings;
-        Stack info = new Stack;
+        Stack info = new Stack();
 
         for (Response actionItem : items) {
             int locationId = actionItem.getLocationId();
@@ -42,7 +42,7 @@ public class DataExtractor {
 
             String title = question.getShortDesc();
             actionItem.setTitle(title);
-            info.push(title)
+            info.push(title);
 
         }
 
