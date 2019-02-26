@@ -18,7 +18,7 @@ public class DataExtractor {
     private AppDatabase db;
     //ActionItemPresenter presenter = new ActionItemPresenter();
 
-    public List<Response> getlist(){
+    public Stack<Response> getlist(){
         db = AppDatabase.getAppDatabase(MyApplication.getAppContext());
 
 
@@ -34,15 +34,15 @@ public class DataExtractor {
             Location location = locationDao.getByLocationId(locationId);
             actionItem.setLocationName(location.getName());
 
-            info.push(actionItem.getTitle());
+            info.push(actionItem.getTitle().toString());
             int questionId = actionItem.getQuestionId();
 
             Question question = questionDao.getByQuestionID(questionId);
-            info.push(question.getShortDesc());
+            info.push(question.getShortDesc().toString());
 
             String title = question.getShortDesc();
             actionItem.setTitle(title);
-            info.push(title);
+            info.push(title.toString());
 
         }
 

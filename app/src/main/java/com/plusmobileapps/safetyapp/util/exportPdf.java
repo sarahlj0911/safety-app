@@ -20,11 +20,13 @@ import com.plusmobileapps.safetyapp.data.entity.Response;
 import org.w3c.dom.Document;
 
 import java.util.List;
+import java.util.Stack;
 
 public class exportPdf extends AppCompatActivity {
     protected CheckBox ActionItembox;
     protected CheckBox WalkthroughCommentsbox;
     protected CheckBox Picsbox;
+    PdfDocument document = new PdfDocument();
     public DataExtractor extractor = new DataExtractor();
     String Results = "";
 
@@ -32,7 +34,7 @@ public class exportPdf extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        PdfDocument document = new PdfDocument();
+
         //PdfDocument.PageInfo pageInfo = new PdfDocument.PageInfo.Builder(new Rect(0, 0, 100, 100), 1).create();
 
         //PdfDocument.Page page = document.startPage(pageInfo);
@@ -50,7 +52,17 @@ public class exportPdf extends AppCompatActivity {
 
 
     public void export(){
-        //Results = extractor.getlist();
+        Stack actionItemsStack = new Stack();
+        actionItemsStack = extractor.getlist();
+        //add to global pdf class
+        String nextItem = "";
+        while(!actionItemsStack.empty()){
+            nextItem = actionItemsStack.pop();
+
+            //Todo
+            //write to local file
+            document.writeTo();
+        }
 
 
     }
