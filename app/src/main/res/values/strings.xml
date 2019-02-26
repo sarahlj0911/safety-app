@@ -171,6 +171,7 @@
     <string name="authorization_code_des">You still need to verify your account. Please enter the code that was previously emailed to you.</string>
     <string name="code_listener_button_confirm">CONFIRM</string>
     <string name="code_authorization_confirmed">confirmed</string>
+    <string name="user_not_found">User not found</string>
 
 </resources>
 

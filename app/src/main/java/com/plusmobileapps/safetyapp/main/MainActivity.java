@@ -329,8 +329,8 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
 
             case R.id.settings_menu_remove:
                 //settings selected
-                Intent remove_user = new Intent(this, AdminSettings.class);
-                //startActivity(remove_user);
+                Intent remove_user = new Intent(this, removeUser.class);
+                startActivity(remove_user);
                 break;
         }
 
