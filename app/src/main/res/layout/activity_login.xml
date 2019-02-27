@@ -71,16 +71,17 @@
 
         <EditText
             android:id="@+id/fieldEmail"
-            android:layout_width="304dp"
-            android:layout_height="51dp"
+            android:layout_width="305dp"
+            android:layout_height="50dp"
+            android:backgroundTint="@android:color/white"
             android:ems="10"
             android:hint="@string/login_field_email_placeholder"
             android:importantForAutofill="no"
             android:inputType="textEmailAddress"
+            android:nextFocusDown="@+id/fieldPassword"
             android:selectAllOnFocus="false"
             android:singleLine="true"
             android:textColor="@android:color/white"
-            android:backgroundTint="@android:color/white"
             tools:ignore="UnusedAttribute"
             tools:layout_editor_absoluteX="66dp"
             tools:layout_editor_absoluteY="317dp" />
@@ -94,8 +95,6 @@
         android:layout_marginTop="10dp"
         android:layout_marginEnd="20dp"
         android:layout_marginBottom="50dp"
-        android:focusable="true"
-        android:focusableInTouchMode="true"
         android:textColorHint="@android:color/white"
         android:theme="@style/InputLayoutFieldMain"
         app:errorTextAppearance="@style/error_appearance"
@@ -108,8 +107,8 @@
 
         <EditText
             android:id="@+id/fieldPassword"
-            android:layout_width="308dp"
-            android:layout_height="44dp"
+            android:layout_width="305dp"
+            android:layout_height="50dp"
             android:backgroundTint="@android:color/white"
             android:ems="10"
             android:hint="@string/Login_field_password_placeholder"

@@ -45,6 +45,8 @@ public interface SignupContract {
 
         void passwordTextAdded();
 
+        void passwordCheckTextAdded();
+
         void schoolNameTextAdded();
     }
 }

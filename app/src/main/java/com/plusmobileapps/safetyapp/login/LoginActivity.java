@@ -102,8 +102,6 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         emailInput = findViewById(R.id.fieldEmail);
         passwordInput = findViewById(R.id.fieldPassword);
 
-        emailInput.setNextFocusDownId(R.id.fieldPassword);
-
         Objects.requireNonNull(emailField.getEditText()).addTextChangedListener(emailListener);
         Objects.requireNonNull(passwordField.getEditText()).addTextChangedListener(passwordListener);
         codeInput.addTextChangedListener(codeListener);
@@ -206,14 +204,13 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
 
         @Override
         public void authenticationChallenge(ChallengeContinuation continuation) {
-            Log.d(TAG, "AWS Sign-in Failure: " +continuation.getChallengeName());
+            Log.d(TAG, "AWS Sign-in Challenge: " +continuation.getChallengeName());
             if (continuation.getChallengeName().contains("NEW_PASSWORD_REQUIRED")) {
                 user = userPool.getUser(email);
                 buttonLoginStatus.setText(getString(R.string.login_button_error_verify));
                 buttonLoginStatus.setClickable(true);
                 showCodeView = true; }
             else {
-                Log.d(TAG, "AWS Sign-in Failure: " +continuation.getChallengeName());
                 buttonLoginStatus.setText(getString(R.string.login_button_error_aws_user_exists));
                 handler.postDelayed(failureAnimation, 2000);
                 handler.postDelayed(resetButton, 5000);
@@ -225,22 +222,52 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
             String ex = exception.toString();
             Log.d(TAG, "AWS Sign-in Failure: " +ex);
             if (ex.toLowerCase().contains("usernotfoundexception")) {
-                buttonLoginStatus.setText(getString(R.string.login_button_user_not_found)); }
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        buttonLoginStatus.setText(getString(R.string.login_button_user_not_found)); }
+                    });
+            }
             else if (ex.toLowerCase().contains("notauthorizedexception")) {
-                buttonLoginStatus.setText(String.format("%s\n Reset it?", getString(R.string.login_button_error_aws_user_exists)));
-                buttonLoginStatus.setClickable(true); }
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        buttonLoginStatus.setText(String.format("%s\n Reset it?", getString(R.string.login_button_error_aws_user_exists)));
+                        buttonLoginStatus.setClickable(true); }
+                });
+            }
             else if (ex.toLowerCase().contains("passwordresetrequiredexception")) {
-                buttonLoginStatus.setText(getString(R.string.login_button_error_aws_new_password));
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        buttonLoginStatus.setText(getString(R.string.login_button_error_aws_new_password));}
+                });
             }
             else if (ex.toLowerCase().contains("usernotconfirmedexception")) {
                 user = userPool.getUser(email);
-                buttonLoginStatus.setText(getString(R.string.login_button_error_verify));
-                buttonLoginStatus.setClickable(true);
-                showCodeView = true; }
-            else if (ex.toLowerCase().contains("unable to resolve host")) {
-                buttonLoginStatus.setText(getString(R.string.login_button_error_AWS_connection_issue));
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        buttonLoginStatus.setText(getString(R.string.login_button_error_verify));
+                        buttonLoginStatus.setClickable(false);
+                        buttonLoginStatus.setClickable(true);
+                        showCodeView = true; }
+                });
             }
-            else buttonLoginStatus.setText(String.format("%s%s", getString(R.string.login_button_error_aws_error), exception));
+            else if (ex.toLowerCase().contains("unable to resolve host")) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        buttonLoginStatus.setText(getString(R.string.login_button_error_AWS_connection_issue)); }
+                });
+            }
+            else {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        buttonLoginStatus.setText(R.string.login_button_error_aws_error); }
+                });
+            }
             handler.postDelayed(failureAnimation, 2000);
             handler.postDelayed(resetButton, 5000); }
     };
@@ -444,7 +471,6 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
     /**
      * Hides the keyboard
      * REF: https://stackoverflow.com/questions/1109022/close-hide-the-android-soft-keyboard#
-     * Added by Jeremy Powell 1/24/2019
      */
     private void hideKeyboard(View v) {
         if (v != null) {

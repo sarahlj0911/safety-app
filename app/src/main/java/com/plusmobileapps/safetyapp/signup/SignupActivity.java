@@ -93,6 +93,7 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
         Objects.requireNonNull(nameInput.getEditText()).addTextChangedListener(nameListener);
         Objects.requireNonNull(emailInput.getEditText()).addTextChangedListener(emailListener);
         Objects.requireNonNull(passwordInput.getEditText()).addTextChangedListener(passwordListener);
+        Objects.requireNonNull(passwordCheckInput.getEditText()).addTextChangedListener(passwordCheckListener);
 
         statusText.setText("");
         ArrayAdapter adapter = ArrayAdapter.createFromResource(this, R.array.signup_roles, R.layout.activity_signup_spinner);
@@ -220,6 +221,7 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
 
             Boolean inputReady = presenter.processFormInput(formInput);
 
+            school = ""; // TODO delete when school is implemented
             if (inputReady) { // Call AWS
                 userAttributes.addAttribute("name", name);
                 userAttributes.addAttribute("email", email);
@@ -316,6 +318,18 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
         @Override
         public void onTextChanged(CharSequence s, int start, int before, int count) {
             presenter.passwordTextAdded(); }
+
+        @Override
+        public void afterTextChanged(Editable s) { }
+    };
+
+    private TextWatcher passwordCheckListener = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+            presenter.passwordCheckTextAdded(); }
 
         @Override
         public void afterTextChanged(Editable s) { }

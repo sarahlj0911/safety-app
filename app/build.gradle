@@ -34,6 +34,7 @@ android {
     productFlavors {
     }
 }
+apply plugin: 'com.amazonaws.appsync'
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
@@ -68,10 +69,10 @@ dependencies {
     implementation('com.amazonaws:aws-android-sdk-auth-ui:2.7.+@aar') { transitive = true }
 
     //Base SDK
-    implementation 'com.amazonaws:aws-android-sdk-core:2.11.+'
+    implementation 'com.amazonaws:aws-android-sdk-core:2.+'
 
     //AppSync SDK
-    implementation 'com.amazonaws:aws-android-sdk-appsync:2.7.+'
+    implementation 'com.amazonaws:aws-android-sdk-appsync:2.+'
     implementation 'org.eclipse.paho:org.eclipse.paho.client.mqttv3:1.2.0'
     implementation 'org.eclipse.paho:org.eclipse.paho.android.service:1.1.1'
 

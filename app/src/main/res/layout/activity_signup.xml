@@ -60,6 +60,7 @@
             android:inputType="text"
             android:singleLine="true"
             android:textColor="@android:color/white"
+            android:nextFocusDown="@+id/fieldEmail"
             tools:targetApi="o" />
 
     </android.support.design.widget.TextInputLayout>
@@ -72,8 +73,6 @@
         android:layout_centerInParent="true"
         android:layout_marginTop="8dp"
         android:textColorHint="@android:color/white"
-        android:focusable="true"
-        android:focusableInTouchMode="true"
         android:theme="@style/InputLayoutFieldMain"
         app:errorTextAppearance="@style/error_appearance">
 
@@ -88,6 +87,7 @@
             android:inputType="textEmailAddress"
             android:singleLine="true"
             android:textColor="@android:color/white"
+            android:nextFocusDown="@+id/fieldPassword"
             tools:targetApi="o" />
 
     </android.support.design.widget.TextInputLayout>
@@ -99,8 +99,6 @@
         android:layout_below="@+id/signup_email"
         android:layout_centerInParent="true"
         android:layout_marginTop="8dp"
-        android:focusable="true"
-        android:focusableInTouchMode="true"
         android:textColorHint="@android:color/white"
         android:theme="@style/InputLayoutFieldMain"
         app:errorTextAppearance="@style/error_appearance">
@@ -117,6 +115,7 @@
             android:selectAllOnFocus="true"
             android:singleLine="true"
             android:textColor="@android:color/white"
+            android:nextFocusDown="@+id/fieldPasswordCheck"
             tools:targetApi="o" />
 
     </android.support.design.widget.TextInputLayout>
@@ -128,8 +127,6 @@
         android:layout_below="@+id/signup_password"
         android:layout_centerInParent="true"
         android:layout_marginTop="8dp"
-        android:focusable="true"
-        android:focusableInTouchMode="true"
         android:imeOptions="actionDone"
         android:textColorHint="@android:color/white"
         android:theme="@style/InputLayoutFieldMain"
