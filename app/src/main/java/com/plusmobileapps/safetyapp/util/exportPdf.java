@@ -57,11 +57,11 @@ public class exportPdf extends AppCompatActivity {
         //add to global pdf class
         String nextItem = "";
         while(!actionItemsStack.empty()){
-            nextItem = actionItemsStack.pop();
+            nextItem = (String) actionItemsStack.pop();
 
             //Todo
             //write to local file
-            document.writeTo();
+            //document.writeTo();
         }
 
 
