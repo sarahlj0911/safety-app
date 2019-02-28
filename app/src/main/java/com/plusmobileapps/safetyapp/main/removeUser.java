@@ -2,6 +2,7 @@ package com.plusmobileapps.safetyapp.main;
 
 
 import android.content.Context;
+import android.os.AsyncTask;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -49,22 +50,34 @@ public class removeUser extends AppCompatActivity {
                 awsServices = new AwsServices();
                 initAWSUserPool();
 
-                CognitoUser user = userPool.getUser("bskyl@asu.edu");
-
-
-
-                GetDetailsHandler handler = new GetDetailsHandler() {
+                AsyncTask.execute(new Runnable() {
                     @Override
-                    public void onSuccess(final CognitoUserDetails list) {
-                        Log.d("finduser", "Successfully retrieved user details");
-                    }
+                    public void run() {
+                        CognitoUser user = userPool.getUser("bskoczyl@asu.edu");
 
-                    @Override
-                    public void onFailure(final Exception exception) {
-                        Log.d("finduser", "Failed to retrieve the user details, probe exception for the cause");
+                        GetDetailsHandler handler = new GetDetailsHandler() {
+                            @Override
+                            public void onSuccess(final CognitoUserDetails list) {
+                                Log.d("finduser", "Successfully retrieved user details");
+                            }
+
+                            @Override
+                            public void onFailure(final Exception exception) {
+                                Log.d("finduser", "Failed to retrieve the user details, probe exception for the cause/n"+exception);
+
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        //Update UI.
+                                        Snackbar mySnackbar = Snackbar.make(view, R.string.user_not_found, Snackbar.LENGTH_SHORT);
+                                        mySnackbar.show();
+                                    }
+                                });
+                            }
+                        };
+                        user.getDetails(handler);
                     }
-                };
-                user.getDetails(handler);
+                });
 
                 /*GenericHandler handler = new GenericHandler() {
 
@@ -80,9 +93,6 @@ public class removeUser extends AppCompatActivity {
                 };
                 user.deleteUser(handler);*/
 
-
-                Snackbar mySnackbar = Snackbar.make(view, R.string.user_not_found, Snackbar.LENGTH_SHORT);
-                mySnackbar.show();
             }
         });
     }
