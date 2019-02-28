@@ -26,6 +26,35 @@ public class DataExtractor {
 
 
     }
+    public DataExtractor(){
+        db = AppDatabase.getAppDatabase(MyApplication.getAppContext());
+
+
+        ResponseDao responseDao = db.responseDao();
+        LocationDao locationDao = db.locationDao();
+        QuestionDao questionDao = db.questionDao();
+        List<Response> items = responseDao.getAllActionItems(1);
+        String [] titleStrings;
+
+
+        for (Response actionItem : items) {
+            int locationId = actionItem.getLocationId();
+            Location location = locationDao.getByLocationId(locationId);
+            actionItem.setLocationName(location.getName());
+
+            info.push(actionItem.getTitle().toString());
+            int questionId = actionItem.getQuestionId();
+
+            Question question = questionDao.getByQuestionID(questionId);
+            info.push(question.getShortDesc().toString());
+
+            String title = question.getShortDesc();
+            actionItem.setTitle(title);
+            info.push(title.toString());
+
+        }
+
+    }
 
     public void addItem(String value) {
         info.push(value);
