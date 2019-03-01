@@ -80,4 +80,5 @@ dependencies {
     implementation files('/Users/nathan/Documents/GitHub/safety-app/External Jars/poi-ooxml-4.0.1.jar')
     implementation files('/Users/nathan/Documents/GitHub/safety-app/External Jars/poi-ooxml-schemas-4.0.1.jar')
     implementation files('/Users/nathan/Documents/GitHub/safety-app/External Jars/poi-scratchpad-4.0.1.jar')
+    implementation 'com.google.android.gms:play-services-maps:16.1.0'
 }

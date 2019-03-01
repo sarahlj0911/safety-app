@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/textView14"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Title"
+        tools:layout_editor_absoluteX="16dp"
+        tools:layout_editor_absoluteY="28dp" />
+
+    <TextView
+        android:id="@+id/Header"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Header"
+        tools:layout_editor_absoluteX="26dp"
+        tools:layout_editor_absoluteY="107dp" />
+
+    <TextView
+        android:id="@+id/Item"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Item1"
+        tools:layout_editor_absoluteX="37dp"
+        tools:layout_editor_absoluteY="173dp" />
+
+    <TextView
+        android:id="@+id/Subtitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="subtitle"
+        tools:layout_editor_absoluteX="83dp"
+        tools:layout_editor_absoluteY="270dp" />
+
+    <TextView
+        android:id="@+id/subtitle2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Subtitle2"
+        tools:layout_editor_absoluteX="74dp"
+        tools:layout_editor_absoluteY="316dp" />
+
+    <ImageView
+        android:id="@+id/Image1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:layout_editor_absoluteX="16dp"
+        tools:layout_editor_absoluteY="304dp"
+        tools:srcCompat="@tools:sample/backgrounds/scenic" />
+
+    <ScrollView
+        android:id="@+id/scroll1"
+        android:layout_width="321dp"
+        android:layout_height="254dp"
+        tools:layout_editor_absoluteX="82dp"
+        tools:layout_editor_absoluteY="8dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" />
+    </ScrollView>
+
+    <EditText
+        android:id="@+id/time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="date"
+        tools:layout_editor_absoluteX="167dp"
+        tools:layout_editor_absoluteY="289dp" />
+</android.support.constraint.ConstraintLayout>
