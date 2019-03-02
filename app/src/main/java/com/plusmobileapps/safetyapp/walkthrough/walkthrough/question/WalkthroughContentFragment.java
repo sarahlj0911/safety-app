@@ -36,7 +36,9 @@ import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -180,8 +182,9 @@ public class WalkthroughContentFragment extends Fragment
         actionPlanLabel.setText(savedInstanceState.getString("actionPlan"));
 
         descriptionTextView.setText(savedInstanceState.getString("description"));
+        dateTextView.setText(savedInstanceState.getString("date"));
 
-        //TODO Location, Date, Map, General Location, School Name
+        //TODO Location, Map, General Location, School Name
 
         return view;
     }
@@ -240,10 +243,8 @@ public class WalkthroughContentFragment extends Fragment
         savedInstanceState.putString("description", description);
         savedInstanceState.putStringArrayList("options", options);
         savedInstanceState.putInt("rating", currentRating);
-        //Date curDate = new Date();
-        //int month = curDate.;
 
-        //savedInstanceState.putString("date", Calendar.getInstance().);
+        savedInstanceState.putString("date", new SimpleDateFormat("MM/dd/yyyy").format(new Date()));
 
         if (priority != null) {
             savedInstanceState.putString("priority", priority.toString());
