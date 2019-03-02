@@ -62,9 +62,7 @@ public class WalkthroughContentFragment extends Fragment
     private View priorityRed;
     private View priorityYellow;
     private View priorityGreen;
-    private View priorityRedSelected;
-    private View priorityYellowSelected;
-    private View priorityGreenSelected;
+    private Button saveButton;
     private TextView actionPlanLabel;
     private EditText actionPlanEditText;
     private String actionPlan;
@@ -101,7 +99,7 @@ public class WalkthroughContentFragment extends Fragment
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         packageManager = this.getActivity().getPackageManager();
-        View view = inflater.inflate(R.layout.fragment_walkthrough_question, container, false);
+        View view = inflater.inflate(R.layout.activity_new_action, container, false);
         String walkthroughJsonObject = getArguments().getString("walkthroughQuestion");
 
 
@@ -147,19 +145,16 @@ public class WalkthroughContentFragment extends Fragment
     }
 
     private void initViews(View view) {
-        descriptionTextView = view.findViewById(R.id.question_description);
-        actionPlanLabel = view.findViewById(R.id.title_action_plan);
-        actionPlanEditText = view.findViewById(R.id.actionPlanEditText);
-        priorityRed = view.findViewById(R.id.priority_btn_red);
+        descriptionTextView = view.findViewById(R.id.fieldDesc);
+        actionPlanLabel = view.findViewById(R.id.fieldTitle);
+        actionPlanEditText = view.findViewById(R.id.fieldTitle);
+        priorityRed = view.findViewById(R.id.highPriorityButton);
         priorityRed.setOnClickListener(this);
-        priorityYellow = view.findViewById(R.id.priority_btn_yellow);
+        priorityYellow = view.findViewById(R.id.mediumPriorityButton);
         priorityYellow.setOnClickListener(this);
-        priorityGreen = view.findViewById(R.id.priority_btn_green);
+        priorityGreen = view.findViewById(R.id.lowPriorityButton);
         priorityGreen.setOnClickListener(this);
-        priorityRedSelected = view.findViewById(R.id.priority_btn_red_selected);
-        priorityYellowSelected = view.findViewById(R.id.priority_btn_yellow_selected);
-        priorityGreenSelected = view.findViewById(R.id.priority_btn_green_selected);
-        cameraButton = view.findViewById(R.id.button_take_photo);
+        cameraButton = view.findViewById(R.id.picButton);
     }
 
     @Override
