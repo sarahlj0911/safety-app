@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -63,6 +64,7 @@ public class WalkthroughContentFragment extends Fragment
     private View priorityYellow;
     private View priorityGreen;
     private View saveButton;
+    private View statusBar;
     private TextView actionPlanLabel;
     private EditText actionPlanEditText;
     private String actionPlan;
@@ -102,7 +104,13 @@ public class WalkthroughContentFragment extends Fragment
         View view;
         if(savedInstanceState != null)
         {
-            view = null; //TODO Saved stuff
+            view = inflater.inflate(R.layout.activity_saved_action, container, false);
+            String walkthroughJsonObject = getArguments().getString("walkthroughQuestion");
+
+
+            walkthroughQuestion = new Gson().fromJson(walkthroughJsonObject, Question.class);
+            initSavedViews(view);
+            generateSavedView(view, walkthroughQuestion, savedInstanceState);
         }
         else
         {
@@ -141,6 +149,32 @@ public class WalkthroughContentFragment extends Fragment
         return view;
     }
 
+    private View generateSavedView(View view, Question question, Bundle savedInstanceState) {
+
+        statusBar = view.findViewById(R.id.statusBar);
+
+        String temp = savedInstanceState.getString("priority");
+
+        if(temp.equalsIgnoreCase("HIGH"))
+        {
+            statusBar.setBackgroundColor(Color.parseColor("FFF44336"));
+        }
+        else if (temp.equalsIgnoreCase("MEDIUM"))
+        {
+            statusBar.setBackgroundColor(Color.parseColor("FFFFEB3B"));
+        }
+        else
+        {
+            statusBar.setBackgroundColor(Color.parseColor("FF4CAF50"));
+        }
+
+        //TODO more saved info generated
+
+        descriptionTextView.setText(question.getQuestionText());
+
+        return view;
+    }
+
     private RadioButton generateRadioButton(String content, Rating id) {
         RadioButton radioButton = (RadioButton) getLayoutInflater().inflate(R.layout.radio_button, null);
         radioButton.setId(id.ordinal());
@@ -166,6 +200,12 @@ public class WalkthroughContentFragment extends Fragment
         cameraButton.setOnClickListener(this);
         saveButton = view.findViewById(R.id.saveButton);
         saveButton.setOnClickListener(this);
+    }
+
+    private void initSavedViews(View view) {
+        descriptionTextView = view.findViewById(R.id.finishedDescText);
+        actionPlanLabel = view.findViewById(R.id.finishedTitleText);
+        //TODO more saved values accessed
     }
 
     @Override

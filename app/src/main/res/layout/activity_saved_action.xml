@@ -29,8 +29,8 @@
         android:layout_width="match_parent"
         android:layout_height="20dp"
         android:layout_below="@+id/toolbar"
-        android:contentDescription="Current priority of issue"
-        app:srcCompat="@color/actionItemGreen" />
+        android:background="@color/actionItemGreen"
+        android:contentDescription="Current priority of issue" />
 
     <ImageView
         android:id="@+id/picPlaceholder"
