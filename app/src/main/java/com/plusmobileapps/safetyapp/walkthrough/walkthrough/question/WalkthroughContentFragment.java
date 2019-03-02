@@ -99,18 +99,26 @@ public class WalkthroughContentFragment extends Fragment
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         packageManager = this.getActivity().getPackageManager();
-        View view = inflater.inflate(R.layout.activity_new_action, container, false);
-        String walkthroughJsonObject = getArguments().getString("walkthroughQuestion");
+        View view;
+        if(savedInstanceState != null)
+        {
+            view = null; //TODO Saved stuff
+        }
+        else
+        {
+            view = inflater.inflate(R.layout.activity_new_action, container, false);
+            String walkthroughJsonObject = getArguments().getString("walkthroughQuestion");
 
 
-        walkthroughQuestion = new Gson().fromJson(walkthroughJsonObject, Question.class);
-        initViews(view);
-        generateQuestionView(view, walkthroughQuestion);
+            walkthroughQuestion = new Gson().fromJson(walkthroughJsonObject, Question.class);
+            initViews(view);
+            generateQuestionView(view, walkthroughQuestion);
 
-        if (packageManager.hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
-            cameraButton.setOnClickListener(this);
-        } else {
-            cameraButton.setVisibility(View.GONE);
+            if (packageManager.hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
+                cameraButton.setOnClickListener(this);
+            } else {
+                cameraButton.setVisibility(View.GONE);
+            }
         }
 
         return view;
