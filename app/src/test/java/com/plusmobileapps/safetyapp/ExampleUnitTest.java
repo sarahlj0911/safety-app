@@ -1,5 +1,7 @@
 package com.plusmobileapps.safetyapp;
 
+import com.plusmobileapps.safetyapp.util.DataExtractor;
+
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -14,4 +16,21 @@ public class ExampleUnitTest {
     public void addition_isCorrect() {
         assertEquals(4, 2 + 2);
     }
+
+    @Test
+    public void extractor(){
+        DataExtractor extractor = new DataExtractor("New Item",1);
+        String First = "Hello";
+        String Second = "second";
+        extractor.addItem(First);
+        extractor.addItem(Second);
+        String testString =extractor.getItem();
+        String nextTestitme = extractor.getItem();
+
+        assertTrue(First.equals(nextTestitme) );
+        assertTrue(Second.equals(testString) );
+
+    }
+
+
 }

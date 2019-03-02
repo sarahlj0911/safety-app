@@ -26,6 +26,9 @@ public class DataExtractor {
 
 
     }
+    public void Addnewitem(String NewItem){
+        info.push(value);
+    }
     public DataExtractor(){
         db = AppDatabase.getAppDatabase(MyApplication.getAppContext());
 
