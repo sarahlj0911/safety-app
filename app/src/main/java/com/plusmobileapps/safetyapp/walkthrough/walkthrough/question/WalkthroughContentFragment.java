@@ -62,7 +62,7 @@ public class WalkthroughContentFragment extends Fragment
     private View priorityRed;
     private View priorityYellow;
     private View priorityGreen;
-    private Button saveButton;
+    private View saveButton;
     private TextView actionPlanLabel;
     private EditText actionPlanEditText;
     private String actionPlan;
@@ -117,7 +117,7 @@ public class WalkthroughContentFragment extends Fragment
     }
 
     private View generateQuestionView(View view, Question question) {
-        radioGroup = view.findViewById(R.id.radioGroup);
+        radioGroup = view.findViewById(R.id.walkthroughStatus);
         radioGroup.setOnCheckedChangeListener(ratingChangeListener);
         radioGroup.addView(generateRadioButton(question.getRatingOption1(), Rating.OPTION1));
         radioGroup.addView(generateRadioButton(question.getRatingOption2(), Rating.OPTION2));
@@ -155,6 +155,9 @@ public class WalkthroughContentFragment extends Fragment
         priorityGreen = view.findViewById(R.id.lowPriorityButton);
         priorityGreen.setOnClickListener(this);
         cameraButton = view.findViewById(R.id.picButton);
+        cameraButton.setOnClickListener(this);
+        saveButton = view.findViewById(R.id.saveButton);
+        saveButton.setOnClickListener(this);
     }
 
     @Override
@@ -190,6 +193,7 @@ public class WalkthroughContentFragment extends Fragment
         radioGroup.check(rating);
     }
 
+    /*
     @Override
     public void showPriority(Priority priority) {
         switch (priority) {
@@ -222,6 +226,7 @@ public class WalkthroughContentFragment extends Fragment
                 break;
         }
     }
+    */
 
     @Override
     public void showActionPlan(String actionPlan) {
@@ -320,7 +325,7 @@ public class WalkthroughContentFragment extends Fragment
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.button_take_photo:
+            case R.id.picButton:
                 Log.d(TAG, "Taking a photo...");
                 Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
@@ -347,22 +352,25 @@ public class WalkthroughContentFragment extends Fragment
                     }
                 }
                 break;
-            case R.id.priority_btn_red:
+            case R.id.highPriorityButton:
                 priority = Priority.HIGH;
                 presenter.priorityClicked(priority);
                 currentPriority = Priority.HIGH.ordinal();
                 response.setIsActionItem(1);
                 break;
-            case R.id.priority_btn_yellow:
+            case R.id.mediumPriorityButton:
                 priority = Priority.MEDIUM;
                 presenter.priorityClicked(priority);
                 currentPriority = Priority.MEDIUM.ordinal();
                 response.setIsActionItem(1);
                 break;
-            case R.id.priority_btn_green:
+            case R.id.lowPriorityButton:
                 priority = Priority.NONE;
                 presenter.priorityClicked(priority);
                 currentPriority = Priority.NONE.ordinal();
+                break;
+            case R.id.saveButton:
+                //TODO Save things here
                 break;
             default:
                 break;
