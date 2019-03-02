@@ -133,6 +133,7 @@
     <string name="new_ticket">New Ticket</string>
     <string name="enter_your_email">Enter your email:</string>
     <string name="submit">Submit</string>
+    <string name="recovery_email_was_sent_enter_the_recovery_code_below">Recovery email was sent. Enter the recovery code below</string>
     <string-array name="userArray">
 
         <item>User1</item>
