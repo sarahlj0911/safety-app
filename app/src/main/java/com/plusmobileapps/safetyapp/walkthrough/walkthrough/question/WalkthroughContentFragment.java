@@ -193,6 +193,11 @@ public class WalkthroughContentFragment extends Fragment
         radioGroup.check(rating);
     }
 
+    @Override
+    public void showPriority(Priority priority) {
+        //TODO Saved action plan settings
+    }
+
     /*
     @Override
     public void showPriority(Priority priority) {
