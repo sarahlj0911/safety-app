@@ -55,6 +55,10 @@ public class WalkthroughContentFragment extends Fragment
     private Question walkthroughQuestion;
     private Response response = new Response();
     private TextView descriptionTextView;
+    private TextView dateTextView;
+    private TextView locationTextView;
+    private TextView schoolName;
+    private TextView genLoc;
     private String description;
     private ImageButton cameraButton;
     private ArrayList<String> options = new ArrayList<>();
@@ -65,6 +69,9 @@ public class WalkthroughContentFragment extends Fragment
     private View priorityGreen;
     private View saveButton;
     private View statusBar;
+    private View editButton;
+    private View mapPic;
+    private View picDisplay;
     private TextView actionPlanLabel;
     private EditText actionPlanEditText;
     private String actionPlan;
@@ -168,9 +175,13 @@ public class WalkthroughContentFragment extends Fragment
             statusBar.setBackgroundColor(Color.parseColor("FF4CAF50"));
         }
 
-        //TODO more saved info generated
+        //picDisplay.setBackground(savedInstanceState.getString("photoPath"));
 
-        descriptionTextView.setText(question.getQuestionText());
+        actionPlanLabel.setText(savedInstanceState.getString("actionPlan"));
+
+        descriptionTextView.setText(savedInstanceState.getString("description"));
+
+        //TODO Location, Date, Map, General Location, School Name
 
         return view;
     }
@@ -205,7 +216,14 @@ public class WalkthroughContentFragment extends Fragment
     private void initSavedViews(View view) {
         descriptionTextView = view.findViewById(R.id.finishedDescText);
         actionPlanLabel = view.findViewById(R.id.finishedTitleText);
-        //TODO more saved values accessed
+        dateTextView = view.findViewById(R.id.actionDateText);
+        locationTextView = view.findViewById(R.id.actionLocationText);
+        schoolName = view.findViewById(R.id.schoolNameText);
+        genLoc = view.findViewById(R.id.genLocationText);
+        mapPic = view.findViewById(R.id.schoolMap);
+        picDisplay = view.findViewById(R.id.picPlaceholder);
+        editButton = view.findViewById(R.id.editSavedWalkthroughButton);
+        editButton.setOnClickListener(this);
     }
 
     @Override
@@ -222,6 +240,10 @@ public class WalkthroughContentFragment extends Fragment
         savedInstanceState.putString("description", description);
         savedInstanceState.putStringArrayList("options", options);
         savedInstanceState.putInt("rating", currentRating);
+        //Date curDate = new Date();
+        //int month = curDate.;
+
+        //savedInstanceState.putString("date", Calendar.getInstance().);
 
         if (priority != null) {
             savedInstanceState.putString("priority", priority.toString());
