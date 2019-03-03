@@ -232,6 +232,7 @@
         android:textColor="@android:color/white"
         android:textStyle="bold" />
 
+
     <Button
         android:id="@+id/button_save_signup"
         android:layout_width="300dp"
@@ -239,7 +240,12 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="70dp"
-        android:text="@string/btn_signup" />
+        android:text="@string/btn_signup"
+        android:textColor="@color/button_verification_text"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:background="@android:color/transparent"
+        />
 
     <TextView
         android:id="@+id/alertView"
