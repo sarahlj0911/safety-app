@@ -12,6 +12,7 @@ public class AdminNewTicketActivity extends AppCompatActivity {
 
     Button b1;
 
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 

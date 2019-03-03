@@ -42,7 +42,6 @@ import com.plusmobileapps.safetyapp.walkthrough.landing.WalkthroughLandingPresen
 
 
 import com.amazonaws.mobile.client.AWSMobileClient;
-
 public class MainActivity extends AppCompatActivity implements MainActivityContract.View {
     private static final String TAG = "MainActivity";
     private TextView mTextMessage;
