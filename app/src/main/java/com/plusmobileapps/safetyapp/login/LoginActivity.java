@@ -136,6 +136,11 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         }
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        loginButton.dispose();
+    }
 
     public void displayInvalidEmailError(boolean show) {
         emailField.setError(getString(R.string.error_email_invalid));

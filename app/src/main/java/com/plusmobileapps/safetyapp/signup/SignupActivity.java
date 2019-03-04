@@ -39,6 +39,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
 
+import br.com.simplepass.loading_button_lib.customViews.CircularProgressButton;
+
 
 public class SignupActivity extends AppCompatActivity implements SignupContract.View, SignupDownloadCallback {
 
@@ -47,6 +49,7 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
     private TextInputLayout nameInput, emailInput, passwordInput, passwordCheckInput, InputschoolNameInput;
     private TextView statusText, alertView;
     private Spinner schoolSpinner, roleSpinner;
+    private CircularProgressButton signUpButton;
     private ArrayList<String> schoolList;
     private ArrayAdapter<String> schoolSpinnerList;
     private EditText newSchool, nameField, emailField, passwordField;
@@ -67,8 +70,6 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_signup);
         presenter = new SignupPresenter(this);
-        Button saveSignupBtn = findViewById(R.id.button_save_signup);
-        saveSignupBtn.setOnClickListener(saveSignupClickListener);
 
         schoolDownloadFragment = SchoolDownloadFragment.getInstance(getFragmentManager());
         schoolDownloadFragment.setCallback(this);
@@ -77,6 +78,9 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
         schoolSpinner = findViewById(R.id.spinner_signup_school_name);
         roleSpinner = findViewById(R.id.spinner_signup_role);
         newSchool = findViewById(R.id.new_school_text_box);
+        signUpButton = findViewById(R.id.button_save_signup);
+        signUpButton.setOnClickListener(saveSignupClickListener);
+        signUpButton.setBackgroundResource(R.drawable.login_button_ripple);
 
         nameInput = findViewById(R.id.signup_name);
         emailInput = findViewById(R.id.signup_email);
@@ -114,6 +118,12 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
             downloadSchools();
             presenter.start();
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        signUpButton.dispose();
     }
 
     @Override

@@ -189,20 +189,20 @@
         android:layout_height="55dp"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
-        android:layout_marginBottom="80dp"
+        android:layout_marginBottom="90dp"
         android:background="@drawable/login_button_ripple"
         android:onClick="buttonLogInClicked"
+        android:stateListAnimator="@null"
         android:text="@string/button_login"
         android:textAlignment="center"
         android:textColor="@drawable/login_button_text"
         android:textSize="18sp"
         android:textStyle="bold"
-        android:stateListAnimator="@null"
-        app:spinning_bar_color="@android:color/white"
-        app:spinning_bar_width="4.5dp"
         app:layout_constraintBottom_toBottomOf="@+id/imageBackground"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:spinning_bar_color="@android:color/white"
+        app:spinning_bar_width="4.5dp" />
 
     <android.support.constraint.ConstraintLayout
         android:id="@+id/codeView"
