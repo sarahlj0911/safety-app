@@ -69,11 +69,12 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
     private EditText emailInput, passwordInput, codeInput;
     private LoginContract.Presenter presenter;
     private CircularProgressButton loginButton;
+    private Handler handler;
+    private int emailCharCount;
 
     // AWS
     private CognitoUserPool userPool;
     private CognitoUser user;
-    private Handler handler;
 
 
     @Override
@@ -110,7 +111,8 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         buttonDismissCodeView.setClickable(false);
         buttonLoginStatus.setClickable(false);
 
-        fadeOutActivity = ActivityOptionsCompat.makeCustomAnimation(this, android.R.anim.fade_in, android.R.anim.fade_out).toBundle();
+        //fadeOutActivity = ActivityOptionsCompat.makeCustomAnimation(this, android.R.anim.fade_in, android.R.anim.fade_out).toBundle();
+        fadeOutActivity = ActivityOptionsCompat.makeCustomAnimation(this, 1, android.R.anim.fade_out).toBundle();
 
         userPool = new AwsServices().initAWSUserPool(this);
     }
@@ -127,13 +129,11 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         networkInfo = connectivityManager.getActiveNetworkInfo();
         if (networkInfo != null && networkInfo.isConnected()) {
             hasInternetConnection = true;
-            buttonLoginStatus.setText("");
-        }
+            buttonLoginStatus.setText(""); }
         else {
             hasInternetConnection = false;
             buttonLoginStatus.setText("You have no internet connection!\nApp services will be unavailable.");
-            Log.e(TAG, "Device does not have an internet connection!");
-        }
+            Log.e(TAG, "Device does not have an internet connection!"); }
     }
 
     @Override
@@ -173,6 +173,9 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
     // Handler: Code Confirmation
     AuthenticationHandler authenticationHandler = new AuthenticationHandler() {
         // Button Animations
+        final Runnable successAnimation = new Runnable() { public void run() {
+            loginButton.doneLoadingAnimation(Color.parseColor("#ffffff"), BitmapFactory.decodeResource(getResources(), R.drawable.login_button_confirmed)); }
+        };
         final Runnable failureAnimation = new Runnable() { public void run() {
             if (showCodeView) { showCodeAuthorizationView(); }
             buttonLoginStatus.setAlpha(1);
@@ -182,9 +185,7 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         final Runnable resetButton = new Runnable() { public void run() {
             loginButton.revertAnimation();
         } };
-        final Runnable successAnimation = new Runnable() { public void run() {
-            loginButton.doneLoadingAnimation(Color.parseColor("#ffffff"), BitmapFactory.decodeResource(getResources(), R.drawable.login_button_confirmed)); }
-        };
+
 
         @Override
         public void onSuccess(CognitoUserSession userSession, CognitoDevice newDevice) {
@@ -212,13 +213,20 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
             Log.d(TAG, "AWS Sign-in Challenge: " +continuation.getChallengeName());
             if (continuation.getChallengeName().contains("NEW_PASSWORD_REQUIRED")) {
                 user = userPool.getUser(email);
-                buttonLoginStatus.setText(getString(R.string.login_button_error_verify));
-                buttonLoginStatus.setClickable(true);
-                showCodeView = true; }
-            else {
-                buttonLoginStatus.setText(getString(R.string.login_button_error_aws_user_exists));
-                handler.postDelayed(failureAnimation, 2000);
-                handler.postDelayed(resetButton, 5000);
+                showCodeView = true;
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        buttonLoginStatus.setText(getString(R.string.login_button_error_verify));
+                        buttonLoginStatus.setClickable(true); }
+                }); }
+            else { runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        buttonLoginStatus.setText(getString(R.string.login_button_error_aws_user_exists));
+                        handler.postDelayed(failureAnimation, 2000);
+                        handler.postDelayed(resetButton, 5000); }
+                });
             }
         }
 
@@ -232,6 +240,14 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
                     public void run() {
                         buttonLoginStatus.setText(getString(R.string.login_button_user_not_found)); }
                     });
+            }
+            else if (ex.toLowerCase().contains("user is disabled")) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        buttonLoginStatus.setText(getString(R.string.aws_login_error_disabled));
+                        buttonLoginStatus.setClickable(true); }
+                });
             }
             else if (ex.toLowerCase().contains("notauthorizedexception")) {
                 runOnUiThread(new Runnable() {
@@ -348,6 +364,9 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
 
         @Override
         public void onTextChanged(CharSequence s, int start, int before, int count) {
+            int charCount = emailInput.getText().length();
+            if (charCount > emailCharCount+1) passwordInput.requestFocus();
+            else emailCharCount = charCount;
             presenter.emailTextAdded(); }
 
         @Override

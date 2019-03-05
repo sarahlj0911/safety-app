@@ -3,9 +3,12 @@ package com.plusmobileapps.safetyapp.signup;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.app.AlertDialog;
@@ -17,7 +20,6 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -28,7 +30,6 @@ import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUserCodeDel
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUserPool;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.handlers.SignUpHandler;
 import com.plusmobileapps.safetyapp.AwsServices;
-import com.plusmobileapps.safetyapp.PrefManager;
 import com.plusmobileapps.safetyapp.R;
 import com.plusmobileapps.safetyapp.login.LoginActivity;
 import com.plusmobileapps.safetyapp.main.MainActivity;
@@ -55,17 +56,20 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
     private EditText newSchool, nameField, emailField, passwordField;
     private boolean schoolExists, userSignedUp = false;
     private SchoolDownloadFragment schoolDownloadFragment;
-    boolean downloading;
     private CognitoUserPool userPool;
     private CognitoUserAttributes userAttributes;
-    private SignUpHandler signupCallback;
-    String email, name;
+    private Handler handler;
+    private Bundle fadeOutActivity;
+    private boolean downloading;
+    private String email, name;
+    private int nameCharCount, emailCharCount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Log.d("Debug"+TAG, "onCreate");
         super.onCreate(savedInstanceState);
         Window w = getWindow();
+        handler = new Handler();
         w.setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION, 2000);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_signup);
@@ -100,12 +104,12 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
         Objects.requireNonNull(passwordCheckInput.getEditText()).addTextChangedListener(passwordCheckListener);
 
         statusText.setText("");
+        fadeOutActivity = ActivityOptionsCompat.makeCustomAnimation(this, 1, android.R.anim.fade_out).toBundle();
         ArrayAdapter adapter = ArrayAdapter.createFromResource(this, R.array.signup_roles, R.layout.activity_signup_spinner);
         adapter.setDropDownViewResource(R.layout.activity_signup_spinner_dropdown);
         roleSpinner.setAdapter(adapter);
 
         userPool = new AwsServices().initAWSUserPool(this);
-        initSignUpHandler();
         userAttributes = new CognitoUserAttributes();
     }
 
@@ -129,7 +133,7 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+        overridePendingTransition(1, android.R.anim.fade_out);
     }
 
     @Override
@@ -140,17 +144,13 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
     @Override
     public void launchHomeScreen() {
         Intent signUp = new Intent(SignupActivity.this, MainActivity.class);
-        Bundle bundle = ActivityOptionsCompat.makeCustomAnimation(this,
-                android.R.anim.fade_in, android.R.anim.fade_out).toBundle();
-        startActivity(signUp, bundle);
+        startActivity(signUp, fadeOutActivity);
         finish();
     }
 
     public void launchLoginScreen() {
         Intent signUp = new Intent(SignupActivity.this, LoginActivity.class);
-        Bundle bundle = ActivityOptionsCompat.makeCustomAnimation(this,
-                android.R.anim.fade_in, android.R.anim.fade_out).toBundle();
-        startActivity(signUp, bundle);
+        startActivity(signUp, fadeOutActivity);
         finish();
     }
 
@@ -199,7 +199,7 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
         @Override
         public void onClick(View v) {
             HashMap<String, String> formInput = new HashMap<>();
-            String school;
+            String school = "";
             statusText.setText("");
             nameInput.clearFocus();
             emailInput.clearFocus();
@@ -209,11 +209,10 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
             if (schoolExists) {
                 Spinner schoolInput = findViewById(R.id.spinner_signup_school_name);
                 school = schoolInput.getSelectedItem().toString();
-                Log.d(TAG, "Chosen School: " + school);
-            } else {
+                Log.d(TAG, "Chosen School: " + school); }
+            else {
                 school = newSchool.getEditableText().toString();
-                Log.d(TAG, "New School: " + school);
-            }
+                Log.d(TAG, "New School: " + school); }
 
             name = Objects.requireNonNull(nameInput.getEditText()).getText().toString();
             email = Objects.requireNonNull(emailInput.getEditText()).getText().toString();
@@ -231,8 +230,8 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
 
             Boolean inputReady = presenter.processFormInput(formInput);
 
-            school = ""; // TODO delete when school is implemented
             if (inputReady) { // Call AWS
+                signUpButton.startAnimation();
                 userAttributes.addAttribute("name", name);
                 userAttributes.addAttribute("email", email);
                 userAttributes.addAttribute("custom:role", role);
@@ -303,6 +302,9 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
 
         @Override
         public void onTextChanged(CharSequence s, int start, int before, int count) {
+            int charCount = nameField.getText().length();
+            if (charCount > nameCharCount+1) emailField.requestFocus();
+            else nameCharCount = charCount;
             presenter.nameTextAdded(); }
 
         @Override
@@ -315,6 +317,9 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
 
         @Override
         public void onTextChanged(CharSequence s, int start, int before, int count) {
+            int charCount = emailField.getText().length();
+            if (charCount > emailCharCount+1) passwordField.requestFocus();
+            else emailCharCount = charCount;
             presenter.emailTextAdded(); }
 
         @Override
@@ -345,7 +350,6 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
         public void afterTextChanged(Editable s) { }
     };
 
-
     private TextWatcher schoolNameListener = new TextWatcher() {
         @Override
         public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
@@ -357,6 +361,7 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
         @Override
         public void afterTextChanged(Editable s) { }
     };
+
 
     private void downloadSchools() {
         if (!downloading && schoolDownloadFragment != null) {
@@ -408,45 +413,65 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
             schoolDownloadFragment.cancelGetSchools(); }
     }
 
-    private void initSignUpHandler(){
-        signupCallback = new SignUpHandler() {
-            @Override
-            public void onSuccess(CognitoUser user, boolean signUpConfirmationState, CognitoUserCodeDeliveryDetails cognitoUserCodeDeliveryDetails) {
-                statusText.setText("");
-                if (!signUpConfirmationState) { // User confirming via email code
-                    AlertDialog.Builder builder = new AlertDialog.Builder(SignupActivity.this);
-                    userSignedUp = true;
-
-                    // TODO Have button go to default user email app instead
-                    builder.setCancelable(true);
-                    builder.setTitle("Account Created");
-                    builder.setMessage("Almost there! A confirmation email has been sent to "+email+ ".");
-                    builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            alertView.setVisibility(View.VISIBLE);
-                            launchLoginScreen();
-                        }
-                    });
-                    builder.show(); }
-                else launchHomeScreen();
-            }
-
-            @Override
-            public void onFailure(Exception exception) {
-                String e = exception.toString();
-                Log.d(TAG, "User sign-up failed: " + e);
-                String error;
-                if (e.toLowerCase().contains("constraint: member")) {
-                    error = "Password must be at least 8 characters";
-                } else if (e.toLowerCase().contains("policy:")) {
-                    error = StringUtils.substringBetween(e, "policy:", " (Service");
-                } else if (e.toLowerCase().contains("usernameexistsexception")) {
-                    error = StringUtils.substringBetween(e, "UsernameExistsException:", " (Service");
-                } else error = getApplicationContext().getString(R.string.status_text, name);
-                statusText.setText(error);
-            }
+    // Handler: Signup User
+    SignUpHandler signupCallback = new SignUpHandler() {
+        // Button Animations
+        final Runnable successAnimation = new Runnable() { public void run() {
+            signUpButton.doneLoadingAnimation(Color.parseColor("#ffffff"), BitmapFactory.decodeResource(getResources(), R.drawable.login_button_confirmed)); }
         };
-    }
+        final Runnable failureAnimation = new Runnable() { public void run() {
+            signUpButton.doneLoadingAnimation(Color.parseColor("#ffffff"), BitmapFactory.decodeResource(getResources(), R.drawable.login_button_failed)); }
+        };
+        final Runnable resetButton = new Runnable() { public void run() {
+            signUpButton.revertAnimation();
+        } };
+        final Runnable waitAndLaunchDialog = new Runnable() { public void run() {
+            AlertDialog.Builder builder = new AlertDialog.Builder(SignupActivity.this);
+            userSignedUp = true;
+
+            builder.setCancelable(true);
+            builder.setTitle("Account Created");
+            builder.setMessage("Almost there! A confirmation email has been sent to " +email+ ".");
+            builder.setPositiveButton("Go To Inbox", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    alertView.setVisibility(View.VISIBLE);
+//                    Intent intent = new Intent(Intent.ACTION_MAIN);
+//                    intent.addCategory(Intent.CATEGORY_APP_EMAIL);
+//                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//                    startActivity(intent);
+                    launchLoginScreen();
+                }
+            });
+            builder.show();
+        } };
+
+        @Override
+        public void onSuccess(CognitoUser user, boolean signUpConfirmationState, CognitoUserCodeDeliveryDetails cognitoUserCodeDeliveryDetails) {
+            statusText.setText("");
+            if (!signUpConfirmationState) { // User confirming via email code
+                handler.postDelayed(successAnimation, 1000);
+                handler.postDelayed(waitAndLaunchDialog, 2000);
+            }
+            else launchHomeScreen();
+        }
+
+        @Override
+        public void onFailure(Exception exception) {
+            String e = exception.toString();
+            Log.d(TAG, "User sign-up failed: " + e);
+            String error;
+            if (e.toLowerCase().contains("constraint: member")) {
+                error = "Password must be at least 8 characters";
+            } else if (e.toLowerCase().contains("policy:")) {
+                error = StringUtils.substringBetween(e, "policy:", " (Service");
+            } else if (e.toLowerCase().contains("usernameexistsexception")) {
+                error = StringUtils.substringBetween(e, "UsernameExistsException:", " (Service");
+            } else error = getApplicationContext().getString(R.string.status_text, name);
+            statusText.setText(error);
+            handler.postDelayed(failureAnimation, 500);
+            handler.postDelayed(resetButton, 3000);
+        }
+    };
 
 }
