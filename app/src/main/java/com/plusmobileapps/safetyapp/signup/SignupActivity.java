@@ -304,7 +304,7 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
         public void onTextChanged(CharSequence s, int start, int before, int count) {
             int charCount = nameField.getText().length();
             if (charCount > nameCharCount+1) emailField.requestFocus();
-            else nameCharCount = charCount;
+            nameCharCount = charCount;
             presenter.nameTextAdded(); }
 
         @Override
@@ -319,7 +319,7 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
         public void onTextChanged(CharSequence s, int start, int before, int count) {
             int charCount = emailField.getText().length();
             if (charCount > emailCharCount+1) passwordField.requestFocus();
-            else emailCharCount = charCount;
+            emailCharCount = charCount;
             presenter.emailTextAdded(); }
 
         @Override

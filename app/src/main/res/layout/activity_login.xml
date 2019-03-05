@@ -333,16 +333,18 @@
                 android:layout_alignParentStart="true"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentBottom="true"
-                android:layout_marginStart="0dp"
-                android:layout_marginTop="5dp"
-                android:layout_marginEnd="0dp"
-                android:layout_marginBottom="0dp"
-                android:background="@drawable/code_confirm_button"
+                android:layout_marginStart="2dp"
+                android:layout_marginEnd="2dp"
+                android:layout_marginBottom="2dp"
+                android:background="@drawable/rounded_button_animation"
                 android:onClick="buttonConfirmCodeClicked"
                 android:text="@string/login_code_button_send_email"
                 android:textColor="@color/button_verification_text"
+                android:clickable="true"
+                android:focusable="true"
                 android:textSize="18sp"
                 android:textStyle="bold" />
+
         </RelativeLayout>
 
     </android.support.constraint.ConstraintLayout>

@@ -366,7 +366,7 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         public void onTextChanged(CharSequence s, int start, int before, int count) {
             int charCount = emailInput.getText().length();
             if (charCount > emailCharCount+1) passwordInput.requestFocus();
-            else emailCharCount = charCount;
+            emailCharCount = charCount;
             presenter.emailTextAdded(); }
 
         @Override
@@ -390,12 +390,17 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
 
         @Override
         public void onTextChanged(CharSequence s, int start, int before, int count) {
-            if (codeInput.length() == 0) codeInput.setTypeface(null, Typeface.NORMAL);
-            else codeInput.setTypeface(null, Typeface.BOLD);
-            codeAuthWindow.setBackgroundResource(R.drawable.code_authorization_view_layout);
-            buttonCode.setTextColor(getColor(R.color.button_verification_text));
-            buttonCode.setBackgroundResource(R.drawable.code_confirm_button);
-            buttonCode.setText(getString(R.string.code_listener_button_confirm)); }
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    if (codeInput.length() == 0) codeInput.setTypeface(null, Typeface.NORMAL);
+                    else codeInput.setTypeface(null, Typeface.BOLD);
+                    codeAuthWindow.setBackgroundResource(R.drawable.code_authorization_view_layout);
+                    buttonCode.setTextColor(getColor(R.color.button_verification_text));
+                    buttonCode.setBackgroundResource(R.drawable.rounded_button_animation);
+                    buttonCode.setText(getString(R.string.code_listener_button_confirm));
+                }
+            }); }
 
         @Override
         public void afterTextChanged(Editable s) { }
