@@ -247,12 +247,17 @@
             android:layout_height="250dp"
             android:layout_marginStart="50dp"
             android:layout_marginEnd="50dp"
-            android:background="@drawable/code_authorization_view_layout"
-            android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/viewAuthCodeBackground"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/code_authorization_view_layout"
+                tools:ignore="ContentDescription" />
 
             <TextView
                 android:id="@+id/textViewCodeTitle"
@@ -326,6 +331,21 @@
                 android:textColor="@android:color/white"
                 android:visibility="invisible" />
 
+            <ImageView
+                android:id="@+id/buttonCodeBackground"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginStart="0dp"
+                android:layout_marginEnd="0dp"
+                android:layout_marginBottom="-1dp"
+                android:clickable="false"
+                android:focusable="false"
+                android:src="@drawable/rounded_button_animation"
+                tools:ignore="ContentDescription" />
+
             <Button
                 android:id="@+id/buttonCode"
                 android:layout_width="wrap_content"
@@ -337,11 +357,11 @@
                 android:layout_marginEnd="2dp"
                 android:layout_marginBottom="2dp"
                 android:background="@drawable/rounded_button_animation"
+                android:clickable="true"
+                android:focusable="true"
                 android:onClick="buttonConfirmCodeClicked"
                 android:text="@string/login_code_button_send_email"
                 android:textColor="@color/button_verification_text"
-                android:clickable="true"
-                android:focusable="true"
                 android:textSize="18sp"
                 android:textStyle="bold" />
 

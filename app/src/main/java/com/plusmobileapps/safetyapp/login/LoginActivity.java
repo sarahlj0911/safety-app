@@ -3,16 +3,21 @@ package com.plusmobileapps.safetyapp.login;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.TransitionDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -24,6 +29,8 @@ import android.view.animation.AccelerateInterpolator;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
+import android.view.animation.DecelerateInterpolator;
+import android.view.animation.ScaleAnimation;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -63,7 +70,7 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
     private NetworkInfo networkInfo;
     private boolean showCodeView, hasInternetConnection;
     private String email, password;
-    private ImageView backgroundBlur;
+    private ImageView backgroundBlur, codeBackground, buttonCodeBackground;
     private Button buttonLoginStatus, buttonDismissCodeView, buttonCode;
     private TextInputLayout emailField, passwordField;
     private EditText emailInput, passwordInput, codeInput;
@@ -98,6 +105,8 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         loginButton = findViewById(R.id.buttonLogin);
         buttonLoginStatus = findViewById(R.id.buttonLoginStatus);
         backgroundBlur = findViewById(R.id.imageBackgroundBlur);
+        codeBackground = findViewById(R.id.viewAuthCodeBackground);
+        buttonCodeBackground = findViewById(R.id.buttonCodeBackground);
 
         codeInput = findViewById(R.id.editTextCodeInput);
         emailInput = findViewById(R.id.fieldEmail);
@@ -111,7 +120,6 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         buttonDismissCodeView.setClickable(false);
         buttonLoginStatus.setClickable(false);
 
-        //fadeOutActivity = ActivityOptionsCompat.makeCustomAnimation(this, android.R.anim.fade_in, android.R.anim.fade_out).toBundle();
         fadeOutActivity = ActivityOptionsCompat.makeCustomAnimation(this, 1, android.R.anim.fade_out).toBundle();
 
         userPool = new AwsServices().initAWSUserPool(this);
@@ -170,7 +178,7 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
     public void setPresenter(LoginContract.Presenter presenter) { this.presenter = presenter; }
 
 
-    // Handler: Code Confirmation
+    // Handler: Login User
     AuthenticationHandler authenticationHandler = new AuthenticationHandler() {
         // Button Animations
         final Runnable successAnimation = new Runnable() { public void run() {
@@ -189,8 +197,8 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
 
         @Override
         public void onSuccess(CognitoUserSession userSession, CognitoDevice newDevice) {
-            handler.postDelayed(successAnimation, 2000);
-            handler.postDelayed(waitAndLaunchMain, 3000);
+            handler.postDelayed(successAnimation, 500);
+            handler.postDelayed(waitAndLaunchMain, 1500);
         }
 
         @Override
@@ -270,7 +278,6 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
                     @Override
                     public void run() {
                         buttonLoginStatus.setText(getString(R.string.login_button_error_verify));
-                        buttonLoginStatus.setClickable(false);
                         buttonLoginStatus.setClickable(true);
                         showCodeView = true; }
                 });
@@ -289,8 +296,8 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
                         buttonLoginStatus.setText(R.string.login_button_error_aws_error); }
                 });
             }
-            handler.postDelayed(failureAnimation, 2000);
-            handler.postDelayed(resetButton, 5000); }
+            handler.postDelayed(failureAnimation, 500);
+            handler.postDelayed(resetButton, 3000); }
     };
 
     // Handler: Code Confirmation
@@ -307,14 +314,8 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
                         buttonLoginStatus.setClickable(false);}
                 }); }
             };
-
             Handler viewHandler = new Handler(getBaseContext().getMainLooper());
-            viewHandler.post( new Runnable() {
-                @Override
-                public void run() { buttonCode.setText(getString(R.string.code_authorization_confirmed)); }} );
-            buttonCode.setTextColor(Color.WHITE);
-            buttonCode.setBackgroundResource(R.drawable.code_confirm_button_green);
-            codeAuthWindow.setBackgroundResource(R.drawable.code_authorization_success);
+            codeViewStatusAnimation(0, 200, "CONFIRMED");
             viewHandler.postDelayed(clearView, 2000);
         }
 
@@ -322,38 +323,24 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         @Override
         public void onFailure(Exception exception) {
             Log.d(TAG, "AWS Code Send Failure: " +exception);
-            codeAuthWindow.setBackgroundResource(R.drawable.code_authorization_fail);
-            Handler handler = new Handler(getBaseContext().getMainLooper());
-            handler.post( new Runnable() {
-                @Override
-                public void run() { buttonCode.setText("Incorrect Code"); }} );
-            buttonCode.setTextColor(Color.WHITE);
-            buttonCode.setBackgroundResource(R.drawable.code_confirm_button_red);}
+            codeViewStatusAnimation(1, 200, "INCORRECT CODE");
+        }
     };
 
     // Handler: Resend Confirmation Code
     VerificationHandler resendConfirmationCodeHandler = new VerificationHandler() {
         @Override
         public void onSuccess(CognitoUserCodeDeliveryDetails verificationCodeDeliveryMedium) {
-            Handler viewHandler = new Handler(getBaseContext().getMainLooper());
-            viewHandler.post( new Runnable() {
-                @Override
-                public void run() { buttonCode.setText(getString(R.string.login_code_button_sent)); }} );
-            buttonCode.setTextColor(Color.WHITE);
-            buttonCode.setBackgroundResource(R.drawable.code_confirm_button_green);
-            codeAuthWindow.setBackgroundResource(R.drawable.code_authorization_success);
+            codeViewStatusAnimation(0, 200, "CODE SENT");
         }
 
         @Override
-        public void onFailure(Exception exception) {
-            Log.d(TAG, "AWS Code Email Send Failure: " +exception);
-            Handler viewHandler = new Handler(getBaseContext().getMainLooper());
-            viewHandler.post( new Runnable() {
-                @Override
-                public void run() { buttonCode.setText(getString(R.string.login_code_button_error)); }} );
-            buttonCode.setTextColor(Color.WHITE);
-            buttonCode.setBackgroundResource(R.drawable.code_confirm_button_red);
-            codeAuthWindow.setBackgroundResource(R.drawable.code_authorization_fail);
+        public void onFailure(Exception ex) {
+            String showErr;
+            Log.d(TAG, "AWS Code Email Send Failure: " +ex);
+            if (ex.toString().toLowerCase().contains("limitexceededexception")) showErr = "ATTEMPT LIMIT EXCEEDED";
+            else showErr = "ISSUE SENDING CODE";
+            codeViewStatusAnimation(1, 200, showErr);
         }
     };
 
@@ -395,12 +382,7 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
                 public void run() {
                     if (codeInput.length() == 0) codeInput.setTypeface(null, Typeface.NORMAL);
                     else codeInput.setTypeface(null, Typeface.BOLD);
-                    codeAuthWindow.setBackgroundResource(R.drawable.code_authorization_view_layout);
-                    buttonCode.setTextColor(getColor(R.color.button_verification_text));
-                    buttonCode.setBackgroundResource(R.drawable.rounded_button_animation);
-                    buttonCode.setText(getString(R.string.code_listener_button_confirm));
-                }
-            }); }
+                    codeViewStatusAnimation(2, 200, "CONFIRM"); } }); }
 
         @Override
         public void afterTextChanged(Editable s) { }
@@ -426,6 +408,8 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         // Check login with AWS
         if (validInput & hasInternetConnection) {
             loginButton.startAnimation();
+            codeInput.setText("");
+            codeViewStatusAnimation(3, 0, "RESEND CODE");
             userPool.getUser(email).getSessionInBackground(authenticationHandler); // Sign in the user
         }
     }
@@ -472,7 +456,7 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                codeViewAnimation(false, 100);
+                codeViewShowAnimation(false, 100);
             }
         });
     }
@@ -484,7 +468,7 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
             public void run() {
                 Bitmap backgroundCapture = takeScreenshot();
                 backgroundBlur.setImageBitmap(new BlurUtils().blur(LoginActivity.this, backgroundCapture, 25f));
-                codeViewAnimation(true, 200);
+                codeViewShowAnimation(true, 250);
             }
         });
     }
@@ -507,16 +491,20 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
             imm.hideSoftInputFromWindow(v.getWindowToken(), 0); }
     }
 
-    private void codeViewAnimation(Boolean fadeIn, int duration){
-        AnimationSet animation = new AnimationSet(false);
-        animation.setRepeatMode(0);
+    private void codeViewShowAnimation(Boolean show, int duration){
+        AnimationSet animations = new AnimationSet(false);
+        animations.setRepeatMode(0);
 
-        if (fadeIn){
+        if (show){
             codeView.setVisibility(View.VISIBLE);
             AlphaAnimation fadeInAni = new AlphaAnimation(0.0f, 1.0f);
             fadeInAni.setInterpolator(new AccelerateInterpolator());
             fadeInAni.setDuration(duration);
-            animation.addAnimation(fadeInAni);
+            animations.addAnimation(fadeInAni);
+            Animation scaleInAni = new ScaleAnimation(0.97f, 1f, 0.97f, 1f, codeAuthWindow.getWidth()/2f, codeAuthWindow.getHeight()/2f);
+            scaleInAni.setDuration(1000);
+            scaleInAni.setInterpolator(new DecelerateInterpolator());
+            codeAuthWindow.startAnimation(scaleInAni);
         }
         else {
             AlphaAnimation fadeOutAni = new AlphaAnimation(1.0f, 0.0f);
@@ -534,9 +522,48 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
                 @Override
                 public void onAnimationRepeat(Animation animation) { }
             });
-            animation.addAnimation(fadeOutAni);
+            animations.addAnimation(fadeOutAni);
         }
-        codeView.startAnimation(animation);
+        codeView.startAnimation(animations);
+    }
+
+
+    private void codeViewStatusAnimation(int status, final int duration, final String buttonText) {
+        final TransitionDrawable backgroundTransition, buttonTransition;
+        final boolean reverse;
+
+        if (status == 1) { // FAILURE
+            reverse = false;
+            buttonTransition = (TransitionDrawable) ContextCompat.getDrawable(this, R.drawable.code_authorization_button_fail_animation);
+            backgroundTransition = (TransitionDrawable) ContextCompat.getDrawable(this, R.drawable.code_authorization_fail_animation);
+        }
+        else { // SUCCESS(0) or RESET(>1)
+            reverse = status > 1;
+            buttonTransition = (TransitionDrawable) ContextCompat.getDrawable(this, R.drawable.code_authorization_button_success_animation);
+            backgroundTransition = (TransitionDrawable) ContextCompat.getDrawable(this, R.drawable.code_authorization_success_animation);
+        }
+
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                buttonCode.setText(buttonText);
+                buttonCodeBackground.setImageDrawable(buttonTransition);
+                codeBackground.setImageDrawable(backgroundTransition);
+                if (reverse) {
+                    buttonCode.setTextColor(getColor(R.color.button_verification_text));
+                    Objects.requireNonNull(buttonTransition).resetTransition();
+                    Objects.requireNonNull(backgroundTransition).resetTransition();
+
+                    Handler handler = new Handler(getBaseContext().getMainLooper());
+                    final Runnable resetButton = new Runnable() { public void run() {
+                        buttonCode.setBackgroundResource(R.drawable.rounded_button_animation); }};
+                    handler.postDelayed(resetButton, duration); }
+                else {
+                    buttonCode.setTextColor(Color.WHITE);
+                    buttonCode.setBackgroundResource(0);
+                    Objects.requireNonNull(buttonTransition).startTransition(duration);
+                    Objects.requireNonNull(backgroundTransition).startTransition(duration); }
+            }});
     }
 
 }
