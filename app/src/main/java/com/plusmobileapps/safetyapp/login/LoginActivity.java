@@ -74,7 +74,7 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
     private TextInputLayout emailField, passwordField;
     private EditText emailInput, passwordInput, codeInput;
     private CircularProgressButton loginButton;
-    private boolean showCodeView, hasInternetConnection;
+    private boolean showCodeView, hasInternetConnection, statusOfCodeSuccess;
     private int emailCharCount;
     // AWS
     private CognitoUserPool userPool;
@@ -151,7 +151,7 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
             Log.e(TAG, "Device does not have an internet connection!");
         }
 
-        if (openAnimation.equals("start")) activityStartingAnimation("start");
+        if (openAnimation.equals("start")) activityStartingAnimation();
 //        else if (openAnimation.equals("back")) {
 //            activityStartingAnimation("back"); }
     }
@@ -580,14 +580,19 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         final TransitionDrawable backgroundTransition, buttonTransition;
         final boolean reverse;
 
+//        if (status == 0) { // SUCCESS
+//            reverse = false;
+//            buttonTransition = (TransitionDrawable) ContextCompat.getDrawable(this, R.drawable.code_authorization_button_success_animation);
+//            backgroundTransition = (TransitionDrawable) ContextCompat.getDrawable(this, R.drawable.code_authorization_success_animation);
+//        }
         if (status == 1) { // FAILURE
             reverse = false;
             buttonTransition = (TransitionDrawable) ContextCompat.getDrawable(this, R.drawable.code_authorization_button_fail_animation);
             backgroundTransition = (TransitionDrawable) ContextCompat.getDrawable(this, R.drawable.code_authorization_fail_animation); }
-        else { // SUCCESS(0) or RESET(>1)
+        else {  // RESET
             reverse = status > 1;
-            buttonTransition = (TransitionDrawable) ContextCompat.getDrawable(this, R.drawable.code_authorization_button_success_animation);
-            backgroundTransition = (TransitionDrawable) ContextCompat.getDrawable(this, R.drawable.code_authorization_success_animation); }
+            buttonTransition = (TransitionDrawable) ContextCompat.getDrawable(this, R.drawable.code_authorization_button_fail_animation);
+            backgroundTransition = (TransitionDrawable) ContextCompat.getDrawable(this, R.drawable.code_authorization_fail_animation); }
 
         runOnUiThread(new Runnable() {
             @Override
@@ -603,9 +608,7 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
                     Handler handler = new Handler(getBaseContext().getMainLooper());
                     final Runnable resetButton = new Runnable() {
                         public void run() {
-                            buttonCode.setBackgroundResource(R.drawable.rounded_button_animation);
-                        }
-                    };
+                            buttonCode.setBackgroundResource(R.drawable.rounded_button_animation); }};
                     handler.postDelayed(resetButton, duration); }
                 else {
                     buttonCode.setTextColor(Color.WHITE);
@@ -617,17 +620,16 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
     }
 
 
-    private void activityStartingAnimation(String type) {
-        // TODO animations for buttonLoginStatus, emailField, passwordField, appLogo, appTitle
+    private void activityStartingAnimation() {
         Animation fadeIn, logoStart, emailFieldAni, passwordFieldAni, newUserAni, signUpAni, statusAni, buttonAni;
         int fieldOffset, fieldOffsetPlus;
 
-        fieldOffset = 1300;
-        fieldOffsetPlus = 120;
+        fieldOffset = 750;
+        fieldOffsetPlus = 90;
 
         fadeIn = new AlphaAnimation(0.0f, 1.0f);
         fadeIn.setDuration(100);
-        fadeIn.setStartOffset(1700);
+        fadeIn.setStartOffset(1200);
 
         logoStart = AnimationUtils.loadAnimation(this, R.anim.logo_start_animation);
         emailFieldAni = AnimationUtils.loadAnimation(this, R.anim.fade_move_up_animation);
@@ -636,25 +638,6 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         signUpAni = AnimationUtils.loadAnimation(this, R.anim.fade_move_up_animation);
         statusAni = AnimationUtils.loadAnimation(this, R.anim.fade_move_up_animation);
         buttonAni = AnimationUtils.loadAnimation(this, R.anim.fade_move_up_animation);
-
-//        if (type.equals("start")) {
-//            logoStart = AnimationUtils.loadAnimation(this, R.anim.logo_start_animation);
-//            fieldOffset = 1300;
-//            fieldOffsetPlus = 120;}
-//        else {
-//            logoStart = AnimationUtils.loadAnimation(this, R.anim.fade_move_up_animation);
-//            fieldOffset = 100;
-//            fieldOffsetPlus = 50;
-//            int newDuration = 700;
-//            logoStart.setStartOffset(fieldOffset + fieldOffsetPlus);
-//            logoStart.setDuration(newDuration);
-//            emailFieldAni.setDuration(newDuration);
-//            passwordFieldAni.setDuration(newDuration);
-//            newUserAni.setDuration(newDuration);
-//            signUpAni.setDuration(newDuration);
-//            statusAni.setDuration(newDuration);
-//            buttonAni.setDuration(newDuration);
-//        }
 
         emailFieldAni.setStartOffset(fieldOffset + fieldOffsetPlus*2);
         passwordFieldAni.setStartOffset(fieldOffset + fieldOffsetPlus*3);
