@@ -133,7 +133,8 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        overridePendingTransition(1, android.R.anim.fade_out);
+//        overridePendingTransition(1, android.R.anim.fade_out);
+        launchLoginScreen();
     }
 
     @Override
@@ -149,8 +150,9 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
     }
 
     public void launchLoginScreen() {
-        Intent signUp = new Intent(SignupActivity.this, LoginActivity.class);
-        startActivity(signUp, fadeOutActivity);
+        Intent login = new Intent(SignupActivity.this, LoginActivity.class);
+        login.putExtra("openAni", "back");
+        startActivity(login, fadeOutActivity);
         finish();
     }
 

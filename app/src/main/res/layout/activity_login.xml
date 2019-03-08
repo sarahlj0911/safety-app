@@ -21,22 +21,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/login_background" />
 
-    <ImageView
-        android:id="@+id/imageLogo"
-        android:layout_width="200dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="40dp"
-        android:layout_marginEnd="20dp"
-        android:contentDescription="@string/login_image_background_description"
-        android:scaleType="fitCenter"
-        app:layout_constraintBottom_toTopOf="@+id/textViewTitle"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/imageBackground"
-        app:layout_constraintVertical_bias="1.0"
-        app:srcCompat="@drawable/logo_light" />
-
     <TextView
         android:id="@+id/textViewTitle"
         android:layout_width="wrap_content"
@@ -53,6 +37,22 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/imageBackground"
         app:layout_constraintVertical_bias="0.8" />
+
+    <ImageView
+        android:id="@+id/imageLogo"
+        android:layout_width="200dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginEnd="20dp"
+        android:contentDescription="@string/login_image_background_description"
+        android:scaleType="fitCenter"
+        app:layout_constraintBottom_toTopOf="@+id/textViewTitle"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/imageBackground"
+        app:layout_constraintVertical_bias="1.0"
+        app:srcCompat="@drawable/logo_light" />
 
     <android.support.design.widget.TextInputLayout
         android:id="@+id/textInputLayoutEmail"
@@ -333,23 +333,26 @@
 
             <ImageView
                 android:id="@+id/buttonCodeBackground"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentBottom="true"
                 android:layout_marginStart="0dp"
                 android:layout_marginEnd="0dp"
-                android:layout_marginBottom="-1dp"
+                android:layout_marginBottom="0dp"
+                android:adjustViewBounds="false"
                 android:clickable="false"
+                android:cropToPadding="true"
                 android:focusable="false"
+                android:scaleType="fitEnd"
                 android:src="@drawable/rounded_button_animation"
                 tools:ignore="ContentDescription" />
 
             <Button
                 android:id="@+id/buttonCode"
                 android:layout_width="wrap_content"
-                android:layout_height="50dp"
+                android:layout_height="43dp"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentBottom="true"
