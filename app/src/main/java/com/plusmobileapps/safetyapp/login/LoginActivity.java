@@ -151,7 +151,8 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
             Log.e(TAG, "Device does not have an internet connection!");
         }
 
-        if (openAnimation.equals("start")) activityStartingAnimation();
+        if (openAnimation != null && openAnimation.equals("start")) activityStartingAnimation();
+
 //        else if (openAnimation.equals("back")) {
 //            activityStartingAnimation("back"); }
     }
@@ -624,7 +625,7 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         Animation fadeIn, logoStart, emailFieldAni, passwordFieldAni, newUserAni, signUpAni, statusAni, buttonAni;
         int fieldOffset, fieldOffsetPlus;
 
-        fieldOffset = 750;
+        fieldOffset = 650;
         fieldOffsetPlus = 90;
 
         fadeIn = new AlphaAnimation(0.0f, 1.0f);

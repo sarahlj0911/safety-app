@@ -7,6 +7,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.TextInputLayout;
@@ -120,8 +121,7 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
         if (userSignedUp) launchLoginScreen();
         else {
             downloadSchools();
-            presenter.start();
-        }
+            presenter.start(); }
     }
 
     @Override
@@ -133,16 +133,13 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-//        overridePendingTransition(1, android.R.anim.fade_out);
         launchLoginScreen();
     }
 
-    @Override
     public void setPresenter(SignupContract.Presenter presenter) {
         this.presenter = presenter;
     }
 
-    @Override
     public void launchHomeScreen() {
         Intent signUp = new Intent(SignupActivity.this, MainActivity.class);
         startActivity(signUp, fadeOutActivity);
@@ -156,7 +153,6 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
         finish();
     }
 
-    @Override
     public void populateSchoolSpinner(ArrayList<String> schools) {
       /*  schoolList.remove("");
         schoolList.remove(getString(R.string.new_school));
@@ -201,7 +197,7 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
         @Override
         public void onClick(View v) {
             HashMap<String, String> formInput = new HashMap<>();
-            String school = "";
+            String school;
             statusText.setText("");
             nameInput.clearFocus();
             emailInput.clearFocus();
@@ -438,11 +434,10 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     alertView.setVisibility(View.VISIBLE);
-//                    Intent intent = new Intent(Intent.ACTION_MAIN);
-//                    intent.addCategory(Intent.CATEGORY_APP_EMAIL);
-//                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//                    startActivity(intent);
-                    launchLoginScreen();
+                    Intent intent = Intent.makeMainSelectorActivity(Intent.ACTION_MAIN, Intent.CATEGORY_APP_EMAIL);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                    dialog.dismiss();
                 }
             });
             builder.show();
