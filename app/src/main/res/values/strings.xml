@@ -78,7 +78,7 @@
     <string name="status_text">"Unable to Sign Up %1$s \n AWS Error"</string>
 
 
-    <!-- Signup Confirmation Page Strings -->
+    <!-- Signup Confirmation Page -->
     <string name="signup_confirm_title">Almost There!</string>
     <string name="signup_confirm_description">A confirmation email has been sent to %1$s. Please enter the code you receive in the field below.</string>
     <string name="signup_code">Code</string>
@@ -86,7 +86,7 @@
     <string name="signup_confirm_button">Confirm</string>
 
 
-    <!-- Login Page Strings -->
+    <!-- Login Page -->
     <string name="login_field_email_placeholder">Email</string>
     <string name="Login_field_password_placeholder">Password</string>
     <string name="login_image_background_description">background</string>
@@ -101,6 +101,10 @@
     <string name="login_code_button_sent">Code Sent</string>
     <string name="login_code_button_error">Issue Sending Code</string>
 
+    <!-- Placeholders -->
+    <string name="placeholder_title">Title</string>
+    <string name="placeholder_content">This is some dummy text to fill in the content. Place change this text to whatever you would like when initializing this view. Until then, you will have this beautiful text filling in the spaces.</string>
+    <string name="placeholder_button">Button</string>
 
     <string-array name="signup_roles">
         <item>Administrator</item>

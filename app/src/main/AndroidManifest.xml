@@ -120,6 +120,7 @@
         </service>
 
         <activity android:name=".AdminSettings" />
+        <activity android:name=".CustomPopup" />
     </application>
 
 </manifest>

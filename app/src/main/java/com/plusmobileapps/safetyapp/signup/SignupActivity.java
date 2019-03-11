@@ -3,6 +3,7 @@ package com.plusmobileapps.safetyapp.signup;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
@@ -10,6 +11,7 @@ import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.app.AlertDialog;
@@ -18,10 +20,19 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.AnimationSet;
+import android.view.animation.DecelerateInterpolator;
+import android.view.animation.ScaleAnimation;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -31,6 +42,8 @@ import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUserCodeDel
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUserPool;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.handlers.SignUpHandler;
 import com.plusmobileapps.safetyapp.AwsServices;
+import com.plusmobileapps.safetyapp.BlurUtils;
+import com.plusmobileapps.safetyapp.CustomPopup;
 import com.plusmobileapps.safetyapp.R;
 import com.plusmobileapps.safetyapp.login.LoginActivity;
 import com.plusmobileapps.safetyapp.main.MainActivity;
@@ -48,6 +61,10 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
 
     public static final String TAG = "SignupActivity";
     private SignupContract.Presenter presenter;
+    private View customPopup, customPopupWindow;
+    private Bitmap backgroundCapture;
+    private ImageView customPopupBackground;
+    private ViewGroup.LayoutParams defaultLayoutParams;
     private TextInputLayout nameInput, emailInput, passwordInput, passwordCheckInput, InputschoolNameInput;
     private TextView statusText, alertView;
     private Spinner schoolSpinner, roleSpinner;
@@ -65,16 +82,18 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
     private String email, name;
     private int nameCharCount, emailCharCount;
 
+    private TextView alertTitle, alertContent, alertButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Log.d("Debug"+TAG, "onCreate");
         super.onCreate(savedInstanceState);
-        Window w = getWindow();
         handler = new Handler();
+        presenter = new SignupPresenter(this);
+        Window w = getWindow();
         w.setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION, 2000);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_signup);
-        presenter = new SignupPresenter(this);
 
         schoolDownloadFragment = SchoolDownloadFragment.getInstance(getFragmentManager());
         schoolDownloadFragment.setCallback(this);
@@ -98,6 +117,16 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
 
         statusText = findViewById(R.id.textViewStatus);
         alertView = findViewById(R.id.alertView);
+
+        defaultLayoutParams = findViewById(R.id.viewSignup).getLayoutParams();
+        customPopup = getLayoutInflater().inflate(R.layout.custom_popup, null);
+        customPopup.setVisibility(View.INVISIBLE);
+        addContentView(customPopup, defaultLayoutParams);
+        customPopupWindow = findViewById(R.id.viewAlertWindow);
+        customPopupBackground = findViewById(R.id.imageBackgroundBlur);
+        alertTitle = findViewById(R.id.textTitle);
+        alertContent = findViewById(R.id.textDescription);
+        alertButton = findViewById(R.id.buttonText);
 
         Objects.requireNonNull(nameInput.getEditText()).addTextChangedListener(nameListener);
         Objects.requireNonNull(emailInput.getEditText()).addTextChangedListener(emailListener);
@@ -123,6 +152,7 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
             downloadSchools();
             presenter.start(); }
     }
+    
 
     @Override
     protected void onDestroy() {
@@ -427,20 +457,29 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
             AlertDialog.Builder builder = new AlertDialog.Builder(SignupActivity.this);
             userSignedUp = true;
 
-            builder.setCancelable(true);
-            builder.setTitle("Account Created");
-            builder.setMessage("Almost there! A confirmation email has been sent to " +email+ ".");
-            builder.setPositiveButton("Go To Inbox", new DialogInterface.OnClickListener() {
+            backgroundCapture = takeScreenshot();
+
+            runOnUiThread(new Runnable() {
                 @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    alertView.setVisibility(View.VISIBLE);
-                    Intent intent = Intent.makeMainSelectorActivity(Intent.ACTION_MAIN, Intent.CATEGORY_APP_EMAIL);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    startActivity(intent);
-                    dialog.dismiss();
+                public void run() {
+                    showPopupView();
                 }
             });
-            builder.show();
+
+//            builder.setCancelable(true);
+//            builder.setTitle("Account Created");
+//            builder.setMessage("Almost there! A confirmation email has been sent to " +email+ ".");
+//            builder.setPositiveButton("Go To Inbox", new DialogInterface.OnClickListener() {
+//                @Override
+//                public void onClick(DialogInterface dialog, int which) {
+//                    alertView.setVisibility(View.VISIBLE);
+//                    Intent intent = Intent.makeMainSelectorActivity(Intent.ACTION_MAIN, Intent.CATEGORY_APP_EMAIL);
+//                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                    startActivity(intent);
+//                    dialog.dismiss();
+//                }
+//            });
+//            builder.show();
         } };
 
         @Override
@@ -471,4 +510,81 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
         }
     };
 
+
+
+    public void showPopupView(){
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+            customPopupBackground.setImageBitmap(new BlurUtils().blur(SignupActivity.this, backgroundCapture, 25f));
+            codeViewShowAnimation(true, 250);
+            }
+        });
+    }
+
+    public void buttonClicked(View view) {
+        buttonDismissViewClicked(customPopup);
+        Intent intent = Intent.makeMainSelectorActivity(Intent.ACTION_MAIN, Intent.CATEGORY_APP_EMAIL);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+    }
+
+    public void buttonDismissViewClicked(View view) {
+        hideKeyboard(view);
+        customPopupWindow.setClickable(false);
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() { codeViewShowAnimation(false, 100); }
+        });
+    }
+
+    private void hideKeyboard(View v) {
+        if (v != null) {
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(v.getWindowToken(), 0); }
+    }
+
+    private Bitmap takeScreenshot() {
+        try {
+            View screen = getWindow().getDecorView().getRootView();
+            screen.setDrawingCacheEnabled(true);
+            return Bitmap.createBitmap(screen.getDrawingCache()); }
+        catch (Throwable e) {
+            e.printStackTrace();
+            return null; }
+    }
+
+    private void codeViewShowAnimation(Boolean show, int duration) {
+        AnimationSet animations = new AnimationSet(false);
+        animations.setRepeatMode(0);
+
+        if (show) {
+            customPopup.setVisibility(View.VISIBLE);
+            AlphaAnimation fadeInAni = new AlphaAnimation(0.0f, 1.0f);
+            fadeInAni.setInterpolator(new AccelerateInterpolator());
+            fadeInAni.setDuration(duration);
+            animations.addAnimation(fadeInAni);
+
+            Animation scaleInAni = new ScaleAnimation(0.97f, 1f, 0.97f, 1f, customPopupWindow.getWidth() / 2f, customPopupWindow.getHeight() / 2f);
+            scaleInAni.setDuration(1000);
+            scaleInAni.setInterpolator(new DecelerateInterpolator());
+            customPopup.startAnimation(scaleInAni); }
+        else {
+            AlphaAnimation fadeOutAni = new AlphaAnimation(1.0f, 0.0f);
+            fadeOutAni.setInterpolator(new AccelerateInterpolator());
+            fadeOutAni.setDuration(duration);
+            fadeOutAni.setAnimationListener(new Animation.AnimationListener() {
+                @Override
+                public void onAnimationStart(Animation animation) { }
+
+                @Override
+                public void onAnimationEnd(Animation animation) {
+                    customPopup.setVisibility(View.INVISIBLE); }
+
+                @Override
+                public void onAnimationRepeat(Animation animation) { }
+            });
+            animations.addAnimation(fadeOutAni); }
+        customPopup.startAnimation(animations);
+    }
 }

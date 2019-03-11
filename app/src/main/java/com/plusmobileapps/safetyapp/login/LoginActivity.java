@@ -97,7 +97,7 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         emailField = findViewById(R.id.textInputLayoutEmail);
         passwordField = findViewById(R.id.textInputLayoutPassword);
 
-        buttonCode = findViewById(R.id.buttonCode);
+        buttonCode = findViewById(R.id.buttonText);
         buttonDismissCodeView = findViewById(R.id.buttonDismissAuthCode);
         loginButton = findViewById(R.id.buttonLogin);
         buttonLoginStatus = findViewById(R.id.buttonLoginStatus);

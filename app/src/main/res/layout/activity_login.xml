@@ -260,7 +260,7 @@
                 tools:ignore="ContentDescription" />
 
             <TextView
-                android:id="@+id/textViewCodeTitle"
+                android:id="@+id/textTitle"
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
@@ -280,10 +280,10 @@
                 app:layout_constraintStart_toStartOf="parent" />
 
             <TextView
-                android:id="@+id/textViewCodeDescription"
+                android:id="@+id/textDescription"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/textViewCodeTitle"
+                android:layout_below="@+id/textTitle"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentEnd="true"
                 android:layout_marginStart="20dp"
@@ -297,7 +297,7 @@
                 android:id="@+id/editTextCodeInput"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:layout_below="@+id/textViewCodeDescription"
+                android:layout_below="@+id/textDescription"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentEnd="true"
                 android:layout_marginStart="20dp"
@@ -320,7 +320,7 @@
                 android:id="@+id/textViewCodeStatus"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_above="@+id/buttonCode"
+                android:layout_above="@+id/buttonText"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentEnd="true"
                 android:layout_marginStart="20dp"
@@ -350,7 +350,7 @@
                 tools:ignore="ContentDescription" />
 
             <Button
-                android:id="@+id/buttonCode"
+                android:id="@+id/buttonText"
                 android:layout_width="wrap_content"
                 android:layout_height="43dp"
                 android:layout_alignParentStart="true"

@@ -2,6 +2,7 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/viewSignup"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_toEndOf="@id/label_signup_role"
@@ -62,12 +63,12 @@
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:autofillHints="Enter your name"
+            android:backgroundTint="@android:color/white"
             android:hint="@string/hint_name"
             android:inputType="textPersonName"
             android:nextFocusDown="@+id/fieldEmail"
             android:singleLine="true"
             android:textColor="@android:color/white"
-            android:backgroundTint="@android:color/white"
             tools:targetApi="o" />
 
     </android.support.design.widget.TextInputLayout>
@@ -209,8 +210,8 @@
         android:paddingTop="7dp"
         android:singleLine="false"
         android:spinnerMode="dropdown"
-        android:visibility="visible"
         android:textAlignment="center"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="@+id/label_signup_school_name"
         app:layout_constraintEnd_toEndOf="@+id/signup_password_check"
         app:layout_constraintHorizontal_bias="1.0"
@@ -228,11 +229,11 @@
         android:backgroundTint="@android:color/white"
         android:focusableInTouchMode="false"
         android:importantForAutofill="no"
+        android:paddingLeft="10dp"
         android:paddingTop="7dp"
+        android:paddingRight="10dp"
         android:textColor="@android:color/white"
         android:textSize="18sp"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@+id/label_signup_school_name"
         app:layout_constraintEnd_toEndOf="@+id/signup_password_check"
@@ -277,9 +278,9 @@
         android:focusable="false"
         android:focusableInTouchMode="false"
         android:gravity="center_vertical"
-        android:prompt="@string/signup_role_prompt"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
+        android:prompt="@string/signup_role_prompt"
         android:spinnerMode="dropdown"
         app:layout_constraintBottom_toBottomOf="@+id/label_signup_role"
         app:layout_constraintEnd_toEndOf="@+id/new_school_text_box"
@@ -328,8 +329,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:spinning_bar_color="@android:color/white"
         app:spinning_bar_width="4.5dp" />
-
-
 
     <TextView
         android:id="@+id/alertView"
