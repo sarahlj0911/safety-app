@@ -362,6 +362,7 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         public void onFailure(Exception exception) {
             Log.d(TAG, "AWS Code Send Failure: " + exception);
             codeViewStatusAnimation(1, 200, "INCORRECT CODE");
+            codeViewErrorAnimation();
         }
     };
 
@@ -620,13 +621,17 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         });
     }
 
+    private void codeViewErrorAnimation() {
+        Animation shakeViewAni = AnimationUtils.loadAnimation(this, R.anim.shake_horizontally);
+        codeAuthWindow.startAnimation(shakeViewAni);
+    }
 
     private void activityStartingAnimation() {
         Animation fadeIn, logoStart, emailFieldAni, passwordFieldAni, newUserAni, signUpAni, statusAni, buttonAni;
         int fieldOffset, fieldOffsetPlus;
 
-        fieldOffset = 650;
-        fieldOffsetPlus = 90;
+        fieldOffset = 1000;
+        fieldOffsetPlus = 85;
 
         fadeIn = new AlphaAnimation(0.0f, 1.0f);
         fadeIn.setDuration(100);
