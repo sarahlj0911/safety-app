@@ -1,20 +1,16 @@
 package com.plusmobileapps.safetyapp.signup;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.ActivityOptionsCompat;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -43,7 +39,6 @@ import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUserPool;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.handlers.SignUpHandler;
 import com.plusmobileapps.safetyapp.AwsServices;
 import com.plusmobileapps.safetyapp.BlurUtils;
-import com.plusmobileapps.safetyapp.CustomPopup;
 import com.plusmobileapps.safetyapp.R;
 import com.plusmobileapps.safetyapp.login.LoginActivity;
 import com.plusmobileapps.safetyapp.main.MainActivity;
@@ -64,9 +59,8 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
     private View customPopup, customPopupWindow;
     private Bitmap backgroundCapture;
     private ImageView customPopupBackground;
-    private ViewGroup.LayoutParams defaultLayoutParams;
     private TextInputLayout nameInput, emailInput, passwordInput, passwordCheckInput, InputschoolNameInput;
-    private TextView statusText, alertView;
+    private TextView statusText, alertTitle, alertContent, alertButton;
     private Spinner schoolSpinner, roleSpinner;
     private CircularProgressButton signUpButton;
     private ArrayList<String> schoolList;
@@ -82,7 +76,6 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
     private String email, name;
     private int nameCharCount, emailCharCount;
 
-    private TextView alertTitle, alertContent, alertButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,11 +107,9 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
         nameField = findViewById(R.id.fieldName);
         emailField = findViewById(R.id.fieldEmail);
         passwordField = findViewById(R.id.fieldPassword);
-
         statusText = findViewById(R.id.textViewStatus);
-        alertView = findViewById(R.id.alertView);
 
-        defaultLayoutParams = findViewById(R.id.viewSignup).getLayoutParams();
+        ViewGroup.LayoutParams defaultLayoutParams = findViewById(R.id.viewSignup).getLayoutParams();
         customPopup = getLayoutInflater().inflate(R.layout.custom_popup, null);
         customPopup.setVisibility(View.INVISIBLE);
         addContentView(customPopup, defaultLayoutParams);
@@ -134,6 +125,8 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
         Objects.requireNonNull(passwordCheckInput.getEditText()).addTextChangedListener(passwordCheckListener);
 
         statusText.setText("");
+        alertTitle.setText(getString(R.string.signup_confirm_title));
+        alertButton.setText(getString(R.string.signup_button_inbox));
         fadeOutActivity = ActivityOptionsCompat.makeCustomAnimation(this, 1, android.R.anim.fade_out).toBundle();
         ArrayAdapter adapter = ArrayAdapter.createFromResource(this, R.array.signup_roles, R.layout.activity_signup_spinner);
         adapter.setDropDownViewResource(R.layout.activity_signup_spinner_dropdown);
@@ -152,7 +145,6 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
             downloadSchools();
             presenter.start(); }
     }
-    
 
     @Override
     protected void onDestroy() {
@@ -417,19 +409,18 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
         switch (progressCode) {
             // You can add UI behavior for progress updates here.
             case SignupDownloadCallback.Progress.ERROR:
-
                 break;
+
             case SignupDownloadCallback.Progress.CONNECT_SUCCESS:
-
                 break;
+
             case SignupDownloadCallback.Progress.GET_INPUT_STREAM_SUCCESS:
-
                 break;
+
             case SignupDownloadCallback.Progress.PROCESS_INPUT_STREAM_IN_PROGRESS:
-
                 break;
-            case SignupDownloadCallback.Progress.PROCESS_INPUT_STREAM_SUCCESS:
 
+            case SignupDownloadCallback.Progress.PROCESS_INPUT_STREAM_SUCCESS:
                 break;
         }
     }
@@ -454,11 +445,8 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
             signUpButton.revertAnimation();
         } };
         final Runnable waitAndLaunchDialog = new Runnable() { public void run() {
-            AlertDialog.Builder builder = new AlertDialog.Builder(SignupActivity.this);
             userSignedUp = true;
-
             backgroundCapture = takeScreenshot();
-
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -466,6 +454,7 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
                 }
             });
 
+//            AlertDialog.Builder builder = new AlertDialog.Builder(SignupActivity.this);
 //            builder.setCancelable(true);
 //            builder.setTitle("Account Created");
 //            builder.setMessage("Almost there! A confirmation email has been sent to " +email+ ".");
@@ -516,6 +505,7 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
+            alertContent.setText(String.format("A confirmation email has been sent to %s.", email));
             customPopupBackground.setImageBitmap(new BlurUtils().blur(SignupActivity.this, backgroundCapture, 25f));
             codeViewShowAnimation(true, 250);
             }

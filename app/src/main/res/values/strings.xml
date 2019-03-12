@@ -78,12 +78,13 @@
     <string name="status_text">"Unable to Sign Up %1$s \n AWS Error"</string>
 
 
-    <!-- Signup Confirmation Page -->
+    <!-- Signup Confirmation -->
     <string name="signup_confirm_title">Almost There!</string>
     <string name="signup_confirm_description">A confirmation email has been sent to %1$s. Please enter the code you receive in the field below.</string>
     <string name="signup_code">Code</string>
     <string name="signup_status">Incorrect Confirmation Code</string>
-    <string name="signup_confirm_button">Confirm</string>
+    <string name="signup_button_confirm">Confirm</string>
+    <string name="signup_button_inbox">Go To Inbox</string>
 
 
     <!-- Login Page -->

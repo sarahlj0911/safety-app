@@ -593,8 +593,8 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
             backgroundTransition = (TransitionDrawable) ContextCompat.getDrawable(this, R.drawable.code_authorization_fail_animation); }
         else {  // RESET
             reverse = status > 1;
-            buttonTransition = (TransitionDrawable) ContextCompat.getDrawable(this, R.drawable.code_authorization_button_fail_animation);
-            backgroundTransition = (TransitionDrawable) ContextCompat.getDrawable(this, R.drawable.code_authorization_fail_animation); }
+            buttonTransition = (TransitionDrawable) ContextCompat.getDrawable(this, R.drawable.code_authorization_button_success_animation);
+            backgroundTransition = (TransitionDrawable) ContextCompat.getDrawable(this, R.drawable.code_authorization_success_animation); }
 
         runOnUiThread(new Runnable() {
             @Override
