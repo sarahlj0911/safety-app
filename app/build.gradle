@@ -57,8 +57,8 @@ dependencies {
 
 
     // AWS Mobile Client SDK
-    //implementation('com.amazonaws:aws-android-sdk-mobile-client:2.7.+@aar') { transitive = true }
-    implementation 'com.amazonaws:aws-android-sdk-mobile-client:2.11.+'
+    implementation('com.amazonaws:aws-android-sdk-mobile-client:2.7.+@aar') { transitive = true }
+    //implementation 'com.amazonaws:aws-android-sdk-mobile-client:2.11.+'
 
     // AWS Cognito UserPools for SignIn
     implementation 'com.android.support:support-v4:24.+'
