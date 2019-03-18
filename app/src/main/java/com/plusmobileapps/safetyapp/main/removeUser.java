@@ -56,7 +56,7 @@ public class removeUser extends AppCompatActivity {
                 awsServices = new AwsServices();
                 initAWSUserPool();
 
-                final String email = input.getText().toString(); 
+                final String email = input.getText().toString();
 
                 AsyncTask.execute(new Runnable() {
                     @Override
