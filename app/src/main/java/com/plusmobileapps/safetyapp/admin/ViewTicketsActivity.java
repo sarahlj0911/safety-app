@@ -1,5 +1,6 @@
 package com.plusmobileapps.safetyapp.admin;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -17,6 +18,11 @@ protected void onCreate(Bundle savedInstanceState) {
 
 
         setContentView(R.layout.activity_admin_view_tickets);
+
+        }
+        public void backClicked(){
+                Intent i=new Intent(ViewTicketsActivity.this,AdminMainActivity.class);
+                startActivity(i);
 
         }
 
