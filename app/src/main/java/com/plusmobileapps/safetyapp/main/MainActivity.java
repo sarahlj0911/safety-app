@@ -37,6 +37,7 @@ import com.plusmobileapps.safetyapp.AwsServices;
 import com.plusmobileapps.safetyapp.R;
 import com.plusmobileapps.safetyapp.actionitems.landing.ActionItemPresenter;
 import com.plusmobileapps.safetyapp.summary.landing.SummaryPresenter;
+import com.plusmobileapps.safetyapp.util.FileUtil;
 import com.plusmobileapps.safetyapp.walkthrough.landing.WalkthroughLandingPresenter;
 
 
@@ -55,6 +56,8 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
     private BottomNavigationView navigation;
     private String walkthroughFragmentTitle = "";
     private MainActivityPresenter presenter;
+
+    String selectedSchool = "";
 
     //db mapper
     DynamoDBMapper dynamoDBMapper;
@@ -124,6 +127,15 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
         awsServices = new AwsServices();
         userPool = new CognitoUserPool(CONTEXT, awsServices.getPOOL_ID(), awsServices.getAPP_ClIENT_ID(), awsServices.getAPP_ClIENT_SECRET(), awsServices.getREGION());
         user = userPool.getUser("shadow13524@gmail.com");
+
+        selectedSchool = "newSchool";
+        FileUtil.upload(this, selectedSchool +"/appDB.db", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db");
+        //FileUtil.upload(this, "uploads/appDB.db-shm", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db-shm");
+        //FileUtil.upload(this, "uploads/appDB.db-wal", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db-wal");
+
+        //boolean fileDeleted = FileUtil.deleteDb(this);
+
+        FileUtil.download(this, "uploads/appDB1.db", "/data/data/com.plusmobileapps.safetyapp/databases/");
     }
 
     @Override
