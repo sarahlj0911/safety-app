@@ -157,9 +157,12 @@
     <string name="username">Username</string>
     <string name="temporary_password">Temporary Password</string>
     <string name="school">School</string>
+
     <string name="create_user">Create User</string>
     <string name="Admin_add">Add User</string>
     <string name="Admin_remove">remove User</string>
+    <string name="Admin_manage">manage user</string>
+
     <string name="login_button_error_aws_user_exists">Incorrect Password</string>
     <string name="login_button_user_confirmed">Account Confirmed!\nLogin Again</string>
     <string name="login_button_error_aws_new_password">Password Reset Required</string>
@@ -174,6 +177,7 @@
 
     <string name="delete_user">delete user</string>
     <string name="add_user">add user</string>
+
     <string name="view_current_tickets">View Current Tickets</string>
     <string name="ticket_history">Ticket History</string>
     <string name="string_ticket_history" />

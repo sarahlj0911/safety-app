@@ -58,6 +58,7 @@ import com.plusmobileapps.safetyapp.R;
 import com.plusmobileapps.safetyapp.main.MainActivity;
 import com.plusmobileapps.safetyapp.main.UserInfoDO;
 import com.plusmobileapps.safetyapp.signup.SignupActivity;
+import com.plusmobileapps.safetyapp.util.FileUtil;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -134,6 +135,8 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         awsServices = new AwsServices();
         initAWSUserPool();
         createAuthenticationHandler();
+
+        //boolean fileDeleted = FileUtil.deleteDb(this);
     }
 
     @Override
