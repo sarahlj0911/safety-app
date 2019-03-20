@@ -1,7 +1,9 @@
 package com.plusmobileapps.safetyapp.main;
 
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -11,15 +13,17 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 
 
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUser;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUserDetails;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUserPool;
-import com.amazonaws.mobileconnectors.cognitoidentityprovider.handlers.GenericHandler;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.handlers.GetDetailsHandler;
 import com.plusmobileapps.safetyapp.AwsServices;
 import com.plusmobileapps.safetyapp.R;
+
+import java.util.Map;
 
 public class removeUser extends AppCompatActivity {
 
@@ -33,7 +37,7 @@ public class removeUser extends AppCompatActivity {
         setContentView(R.layout.activity_remove_user);
 
         final Button button = findViewById(R.id.button2);
-
+        final EditText input = findViewById(R.id.editText2);
         final View view = findViewById(R.id.rootView);
 
         Toolbar myChildToolbar = findViewById(R.id.toolbar2);
@@ -51,25 +55,17 @@ public class removeUser extends AppCompatActivity {
                 awsServices = new AwsServices();
                 initAWSUserPool();
 
-<<<<<<< HEAD
-                final String email = input.getText().toString();
+                final String email = input.getText().toString(); //gets you the contents of edit text
 
                 AsyncTask.execute(new Runnable() {
                     @Override
                     public void run() {
-                        final CognitoUser user = userPool.getUser(email);
-=======
-                AsyncTask.execute(new Runnable() {
-                    @Override
-                    public void run() {
-                        CognitoUser user = userPool.getUser("bskoczyl@asu.edu");
->>>>>>> parent of f2e73e7... confirm dialog
+                        CognitoUser user = userPool.getUser(email);
 
                         GetDetailsHandler handler = new GetDetailsHandler() {
                             @Override
                             public void onSuccess(final CognitoUserDetails list) {
                                 Log.d("finduser", "Successfully retrieved user details");
-<<<<<<< HEAD
 
                                 Map userAtts    = list.getAttributes().getAttributes();
                                 final String name = userAtts.get("name").toString();
@@ -86,32 +82,15 @@ public class removeUser extends AppCompatActivity {
                                                 .setCancelable(false)
                                                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                                                     public void onClick(DialogInterface dialog, int id) {
-                                                        Log.d("finduser", "confirmation dialog, yes");
-                                                        GenericHandler handler = new GenericHandler() {
-                                                            @Override
-                                                            public void onSuccess() {
-                                                                Log.d("finduser","Delete was successful!");
-                                                            }
-
-                                                            @Override
-                                                            public void onFailure(Exception exception) {
-                                                                Log.d("finduser","Delete failed, probe exception for details");
-                                                            }
-                                                        };
-                                                        user.deleteUser(handler);
+                                                        Log.d("finduser", "confirmation dialog");
                                                     }
                                                 })
-                                                .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                                                    public void onClick(DialogInterface dialog, int id) {
-                                                        Log.d("finduser", "confirmation dialog, no");
-                                                    }
-                                                })
+                                                .setNegativeButton("No", null)
                                                 .show();
                                     }
                                 });
 
-=======
->>>>>>> parent of f2e73e7... confirm dialog
+
                             }
 
                             @Override
@@ -131,6 +110,20 @@ public class removeUser extends AppCompatActivity {
                         user.getDetails(handler);
                     }
                 });
+
+                /*GenericHandler handler = new GenericHandler() {
+
+                    @Override
+                    public void onSuccess() {
+                        // Delete was successful!
+                    }
+
+                    @Override
+                    public void onFailure(Exception exception) {
+                        // Delete failed, probe exception for details
+                    }
+                };
+                user.deleteUser(handler);*/
 
             }
         });
