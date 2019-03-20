@@ -554,25 +554,6 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
 
         animation.start();
     }
-    public void createUserInfoItem() {
 
-        //an example to demonstrate a dynamoDB push to amazon web servers
-        final UserInfoDO item = new UserInfoDO();
-        item.setUserId("bart-test");
-        item.setName("bart");
-        item.setTitle("student");
-        item.setLanguage("eng");
-        item.setLocation("asu");
-        Log.d("AWS", "createUserInfoItem");
-
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                dynamoDBMapper.save(item);
-                // Item saved
-                Log.d("AWS", "item added");
-            }
-        }).start();
-    }
 
 }
