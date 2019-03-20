@@ -51,25 +51,17 @@ public class removeUser extends AppCompatActivity {
                 awsServices = new AwsServices();
                 initAWSUserPool();
 
-<<<<<<< HEAD
                 final String email = input.getText().toString();
 
                 AsyncTask.execute(new Runnable() {
                     @Override
                     public void run() {
                         final CognitoUser user = userPool.getUser(email);
-=======
-                AsyncTask.execute(new Runnable() {
-                    @Override
-                    public void run() {
-                        CognitoUser user = userPool.getUser("bskoczyl@asu.edu");
->>>>>>> parent of f2e73e7... confirm dialog
 
                         GetDetailsHandler handler = new GetDetailsHandler() {
                             @Override
                             public void onSuccess(final CognitoUserDetails list) {
                                 Log.d("finduser", "Successfully retrieved user details");
-<<<<<<< HEAD
 
                                 Map userAtts    = list.getAttributes().getAttributes();
                                 final String name = userAtts.get("name").toString();
@@ -109,9 +101,6 @@ public class removeUser extends AppCompatActivity {
                                                 .show();
                                     }
                                 });
-
-=======
->>>>>>> parent of f2e73e7... confirm dialog
                             }
 
                             @Override
