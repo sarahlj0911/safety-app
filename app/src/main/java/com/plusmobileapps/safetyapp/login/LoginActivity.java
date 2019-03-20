@@ -303,63 +303,26 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
 
             @Override
             public void onFailure(Exception exception) {
+                // Sign-in failed, check exception for the cause
                 String ex = exception.toString();
                 Log.d(TAG, "AWS Sign-in Failure: " +ex);
                 if (ex.toLowerCase().contains("usernotfoundexception")) {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            buttonLoginStatus.setText(getString(R.string.login_button_user_not_found)); }
-                    });
-                }
-                else if (ex.toLowerCase().contains("user is disabled")) {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            buttonLoginStatus.setText("Your account has been disabled");
-                            buttonLoginStatus.setClickable(true); }
-                    });
-                }
+                    buttonLoginStatus.setText(getString(R.string.login_button_user_not_found)); }
                 else if (ex.toLowerCase().contains("notauthorizedexception")) {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            buttonLoginStatus.setText(String.format("%s\n Reset it?", getString(R.string.login_button_error_aws_user_exists)));
-                            buttonLoginStatus.setClickable(true); }
-                    });
-                }
+                    buttonLoginStatus.setText(String.format("%s\n Reset it?", getString(R.string.login_button_error_aws_user_exists)));
+                    buttonLoginStatus.setClickable(true); }
                 else if (ex.toLowerCase().contains("passwordresetrequiredexception")) {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            buttonLoginStatus.setText(getString(R.string.login_button_error_aws_new_password));}
-                    });
+                    buttonLoginStatus.setText(getString(R.string.login_button_error_aws_new_password));
                 }
                 else if (ex.toLowerCase().contains("usernotconfirmedexception")) {
                     user = userPool.getUser(email);
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            buttonLoginStatus.setText(getString(R.string.login_button_error_verify));
-                            buttonLoginStatus.setClickable(false);
-                            buttonLoginStatus.setClickable(true);
-                            showCodeView = true; }
-                    });
-                }
+                    buttonLoginStatus.setText(getString(R.string.login_button_error_verify));
+                    buttonLoginStatus.setClickable(true);
+                    showCodeView = true; }
                 else if (ex.toLowerCase().contains("unable to resolve host")) {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            buttonLoginStatus.setText(getString(R.string.login_button_error_AWS_connection_issue)); }
-                    });
+                    buttonLoginStatus.setText(getString(R.string.login_button_error_AWS_connection_issue));
                 }
-                else {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            buttonLoginStatus.setText(R.string.login_button_error_aws_error); }
-                    });
-                }
+                else buttonLoginStatus.setText(String.format("%s%s", getString(R.string.login_button_error_aws_error), exception));
                 handler.postDelayed(failureAnimation, 2000);
                 handler.postDelayed(resetButton, 5000); }
         };
