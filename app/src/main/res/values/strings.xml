@@ -160,6 +160,7 @@
     <string name="create_user">Create User</string>
     <string name="Admin_add">Add User</string>
     <string name="Admin_remove">remove User</string>
+    <string name="Admin_manage">manage User</string>
     <string name="login_button_error_aws_user_exists">Incorrect Password</string>
     <string name="login_button_user_confirmed">Account Confirmed!\nLogin Again</string>
     <string name="login_button_error_aws_new_password">Password Reset Required</string>
