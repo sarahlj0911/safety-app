@@ -1,6 +1,7 @@
 package com.plusmobileapps.safetyapp.login;
 
 import android.annotation.SuppressLint;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -28,6 +29,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 
+import com.amazonaws.auth.AWSCredentialsProvider;
+import com.amazonaws.mobile.client.AWSMobileClient;
+import com.amazonaws.mobile.client.AWSStartupHandler;
+import com.amazonaws.mobile.client.AWSStartupResult;
+import com.amazonaws.mobile.config.AWSConfiguration;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoDevice;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUser;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUserCodeDeliveryDetails;
@@ -40,14 +46,21 @@ import com.amazonaws.mobileconnectors.cognitoidentityprovider.continuations.Mult
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.handlers.AuthenticationHandler;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.handlers.GenericHandler;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.handlers.VerificationHandler;
+import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBMapper;
+import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
+import com.amazonaws.services.dynamodbv2.model.AttributeValue;
+import com.amazonaws.services.dynamodbv2.model.ScanRequest;
+import com.amazonaws.services.dynamodbv2.model.ScanResult;
 import com.plusmobileapps.safetyapp.AwsServices;
 import com.plusmobileapps.safetyapp.BlurUtils;
 import com.plusmobileapps.safetyapp.PrefManager;
 import com.plusmobileapps.safetyapp.R;
 import com.plusmobileapps.safetyapp.main.MainActivity;
+import com.plusmobileapps.safetyapp.main.UserInfoDO;
 import com.plusmobileapps.safetyapp.signup.SignupActivity;
 
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 import br.com.simplepass.loading_button_lib.customViews.CircularProgressButton;
@@ -71,6 +84,13 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
     private View codeAuthWindow;
     private Context CONTEXT = this;
     private AwsServices awsServices;
+    DynamoDBMapper dynamoDBMapper;
+    ContentResolver contentResolver;
+    public static final String AUTHORITY = "com.plusmobileapps.safetyapp.provider";
+    // An account type, in the form of a domain name
+    public static final String ACCOUNT_TYPE = "safetyapp.com";
+    // The account name
+    public static final String ACCOUNT = "safetyapp";
 
 
     @Override
@@ -391,18 +411,21 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
 
 
     public void buttonLogInClicked(View view) {
+
         android.util.Log.d(TAG, "Debug: Login Button Clicked");
+
         HashMap<String, String> formInput = new HashMap<>();
         emailInput.clearFocus();
         passwordInput.clearFocus();
         buttonLoginStatus.setAlpha(0);
         buttonLoginStatus.setClickable(false);
 
-        email = emailInput.getText().toString();
         password = passwordInput.getText().toString();
 
         formInput.put(LoginPresenter.EMAIL_INPUT, email);
         formInput.put(LoginPresenter.PASSWORD_INPUT, password);
+
+
 
         boolean validInput = presenter.processFormInput(formInput);
 
@@ -530,6 +553,26 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         });
 
         animation.start();
+    }
+    public void createUserInfoItem() {
+
+        //an example to demonstrate a dynamoDB push to amazon web servers
+        final UserInfoDO item = new UserInfoDO();
+        item.setUserId("bart-test");
+        item.setName("bart");
+        item.setTitle("student");
+        item.setLanguage("eng");
+        item.setLocation("asu");
+        Log.d("AWS", "createUserInfoItem");
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                dynamoDBMapper.save(item);
+                // Item saved
+                Log.d("AWS", "item added");
+            }
+        }).start();
     }
 
 }
