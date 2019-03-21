@@ -19,6 +19,7 @@ import android.widget.EditText;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUser;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUserDetails;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUserPool;
+import com.amazonaws.mobileconnectors.cognitoidentityprovider.handlers.GenericHandler;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.handlers.GetDetailsHandler;
 import com.plusmobileapps.safetyapp.AwsServices;
 import com.plusmobileapps.safetyapp.R;
@@ -55,12 +56,12 @@ public class removeUser extends AppCompatActivity {
                 awsServices = new AwsServices();
                 initAWSUserPool();
 
-                final String email = input.getText().toString(); //gets you the contents of edit text
+                final String email = input.getText().toString();
 
                 AsyncTask.execute(new Runnable() {
                     @Override
                     public void run() {
-                        CognitoUser user = userPool.getUser(email);
+                        final CognitoUser user = userPool.getUser(email);
 
                         GetDetailsHandler handler = new GetDetailsHandler() {
                             @Override
@@ -82,14 +83,29 @@ public class removeUser extends AppCompatActivity {
                                                 .setCancelable(false)
                                                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                                                     public void onClick(DialogInterface dialog, int id) {
-                                                        Log.d("finduser", "confirmation dialog");
+                                                        Log.d("finduser", "confirmation dialog, yes");
+                                                        GenericHandler handler = new GenericHandler() {
+                                                            @Override
+                                                            public void onSuccess() {
+                                                                Log.d("finduser","Delete was successful!");
+                                                            }
+
+                                                            @Override
+                                                            public void onFailure(Exception exception) {
+                                                                Log.d("finduser","Delete failed, probe exception for details");
+                                                            }
+                                                        };
+                                                        user.deleteUser(handler);
                                                     }
                                                 })
-                                                .setNegativeButton("No", null)
+                                                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                                    public void onClick(DialogInterface dialog, int id) {
+                                                        Log.d("finduser", "confirmation dialog, no");
+                                                    }
+                                                })
                                                 .show();
                                     }
                                 });
-
 
                             }
 
@@ -110,20 +126,6 @@ public class removeUser extends AppCompatActivity {
                         user.getDetails(handler);
                     }
                 });
-
-                /*GenericHandler handler = new GenericHandler() {
-
-                    @Override
-                    public void onSuccess() {
-                        // Delete was successful!
-                    }
-
-                    @Override
-                    public void onFailure(Exception exception) {
-                        // Delete failed, probe exception for details
-                    }
-                };
-                user.deleteUser(handler);*/
 
             }
         });
