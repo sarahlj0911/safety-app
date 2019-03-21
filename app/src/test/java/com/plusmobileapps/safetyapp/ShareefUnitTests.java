@@ -1,6 +1,5 @@
 package com.plusmobileapps.safetyapp;
 
-import com.plusmobileapps.safetyapp.login.ForgotPasswordActivity;
 import com.plusmobileapps.safetyapp.signup.SignupActivity;
 
 import org.junit.Test;
@@ -26,20 +25,4 @@ public class ShareefUnitTests {
         assertEquals(testy,testy);
     }
 
-
-    @Test
-    public void passwordReset() {
-        ForgotPasswordActivity fp = new ForgotPasswordActivity();
-
-        Boolean reset= fp.clicked;
-        //Not reset if false
-        assertEquals(false,reset);
-        fp.buttonClicked();
-        reset= fp.clicked;
-        //has been reset if true
-        assertEquals(true,reset);
-
-
-
-    }
 }
