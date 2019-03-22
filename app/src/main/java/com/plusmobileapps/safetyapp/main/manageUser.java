@@ -26,7 +26,7 @@ import com.plusmobileapps.safetyapp.R;
 
 import java.util.Map;
 
-public class removeUser extends AppCompatActivity {
+public class manageUser extends AppCompatActivity {
 
     private CognitoUserPool userPool;
     private AwsServices awsServices;
@@ -35,9 +35,9 @@ public class removeUser extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_remove_user);
+        setContentView(R.layout.activity_manage_user);
 
-        final Button button = findViewById(R.id.button);
+        final Button button = findViewById(R.id.button2);
         final EditText input = findViewById(R.id.editText);
         final View view = findViewById(R.id.rootView);
 
@@ -49,7 +49,6 @@ public class removeUser extends AppCompatActivity {
 
         // Enable the Up button
         ab.setDisplayHomeAsUpEnabled(true);
-
 
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -80,11 +79,10 @@ public class removeUser extends AppCompatActivity {
                                     public void run() {
                                         //Update UI.
                                         new AlertDialog.Builder(CONTEXT)
-                                                .setMessage("Are you sure you want to delete user: " + name + " with role: " + role)
+                                                .setMessage("Continue with this user: " + name + " with role: " + role + "?")
                                                 .setCancelable(false)
                                                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                                                     public void onClick(DialogInterface dialog, int id) {
-                                                        Log.d("finduser", "confirmation dialog, yes");
                                                         GenericHandler handler = new GenericHandler() {
                                                             @Override
                                                             public void onSuccess() {
@@ -96,7 +94,7 @@ public class removeUser extends AppCompatActivity {
                                                                 Log.d("finduser","Delete failed, probe exception for details");
                                                             }
                                                         };
-                                                        user.deleteUser(handler);
+                                                        //to do
                                                     }
                                                 })
                                                 .setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -132,8 +130,12 @@ public class removeUser extends AppCompatActivity {
         });
     }
 
+
+
+
     private void initAWSUserPool(){
         userPool = new CognitoUserPool(CONTEXT, awsServices.getPOOL_ID(), awsServices.getAPP_ClIENT_ID(), awsServices.getAPP_ClIENT_SECRET(), awsServices.getREGION());
+
     }
 
 }

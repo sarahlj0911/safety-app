@@ -7,4 +7,7 @@
         android:id="@+id/settings_menu_remove"
         android:title="@string/Admin_remove" />
 
+    <item
+        android:id="@+id/settings_menu_manage"
+        android:title="@string/Admin_manage" />
 </menu>

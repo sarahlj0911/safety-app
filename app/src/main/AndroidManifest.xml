@@ -28,6 +28,11 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar"
         tools:ignore="GoogleAppIndexingWarning">
+        <activity
+            android:name=".main.manageUser"
+            android:label="@string/title_activity_manage_user"
+            android:theme="@style/AppTheme.NoActionBar.NoActionBar"></activity>
+
         <service android:name="org.eclipse.paho.android.service.MqttService" />
 
         <activity
@@ -119,8 +124,9 @@
         </service>
 
         <activity android:name=".AdminSettings" />
-        <activity android:name=".main.removeUser"
-            android:parentActivityName="com.plusmobileapps.safetyapp.main.MainActivity"/>
+        <activity
+            android:name=".main.removeUser"
+            android:parentActivityName=".main.MainActivity" />
     </application>
 
 </manifest>
