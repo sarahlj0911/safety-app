@@ -62,8 +62,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/walkthroughDesc"
+        android:layout_centerHorizontal="true"
         android:layout_marginLeft="100dp"
-        android:layout_marginTop="126dp"
+        android:layout_marginTop="171dp"
         android:layout_marginRight="100dp"
         android:ems="10"
         android:fontFamily="sans-serif"
@@ -114,9 +115,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/walkthroughStatus"
-        android:layout_centerInParent="false"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="30dp"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="2dp"
         android:background="@color/colorPrimary"
         android:text="Save" />
 
@@ -144,6 +144,19 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Specific Area in Building" />
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/walkthroughCampus"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/walkthroughArea">
+
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/fieldCampus"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Campus" />
     </android.support.design.widget.TextInputLayout>
 
 </RelativeLayout>

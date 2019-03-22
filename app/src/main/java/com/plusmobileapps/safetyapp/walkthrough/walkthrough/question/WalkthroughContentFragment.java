@@ -183,8 +183,11 @@ public class WalkthroughContentFragment extends Fragment
 
         descriptionTextView.setText(savedInstanceState.getString("description"));
         dateTextView.setText(savedInstanceState.getString("date"));
+        locationTextView.setText(savedInstanceState.getString("area"));
+        genLoc.setText(savedInstanceState.getString("building"));
+        schoolName.setText(savedInstanceState.getString("campus"));
 
-        //TODO Location, Map, General Location, School Name
+        //TODO Map, Camera
 
         return view;
     }
@@ -204,6 +207,9 @@ public class WalkthroughContentFragment extends Fragment
         descriptionTextView = view.findViewById(R.id.fieldDesc);
         actionPlanLabel = view.findViewById(R.id.fieldTitle);
         actionPlanEditText = view.findViewById(R.id.fieldTitle);
+        locationTextView = view.findViewById(R.id.fieldArea);
+        genLoc = view.findViewById(R.id.fieldBuilding);
+        schoolName = view.findViewById(R.id.fieldCampus);
         priorityRed = view.findViewById(R.id.highPriorityButton);
         priorityRed.setOnClickListener(this);
         priorityYellow = view.findViewById(R.id.mediumPriorityButton);
@@ -243,6 +249,9 @@ public class WalkthroughContentFragment extends Fragment
         savedInstanceState.putString("description", description);
         savedInstanceState.putStringArrayList("options", options);
         savedInstanceState.putInt("rating", currentRating);
+        savedInstanceState.putString("area", locationTextView.getText().toString());
+        savedInstanceState.putString("building", genLoc.getText().toString());
+        savedInstanceState.putString("campus", schoolName.getText().toString());
 
         savedInstanceState.putString("date", new SimpleDateFormat("MM/dd/yyyy").format(new Date()));
 
