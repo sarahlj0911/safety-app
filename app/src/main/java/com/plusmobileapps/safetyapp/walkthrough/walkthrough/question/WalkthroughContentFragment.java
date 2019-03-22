@@ -448,6 +448,9 @@ public class WalkthroughContentFragment extends Fragment
             case R.id.saveButton:
                 //TODO Save things here
                 break;
+            case R.id.editSavedWalkthroughButton:
+                //TODO Edit things here
+                break;
             default:
                 break;
         }
