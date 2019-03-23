@@ -15,10 +15,6 @@ import com.plusmobileapps.safetyapp.PrefManager;
 import com.plusmobileapps.safetyapp.R;
 
 public class AdminDeleteUserActivity extends AppCompatActivity {
-<<<<<<< HEAD
-
-=======
->>>>>>> 8938deb2e72c20083393b85b5cfdb1f7c354bb07
     String array[] = {"user1", "user2", "user3", "user4","user5"};
     Button b1;
     Spinner spinner;
