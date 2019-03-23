@@ -186,6 +186,7 @@ public class WalkthroughContentFragment extends Fragment
         locationTextView.setText(savedInstanceState.getString("area"));
         genLoc.setText(savedInstanceState.getString("building"));
         schoolName.setText(savedInstanceState.getString("campus"));
+        mapPic.setBackgroundResource(R.drawable.ASU_map);
 
         //TODO Map, Camera
 
