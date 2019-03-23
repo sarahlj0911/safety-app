@@ -22,6 +22,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
@@ -35,6 +36,9 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.amazonaws.mobile.client.AWSMobileClient;
+import com.amazonaws.mobile.client.UserStateDetails;
+import com.amazonaws.mobile.client.UserStateListener;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoDevice;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUser;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUserCodeDeliveryDetails;
@@ -62,7 +66,8 @@ import br.com.simplepass.loading_button_lib.customViews.CircularProgressButton;
 
 public class LoginActivity extends AppCompatActivity implements LoginContract.View {
 
-    public static final String TAG = "LoginActivity";
+    private static final String TAG = "LoginActivity";
+    private static final String AWSTAG = "LoginActivityAWS";
     private View codeAuthWindow, codeView;
     private Bundle fadeOutActivity;
     private Handler handler;
@@ -74,7 +79,7 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
     private TextInputLayout emailField, passwordField;
     private EditText emailInput, passwordInput, codeInput;
     private CircularProgressButton loginButton;
-    private boolean showCodeView, hasInternetConnection, statusOfCodeSuccess;
+    private boolean showCodeView, hasInternetConnection;
     private int emailCharCount;
     // AWS
     private CognitoUserPool userPool;
@@ -104,7 +109,7 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         backgroundBlur = findViewById(R.id.imageBackgroundBlur);
         codeBackground = findViewById(R.id.viewAuthCodeBackground);
         buttonCodeBackground = findViewById(R.id.buttonCodeBackground);
-        buttonSignUp = findViewById(R.id.buttonRegister);
+        buttonSignUp = findViewById(R.id.buttonSignUp);
 
         textNewUser = findViewById(R.id.textRegister);
         appTitle = findViewById(R.id.textViewTitle);
@@ -123,17 +128,33 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         buttonDismissCodeView.setClickable(false);
         buttonLoginStatus.setClickable(false);
 
-//        logoStart = AnimationUtils.loadAnimation(this, R.animator.logo_start);
         fadeOutActivity = ActivityOptionsCompat.makeCustomAnimation(this, 1, android.R.anim.fade_out).toBundle();
 
         userPool = new AwsServices().initAWSUserPool(this);
+        //AWSMobileClient mobileClient = new AWSMobileClient();
+
+        AWSMobileClient.getInstance().addUserStateListener(new UserStateListener() {
+            @Override
+            public void onUserStateChanged(UserStateDetails details) {
+                switch (details.getUserState()){
+                    case SIGNED_IN:
+                        Log.i(AWSTAG, "User is already signed in");
+                        launchHomeScreen();
+                        break;
+                    case SIGNED_OUT:
+                        Log.i(AWSTAG, "User is not signed in");
+                        break;
+                    default:
+                        Log.i(AWSTAG, "Unsupported");
+                }
+            }
+        });
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        Intent intent = getIntent();
-        String openAnimation = intent.getStringExtra("openAni");
+        String openAnimation = getIntent().getStringExtra("openAni");
 
         passwordInput.setText("");
         emailInput.setText("");
@@ -145,16 +166,15 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         if (networkInfo != null && networkInfo.isConnected()) {
             hasInternetConnection = true;
             buttonLoginStatus.setText("");
-        } else {
+            // TODO check if user is already signed in
+
+        }
+        else {
             hasInternetConnection = false;
             buttonLoginStatus.setText("You have no internet connection!\nApp services will be unavailable.");
-            Log.e(TAG, "Device does not have an internet connection!");
-        }
+            Log.e(TAG, "Device does not have an internet connection!"); }
 
         if (openAnimation != null && openAnimation.equals("start")) activityStartingAnimation();
-
-//        else if (openAnimation.equals("back")) {
-//            activityStartingAnimation("back"); }
     }
 
     @Override
@@ -162,6 +182,23 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         super.onDestroy();
         loginButton.dispose();
     }
+
+    @Override
+    public void launchHomeScreen() {
+//        PrefManager prefManager = new PrefManager(this);
+//        prefManager.setIsUserSignedUp(true);
+        Intent mainActivity = new Intent(LoginActivity.this, MainActivity.class);
+        mainActivity.putExtra("email", email);
+        mainActivity.putExtra("password", password);
+        startActivity(mainActivity, fadeOutActivity);
+        finish();
+    }
+
+    @Override
+    public void setPresenter(LoginContract.Presenter presenter) {
+        this.presenter = presenter;
+    }
+
 
     public void displayInvalidEmailError(boolean show) {
         emailField.setError(getString(R.string.error_email_invalid));
@@ -179,40 +216,9 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
     }
 
 
-    @Override
-    public void launchHomeScreen() {
-        PrefManager prefManager = new PrefManager(this);
-        prefManager.setIsUserSignedUp(true);
-        Intent mainActivity = new Intent(LoginActivity.this, MainActivity.class);
-        mainActivity.putExtra("email", email);
-        startActivity(mainActivity, fadeOutActivity);
-        finish();
-    }
-
-
-    @Override
-    public void setPresenter(LoginContract.Presenter presenter) {
-        this.presenter = presenter;
-    }
-
-
     // Handler: Login User
     AuthenticationHandler authenticationHandler = new AuthenticationHandler() {
         // Button Animations
-        final Runnable successAnimation = new Runnable() {
-            public void run() {
-                loginButton.doneLoadingAnimation(Color.parseColor("#ffffff"), BitmapFactory.decodeResource(getResources(), R.drawable.login_button_confirmed));
-            }
-        };
-        final Runnable failureAnimation = new Runnable() {
-            public void run() {
-                if (showCodeView) {
-                    showCodeAuthorizationView();
-                }
-                buttonLoginStatus.setAlpha(1);
-                loginButton.doneLoadingAnimation(Color.parseColor("#ffffff"), BitmapFactory.decodeResource(getResources(), R.drawable.login_button_failed));
-            }
-        };
         final Runnable waitAndLaunchMain = new Runnable() {
             public void run() {
                 launchHomeScreen();
@@ -223,17 +229,29 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
                 loginButton.revertAnimation();
             }
         };
-
+        final Runnable successAnimation = new Runnable() {
+            public void run() {
+                loginButton.doneLoadingAnimation(Color.parseColor("#ffffff"), BitmapFactory.decodeResource(getResources(), R.drawable.login_button_confirmed));
+            }
+        };
+        final Runnable failureAnimation = new Runnable() {
+            public void run() {
+                if (showCodeView) showCodeAuthorizationView();
+                buttonLoginStatus.setAlpha(1);
+                loginButton.doneLoadingAnimation(Color.parseColor("#ffffff"), BitmapFactory.decodeResource(getResources(), R.drawable.login_button_failed));
+            }
+        };
 
         @Override
         public void onSuccess(CognitoUserSession userSession, CognitoDevice newDevice) {
+            Log.d(AWSTAG, "Sign-in Successful");
             handler.postDelayed(successAnimation, 500);
             handler.postDelayed(waitAndLaunchMain, 1500);
         }
 
         @Override
         public void getAuthenticationDetails(AuthenticationContinuation authenticationContinuation, String userId) {
-            Log.d(TAG, "AWS Sign-in: Getting Details");
+            Log.d(AWSTAG, "Sign-in: Getting Details");
             AuthenticationDetails authenticationDetails = new AuthenticationDetails(userId, password, null);    // The API needs user sign-in credentials to continue
             authenticationContinuation.setAuthenticationDetails(authenticationDetails);     // Pass the user sign-in credentials to the continuation
             authenticationContinuation.continueTask();  // Allow the sign-in to continue
@@ -241,14 +259,14 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
 
         @Override
         public void getMFACode(MultiFactorAuthenticationContinuation multiFactorAuthenticationContinuation) {
-            Log.d(TAG, "AWS Sign-in: Needs to use a multi-factor authentication method to sign in");
+            Log.d(AWSTAG, "Sign-in: Using multi-factor authentication");
             // multiFactorAuthenticationContinuation.setMfaCode(mfaVerificationCode);
             // multiFactorAuthenticationContinuation.continueTask();
         }
 
         @Override
         public void authenticationChallenge(ChallengeContinuation continuation) {
-            Log.d(TAG, "AWS Sign-in Challenge: " + continuation.getChallengeName());
+            Log.d(AWSTAG, "Sign-in Challenge: " + continuation.getChallengeName());
             if (continuation.getChallengeName().contains("NEW_PASSWORD_REQUIRED")) {
                 user = userPool.getUser(email);
                 showCodeView = true;
@@ -258,9 +276,8 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
                         buttonLoginStatus.setText(getString(R.string.login_button_error_verify));
                         buttonLoginStatus.setClickable(true);
                     }
-                });
-            } else {
-                runOnUiThread(new Runnable() {
+                }); }
+            else { runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         buttonLoginStatus.setText(getString(R.string.login_button_error_aws_user_exists));
@@ -339,7 +356,7 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
     GenericHandler confirmCodeHandler = new GenericHandler() {
         @Override
         public void onSuccess() {
-            Log.d(TAG, "Code was sent!");
+            Log.d(AWSTAG, "Code was sent!");
             final Runnable clearView = new Runnable() {
                 public void run() {
                     buttonDismissAuthCodeClicked(codeAuthWindow);
@@ -360,7 +377,7 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         @SuppressLint("SetTextI18n")
         @Override
         public void onFailure(Exception exception) {
-            Log.d(TAG, "AWS Code Send Failure: " + exception);
+            Log.d(AWSTAG, "AWS Code Send Failure: " + exception);
             codeViewStatusAnimation(1, 200, "INCORRECT CODE");
             codeViewErrorAnimation();
         }
@@ -370,13 +387,14 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
     VerificationHandler resendConfirmationCodeHandler = new VerificationHandler() {
         @Override
         public void onSuccess(CognitoUserCodeDeliveryDetails verificationCodeDeliveryMedium) {
+            Log.d(AWSTAG, "Resend Code Successful");
             codeViewStatusAnimation(0, 200, "CODE SENT");
         }
 
         @Override
         public void onFailure(Exception ex) {
             String showErr;
-            Log.d(TAG, "AWS Code Email Send Failure: " + ex);
+            Log.d(AWSTAG, "Resend Code Failure: " + ex);
             if (ex.toString().toLowerCase().contains("limitexceededexception"))
                 showErr = "ATTEMPT LIMIT EXCEEDED";
             else showErr = "ISSUE SENDING CODE";
@@ -466,7 +484,7 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         }
     }
 
-    public void buttonRegisterClicked(View view) {
+    public void buttonSignUpClicked(View view) {
         android.util.Log.d(TAG, "Debug: Login Register Clicked");
         Intent signUp = new Intent(LoginActivity.this, SignupActivity.class);
         startActivity(signUp, fadeOutActivity);
@@ -573,10 +591,14 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
                 @Override
                 public void onAnimationRepeat(Animation animation) { }
             });
-            animations.addAnimation(fadeOutAni); }
+            animations.addAnimation(fadeOutAni);
+
+            Animation scaleOutAni = new ScaleAnimation(1f, 0.97f, 1f, 0.97f, codeAuthWindow.getWidth() / 2f, codeAuthWindow.getHeight() / 2f);
+            scaleOutAni.setDuration(duration);
+            scaleOutAni.setInterpolator(new AccelerateDecelerateInterpolator());
+            codeAuthWindow.startAnimation(scaleOutAni); }
         codeView.startAnimation(animations);
     }
-
 
     private void codeViewStatusAnimation(int status, final int duration, final String buttonText) {
         final TransitionDrawable backgroundTransition, buttonTransition;

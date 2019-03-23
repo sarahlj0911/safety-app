@@ -512,7 +512,7 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
         });
     }
 
-    public void buttonClicked(View view) {
+    public void popupButtonClicked(View view) {
         buttonDismissViewClicked(customPopup);
         Intent intent = Intent.makeMainSelectorActivity(Intent.ACTION_MAIN, Intent.CATEGORY_APP_EMAIL);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

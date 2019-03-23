@@ -142,7 +142,7 @@
         tools:ignore="RtlCompat" />
 
     <Button
-        android:id="@+id/buttonRegister"
+        android:id="@+id/buttonSignUp"
         android:layout_width="wrap_content"
         android:layout_height="45dp"
         android:layout_marginStart="5dp"
@@ -150,7 +150,7 @@
         android:layout_marginEnd="20dp"
         android:background="@drawable/login_status_ripple"
         android:fontFamily="sans-serif-medium"
-        android:onClick="buttonRegisterClicked"
+        android:onClick="buttonSignUpClicked"
         android:stateListAnimator="@null"
         android:text="@string/login_button_register"
         android:textAllCaps="false"

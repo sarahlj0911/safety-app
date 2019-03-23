@@ -126,7 +126,7 @@
             android:background="@drawable/rounded_button_animation"
             android:clickable="true"
             android:focusable="true"
-            android:onClick="buttonClicked"
+            android:onClick="popupButtonClicked"
             android:text="@string/placeholder_button"
             android:textColor="@color/button_verification_text"
             android:textSize="18sp"
