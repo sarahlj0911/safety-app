@@ -177,7 +177,10 @@ public class WalkthroughContentFragment extends Fragment
             statusBar.setBackgroundColor(Color.parseColor("FF4CAF50"));
         }
 
-        //picDisplay.setBackground(savedInstanceState.getString("photoPath"));
+        String picPath = savedInstanceState.getString("photoPath");
+        Drawable picture = Drawable.createFromPath(picPath);
+
+        picDisplay.setBackground(picture);
 
         actionPlanLabel.setText(savedInstanceState.getString("actionPlan"));
 
@@ -192,7 +195,7 @@ public class WalkthroughContentFragment extends Fragment
             mapPic.setBackgroundResource(R.drawable.ASU_map);
         }
 
-        //TODO Map, Camera
+        //TODO Camera
 
         return view;
     }
