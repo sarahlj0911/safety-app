@@ -83,6 +83,7 @@ public class WalkthroughContentFragment extends Fragment
     private RadioGroup radioGroup;
     private int currentRating = -1;
     private int currentPriority = -1;
+    private static int count = 0;
 
     public static WalkthroughContentFragment newInstance(Question question, Response loadedResponse) {
         WalkthroughContentFragment fragment = new WalkthroughContentFragment();
@@ -194,8 +195,6 @@ public class WalkthroughContentFragment extends Fragment
         {
             mapPic.setBackgroundResource(R.drawable.ASU_map);
         }
-
-        //TODO Camera
 
         return view;
     }
@@ -481,8 +480,10 @@ public class WalkthroughContentFragment extends Fragment
         }
     }
 
-    private File createImageFile() throws IOException {
-        String imageFileName = "JPEG_";
+    private File createImageFile() throws IOException
+    {
+        String imageFileName = "JPEG_" + count;
+        count++;
         File storageDir = this.getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         File image = File.createTempFile(imageFileName, ".jpg", storageDir);
         /*photoPath = image.getAbsolutePath();
