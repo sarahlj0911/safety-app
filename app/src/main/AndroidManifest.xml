@@ -28,10 +28,11 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar"
         tools:ignore="GoogleAppIndexingWarning">
+        <activity android:name=".main.ManageSelectedUser"></activity>
         <activity
             android:name=".main.manageUser"
             android:label="@string/title_activity_manage_user"
-            android:theme="@style/AppTheme.NoActionBar.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar.NoActionBar" />
 
         <service android:name="org.eclipse.paho.android.service.MqttService" />
 

@@ -4,6 +4,7 @@ package com.plusmobileapps.safetyapp.main;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -47,6 +48,8 @@ public class manageUser extends AppCompatActivity {
         // Get a support ActionBar corresponding to this toolbar
         ActionBar ab = getSupportActionBar();
 
+        final Intent manage_user = new Intent(this, ManageSelectedUser.class);
+
         // Enable the Up button
         ab.setDisplayHomeAsUpEnabled(true);
 
@@ -87,6 +90,8 @@ public class manageUser extends AppCompatActivity {
                                                             @Override
                                                             public void onSuccess() {
                                                                 Log.d("finduser","Delete was successful!");
+
+                                                                startActivity(manage_user);
                                                             }
 
                                                             @Override
