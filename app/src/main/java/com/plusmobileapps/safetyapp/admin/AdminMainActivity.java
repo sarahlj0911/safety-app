@@ -25,30 +25,30 @@ public class AdminMainActivity extends AppCompatActivity {
 
     }
     public void viewTickets(){
-        Log.d("onclick","viewtickets");
+        Log.d("onclick","viewtickets clicked");
 
         Intent i=new Intent(AdminMainActivity.this,ViewTicketsActivity.class);
         startActivity(i);
     }
     public void viewHistory(){
-        Log.d("onclick","viewHistory");
+        Log.d("onclick","viewHistory clicked");
         Intent i=new Intent(AdminMainActivity.this,AdminViewHistoryActivity.class);
         startActivity(i);
     }
     public void addUser(){
-        Log.d("onclick","addUser");
+        Log.d("onclick","addUser clicked ");
 
         Intent i=new Intent(AdminMainActivity.this,AdminAddUserActivity.class);
         startActivity(i);
     }
     public void deleteUser(){
-        Log.d("onclick","viewtickets");
+        Log.d("onclick","viewtickets clicked");
 
         Intent i=new Intent(AdminMainActivity.this,AdminDeleteUserActivity.class);
         startActivity(i);
     }
     public void newTicket(){
-        Log.d("onclick","viewtickets");
+        Log.d("onclick","viewtickets clicked");
 
     }
 }

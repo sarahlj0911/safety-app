@@ -15,7 +15,7 @@ import com.plusmobileapps.safetyapp.PrefManager;
 import com.plusmobileapps.safetyapp.R;
 
 public class AdminDeleteUserActivity extends AppCompatActivity {
-    String array[] = {"user1", "user2", "user3", "user4"};
+    String array[] = {"user1", "user2", "user3", "user4","user5"};
     Button b1;
     Spinner spinner;
     ArrayAdapter<CharSequence> adapter;
@@ -23,6 +23,7 @@ public class AdminDeleteUserActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin_delete_user);
+        //creates spinner to list users
         spinner = (Spinner) findViewById(R.id.spinner);
         adapter = ArrayAdapter.createFromResource(this, R.array.userArray,android.R.layout.simple_spinner_item);
         spinner.setAdapter(adapter);
