@@ -190,6 +190,8 @@
     </string-array>
 
     <string name="user_not_found">User not found</string>
+    <string name="upload">Upload</string>
+    <string name="download">Download</string>
 
 
 </resources>
