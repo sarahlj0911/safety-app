@@ -37,8 +37,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.amazonaws.mobile.client.AWSMobileClient;
+import com.amazonaws.mobile.client.AWSStartupHandler;
+import com.amazonaws.mobile.client.AWSStartupResult;
+import com.amazonaws.mobile.client.Callback;
 import com.amazonaws.mobile.client.UserStateDetails;
 import com.amazonaws.mobile.client.UserStateListener;
+import com.amazonaws.mobile.client.results.SignInResult;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoDevice;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUser;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUserCodeDeliveryDetails;
@@ -59,6 +63,7 @@ import com.plusmobileapps.safetyapp.main.MainActivity;
 import com.plusmobileapps.safetyapp.signup.SignupActivity;
 
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 import br.com.simplepass.loading_button_lib.customViews.CircularProgressButton;
@@ -72,7 +77,7 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
     private Bundle fadeOutActivity;
     private Handler handler;
     private LoginContract.Presenter presenter;
-    private String email, password;
+    private String username, password;
     private TextView appTitle, textNewUser;
     private ImageView backgroundBlur, codeBackground, buttonCodeBackground, appLogo;
     private Button buttonLoginStatus, buttonDismissCodeView, buttonCode, buttonSignUp;
@@ -115,7 +120,6 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         appTitle = findViewById(R.id.textViewTitle);
         appLogo = findViewById(R.id.imageLogo);
 
-
         codeInput = findViewById(R.id.editTextCodeInput);
         emailInput = findViewById(R.id.fieldEmail);
         passwordInput = findViewById(R.id.fieldPassword);
@@ -131,24 +135,6 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         fadeOutActivity = ActivityOptionsCompat.makeCustomAnimation(this, 1, android.R.anim.fade_out).toBundle();
 
         userPool = new AwsServices().initAWSUserPool(this);
-        //AWSMobileClient mobileClient = new AWSMobileClient();
-
-        AWSMobileClient.getInstance().addUserStateListener(new UserStateListener() {
-            @Override
-            public void onUserStateChanged(UserStateDetails details) {
-                switch (details.getUserState()){
-                    case SIGNED_IN:
-                        Log.i(AWSTAG, "User is already signed in");
-                        launchHomeScreen();
-                        break;
-                    case SIGNED_OUT:
-                        Log.i(AWSTAG, "User is not signed in");
-                        break;
-                    default:
-                        Log.i(AWSTAG, "Unsupported");
-                }
-            }
-        });
     }
 
     @Override
@@ -165,10 +151,7 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
         if (networkInfo != null && networkInfo.isConnected()) {
             hasInternetConnection = true;
-            buttonLoginStatus.setText("");
-            // TODO check if user is already signed in
-
-        }
+            buttonLoginStatus.setText(""); }
         else {
             hasInternetConnection = false;
             buttonLoginStatus.setText("You have no internet connection!\nApp services will be unavailable.");
@@ -188,8 +171,7 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
 //        PrefManager prefManager = new PrefManager(this);
 //        prefManager.setIsUserSignedUp(true);
         Intent mainActivity = new Intent(LoginActivity.this, MainActivity.class);
-        mainActivity.putExtra("email", email);
-        mainActivity.putExtra("password", password);
+        mainActivity.putExtra("email", username);
         startActivity(mainActivity, fadeOutActivity);
         finish();
     }
@@ -244,9 +226,8 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
 
         @Override
         public void onSuccess(CognitoUserSession userSession, CognitoDevice newDevice) {
-            Log.d(AWSTAG, "Sign-in Successful");
-            handler.postDelayed(successAnimation, 500);
-            handler.postDelayed(waitAndLaunchMain, 1500);
+                    handler.postDelayed(successAnimation, 500);
+                    handler.postDelayed(waitAndLaunchMain, 1500);
         }
 
         @Override
@@ -268,7 +249,7 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         public void authenticationChallenge(ChallengeContinuation continuation) {
             Log.d(AWSTAG, "Sign-in Challenge: " + continuation.getChallengeName());
             if (continuation.getChallengeName().contains("NEW_PASSWORD_REQUIRED")) {
-                user = userPool.getUser(email);
+                user = userPool.getUser(username);
                 showCodeView = true;
                 runOnUiThread(new Runnable() {
                     @Override
@@ -323,7 +304,7 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
                     }
                 });
             } else if (ex.toLowerCase().contains("usernotconfirmedexception")) {
-                user = userPool.getUser(email);
+                user = userPool.getUser(username);
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -467,10 +448,10 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         buttonLoginStatus.setAlpha(0);
         buttonLoginStatus.setClickable(false);
 
-        email = emailInput.getText().toString();
+        username = emailInput.getText().toString();
         password = passwordInput.getText().toString();
 
-        formInput.put(LoginPresenter.EMAIL_INPUT, email);
+        formInput.put(LoginPresenter.EMAIL_INPUT, username);
         formInput.put(LoginPresenter.PASSWORD_INPUT, password);
 
         boolean validInput = presenter.processFormInput(formInput);
@@ -480,7 +461,7 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
             loginButton.startAnimation();
             codeInput.setText("");
             codeViewStatusAnimation(3, 0, "RESEND CODE");
-            userPool.getUser(email).getSessionInBackground(authenticationHandler); // Sign in the user
+            userPool.getUser(username).getSessionInBackground(authenticationHandler); // Sign in the user
         }
     }
 

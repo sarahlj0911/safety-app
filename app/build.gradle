@@ -69,7 +69,7 @@ dependencies {
     implementation('com.amazonaws:aws-android-sdk-auth-ui:2.7.+@aar') { transitive = true }
 
     //Base SDK
-    implementation 'com.amazonaws:aws-android-sdk-core:2.11.+'
+    implementation 'com.amazonaws:aws-android-sdk-core:2.12.5'
 
     //AppSync SDK
     implementation 'com.amazonaws:aws-android-sdk-appsync:2.+'

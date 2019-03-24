@@ -7,8 +7,11 @@ import com.amazonaws.regions.Regions;
 
 import static com.amazonaws.regions.Regions.US_WEST_2;
 
-// AWS Services API: https://docs.aws.amazon.com/cognito/latest/developerguide/using-amazon-cognito-user-identity-pools-android-sdk.html
-// AWS UserType:     https://docs.aws.amazon.com/cognito-user-identity-pools/latest/APIReference/API_UserType.html
+// AWS User Pool:           https://us-west-2.console.aws.amazon.com/cognito/users?region=us-west-2#/pool/us-west-2_syFk4QKhg/users?_k=wjemxd
+// AWS Android SDK:         https://aws-amplify.github.io/docs/android/start?ref=amplify-android-btn
+// AWS Android Git Repo:    https://github.com/aws-amplify/aws-sdk-android
+// AWS Services API:        https://docs.aws.amazon.com/cognito/latest/developerguide/using-amazon-cognito-user-identity-pools-android-sdk.html
+// AWS UserType:            https://docs.aws.amazon.com/cognito-user-identity-pools/latest/APIReference/API_UserType.html
 
 public class AwsServices {
     private String POOL_ID;
