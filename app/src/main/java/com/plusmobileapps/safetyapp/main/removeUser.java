@@ -61,14 +61,16 @@ public class removeUser extends AppCompatActivity {
                 AsyncTask.execute(new Runnable() {
                     @Override
                     public void run() {
+                        //pull user with this email from user pool
                         final CognitoUser user = userPool.getUser(email);
-
 
                         GetDetailsHandler handler = new GetDetailsHandler() {
                             @Override
                             public void onSuccess(final CognitoUserDetails list) {
                                 Log.d("finduser", "Successfully retrieved user details");
 
+
+                                //get user name and role
                                 Map userAtts    = list.getAttributes().getAttributes();
                                 final String name = userAtts.get("name").toString();
                                 final String role = userAtts.get("custom:role").toString();
@@ -79,6 +81,7 @@ public class removeUser extends AppCompatActivity {
                                     @Override
                                     public void run() {
                                         //Update UI.
+                                        //pop up dialog for found user
                                         new AlertDialog.Builder(CONTEXT)
                                                 .setMessage("Are you sure you want to delete user: " + name + " with role: " + role)
                                                 .setCancelable(false)
@@ -96,6 +99,7 @@ public class removeUser extends AppCompatActivity {
                                                                 Log.d("finduser","Delete failed, probe exception for details");
                                                             }
                                                         };
+                                                        //if user selected yes on dialog, delete selected user
                                                         user.deleteUser(handler);
                                                     }
                                                 })
@@ -110,6 +114,7 @@ public class removeUser extends AppCompatActivity {
 
                             }
 
+                            //create message at the bottom of the screen when it fails to find the user that was entered
                             @Override
                             public void onFailure(final Exception exception) {
                                 Log.d("finduser", "Failed to retrieve the user details, probe exception for the cause/n"+exception);
@@ -132,6 +137,7 @@ public class removeUser extends AppCompatActivity {
         });
     }
 
+    //initialize user pool
     private void initAWSUserPool(){
         userPool = new CognitoUserPool(CONTEXT, awsServices.getPOOL_ID(), awsServices.getAPP_ClIENT_ID(), awsServices.getAPP_ClIENT_SECRET(), awsServices.getREGION());
     }

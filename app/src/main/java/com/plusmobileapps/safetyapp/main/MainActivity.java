@@ -128,14 +128,14 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
         userPool = new CognitoUserPool(CONTEXT, awsServices.getPOOL_ID(), awsServices.getAPP_ClIENT_ID(), awsServices.getAPP_ClIENT_SECRET(), awsServices.getREGION());
         user = userPool.getUser("shadow13524@gmail.com");
 
-        selectedSchool = "newSchool";
-        FileUtil.upload(this, selectedSchool +"/appDB.db", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db");
-        //FileUtil.upload(this, "uploads/appDB.db-shm", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db-shm");
-        //FileUtil.upload(this, "uploads/appDB.db-wal", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db-wal");
+        selectedSchool = "";
+        //FileUtil.upload(this, "uploads/appDB.db", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db");
+       // FileUtil.upload(this, "uploads/appDB.db-shm", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db-shm");
+       // FileUtil.upload(this, "uploads/appDB.db-wal", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db-wal");
 
         //boolean fileDeleted = FileUtil.deleteDb(this);
 
-        FileUtil.download(this, "uploads/appDB1.db", "/data/data/com.plusmobileapps.safetyapp/databases/");
+        //FileUtil.download(this, "uploads/appDB.db", "/data/data/com.plusmobileapps.safetyapp/databases/");
     }
 
     @Override
@@ -186,9 +186,18 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
 
     @Override
     protected void onStop() {
+
         super.onStop();
         Log.d("YourMainActivity", "User has been signed out");
         user.signOut();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        //FileUtil.upload(this, "uploads/appDB.db", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db");
+        //FileUtil.upload(this, "uploads/appDB.db-shm", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db-shm");
+        //FileUtil.upload(this, "uploads/appDB.db-wal", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db-wal");
     }
 
 
