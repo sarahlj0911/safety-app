@@ -2,15 +2,9 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/settings_menu"
-        android:title="@string/Admin_add" />
+        android:title="@string/Admin_add" />/>
     <item
         android:id="@+id/settings_menu_remove"
         android:title="@string/Admin_remove" />
-    <item
-        android:id="@+id/uploadbtn"
-        android:title="@string/upload" />
-    <item
-        android:id="@+id/Downloadbtn"
-        android:title="@string/download" />
 
 </menu>
