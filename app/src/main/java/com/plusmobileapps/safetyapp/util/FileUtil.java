@@ -59,7 +59,7 @@ public class FileUtil {
                         .s3Client(new AmazonS3Client(AWSMobileClient.getInstance().getCredentialsProvider()))
                         .build();
         try {
-            File localFile = new File("/data/data/com.plusmobileapps.safetyapp/databases/appDB1.db");
+            File localFile = new File(file, path);
 
 
             Log.d("YourActivity", localFile.getPath());
