@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
     // AWS
     private CognitoUserPool userPool;
     private CognitoUser user;
-    private String userEmail, userRole, userSchool;
+    private String userEmail, userName, userRole, userSchool;
 
     // DB mapper
     DynamoDBMapper dynamoDBMapper;
@@ -101,18 +101,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
             }
         }).execute();
 
-        AWSMobileClient.getInstance().initialize(this, new Callback<UserStateDetails>() {
-            @Override
-            public void onResult(UserStateDetails result) {
-                Log.d(AWSTAG, "User State: "+result.getUserState());
-            }
-
-            @Override
-            public void onError(Exception e) {
-                Log.d(AWSTAG, "Unknown client error: "+e);
-            }
-        });
-
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         final MainSwipeAdapter swipeAdapter = new MainSwipeAdapter(getSupportFragmentManager(), factory);
         viewPager.setAdapter(swipeAdapter);
@@ -129,10 +117,8 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
         ContentResolver.setSyncAutomatically(account, AUTHORITY, true);
         ContentResolver.addPeriodicSync(account, AUTHORITY, Bundle.EMPTY, SYNC_INTERVAL);
 
-
         AWSCredentialsProvider credentialsProvider = AWSMobileClient.getInstance().getCredentialsProvider();
         AWSConfiguration configuration = AWSMobileClient.getInstance().getConfiguration();
-
 
         // Add code to instantiate a AmazonDynamoDBClient
         AmazonDynamoDBClient dynamoDBClient = new AmazonDynamoDBClient(credentialsProvider);
@@ -145,6 +131,19 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
         userPool = new AwsServices().initAWSUserPool(this);
         user = userPool.getUser(userEmail);
         user.getDetailsInBackground(getUserDetailsHandler);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        user.getSession(authenticationHandler);
+    }
+
+    @Override
+    public void onStop(){
+        super.onStop();
+        user.signOut();
+        Log.d(AWSTAG, "Signed out user "+userEmail+" automatically");
     }
 
     @Override
@@ -327,14 +326,44 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
         @Override
         public void onSuccess(final CognitoUserDetails list) {
             // Successfully retrieved user details
+            userName = list.getAttributes().getAttributes().get("name");
             userRole = list.getAttributes().getAttributes().get("custom:role");
             userSchool = list.getAttributes().getAttributes().get("custom:school");
-            Log.d(AWSTAG, "Successfully loaded " +userEmail+ " as role " +userRole+ " at school " +userSchool);
+            Log.d(AWSTAG, "Successfully loaded " +userName+ " as role " +userRole+ " at school " +userSchool);
         }
 
         @Override
         public void onFailure(final Exception exception) {
             Log.d(AWSTAG, "Failed to retrieve the user's details: " + exception);
+        }
+    };
+
+    AuthenticationHandler authenticationHandler = new AuthenticationHandler() {
+        @Override
+        public void onSuccess(CognitoUserSession userSession, CognitoDevice newDevice) {
+            Log.d(AWSTAG, "User "+userEmail+" automatically signed back in");
+        }
+
+        @Override
+        public void getAuthenticationDetails(AuthenticationContinuation authenticationContinuation, String userId) {
+            Log.d(AWSTAG, "Refreshing user "+userEmail+" details");
+        }
+
+        @Override
+        public void getMFACode(MultiFactorAuthenticationContinuation continuation) {
+            Log.d(AWSTAG, "Encountered MFA challenge. Sending user back to login...");
+            launchLoginScreen();
+        }
+
+        @Override
+        public void authenticationChallenge(ChallengeContinuation continuation) {
+            Log.d(AWSTAG, "Encountered authentication challenge. Sending user back to login...");
+            launchLoginScreen();
+        }
+
+        @Override
+        public void onFailure(Exception exception) {
+            Log.d(AWSTAG, "Unable to login user: "+exception);
         }
     };
 
