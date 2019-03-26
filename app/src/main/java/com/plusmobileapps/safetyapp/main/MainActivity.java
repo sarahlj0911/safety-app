@@ -24,8 +24,6 @@ import com.amazonaws.auth.AWSCredentialsProvider;
 import com.amazonaws.mobile.client.AWSMobileClient;
 import com.amazonaws.mobile.client.AWSStartupHandler;
 import com.amazonaws.mobile.client.AWSStartupResult;
-import com.amazonaws.mobile.client.Callback;
-import com.amazonaws.mobile.client.UserStateDetails;
 import com.amazonaws.mobile.config.AWSConfiguration;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoDevice;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUser;
@@ -153,14 +151,15 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
     }
 
     @Override
-    public void changeNavHighlight(int position) {
+    public void changeNavHighlight(int position){
         navigation.setSelectedItemId(position);
         setAppBarTitle(position);
     }
 
-    private void launchLoginScreen(){
+    private void launchLoginScreen() {
 //        PrefManager prefManager = new PrefManager(this);
 //        prefManager.setIsUserSignedUp(true);
+        // TODO Possibly delete above
         Intent loginActivity = new Intent(MainActivity.this, LoginActivity.class);
         startActivity(loginActivity, fadeOutActivity);
         finish();
@@ -255,7 +254,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
 
     /**
      * Create a new dummy account for the sync adapter
-     *
      * @param context The application context
      */
     public static Account CreateSyncAccount(Context context) {
@@ -268,16 +266,13 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
          * If successful, return the Account object, otherwise report an error.
          */
         if (accountManager.addAccountExplicitly(newAccount, null, null)) {
+            Log.d(TAG, "Sync account created!");
             /*
              * If you don't set android:syncable="true" in your <provider> element in the manifest,
              * then call context.setIsSyncable(account, AUTHORITY, 1) here.
              */
-        } else {
-            Log.d(TAG, "Account already exists or some other error occurred.");
         }
-
-        Log.d(TAG, "Sync account created!");
-
+        else Log.d(TAG, "Account already exists or some other error occurred.");
         return newAccount;
     }
 

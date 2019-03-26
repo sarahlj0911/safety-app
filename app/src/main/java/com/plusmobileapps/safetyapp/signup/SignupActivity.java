@@ -453,30 +453,14 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
                     showPopupView();
                 }
             });
-
-//            AlertDialog.Builder builder = new AlertDialog.Builder(SignupActivity.this);
-//            builder.setCancelable(true);
-//            builder.setTitle("Account Created");
-//            builder.setMessage("Almost there! A confirmation email has been sent to " +email+ ".");
-//            builder.setPositiveButton("Go To Inbox", new DialogInterface.OnClickListener() {
-//                @Override
-//                public void onClick(DialogInterface dialog, int which) {
-//                    alertView.setVisibility(View.VISIBLE);
-//                    Intent intent = Intent.makeMainSelectorActivity(Intent.ACTION_MAIN, Intent.CATEGORY_APP_EMAIL);
-//                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//                    startActivity(intent);
-//                    dialog.dismiss();
-//                }
-//            });
-//            builder.show();
         } };
 
         @Override
         public void onSuccess(CognitoUser user, boolean signUpConfirmationState, CognitoUserCodeDeliveryDetails cognitoUserCodeDeliveryDetails) {
             statusText.setText("");
             if (!signUpConfirmationState) { // User confirming via email code
-                handler.postDelayed(successAnimation, 1000);
-                handler.postDelayed(waitAndLaunchDialog, 2000);
+                handler.postDelayed(successAnimation, 0);
+                handler.postDelayed(waitAndLaunchDialog, 500);
             }
             else launchHomeScreen();
         }
@@ -494,7 +478,7 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
                 error = StringUtils.substringBetween(e, "UsernameExistsException:", " (Service");
             } else error = getApplicationContext().getString(R.string.status_text, name);
             statusText.setText(error);
-            handler.postDelayed(failureAnimation, 500);
+            handler.postDelayed(failureAnimation, 0);
             handler.postDelayed(resetButton, 3000);
         }
     };

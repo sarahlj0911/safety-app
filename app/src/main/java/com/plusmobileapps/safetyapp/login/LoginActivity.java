@@ -145,7 +145,7 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
             buttonLoginStatus.setText(""); }
         else {
             hasInternetConnection = false;
-            buttonLoginStatus.setText("You have no internet connection!\nApp services will be unavailable.");
+            buttonLoginStatus.setText("No Internet Connection!\nApp services will be unavailable.");
             Log.e(TAG, "Device does not have an internet connection!"); }
 
         if (openAnimation != null && openAnimation.equals("start")) activityStartingAnimation();
@@ -210,15 +210,14 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         final Runnable failureAnimation = new Runnable() {
             public void run() {
                 if (showCodeView) showCodeAuthorizationView();
-                buttonLoginStatus.setAlpha(1);
                 loginButton.doneLoadingAnimation(Color.parseColor("#ffffff"), BitmapFactory.decodeResource(getResources(), R.drawable.login_button_failed));
             }
         };
 
         @Override
         public void onSuccess(CognitoUserSession userSession, CognitoDevice newDevice) {
-                    handler.postDelayed(successAnimation, 500);
-                    handler.postDelayed(waitAndLaunchMain, 1500);
+                    handler.postDelayed(successAnimation, 0);
+                    handler.postDelayed(waitAndLaunchMain, 500);
         }
 
         @Override
@@ -253,8 +252,8 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
                     @Override
                     public void run() {
                         buttonLoginStatus.setText(getString(R.string.login_button_error_aws_user_exists));
-                        handler.postDelayed(failureAnimation, 2000);
-                        handler.postDelayed(resetButton, 5000);
+                        handler.postDelayed(failureAnimation, 0);
+                        handler.postDelayed(resetButton, 3000);
                     }
                 });
             }
@@ -263,63 +262,45 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         @Override
         public void onFailure(Exception exception) {
             String ex = exception.toString();
+            String buttonErrorText;
             Log.d(TAG, "AWS Sign-in Failure: " + ex);
-            if (ex.toLowerCase().contains("usernotfoundexception")) {
+            if (!ex.toLowerCase().contains("cognitointernalerrorexception")) {
+                if (ex.toLowerCase().contains("usernotfoundexception")) {
+                    buttonErrorText = getString(R.string.login_button_user_not_found);
+                }
+                else if (ex.toLowerCase().contains("user is disabled")) {
+                    buttonErrorText = getString(R.string.aws_login_error_disabled);
+                    buttonLoginStatus.setClickable(true);
+                }
+                else if (ex.toLowerCase().contains("notauthorizedexception")) {
+                    buttonErrorText = String.format("%s\n Reset it?", getString(R.string.login_button_error_aws_user_exists));
+                    buttonLoginStatus.setClickable(true);
+                }
+                else if (ex.toLowerCase().contains("passwordresetrequiredexception")) {
+                    buttonErrorText = getString(R.string.login_button_error_aws_new_password);
+                }
+                else if (ex.toLowerCase().contains("usernotconfirmedexception")) {
+                    buttonErrorText = getString(R.string.login_button_error_verify);
+                    user = userPool.getUser(username);
+                    buttonLoginStatus.setClickable(true);
+                    showCodeView = true;
+                }
+                else if (ex.toLowerCase().contains("unable to resolve host")) {
+                    buttonErrorText = getString(R.string.login_button_error_AWS_connection_issue);
+                }
+                else {
+                    buttonErrorText = getString(R.string.login_button_error_aws_error);
+                }
+                final String finalButtonErrorText = buttonErrorText;
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        buttonLoginStatus.setText(getString(R.string.login_button_user_not_found));
-                    }
-                });
-            } else if (ex.toLowerCase().contains("user is disabled")) {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        buttonLoginStatus.setText(getString(R.string.aws_login_error_disabled));
-                        buttonLoginStatus.setClickable(true);
-                    }
-                });
-            } else if (ex.toLowerCase().contains("notauthorizedexception")) {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        buttonLoginStatus.setText(String.format("%s\n Reset it?", getString(R.string.login_button_error_aws_user_exists)));
-                        buttonLoginStatus.setClickable(true);
-                    }
-                });
-            } else if (ex.toLowerCase().contains("passwordresetrequiredexception")) {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        buttonLoginStatus.setText(getString(R.string.login_button_error_aws_new_password));
-                    }
-                });
-            } else if (ex.toLowerCase().contains("usernotconfirmedexception")) {
-                user = userPool.getUser(username);
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        buttonLoginStatus.setText(getString(R.string.login_button_error_verify));
-                        buttonLoginStatus.setClickable(true);
-                        showCodeView = true;
-                    }
-                });
-            } else if (ex.toLowerCase().contains("unable to resolve host")) {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        buttonLoginStatus.setText(getString(R.string.login_button_error_AWS_connection_issue));
-                    }
-                });
-            } else {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        buttonLoginStatus.setText(R.string.login_button_error_aws_error);
+                        buttonLoginStatus.setText(finalButtonErrorText);
+                        buttonLoginStatus.setAlpha(1);
                     }
                 });
             }
-            handler.postDelayed(failureAnimation, 500);
+            handler.postDelayed(failureAnimation, 0);
             handler.postDelayed(resetButton, 3000);
         }
     };
@@ -624,12 +605,12 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         Animation fadeIn, logoStart, emailFieldAni, passwordFieldAni, newUserAni, signUpAni, statusAni, buttonAni;
         int fieldOffset, fieldOffsetPlus;
 
-        fieldOffset = 1000;
+        fieldOffset = 500;
         fieldOffsetPlus = 85;
 
         fadeIn = new AlphaAnimation(0.0f, 1.0f);
         fadeIn.setDuration(100);
-        fadeIn.setStartOffset(1200);
+        fadeIn.setStartOffset(900);
 
         logoStart = AnimationUtils.loadAnimation(this, R.anim.logo_start_animation);
         emailFieldAni = AnimationUtils.loadAnimation(this, R.anim.fade_move_up_animation);
