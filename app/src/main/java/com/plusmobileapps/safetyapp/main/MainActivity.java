@@ -128,14 +128,20 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
         userPool = new CognitoUserPool(CONTEXT, awsServices.getPOOL_ID(), awsServices.getAPP_ClIENT_ID(), awsServices.getAPP_ClIENT_SECRET(), awsServices.getREGION());
         user = userPool.getUser("shadow13524@gmail.com");
 
-        selectedSchool = "newSchool";
+        selectedSchool = "NathanTestDBfiles";
         FileUtil.upload(this, selectedSchool +"/appDB.db", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db");
-        //FileUtil.upload(this, "uploads/appDB.db-shm", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db-shm");
-        //FileUtil.upload(this, "uploads/appDB.db-wal", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db-wal");
+        FileUtil.upload(this, selectedSchool +"/appDB.db-shm", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db-shm");
+        FileUtil.upload(this, selectedSchool +"/appDB.db-wal", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db-wal");
+        //FileUtil.upload(this, selectedSchool +"/awss3transfertable.db", "/data/data/com.plusmobileapps.safetyapp/databases/awss3transfertable.db");
+        //FileUtil.upload(this, selectedSchool +"/awss3transfertable.db-shm", "/data/data/com.plusmobileapps.safetyapp/databases/awss3transfertable.db-shm");
+        //FileUtil.upload(this, selectedSchool +"/awss3transfertable.db-wal", "/data/data/com.plusmobileapps.safetyapp/databases/awss3transfertable.db-wal");
+
+
+
 
         //boolean fileDeleted = FileUtil.deleteDb(this);
 
-        FileUtil.download(this, "uploads/appDB1.db", "/data/data/com.plusmobileapps.safetyapp/databases/");
+        //FileUtil.download(this, "uploads/appDB1.db", "/data/data/com.plusmobileapps.safetyapp/databases/");
     }
 
     @Override
