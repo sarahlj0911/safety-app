@@ -83,6 +83,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
         findViewsById();
         MainActivityFragmentFactory factory = new MainActivityFragmentFactory();
@@ -117,15 +118,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
         ContentResolver.setSyncAutomatically(account, AUTHORITY, true);
         ContentResolver.addPeriodicSync(account, AUTHORITY, Bundle.EMPTY, SYNC_INTERVAL);
 
-        AWSCredentialsProvider credentialsProvider = AWSMobileClient.getInstance().getCredentialsProvider();
-        AWSConfiguration configuration = AWSMobileClient.getInstance().getConfiguration();
 
-        // Add code to instantiate a AmazonDynamoDBClient
-        AmazonDynamoDBClient dynamoDBClient = new AmazonDynamoDBClient(credentialsProvider);
-        this.dynamoDBMapper = DynamoDBMapper.builder()
-                .dynamoDBClient(dynamoDBClient)
-                .awsConfiguration(configuration)
-                .build();
 
         userPool = new AwsServices().initAWSUserPool(this);
         user = userPool.getUser(userEmail);
@@ -133,36 +126,39 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
 
         selectedSchool = "newSchool";
 
+        FileUtil.deleteDb(this);
+        FileUtil.download(this, "uploads/appDB.db", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db");
+        FileUtil.download(this, "uploads/appDB.db-shm", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db-shm");
+        FileUtil.download(this, "uploads/appDB.db-wal", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db-wal");
 
-        boolean fileDeleted = FileUtil.deleteDb(this);
-        AWSMobileClient.getInstance().initialize(this).execute();
-        try {
-            FileUtil.download(this, "uploads/appDB.db", "/data/data/com.plusmobileapps.safetyapp/databases/appDB1.db");
-            //FileUtil.download(this, "uploads/appDB-shm.db", "/data/data/com.plusmobileapps.safetyapp/databases/appDB1.db-shm");
-            //FileUtil.download(this, "uploads/appDB-wal.db", "/data/data/com.plusmobileapps.safetyapp/databases/appDB1.db-wal");
-        }
-        catch(Exception ex) {
-            Log.d("main1", ex.toString());
-        }
+
+        //FileUtil.upload(this, "uploads1/appDB1.db", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db");
+        //FileUtil.upload(this, "uploads1/appDB1.db-shm", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db-shm");
+        //FileUtil.upload(this, "uploads1/appDB1.db-wal", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db-wal");
+
     }
 
     @Override
     public void onResume() {
         super.onResume();
         user.getSession(authenticationHandler);
+
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        //FileUtil.upload(this, "uploads1/appDB.db", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db");
-        //FileUtil.upload(this, "uploads1/appDB.db-shm", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db-shm");
-        //FileUtil.upload(this, "uploads1/appDB.db-wal", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db-wal");
     }
 
     @Override
     public void onStop(){
         super.onStop();
+        try {
+            FileUtil.upload(this, "uploads1/appDB1.db", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db");
+            FileUtil.upload(this, "uploads1/appDB1.db-shm", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db-shm");
+            FileUtil.upload(this, "uploads1/appDB1.db-wal", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db-wal");
+        }
+        catch(Exception ex) {};
         user.signOut();
         Log.d(AWSTAG, "Signed out user "+userEmail+" automatically");
     }

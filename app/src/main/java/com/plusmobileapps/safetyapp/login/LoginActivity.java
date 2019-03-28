@@ -53,6 +53,7 @@ import com.plusmobileapps.safetyapp.BlurUtils;
 import com.plusmobileapps.safetyapp.R;
 import com.plusmobileapps.safetyapp.main.MainActivity;
 import com.plusmobileapps.safetyapp.signup.SignupActivity;
+import com.plusmobileapps.safetyapp.util.FileUtil;
 
 import java.util.HashMap;
 import java.util.Objects;
@@ -126,6 +127,7 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         fadeOutActivity = ActivityOptionsCompat.makeCustomAnimation(this, 1, android.R.anim.fade_out).toBundle();
 
         userPool = new AwsServices().initAWSUserPool(this);
+
     }
 
     @Override

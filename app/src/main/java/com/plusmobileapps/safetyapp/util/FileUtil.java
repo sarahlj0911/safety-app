@@ -62,10 +62,9 @@ public class FileUtil {
             File localFile = new File(path);
 
 
-            Log.d("YourActivity", localFile.getPath());
 
             TransferObserver downloadObserver =
-                    transferUtility.download("/uploads/appDB.db", new File("/data/data/com.plusmobileapps.safetyapp/databases/appDB1.db"));
+                    transferUtility.download(file, localFile);
 
             Log.d("YourActivity", localFile.toString());
 
@@ -75,6 +74,7 @@ public class FileUtil {
                 public void onStateChanged(int id, TransferState state) {
                     if (TransferState.COMPLETED == state) {
                         // Handle a completed upload.
+                        Log.d("YourActivity", "download complete");
                     }
                 }
 
@@ -89,6 +89,7 @@ public class FileUtil {
                 @Override
                 public void onError(int id, Exception ex) {
                     // Handle errors
+                    Log.d("YourActivity", ex.toString());
                 }
 
             });
@@ -149,5 +150,3 @@ public class FileUtil {
     }
 
 }
-
-
