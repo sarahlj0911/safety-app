@@ -130,11 +130,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
         FileUtil.download(this, "uploads/appDB.db", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db");
         FileUtil.download(this, "uploads/appDB.db-shm", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db-shm");
         FileUtil.download(this, "uploads/appDB.db-wal", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db-wal");
-
-
-        //FileUtil.upload(this, "uploads1/appDB1.db", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db");
-        //FileUtil.upload(this, "uploads1/appDB1.db-shm", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db-shm");
-        //FileUtil.upload(this, "uploads1/appDB1.db-wal", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db-wal");
+        
 
     }
 
@@ -158,7 +154,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
             FileUtil.upload(this, "uploads1/appDB1.db-shm", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db-shm");
             FileUtil.upload(this, "uploads1/appDB1.db-wal", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db-wal");
         }
-        catch(Exception ex) {};
+        catch(Exception ex) {}
         user.signOut();
         Log.d(AWSTAG, "Signed out user "+userEmail+" automatically");
     }
