@@ -302,15 +302,56 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
                 Intent adminSettings = new Intent(this, AdminSettings.class);
                 startActivity(adminSettings);
                 break;
-
-            case R.id.settings_menu_remove:
-                //settings selected
-                Intent remove_user = new Intent(this, removeUser.class);
-                startActivity(remove_user);
-                break;
         }
         return super.onOptionsItemSelected(item);
     }
+
+
+    GetDetailsHandler getUserDetailsHandler = new GetDetailsHandler() {
+        @Override
+        public void onSuccess(final CognitoUserDetails list) {
+            // Successfully retrieved user details
+            userName = list.getAttributes().getAttributes().get("name");
+            userRole = list.getAttributes().getAttributes().get("custom:role");
+            userSchool = list.getAttributes().getAttributes().get("custom:school");
+            Log.d(AWSTAG, "Successfully loaded " +userName+ " as role " +userRole+ " at school " +userSchool);
+        }
+
+        @Override
+        public void onFailure(final Exception exception) {
+            Log.d(AWSTAG, "Failed to retrieve the user's details: " + exception);
+        }
+    };
+
+    AuthenticationHandler authenticationHandler = new AuthenticationHandler() {
+        @Override
+        public void onSuccess(CognitoUserSession userSession, CognitoDevice newDevice) {
+            Log.d(AWSTAG, "User "+userEmail+" automatically signed back in");
+        }
+
+        @Override
+        public void getAuthenticationDetails(AuthenticationContinuation authenticationContinuation, String userId) {
+            Log.d(AWSTAG, "Refreshing user "+userEmail+" details");
+        }
+
+        @Override
+        public void getMFACode(MultiFactorAuthenticationContinuation continuation) {
+            Log.d(AWSTAG, "Encountered MFA challenge. Sending user back to login...");
+            launchLoginScreen();
+        }
+
+        @Override
+        public void authenticationChallenge(ChallengeContinuation continuation) {
+            Log.d(AWSTAG, "Encountered authentication challenge. Sending user back to login...");
+            launchLoginScreen();
+        }
+
+        @Override
+        public void onFailure(Exception exception) {
+            Log.d(AWSTAG, "Unable to login user: "+exception);
+        }
+    };
+
 
 
 }
