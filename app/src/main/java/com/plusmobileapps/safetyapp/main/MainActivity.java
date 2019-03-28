@@ -132,19 +132,32 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
         user.getDetailsInBackground(getUserDetailsHandler);
 
         selectedSchool = "newSchool";
-        //FileUtil.upload(this, "uploads/appDB.db", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db");
-        //FileUtil.upload(this, "uploads/appDB.db-shm", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db-shm");
-        //FileUtil.upload(this, "uploads/appDB.db-wal", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db-wal");
 
-        //boolean fileDeleted = FileUtil.deleteDb(this);
 
-        FileUtil.download(this, "uploads/appDB1.db", "/data/data/com.plusmobileapps.safetyapp/databases/");
+        boolean fileDeleted = FileUtil.deleteDb(this);
+        AWSMobileClient.getInstance().initialize(this).execute();
+        try {
+            FileUtil.download(this, "uploads/appDB.db", "/data/data/com.plusmobileapps.safetyapp/databases/appDB1.db");
+            //FileUtil.download(this, "uploads/appDB-shm.db", "/data/data/com.plusmobileapps.safetyapp/databases/appDB1.db-shm");
+            //FileUtil.download(this, "uploads/appDB-wal.db", "/data/data/com.plusmobileapps.safetyapp/databases/appDB1.db-wal");
+        }
+        catch(Exception ex) {
+            Log.d("main1", ex.toString());
+        }
     }
 
     @Override
     public void onResume() {
         super.onResume();
         user.getSession(authenticationHandler);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        //FileUtil.upload(this, "uploads1/appDB.db", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db");
+        //FileUtil.upload(this, "uploads1/appDB.db-shm", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db-shm");
+        //FileUtil.upload(this, "uploads1/appDB.db-wal", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db-wal");
     }
 
     @Override

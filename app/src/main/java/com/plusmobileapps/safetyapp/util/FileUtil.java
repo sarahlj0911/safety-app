@@ -59,13 +59,13 @@ public class FileUtil {
                         .s3Client(new AmazonS3Client(AWSMobileClient.getInstance().getCredentialsProvider()))
                         .build();
         try {
-            File localFile = new File("/data/data/com.plusmobileapps.safetyapp/databases/appDB1.db");
+            File localFile = new File(path);
 
 
             Log.d("YourActivity", localFile.getPath());
 
             TransferObserver downloadObserver =
-                    transferUtility.download(file, localFile);
+                    transferUtility.download("/uploads/appDB.db", new File("/data/data/com.plusmobileapps.safetyapp/databases/appDB1.db"));
 
             Log.d("YourActivity", localFile.toString());
 
