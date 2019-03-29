@@ -62,12 +62,12 @@ public class FileUtil {
             File localFile = new File("/data/data/com.plusmobileapps.safetyapp/databases/appDB1.db");
 
 
-            Log.d("YourActivity", localFile.getPath());
+            Log.d("DownloadingNewDatabase", localFile.getPath());
 
             TransferObserver downloadObserver =
                     transferUtility.download(file, localFile);
 
-            Log.d("YourActivity", localFile.toString());
+            Log.d("DownloadingNewDatabase", localFile.toString());
 
             downloadObserver.setTransferListener(new TransferListener() {
 

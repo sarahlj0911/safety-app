@@ -82,7 +82,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
         setContentView(R.layout.activity_main);
         findViewsById();
         MainActivityFragmentFactory factory = new MainActivityFragmentFactory();
-        setUpPresenters(factory);
         presenter = new MainActivityPresenter(this);
 
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
@@ -129,14 +128,15 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
         user = userPool.getUser("shadow13524@gmail.com");
 
         selectedSchool = "NathanTestDBfiles";
-        FileUtil.upload(this, selectedSchool +"/appDB.db", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db");
-        FileUtil.upload(this, selectedSchool +"/appDB.db-shm", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db-shm");
-        FileUtil.upload(this, selectedSchool +"/appDB.db-wal", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db-wal");
+        FileUtil.download(this, selectedSchool +"/appDB.db", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db");
+        FileUtil.download(this, selectedSchool +"/appDB.db-shm", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db-shm");
+        FileUtil.download(this, selectedSchool +"/appDB.db-wal", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db-wal");
         //FileUtil.upload(this, selectedSchool +"/awss3transfertable.db", "/data/data/com.plusmobileapps.safetyapp/databases/awss3transfertable.db");
         //FileUtil.upload(this, selectedSchool +"/awss3transfertable.db-shm", "/data/data/com.plusmobileapps.safetyapp/databases/awss3transfertable.db-shm");
         //FileUtil.upload(this, selectedSchool +"/awss3transfertable.db-wal", "/data/data/com.plusmobileapps.safetyapp/databases/awss3transfertable.db-wal");
 
 
+        setUpPresenters(factory);
 
 
         //boolean fileDeleted = FileUtil.deleteDb(this);
