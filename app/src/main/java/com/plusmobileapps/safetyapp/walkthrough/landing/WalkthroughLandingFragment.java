@@ -346,7 +346,8 @@ public class WalkthroughLandingFragment extends Fragment
     @Override
     public void updateFromDownload(String result) {
         downloading = true;
-        showProgressBar(true);
+        // TODO progress bar show when server is ready
+        //showProgressBar(true);
         Log.d(TAG, "Result from DownloadTask: " + result);
     }
 

@@ -137,7 +137,9 @@ public class WelcomeActivity extends AppCompatActivity {
     }
 
     private void launchLoginScreen() {
-        startActivity(new Intent(WelcomeActivity.this, LoginActivity.class));
+        Intent login = new Intent(this, LoginActivity.class);
+        login.putExtra("openAni", "start");
+        startActivity(login);
         finish();
     }
 

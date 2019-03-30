@@ -161,7 +161,10 @@ public class SignupPresenter implements SignupContract.Presenter {
     }
 
     @Override
-    public void passwordTextAdded() { view.displayNoSchoolError(false); }
+    public void passwordTextAdded() { view.displayNoPasswordError(false); }
+
+    @Override
+    public void passwordCheckTextAdded() { view.displayNoPasswordCheckError(false); }
 
     @Override
     public void schoolNameTextAdded() { view.displayNoSchoolError(false); }

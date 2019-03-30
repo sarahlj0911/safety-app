@@ -9,6 +9,7 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -19,58 +20,65 @@ import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.amazonaws.mobile.client.Callback;
-import com.amazonaws.mobile.client.UserStateDetails;
-import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUser;
-import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUserPool;
-import com.plusmobileapps.safetyapp.AdminSettings;
-
 import com.amazonaws.auth.AWSCredentialsProvider;
+import com.amazonaws.mobile.client.AWSMobileClient;
 import com.amazonaws.mobile.client.AWSStartupHandler;
 import com.amazonaws.mobile.client.AWSStartupResult;
 import com.amazonaws.mobile.config.AWSConfiguration;
-
+import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoDevice;
+import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUser;
+import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUserDetails;
+import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUserPool;
+import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUserSession;
+import com.amazonaws.mobileconnectors.cognitoidentityprovider.continuations.AuthenticationContinuation;
+import com.amazonaws.mobileconnectors.cognitoidentityprovider.continuations.ChallengeContinuation;
+import com.amazonaws.mobileconnectors.cognitoidentityprovider.continuations.MultiFactorAuthenticationContinuation;
+import com.amazonaws.mobileconnectors.cognitoidentityprovider.handlers.AuthenticationHandler;
+import com.amazonaws.mobileconnectors.cognitoidentityprovider.handlers.GetDetailsHandler;
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
-
+import com.plusmobileapps.safetyapp.AdminSettings;
 import com.plusmobileapps.safetyapp.AwsServices;
 import com.plusmobileapps.safetyapp.R;
 import com.plusmobileapps.safetyapp.actionitems.landing.ActionItemPresenter;
+import com.plusmobileapps.safetyapp.login.LoginActivity;
 import com.plusmobileapps.safetyapp.summary.landing.SummaryPresenter;
+import com.plusmobileapps.safetyapp.util.FileUtil;
 import com.plusmobileapps.safetyapp.walkthrough.landing.WalkthroughLandingPresenter;
 
 
-
-import com.amazonaws.mobile.client.AWSMobileClient;
 public class MainActivity extends AppCompatActivity implements MainActivityContract.View {
     private static final String TAG = "MainActivity";
+    private static final String AWSTAG = "MainActivityAWS";
     private TextView mTextMessage;
-
-    private AwsServices awsServices;
-    private CognitoUserPool userPool;
-    private Context CONTEXT = this;
-    private CognitoUser user;
     private ViewPager viewPager;
     private BottomNavigationView navigation;
     private String walkthroughFragmentTitle = "";
     private MainActivityPresenter presenter;
+    private Bundle fadeOutActivity;
+    private String selectedSchool = "";
 
-    //db mapper
+    // AWS
+    private CognitoUserPool userPool;
+    private CognitoUser user;
+    private String userEmail, userName, userRole, userSchool;
+
+    // DB mapper
     DynamoDBMapper dynamoDBMapper;
 
     // SyncAdapter Constants
-    // The authority for the sync adapter's content provider
-    public static final String AUTHORITY = "com.plusmobileapps.safetyapp.provider";
-    // An account type, in the form of a domain name
-    public static final String ACCOUNT_TYPE = "safetyapp.com";
-    // The account name
-    public static final String ACCOUNT = "safetyapp";
+    public static final String AUTHORITY = "com.plusmobileapps.safetyapp.provider";     // The authority for the sync adapter's content provider
+    public static final String ACCOUNT_TYPE = "safetyapp.com";                          // An account type, in the form of a domain name
+    public static final String ACCOUNT = "safetyapp";                                   // The account name
+
     public static final long SECONDS_PER_MINUTE = 60L;
     public static final long SYNC_INTERVAL_IN_MINUTES = 60L;
     public static final long SYNC_INTERVAL = SYNC_INTERVAL_IN_MINUTES * SECONDS_PER_MINUTE;
+
     // Instance fields
     Account account;
     ContentResolver contentResolver;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,6 +88,18 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
         MainActivityFragmentFactory factory = new MainActivityFragmentFactory();
         setUpPresenters(factory);
         presenter = new MainActivityPresenter(this);
+        fadeOutActivity = ActivityOptionsCompat.makeCustomAnimation(this, 1, android.R.anim.fade_out).toBundle();
+
+        Intent intent = getIntent();
+        userEmail = intent.getStringExtra("email");
+
+        // AWSMobileClient enables AWS user credentials to access your table
+        AWSMobileClient.getInstance().initialize(this, new AWSStartupHandler() {
+            @Override
+            public void onComplete(AWSStartupResult awsStartupResult) {
+                Log.d(AWSTAG, "You are connected to AWS's database!");
+            }
+        }).execute();
 
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         final MainSwipeAdapter swipeAdapter = new MainSwipeAdapter(getSupportFragmentManager(), factory);
@@ -97,86 +117,62 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
         ContentResolver.setSyncAutomatically(account, AUTHORITY, true);
         ContentResolver.addPeriodicSync(account, AUTHORITY, Bundle.EMPTY, SYNC_INTERVAL);
 
-
-
-        AWSMobileClient.getInstance().initialize(this, new AWSStartupHandler() {
-            @Override
-            public void onComplete(AWSStartupResult awsStartupResult) {
-                Log.d("YourMainActivity", "AWSMobileClient is instantiated and you are connected to AWS!");
-            }
-        }).execute();
-
-        // AWSMobileClient enables AWS user credentials to access your table
-        AWSMobileClient.getInstance().initialize(this).execute();
-
         AWSCredentialsProvider credentialsProvider = AWSMobileClient.getInstance().getCredentialsProvider();
         AWSConfiguration configuration = AWSMobileClient.getInstance().getConfiguration();
 
-
         // Add code to instantiate a AmazonDynamoDBClient
         AmazonDynamoDBClient dynamoDBClient = new AmazonDynamoDBClient(credentialsProvider);
-
         this.dynamoDBMapper = DynamoDBMapper.builder()
                 .dynamoDBClient(dynamoDBClient)
                 .awsConfiguration(configuration)
                 .build();
-        createUserInfoItem();
-        awsServices = new AwsServices();
-        userPool = new CognitoUserPool(CONTEXT, awsServices.getPOOL_ID(), awsServices.getAPP_ClIENT_ID(), awsServices.getAPP_ClIENT_SECRET(), awsServices.getREGION());
-        user = userPool.getUser("shadow13524@gmail.com");
+
+        userPool = new AwsServices().initAWSUserPool(this);
+        user = userPool.getUser(userEmail);
+        user.getDetailsInBackground(getUserDetailsHandler);
+
+        selectedSchool = "newSchool";
+        //FileUtil.upload(this, "uploads/appDB.db", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db");
+        //FileUtil.upload(this, "uploads/appDB.db-shm", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db-shm");
+        //FileUtil.upload(this, "uploads/appDB.db-wal", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db-wal");
+
+        //boolean fileDeleted = FileUtil.deleteDb(this);
+
+        FileUtil.download(this, "uploads/appDB1.db", "/data/data/com.plusmobileapps.safetyapp/databases/");
     }
 
     @Override
-    protected void onResume() {
+    public void onResume() {
         super.onResume();
-        AWSMobileClient.getInstance().initialize(getApplicationContext(), new Callback<UserStateDetails>() {
-            @Override
-            public void onResult(UserStateDetails userStateDetails) {
-                switch (userStateDetails.getUserState()) {
-                    case SIGNED_IN:
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                Log.d("YourMainActivity", "User has signed in");
-                            }
-                        });
-                        break;
-                    case SIGNED_OUT:
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                // TODO show user not signed in prompt
-                                Log.d("YourMainActivity", "User not signed in");
-                            }
-                        });
-                        break;
-                    case SIGNED_OUT_USER_POOLS_TOKENS_INVALID:
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                // TODO show user inactive signed out prompt
-                                Log.d("YourMainActivity", "User has been signed out");
-                            }
-                        });
-                        break;
-                    default:
-                        AWSMobileClient.getInstance().signOut();
-                        break;
-                }
-            }
-
-            @Override
-            public void onError(Exception e) {
-                Log.e("INIT", e.toString());
-            }
-        });
+        user.getSession(authenticationHandler);
     }
 
     @Override
-    protected void onStop() {
+    public void onStop(){
         super.onStop();
-        Log.d("YourMainActivity", "User has been signed out");
         user.signOut();
+        Log.d(AWSTAG, "Signed out user "+userEmail+" automatically");
+    }
+
+    @Override
+    public void changePage(int position) {
+        viewPager.setCurrentItem(position, true);
+        setAppBarTitle(position);
+    }
+
+    @Override
+    public void changeNavHighlight(int position){
+        navigation.setSelectedItemId(position);
+        setAppBarTitle(position);
+    }
+
+    private void launchLoginScreen() {
+//        PrefManager prefManager = new PrefManager(this);
+//        prefManager.setIsUserSignedUp(true);
+        // TODO Possibly delete above
+        Intent loginActivity = new Intent(MainActivity.this, LoginActivity.class);
+        startActivity(loginActivity, fadeOutActivity);
+        finish();
     }
 
 
@@ -190,18 +186,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
         mTextMessage = findViewById(R.id.message);
         navigation = findViewById(R.id.navigation);
         viewPager = findViewById(R.id.view_pager);
-    }
-
-    @Override
-    public void changePage(int position) {
-        viewPager.setCurrentItem(position, true);
-        setAppBarTitle(position);
-    }
-
-    @Override
-    public void changeNavHighlight(int position) {
-        navigation.setSelectedItemId(position);
-        setAppBarTitle(position);
     }
 
     private void setAppBarTitle(int index) {
@@ -267,25 +251,19 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
      */
     private ViewPager.OnPageChangeListener pageChangeListener = new ViewPager.OnPageChangeListener() {
         @Override
-        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-        }
+        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) { }
 
         @Override
         public void onPageSelected(int position) {
             presenter.pageSwipedTo(position);
-
         }
 
         @Override
-        public void onPageScrollStateChanged(int state) {
-
-        }
+        public void onPageScrollStateChanged(int state) { }
     };
 
     /**
      * Create a new dummy account for the sync adapter
-     *
      * @param context The application context
      */
     public static Account CreateSyncAccount(Context context) {
@@ -298,16 +276,13 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
          * If successful, return the Account object, otherwise report an error.
          */
         if (accountManager.addAccountExplicitly(newAccount, null, null)) {
+            Log.d(TAG, "Sync account created!");
             /*
              * If you don't set android:syncable="true" in your <provider> element in the manifest,
              * then call context.setIsSyncable(account, AUTHORITY, 1) here.
              */
-        } else {
-            Log.d(TAG, "Account already exists or some other error occurred.");
         }
-
-        Log.d(TAG, "Sync account created!");
-
+        else Log.d(TAG, "Account already exists or some other error occurred.");
         return newAccount;
     }
 
@@ -317,41 +292,66 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
         inflater.inflate(R.menu.drop_down_menu,menu);
         return super.onCreateOptionsMenu(menu);
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
 
         switch(item.getItemId()){
             case R.id.settings_menu:
-                //settings selected
-                Intent adminsettings = new Intent(this, AdminSettings.class);
-                startActivity(adminsettings);
+                // Settings selected
+                Intent adminSettings = new Intent(this, AdminSettings.class);
+                startActivity(adminSettings);
                 break;
         }
-
-
         return super.onOptionsItemSelected(item);
     }
 
 
-    public void createUserInfoItem() {
+    GetDetailsHandler getUserDetailsHandler = new GetDetailsHandler() {
+        @Override
+        public void onSuccess(final CognitoUserDetails list) {
+            // Successfully retrieved user details
+            userName = list.getAttributes().getAttributes().get("name");
+            userRole = list.getAttributes().getAttributes().get("custom:role");
+            userSchool = list.getAttributes().getAttributes().get("custom:school");
+            Log.d(AWSTAG, "Successfully loaded " +userName+ " as role " +userRole+ " at school " +userSchool);
+        }
 
-        //an example to demonstrate a dynamoDB push to amazon web servers
-        final UserInfoDO item = new UserInfoDO();
-        item.setUserId("bart-test");
-        item.setName("bart");
-        item.setTitle("student");
-        item.setLanguage("eng");
-        item.setLocation("asu");
-        Log.d("AWS", "createUserInfoItem");
+        @Override
+        public void onFailure(final Exception exception) {
+            Log.d(AWSTAG, "Failed to retrieve the user's details: " + exception);
+        }
+    };
 
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                dynamoDBMapper.save(item);
-                // Item saved
-                Log.d("AWS", "item added");
-            }
-        }).start();
-    }
+    AuthenticationHandler authenticationHandler = new AuthenticationHandler() {
+        @Override
+        public void onSuccess(CognitoUserSession userSession, CognitoDevice newDevice) {
+            Log.d(AWSTAG, "User "+userEmail+" automatically signed back in");
+        }
+
+        @Override
+        public void getAuthenticationDetails(AuthenticationContinuation authenticationContinuation, String userId) {
+            Log.d(AWSTAG, "Refreshing user "+userEmail+" details");
+        }
+
+        @Override
+        public void getMFACode(MultiFactorAuthenticationContinuation continuation) {
+            Log.d(AWSTAG, "Encountered MFA challenge. Sending user back to login...");
+            launchLoginScreen();
+        }
+
+        @Override
+        public void authenticationChallenge(ChallengeContinuation continuation) {
+            Log.d(AWSTAG, "Encountered authentication challenge. Sending user back to login...");
+            launchLoginScreen();
+        }
+
+        @Override
+        public void onFailure(Exception exception) {
+            Log.d(AWSTAG, "Unable to login user: "+exception);
+        }
+    };
+
+
 
 }

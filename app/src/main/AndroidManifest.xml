@@ -10,6 +10,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" /> <!-- SyncAdapter permissions -->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.READ_SYNC_SETTINGS" />
     <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS" />
@@ -28,7 +29,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar"
         tools:ignore="GoogleAppIndexingWarning">
-
         <service android:name="org.eclipse.paho.android.service.MqttService" />
 
         <activity
@@ -38,7 +38,6 @@
             android:theme="@style/AppTheme.Launcher">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -46,7 +45,7 @@
             android:name=".welcome.WelcomeActivity"
             android:label="@string/app_name_only"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.Walkthrough"></activity>
+            android:theme="@style/AppTheme.Walkthrough" />
         <activity
             android:name=".walkthrough.walkthrough.WalkthroughActivity"
             android:label="@string/title_activity_walkthrough"
@@ -56,6 +55,10 @@
             android:name=".login.LoginActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.Clean" />
+        <activity
+            android:name=".signup.SignupActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.Clean"/>
         <activity
             android:name=".main.MainActivity"
             android:screenOrientation="portrait" />
@@ -80,10 +83,6 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
-
-        <activity
-            android:name=".signup.SignupActivity"
-            android:screenOrientation="portrait" />
 
         <service
             android:name=".sync.AuthenticatorService"
@@ -120,6 +119,10 @@
         </service>
 
         <activity android:name=".AdminSettings" />
+        <activity android:name=".main.removeUser"
+            android:parentActivityName="com.plusmobileapps.safetyapp.main.MainActivity"/>
+
+        <activity android:name=".CustomPopup" />
     </application>
 
 </manifest>

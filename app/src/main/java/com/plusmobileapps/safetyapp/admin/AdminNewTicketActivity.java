@@ -21,7 +21,6 @@ public class AdminNewTicketActivity extends AppCompatActivity {
     Spinner spinner;
     ArrayAdapter<CharSequence> adapter;
 
-
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin_new_ticket);
