@@ -43,6 +43,7 @@ import com.plusmobileapps.safetyapp.R;
 import com.plusmobileapps.safetyapp.actionitems.landing.ActionItemPresenter;
 import com.plusmobileapps.safetyapp.login.LoginActivity;
 import com.plusmobileapps.safetyapp.summary.landing.SummaryPresenter;
+import com.plusmobileapps.safetyapp.util.FileUtil;
 import com.plusmobileapps.safetyapp.walkthrough.landing.WalkthroughLandingPresenter;
 
 
@@ -55,6 +56,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
     private String walkthroughFragmentTitle = "";
     private MainActivityPresenter presenter;
     private Bundle fadeOutActivity;
+    private String selectedSchool = "";
 
     // AWS
     private CognitoUserPool userPool;
@@ -124,11 +126,19 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
                 .dynamoDBClient(dynamoDBClient)
                 .awsConfiguration(configuration)
                 .build();
-        createUserInfoItem();
 
         userPool = new AwsServices().initAWSUserPool(this);
         user = userPool.getUser(userEmail);
         user.getDetailsInBackground(getUserDetailsHandler);
+
+        selectedSchool = "newSchool";
+        //FileUtil.upload(this, "uploads/appDB.db", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db");
+        //FileUtil.upload(this, "uploads/appDB.db-shm", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db-shm");
+        //FileUtil.upload(this, "uploads/appDB.db-wal", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db-wal");
+
+        //boolean fileDeleted = FileUtil.deleteDb(this);
+
+        FileUtil.download(this, "uploads/appDB1.db", "/data/data/com.plusmobileapps.safetyapp/databases/");
     }
 
     @Override
@@ -297,26 +307,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
     }
 
 
-    public void createUserInfoItem() {
-        //an example to demonstrate a dynamoDB push to amazon web servers
-        final UserInfoDO item = new UserInfoDO();
-        item.setUserId("bart-test");
-        item.setName("bart");
-        item.setTitle("student");
-        item.setLanguage("eng");
-        item.setLocation("asu");
-        Log.d(AWSTAG, "createUserInfoItem");
-
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                dynamoDBMapper.save(item);
-                // Item saved
-                Log.d(AWSTAG, "item added");
-            }
-        }).start();
-    }
-
     GetDetailsHandler getUserDetailsHandler = new GetDetailsHandler() {
         @Override
         public void onSuccess(final CognitoUserDetails list) {
@@ -361,5 +351,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
             Log.d(AWSTAG, "Unable to login user: "+exception);
         }
     };
+
+
 
 }

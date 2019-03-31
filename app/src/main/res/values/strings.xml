@@ -163,7 +163,8 @@
     <string name="temporary_password">Temporary Password</string>
     <string name="school">School</string>
     <string name="create_user">Create User</string>
-    <string name="Admin_settings">Admin Settings</string>
+    <string name="Admin_add">Add User</string>
+    <string name="Admin_remove">remove User</string>
     <string name="login_button_error_aws_user_exists">Incorrect Password</string>
     <string name="login_button_user_confirmed">Account Confirmed!\nLogin Again</string>
     <string name="login_button_error_aws_new_password">Password Reset Required</string>
@@ -179,5 +180,24 @@
     <string name="sign_up_title">Create Your Account</string>
     <string name="aws_login_error_disabled">Your Account Has Been Disabled</string>
 
-</resources>
+    <string name="delete_user">delete user</string>
+    <string name="add_user">add user</string>
+    <string name="view_current_tickets">View Current Tickets</string>
+    <string name="ticket_history">Ticket History</string>
+    <string name="string_ticket_history" />
+    <string name="new_ticket">New Ticket</string>
+    <string name="view_history">View History</string>
+    <string name="string_view_history" />
+    <string name="enter_your_name">Enter your name:</string>
+    <string name="view_tickets">View Tickets</string>
 
+    <string-array name="userArray">
+        <item>User1</item>
+        <item>User2</item>
+        <item>User3</item>
+    </string-array>
+
+    <string name="user_not_found">User not found</string>
+
+
+</resources>

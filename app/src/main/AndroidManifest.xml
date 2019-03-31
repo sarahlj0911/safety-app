@@ -29,7 +29,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar"
         tools:ignore="GoogleAppIndexingWarning">
-
         <service android:name="org.eclipse.paho.android.service.MqttService" />
 
         <activity
@@ -120,6 +119,9 @@
         </service>
 
         <activity android:name=".AdminSettings" />
+        <activity android:name=".main.removeUser"
+            android:parentActivityName="com.plusmobileapps.safetyapp.main.MainActivity"/>
+
         <activity android:name=".CustomPopup" />
     </application>
 

@@ -8,7 +8,7 @@ import java.util.TimeZone;
 
 public class DateTimeUtil {
 
-    private static final String DATE_TIME_FORMAT = "EEE MMM dd HH:mm:ss zzz YYYY";
+    private static final String DATE_TIME_FORMAT = "EEE MMM dd HH:mm:ss zzz";
     private static final String ARIZONA_TIME_ZONE = "US/Arizona";
 
     /**
