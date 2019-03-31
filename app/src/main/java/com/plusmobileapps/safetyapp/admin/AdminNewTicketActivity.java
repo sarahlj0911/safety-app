@@ -34,6 +34,7 @@ public class AdminNewTicketActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 Toast.makeText(getBaseContext(), (CharSequence) parent.getItemAtPosition(position),Toast.LENGTH_LONG).show();
+
             }
 
             @Override
@@ -44,6 +45,7 @@ public class AdminNewTicketActivity extends AppCompatActivity {
 
     }
     public void backClicked(){
+        Log.d("BACK CLICKED", "BACK CLICKED");
         Intent i=new Intent(AdminNewTicketActivity.this,AdminMainActivity.class);
         startActivity(i);
 
