@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -37,6 +38,7 @@ public class WelcomeActivity extends AppCompatActivity {
     private Button btnBack, btnNext;
     private PrefManager prefManager;
     private User curUser;
+    private Bundle fadeOutActivity;
     private UserDao userDao;
 
     @Override
@@ -50,16 +52,13 @@ public class WelcomeActivity extends AppCompatActivity {
                 try {
                     curUser = userDao.getUser();
                     launchMainScreen();
-                    curUser.setLastLogin(1);
-                }
+                    curUser.setLastLogin(1); }
                 catch (NullPointerException e) {
                     System.err.println("Error: NullPointerException for user. Reverting to LoginActivity.");
-                    launchLoginScreen();
-                }
+                    launchLoginScreen(); }
             }
             else {
-                launchLoginScreen();
-            }
+                launchLoginScreen(); }
         }
 
         setContentView(R.layout.activity_welcome);
@@ -69,7 +68,7 @@ public class WelcomeActivity extends AppCompatActivity {
         btnBack = findViewById(R.id.welcome_btn_back);
         btnNext = findViewById(R.id.welcome_btn_next);
 
-        layouts = new int[]{
+        layouts = new int[] {
                 R.layout.welcome_slide1,
                 R.layout.welcome_slide2,
                 R.layout.welcome_slide3,
@@ -94,6 +93,8 @@ public class WelcomeActivity extends AppCompatActivity {
                 }
             }
         });
+
+        fadeOutActivity = ActivityOptionsCompat.makeCustomAnimation(this, 1, android.R.anim.fade_out).toBundle();
 
         btnNext.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -139,7 +140,7 @@ public class WelcomeActivity extends AppCompatActivity {
     private void launchLoginScreen() {
         Intent login = new Intent(this, LoginActivity.class);
         login.putExtra("openAni", "start");
-        startActivity(login);
+        startActivity(login, fadeOutActivity);
         finish();
     }
 
