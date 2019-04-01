@@ -84,7 +84,15 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        findViewsById();
+
+        mTextMessage = findViewById(R.id.message);
+        navigation = findViewById(R.id.navigation);
+        viewPager = findViewById(R.id.view_pager);
+
+        Toolbar toolbar = findViewById(R.id.main_toolbar);
+        setSupportActionBar(toolbar);
+        setAppBarTitle(0);
+
         MainActivityFragmentFactory factory = new MainActivityFragmentFactory();
         setUpPresenters(factory);
         presenter = new MainActivityPresenter(this);
@@ -106,10 +114,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
         viewPager.setAdapter(swipeAdapter);
         viewPager.addOnPageChangeListener(pageChangeListener);
         viewPager.setOffscreenPageLimit(3);
-
-        Toolbar toolbar = findViewById(R.id.main_toolbar);
-        setSupportActionBar(toolbar);
-        setAppBarTitle(0);
 
         // Turn on periodic syncing
         contentResolver = getContentResolver();
@@ -180,12 +184,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
         new WalkthroughLandingPresenter(factory.getWalkthroughLandingFragment());
         new ActionItemPresenter(factory.getActionItemsFragment());
         new SummaryPresenter(factory.getSummaryFragment());
-    }
-
-    private void findViewsById() {
-        mTextMessage = findViewById(R.id.message);
-        navigation = findViewById(R.id.navigation);
-        viewPager = findViewById(R.id.view_pager);
     }
 
     private void setAppBarTitle(int index) {
@@ -351,7 +349,5 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
             Log.d(AWSTAG, "Unable to login user: "+exception);
         }
     };
-
-
 
 }

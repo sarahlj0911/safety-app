@@ -166,7 +166,7 @@
     <string name="Admin_add">Add User</string>
     <string name="Admin_remove">remove User</string>
     <string name="login_button_error_aws_user_exists">Incorrect Password</string>
-    <string name="login_button_user_confirmed">Account Confirmed!\nLogin Again</string>
+    <string name="login_button_user_confirmed">Account Confirmed!\nLogging in…</string>
     <string name="login_button_error_aws_new_password">Password Reset Required</string>
     <string name="login_button_error_aws_error">Unknown AWS Issue</string>
     <string name="login_button_error_aws_internal_error">AWS Internal Error</string>

@@ -64,7 +64,7 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
 
     private static final String TAG = "LoginActivity";
     private static final String AWSTAG = "LoginActivityAWS";
-    private View codeAuthWindow, codeView;
+    private View codeAuthWindow, codeView, loginView;
     private Bundle fadeOutActivity;
     private Handler handler;
     private LoginContract.Presenter presenter;
@@ -92,6 +92,7 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_login);
 
+        loginView = findViewById(R.id.viewLogin);
         codeAuthWindow = findViewById(R.id.viewAuthCode);
         codeView = findViewById(R.id.codeView);
 
@@ -310,9 +311,11 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         @Override
         public void onSuccess() {
             Log.d(AWSTAG, "Code was sent!");
+            showCodeView = true;
             final Runnable clearView = new Runnable() {
                 public void run() {
                     buttonDismissAuthCodeClicked(codeAuthWindow);
+                    buttonLogInClicked(loginView); // TODO
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -330,7 +333,7 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         @SuppressLint("SetTextI18n")
         @Override
         public void onFailure(Exception exception) {
-            Log.d(AWSTAG, "AWS Code Send Failure: " + exception);
+            Log.d(AWSTAG, "AWS Code Send FbuttonTextailure: " + exception);
             codeViewStatusAnimation(1, 200, "INCORRECT CODE");
             codeViewErrorAnimation();
         }

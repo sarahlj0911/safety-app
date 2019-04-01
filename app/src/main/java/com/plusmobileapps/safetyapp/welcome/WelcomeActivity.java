@@ -45,6 +45,8 @@ public class WelcomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        fadeOutActivity = ActivityOptionsCompat.makeCustomAnimation(this, 1, android.R.anim.fade_out).toBundle();
+
         // Checking for first time launch - before calling setContentView()
         prefManager = new PrefManager(this);
         if (prefManager.isTutorialSeen()) {
@@ -93,8 +95,6 @@ public class WelcomeActivity extends AppCompatActivity {
                 }
             }
         });
-
-        fadeOutActivity = ActivityOptionsCompat.makeCustomAnimation(this, 1, android.R.anim.fade_out).toBundle();
 
         btnNext.setOnClickListener(new View.OnClickListener() {
             @Override
