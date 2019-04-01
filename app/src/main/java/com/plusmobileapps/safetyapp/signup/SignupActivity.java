@@ -188,6 +188,7 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
                 school = newSchool.getEditableText().toString();
                 Log.d(TAG, "New School: " + school);
             }
+            school = "Temporary school fix";
 
             name = Objects.requireNonNull(nameInput.getEditText()).getText().toString();
             email = Objects.requireNonNull(emailInput.getEditText()).getText().toString();
