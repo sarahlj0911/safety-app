@@ -10,7 +10,10 @@ import com.plusmobileapps.safetyapp.util.DateTimeUtil;
 
 import java.util.Date;
 
-@Entity(tableName = "walkthroughs")
+@Entity(tableName = "walkthroughs",
+        foreignKeys = @ForeignKey(entity = School.class,
+                parentColumns = "schoolId",
+                childColumns = "schoolId"))
 public class Walkthrough {
 
     @PrimaryKey(autoGenerate = true)

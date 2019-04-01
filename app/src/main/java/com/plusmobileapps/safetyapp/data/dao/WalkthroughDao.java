@@ -27,10 +27,10 @@ public interface WalkthroughDao {
     @Query("SELECT * FROM walkthroughs WHERE isDeleted = 1")
     List<Walkthrough> getAllDeleted();
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     long insert(Walkthrough walkthrough);
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertAll(Walkthrough... walkthroughs);
 
     @Delete
