@@ -198,6 +198,7 @@
     </string-array>
 
     <string name="user_not_found">User not found</string>
+    <string name="path_database">/data/data/com.plusmobileapps.safetyapp/databases/</string>
 
 
 </resources>

@@ -142,7 +142,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
 
         //boolean fileDeleted = FileUtil.deleteDb(this);
 
-        FileUtil.download(this, "uploads/appDB1.db", "/data/data/com.plusmobileapps.safetyapp/databases/");
+        FileUtil.download(this, "uploads/appDB1.db", getString(R.string.path_database));
     }
 
     @Override

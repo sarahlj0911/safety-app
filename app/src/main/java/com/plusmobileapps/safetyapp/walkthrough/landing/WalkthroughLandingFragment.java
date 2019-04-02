@@ -165,7 +165,7 @@ public class WalkthroughLandingFragment extends Fragment
         int margin = ((Number) (getResources().getDisplayMetrics().density * 12)).intValue();
         params.setMargins(margin, margin, margin, margin);
 
-        ViewTarget target = new ViewTarget(R.id.floatingActionButton, getActivity());
+        ViewTarget target = new ViewTarget(R.id.floatingActionButton, Objects.requireNonNull(getActivity()));
         showcaseView = new ShowcaseView.Builder(getActivity())
                 .withMaterialShowcase()
                 .setTarget(target)
