@@ -164,7 +164,8 @@
     <string name="school">School</string>
     <string name="create_user">Create User</string>
     <string name="Admin_add">Add User</string>
-    <string name="Admin_remove">remove User</string>
+    <string name="Admin_remove">Remove User</string>
+    <string name="dropdown_signout">Sign Out</string>
     <string name="login_button_error_aws_user_exists">Incorrect Password</string>
     <string name="login_button_user_confirmed">Account Confirmed!\nLogging in…</string>
     <string name="login_button_error_aws_new_password">Password Reset Required</string>

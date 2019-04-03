@@ -155,8 +155,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
     @Override
     public void onStop(){
         super.onStop();
-        user.signOut();
-        Log.d(AWSTAG, "Signed out user "+userEmail+" automatically");
+        signOutUser();
     }
 
     @Override
@@ -172,9 +171,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
     }
 
     private void launchLoginScreen() {
-//        PrefManager prefManager = new PrefManager(this);
-//        prefManager.setIsUserSignedUp(true);
-        // TODO Possibly delete above
         Intent loginActivity = new Intent(MainActivity.this, LoginActivity.class);
         startActivity(loginActivity, fadeOutActivity);
         finish();
@@ -301,6 +297,11 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
                 Intent adminSettings = new Intent(this, AdminSettings.class);
                 startActivity(adminSettings);
                 break;
+            case R.id.settings_menu_signout:
+                // Settings selected
+                signOutUser();
+                launchLoginScreen();
+                break;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -321,6 +322,16 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
             Log.d(AWSTAG, "Failed to retrieve the user's details: " + exception);
         }
     };
+
+    public void signOutUser(){
+        try {
+            user.signOut();
+            Log.d(AWSTAG, "Signed out user "+userEmail);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+    }
 
     AuthenticationHandler authenticationHandler = new AuthenticationHandler() {
         @Override
