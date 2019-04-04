@@ -32,6 +32,9 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.amazonaws.mobile.client.AWSMobileClient;
+import com.amazonaws.mobile.client.AWSStartupHandler;
+import com.amazonaws.mobile.client.AWSStartupResult;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUser;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUserAttributes;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUserCodeDeliveryDetails;
@@ -42,11 +45,14 @@ import com.plusmobileapps.safetyapp.BlurUtils;
 import com.plusmobileapps.safetyapp.R;
 import com.plusmobileapps.safetyapp.login.LoginActivity;
 import com.plusmobileapps.safetyapp.main.MainActivity;
+import com.plusmobileapps.safetyapp.util.FileUtil;
 
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Objects;
 
 import br.com.simplepass.loading_button_lib.customViews.CircularProgressButton;
@@ -76,11 +82,19 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
     private String email, name;
     private int nameCharCount, emailCharCount;
 
+    public ArrayAdapter<String> schoolsAdapter;
+    List<String> schoolNames = new LinkedList<>();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Log.d("Debug"+TAG, "onCreate");
         super.onCreate(savedInstanceState);
+
+
+
+
+
         handler = new Handler();
         presenter = new SignupPresenter(this);
         Window w = getWindow();
@@ -92,7 +106,22 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
         schoolDownloadFragment.setCallback(this);
 
         schoolList = new ArrayList<>();
+
+
         schoolSpinner = findViewById(R.id.spinner_signup_school_name);
+        AWSMobileClient.getInstance().initialize(this, new AWSStartupHandler() {
+            @Override
+            public void onComplete(AWSStartupResult awsStartupResult) {
+            }
+        }).execute();
+        FileUtil.download(this, "schools.json", "/data/data/com.plusmobileapps.safetyapp/databases/schools.json");
+        /*schoolsAdapter = new ArrayAdapter<>(
+                this,
+                android.R.layout.simple_list_item_1,
+                schoolNames );
+*/
+        //schoolSpinner.setAdapter(schoolsAdapter);
+
         roleSpinner = findViewById(R.id.spinner_signup_role);
         newSchool = findViewById(R.id.new_school_text_box);
         signUpButton = findViewById(R.id.button_save_signup);

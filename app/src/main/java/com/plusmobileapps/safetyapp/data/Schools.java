@@ -8,6 +8,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.LinkedList;
@@ -19,8 +21,10 @@ public class Schools {
     public static JSONObject obj;
 
     static void load(Context context) {
+
         try {
-            InputStream is = context.getAssets().open("places.json");
+            File file = new File("/data/data/com.plusmobileapps.safetyapp/databases/schools.json");
+            FileInputStream is = new FileInputStream(file);
             int size = is.available();
             byte[] buffer = new byte[size];
             is.read(buffer);

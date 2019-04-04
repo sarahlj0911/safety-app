@@ -127,9 +127,9 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
         selectedSchool = "newSchool";
 
         FileUtil.deleteDb(this);
-        FileUtil.download(this, "uploads/appDB.db", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db");
-        FileUtil.download(this, "uploads/appDB.db-shm", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db-shm");
-        FileUtil.download(this, "uploads/appDB.db-wal", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db-wal");
+        FileUtil.download(this, "uploads/appDB.db", "/data/data/com.plusmobileapps.safetyapp/databases/appDB1.db");
+        FileUtil.download(this, "uploads/appDB.db-shm", "/data/data/com.plusmobileapps.safetyapp/databases/appDB1.db-shm");
+        FileUtil.download(this, "uploads/appDB.db-wal", "/data/data/com.plusmobileapps.safetyapp/databases/appDB1.db-wal");
         
 
     }
