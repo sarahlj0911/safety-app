@@ -121,6 +121,7 @@
         <activity android:name=".AdminSettings" />
         <activity android:name=".main.removeUser"
             android:parentActivityName="com.plusmobileapps.safetyapp.main.MainActivity"/>
+
     </application>
 
 </manifest>

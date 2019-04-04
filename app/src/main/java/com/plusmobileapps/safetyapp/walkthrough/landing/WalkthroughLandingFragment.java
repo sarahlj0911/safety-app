@@ -95,9 +95,10 @@ public class WalkthroughLandingFragment extends Fragment
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         adapter = new WalkthroughLandingAdapter(new ArrayList<Walkthrough>(0), itemListener);
         recyclerView.setAdapter(adapter);
+
         fab.setOnClickListener(fabListener);
         progressBar = rootView.findViewById(R.id.pb_loading_indicator);
-
+        fab.bringToFront();
         return rootView;
     }
 
