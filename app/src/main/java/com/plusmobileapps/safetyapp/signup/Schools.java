@@ -1,4 +1,4 @@
-package com.plusmobileapps.safetyapp.data;
+package com.plusmobileapps.safetyapp.signup;
 
 import android.content.Context;
 import android.util.Log;

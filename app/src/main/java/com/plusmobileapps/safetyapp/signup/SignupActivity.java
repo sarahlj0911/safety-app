@@ -109,18 +109,14 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
 
 
         schoolSpinner = findViewById(R.id.spinner_signup_school_name);
-        AWSMobileClient.getInstance().initialize(this, new AWSStartupHandler() {
-            @Override
-            public void onComplete(AWSStartupResult awsStartupResult) {
-            }
-        }).execute();
-        FileUtil.download(this, "schools.json", "/data/data/com.plusmobileapps.safetyapp/databases/schools.json");
-        /*schoolsAdapter = new ArrayAdapter<>(
+        Schools.load(this.getApplicationContext());
+        schoolNames = Schools.schoolNames;
+        schoolsAdapter = new ArrayAdapter<>(
                 this,
                 android.R.layout.simple_list_item_1,
                 schoolNames );
-*/
-        //schoolSpinner.setAdapter(schoolsAdapter);
+
+        schoolSpinner.setAdapter(schoolsAdapter);
 
         roleSpinner = findViewById(R.id.spinner_signup_role);
         newSchool = findViewById(R.id.new_school_text_box);
