@@ -6,7 +6,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TextInputLayout;
@@ -36,13 +35,9 @@ import com.plusmobileapps.safetyapp.sync.NetworkFragment;
 import com.plusmobileapps.safetyapp.util.NetworkUtil;
 import com.plusmobileapps.safetyapp.walkthrough.location.LocationActivity;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-
-import static com.amazonaws.mobile.auth.core.internal.util.ThreadUtils.runOnUiThread;
 
 public class WalkthroughLandingFragment extends Fragment
         implements OnShowcaseEventListener, WalkthroughLandingContract.View, DownloadCallback {
@@ -71,18 +66,19 @@ public class WalkthroughLandingFragment extends Fragment
     }
 
     public static WalkthroughLandingFragment newInstance() {
-        return new WalkthroughLandingFragment();
+        WalkthroughLandingFragment fragment = new WalkthroughLandingFragment();
+        return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        networkFragment = NetworkFragment.getInstance(Objects.requireNonNull(getFragmentManager()));
+        networkFragment = NetworkFragment.getInstance(getFragmentManager());
         networkFragment.setCallback(this);
     }
 
     @Override
-    public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_walkthrough_landing, container, false);
         rootView.setTag(TAG);
@@ -110,9 +106,13 @@ public class WalkthroughLandingFragment extends Fragment
     public void onResume() {
         super.onResume();
         prefManager = new PrefManager(Objects.requireNonNull(getContext()));
+
         if (!prefManager.getHasSeenCreateWalkthroughTutorial()) {
-                presenter.firstAppLaunch(); }
+            presenter.firstAppLaunch();
+        }
+
         downloadData();
+
         Log.d(TAG, "Resumed; should start presenter and upload data");
 
         // presenter has to be started in either case
@@ -120,14 +120,9 @@ public class WalkthroughLandingFragment extends Fragment
     }
 
     @Override
-    public void onPause(){
-        super.onPause();
-        showcaseView.hide();
-    }
-
-    @Override
     public void onDestroy() {
         super.onDestroy();
+
         NetworkUtil.unregisterNetworkListener(rootView.getContext(), networkChangeReceiver);
     }
 
@@ -170,23 +165,23 @@ public class WalkthroughLandingFragment extends Fragment
         int margin = ((Number) (getResources().getDisplayMetrics().density * 12)).intValue();
         params.setMargins(margin, margin, margin, margin);
 
-        ViewTarget target = new ViewTarget(R.id.floatingActionButton, Objects.requireNonNull(getActivity()));
+        ViewTarget target = new ViewTarget(R.id.floatingActionButton, getActivity());
         showcaseView = new ShowcaseView.Builder(getActivity())
                 .withMaterialShowcase()
                 .setTarget(target)
                 .setContentTitle(R.string.tutorial_title)
                 .setContentText(R.string.tutorial_content)
                 .setStyle(R.style.CustomShowcaseTheme2)
+                .setShowcaseEventListener(this)
                 .replaceEndButton(R.layout.tutorial_custom_button)
                 .setOnClickListener(tutorialClickListener)
                 .build();
         showcaseView.setButtonPosition(params);
     }
 
-
     @Override
     public void showInProcessConfirmationDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(Objects.requireNonNull(getContext()));
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setMessage(getString(R.string.walkthrough_in_progress_dialog_message))
                 .setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
                     @Override
@@ -206,7 +201,7 @@ public class WalkthroughLandingFragment extends Fragment
 
     @Override
     public void showCreateWalkthroughDialog() {
-        final AlertDialog.Builder builder = new AlertDialog.Builder(Objects.requireNonNull(getContext()));
+        final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setTitle(getString(R.string.tutorial_title))
                 .setView(getLayoutInflater().inflate(R.layout.dialog_create_walkthrough, null))
                 .setPositiveButton(getString(R.string.create), null)
@@ -225,8 +220,8 @@ public class WalkthroughLandingFragment extends Fragment
                     public void onClick(View v) {
                         Dialog dialogObj = (Dialog) dialog;
                         TextInputLayout textInputLayout = dialogObj.findViewById(R.id.edit_text_create_walkthrough);
-                        String walkthroughTitle = Objects.requireNonNull(Objects.requireNonNull(textInputLayout).getEditText()).getText().toString();
-                        if (walkthroughTitle.length() >= MINIMUM_CHARACTER_NAME) {
+                        String walkthroughTitle = textInputLayout.getEditText().getText().toString();
+                        if (walkthroughTitle != null & walkthroughTitle.length() >= MINIMUM_CHARACTER_NAME) {
                             presenter.confirmCreateWalkthroughClicked(walkthroughTitle);
                             dialog.dismiss();
                         } else {
@@ -290,7 +285,7 @@ public class WalkthroughLandingFragment extends Fragment
             //On cancel: un check box.
             final Walkthrough selectedWalkthrough = adapter.getWalkthroughs().get(position);
 
-            AlertDialog.Builder builder = new AlertDialog.Builder(Objects.requireNonNull(getContext()));
+            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
             builder.setMessage("Completing this walkthrough will compelete it for all users at your school. Are you sure?")
                     .setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
                         @Override
@@ -351,17 +346,18 @@ public class WalkthroughLandingFragment extends Fragment
     @Override
     public void updateFromDownload(String result) {
         downloading = true;
-        // TODO progress bar show when server is ready
-        //showProgressBar(true);
+        showProgressBar(true);
         Log.d(TAG, "Result from DownloadTask: " + result);
     }
 
     @Override
     public NetworkInfo getActiveNetworkInfo() {
         ConnectivityManager connectivityManager =
-                (ConnectivityManager) Objects.requireNonNull(getContext()).getSystemService(Context.CONNECTIVITY_SERVICE);
+                (ConnectivityManager) getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
 
-        return connectivityManager.getActiveNetworkInfo();
+        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+
+        return networkInfo;
     }
 
     @Override
