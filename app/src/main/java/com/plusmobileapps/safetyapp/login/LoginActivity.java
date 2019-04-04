@@ -579,11 +579,6 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         final TransitionDrawable backgroundTransition, buttonTransition;
         final boolean reverse;
 
-//        if (status == 0) { // SUCCESS
-//            reverse = false;
-//            buttonTransition = (TransitionDrawable) ContextCompat.getDrawable(this, R.drawable.code_authorization_button_success_animation);
-//            backgroundTransition = (TransitionDrawable) ContextCompat.getDrawable(this, R.drawable.code_authorization_success_animation);
-//        }
         if (status == 1) { // FAILURE
             reverse = false;
             buttonTransition = (TransitionDrawable) ContextCompat.getDrawable(this, R.drawable.code_authorization_button_fail_animation);
