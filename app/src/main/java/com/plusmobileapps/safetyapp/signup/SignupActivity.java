@@ -241,7 +241,6 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
 
             String role = roleSpinner.getSelectedItem().toString();
             String school = schoolSpinner.getSelectedItem().toString();
-            //school = "test";
 
             formInput.put(SignupPresenter.NAME_INPUT, name);
             formInput.put(SignupPresenter.EMAIL_INPUT, email);
@@ -249,7 +248,6 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
             formInput.put(SignupPresenter.PASSWORD_INPUT_CHECK, passwordCheck);
             formInput.put(SignupPresenter.SCHOOL_NAME_INPUT, school);
             formInput.put(SignupPresenter.ROLE_INPUT, role);
-            //school = "test";
 
             Boolean inputReady = presenter.processFormInput(formInput);
 
