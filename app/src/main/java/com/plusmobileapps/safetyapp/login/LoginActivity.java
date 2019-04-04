@@ -141,10 +141,12 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         if (networkInfo != null && networkInfo.isConnected()) {
             hasInternetConnection = true;
             buttonSignUp.setEnabled(true);
+            loginButton.setEnabled(true);
             buttonLoginStatus.setText(""); }
         else {
             hasInternetConnection = false;
             buttonSignUp.setEnabled(false);
+            loginButton.setEnabled(false);
             buttonLoginStatus.setText("No Internet Connection!\nApp services will be unavailable.");
             Log.e(TAG, "Device does not have an internet connection!"); }
 
@@ -273,12 +275,17 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
                     buttonErrorText = getString(R.string.aws_login_error_disabled);
                     buttonLoginStatus.setClickable(true);
                 }
-                else if (ex.toLowerCase().contains("notauthorizedexception")) {
+                else if (ex.toLowerCase().contains("password attempts exceeded")) {
+                    buttonErrorText = getString(R.string.login_button_error_aws_attempts_exceeded);
+                    buttonLoginStatus.setClickable(true);
+                }
+                else if (ex.toLowerCase().contains("incorrect username or password")) {
                     buttonErrorText = String.format("%s\n Reset it?", getString(R.string.login_button_error_aws_user_exists));
                     buttonLoginStatus.setClickable(true);
                 }
                 else if (ex.toLowerCase().contains("passwordresetrequiredexception")) {
                     buttonErrorText = getString(R.string.login_button_error_aws_new_password);
+                    //TODO launch reset password dialog
                 }
                 else if (ex.toLowerCase().contains("usernotconfirmedexception")) {
                     buttonErrorText = getString(R.string.login_button_error_verify);
@@ -333,8 +340,19 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         @SuppressLint("SetTextI18n")
         @Override
         public void onFailure(Exception exception) {
-            Log.d(AWSTAG, "AWS Code Send FbuttonTextailure: " + exception);
-            codeViewStatusAnimation(1, 200, "INCORRECT CODE");
+            String ex = exception.toString();
+            String buttonErrorText;
+            Log.d(AWSTAG, "AWS Code Authentication Failure: " + ex);
+            if (ex.toLowerCase().contains("codemismatchexception")) {
+                buttonErrorText = getString(R.string.login_button_error_aws_code_error_incorrect);
+            }
+            else if (ex.toLowerCase().contains("limitexceededexception")) {
+                buttonErrorText = getString(R.string.login_button_error_aws_code_error_limit);
+            }
+            else {
+                buttonErrorText = getString(R.string.login_button_error_aws_code_error_default);
+            }
+            codeViewStatusAnimation(1, 200, buttonErrorText.toUpperCase());
             codeViewErrorAnimation();
         }
     };
