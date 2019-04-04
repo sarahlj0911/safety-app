@@ -143,11 +143,9 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
         if (networkInfo != null && networkInfo.isConnected()) {
             hasInternetConnection = true;
-            buttonSignUp.setEnabled(true);
             buttonLoginStatus.setText(""); }
         else {
             hasInternetConnection = false;
-            buttonSignUp.setEnabled(false);
             buttonLoginStatus.setText("No Internet Connection!\nApp services will be unavailable.");
             Log.e(TAG, "Device does not have an internet connection!"); }
 
