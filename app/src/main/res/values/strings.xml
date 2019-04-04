@@ -175,7 +175,7 @@
     <string name="login_button_error_aws_code_error_limit">Attempt Limit Exceeded</string>
     <string name="login_button_error_aws_code_error_default">Unknown Error</string>
     <string name="login_button_error_aws_internal_error">AWS Internal Error</string>
-    <string name="login_button_user_not_found">User Not Found</string>
+    <string name="login_button_user_not_found">Account Not Found</string>
     <string name="login_button_error_verify">Need to Verify Account\nContinue Process?</string>
     <string name="login_button_error_AWS_connection_issue">AWS Connection Issue</string>
     <string name="authorization_code_input_field">Enter your code here</string>
