@@ -76,7 +76,6 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
     private CognitoUserPool userPool;
     private CognitoUserAttributes userAttributes;
     private Handler handler;
-    private Bundle fadeOutActivity;
     private String email, name;
     private int nameCharCount, emailCharCount;
 
@@ -127,7 +126,6 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
         statusText.setText("");
         alertTitle.setText(getString(R.string.signup_confirm_title));
         alertButton.setText(getString(R.string.signup_button_inbox));
-        fadeOutActivity = ActivityOptionsCompat.makeCustomAnimation(this, 1, android.R.anim.fade_out).toBundle();
         ArrayAdapter adapter = ArrayAdapter.createFromResource(this, R.array.signup_roles, R.layout.activity_signup_spinner);
         adapter.setDropDownViewResource(R.layout.activity_signup_spinner_dropdown);
         roleSpinner.setAdapter(adapter);
@@ -163,7 +161,8 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
 
     public void launchHomeScreen() {
         Intent signUp = new Intent(SignupActivity.this, MainActivity.class);
-        startActivity(signUp, fadeOutActivity);
+        startActivity(signUp);
+        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
         finish();
     }
 
@@ -173,8 +172,8 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
     public void launchLoginScreen() {
         Intent login = new Intent(SignupActivity.this, LoginActivity.class);
         login.putExtra("openAni", "back");
-        startActivity(login, fadeOutActivity);
-        finish();
+        startActivity(login);
+        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
     }
 
     public void initSchoolSpinner() {

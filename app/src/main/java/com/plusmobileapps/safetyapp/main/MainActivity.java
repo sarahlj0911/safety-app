@@ -56,7 +56,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
     private BottomNavigationView navigation;
     private String walkthroughFragmentTitle = "";
     private MainActivityPresenter presenter;
-    private Bundle fadeOutActivity;
     private String selectedSchool = "";
 
     // AWS
@@ -97,7 +96,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
         MainActivityFragmentFactory factory = new MainActivityFragmentFactory();
         setUpPresenters(factory);
         presenter = new MainActivityPresenter(this);
-        fadeOutActivity = ActivityOptionsCompat.makeCustomAnimation(this, 1, android.R.anim.fade_out).toBundle();
 
         Intent intent = getIntent();
         userEmail = intent.getStringExtra("email");
@@ -176,7 +174,8 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
 //        prefManager.setIsUserSignedUp(true);
         // TODO Possibly delete above
         Intent loginActivity = new Intent(MainActivity.this, LoginActivity.class);
-        startActivity(loginActivity, fadeOutActivity);
+        startActivity(loginActivity);
+        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
         finish();
     }
 

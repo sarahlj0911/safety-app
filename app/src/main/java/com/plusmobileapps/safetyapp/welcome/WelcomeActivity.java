@@ -38,14 +38,11 @@ public class WelcomeActivity extends AppCompatActivity {
     private Button btnBack, btnNext;
     private PrefManager prefManager;
     private User curUser;
-    private Bundle fadeOutActivity;
     private UserDao userDao;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        fadeOutActivity = ActivityOptionsCompat.makeCustomAnimation(this, 1, android.R.anim.fade_out).toBundle();
 
         // Checking for first time launch - before calling setContentView()
         prefManager = new PrefManager(this);
@@ -140,7 +137,8 @@ public class WelcomeActivity extends AppCompatActivity {
     private void launchLoginScreen() {
         Intent login = new Intent(this, LoginActivity.class);
         login.putExtra("openAni", "start");
-        startActivity(login, fadeOutActivity);
+        startActivity(login);
+        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
         finish();
     }
 

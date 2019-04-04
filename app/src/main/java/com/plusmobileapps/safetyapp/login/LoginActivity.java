@@ -65,7 +65,6 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
     private static final String TAG = "LoginActivity";
     private static final String AWSTAG = "LoginActivityAWS";
     private View codeAuthWindow, codeView, loginView;
-    private Bundle fadeOutActivity;
     private Handler handler;
     private LoginContract.Presenter presenter;
     private String username, password;
@@ -124,8 +123,6 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         buttonDismissCodeView.setClickable(false);
         buttonLoginStatus.setClickable(false);
 
-        fadeOutActivity = ActivityOptionsCompat.makeCustomAnimation(this, 1, android.R.anim.fade_out).toBundle();
-
         userPool = new AwsServices().initAWSUserPool(this);
     }
 
@@ -166,7 +163,8 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
 //        prefManager.setIsUserSignedUp(true);
         Intent mainActivity = new Intent(LoginActivity.this, MainActivity.class);
         mainActivity.putExtra("email", username);
-        startActivity(mainActivity, fadeOutActivity);
+        startActivity(mainActivity);
+        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
         finish();
     }
 
@@ -445,7 +443,8 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
     public void buttonSignUpClicked(View view) {
         android.util.Log.d(TAG, "Debug: Login Register Clicked");
         Intent signUp = new Intent(LoginActivity.this, SignupActivity.class);
-        startActivity(signUp, fadeOutActivity);
+        startActivity(signUp);
+        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
     }
 
     public void buttonStatusClicked(View view) {
