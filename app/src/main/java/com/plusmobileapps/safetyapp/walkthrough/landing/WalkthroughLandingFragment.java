@@ -55,8 +55,9 @@ public class WalkthroughLandingFragment extends Fragment
     private PrefManager prefManager;
     private View overlay;
     private View noWalkthroughs;
-    private FloatingActionButton fab;
+
     private RecyclerView recyclerView;
+    private FloatingActionButton fab;
     private WalkthroughLandingAdapter adapter;
     private ProgressBar progressBar;
     private NetworkFragment networkFragment;
