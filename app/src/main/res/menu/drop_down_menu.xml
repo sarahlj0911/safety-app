@@ -2,12 +2,9 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/settings_menu"
-        android:title="@string/Admin_add" />
+        android:title="@string/Admin_add" />/>
     <item
         android:id="@+id/settings_menu_remove"
         android:title="@string/Admin_remove" />
-    <item
-        android:id="@+id/settings_menu_signout"
-        android:title="@string/dropdown_signout" />
 
 </menu>

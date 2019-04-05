@@ -17,7 +17,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -56,6 +55,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
     private BottomNavigationView navigation;
     private String walkthroughFragmentTitle = "";
     private MainActivityPresenter presenter;
+    private Bundle fadeOutActivity;
     private String selectedSchool = "";
 
     // AWS
@@ -85,18 +85,11 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_main);
-
-        mTextMessage = findViewById(R.id.message);
-        navigation = findViewById(R.id.navigation);
-        viewPager = findViewById(R.id.view_pager);
-
-        Toolbar toolbar = findViewById(R.id.main_toolbar);
-        setSupportActionBar(toolbar);
-        setAppBarTitle(0);
-
+        findViewsById();
         MainActivityFragmentFactory factory = new MainActivityFragmentFactory();
         setUpPresenters(factory);
         presenter = new MainActivityPresenter(this);
+        fadeOutActivity = ActivityOptionsCompat.makeCustomAnimation(this, 1, android.R.anim.fade_out).toBundle();
 
         Intent intent = getIntent();
         userEmail = intent.getStringExtra("email");
@@ -115,6 +108,10 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
         viewPager.addOnPageChangeListener(pageChangeListener);
         viewPager.setOffscreenPageLimit(3);
 
+        Toolbar toolbar = findViewById(R.id.main_toolbar);
+        setSupportActionBar(toolbar);
+        setAppBarTitle(0);
+
         // Turn on periodic syncing
         contentResolver = getContentResolver();
         account = CreateSyncAccount(this);
@@ -130,9 +127,9 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
         selectedSchool = "newSchool";
 
         FileUtil.deleteDb(this);
-        FileUtil.download(this, "uploads/appDB.db", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db");
-        FileUtil.download(this, "uploads/appDB.db-shm", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db-shm");
-        FileUtil.download(this, "uploads/appDB.db-wal", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db-wal");
+        FileUtil.download(this, "uploads/appDB.db", "/data/data/com.plusmobileapps.safetyapp/databases/appDB1.db");
+        FileUtil.download(this, "uploads/appDB.db-shm", "/data/data/com.plusmobileapps.safetyapp/databases/appDB1.db-shm");
+        FileUtil.download(this, "uploads/appDB.db-wal", "/data/data/com.plusmobileapps.safetyapp/databases/appDB1.db-wal");
         
 
     }
@@ -175,9 +172,11 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
     }
 
     private void launchLoginScreen() {
+//        PrefManager prefManager = new PrefManager(this);
+//        prefManager.setIsUserSignedUp(true);
+        // TODO Possibly delete above
         Intent loginActivity = new Intent(MainActivity.this, LoginActivity.class);
-        startActivity(loginActivity);
-        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+        startActivity(loginActivity, fadeOutActivity);
         finish();
     }
 
@@ -186,6 +185,12 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
         new WalkthroughLandingPresenter(factory.getWalkthroughLandingFragment());
         new ActionItemPresenter(factory.getActionItemsFragment());
         new SummaryPresenter(factory.getSummaryFragment());
+    }
+
+    private void findViewsById() {
+        mTextMessage = findViewById(R.id.message);
+        navigation = findViewById(R.id.navigation);
+        viewPager = findViewById(R.id.view_pager);
     }
 
     private void setAppBarTitle(int index) {
@@ -302,11 +307,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
                 Intent adminSettings = new Intent(this, AdminSettings.class);
                 startActivity(adminSettings);
                 break;
-            case R.id.settings_menu_signout:
-                // Settings selected
-                signOutUser();
-                launchLoginScreen();
-                break;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -327,16 +327,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
             Log.d(AWSTAG, "Failed to retrieve the user's details: " + exception);
         }
     };
-
-    public void signOutUser(){
-        try {
-            user.signOut();
-            Log.d(AWSTAG, "Signed out user "+userEmail);
-        }
-        catch (Exception e){
-            e.printStackTrace();
-        }
-    }
 
     AuthenticationHandler authenticationHandler = new AuthenticationHandler() {
         @Override
@@ -366,5 +356,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
             Log.d(AWSTAG, "Unable to login user: "+exception);
         }
     };
+
+
 
 }

@@ -68,7 +68,8 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
 
     private static final String TAG = "LoginActivity";
     private static final String AWSTAG = "LoginActivityAWS";
-    private View codeAuthWindow, codeView, loginView;
+    private View codeAuthWindow, codeView;
+    private Bundle fadeOutActivity;
     private Handler handler;
     private LoginContract.Presenter presenter;
     private String username, password;
@@ -95,7 +96,6 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_login);
 
-        loginView = findViewById(R.id.viewLogin);
         codeAuthWindow = findViewById(R.id.viewAuthCode);
         codeView = findViewById(R.id.codeView);
 
@@ -127,6 +127,8 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         buttonDismissCodeView.setClickable(false);
         buttonLoginStatus.setClickable(false);
 
+        fadeOutActivity = ActivityOptionsCompat.makeCustomAnimation(this, 1, android.R.anim.fade_out).toBundle();
+
         userPool = new AwsServices().initAWSUserPool(this);
 
         AWSMobileClient.getInstance().initialize(this, new AWSStartupHandler() {
@@ -153,13 +155,9 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
         if (networkInfo != null && networkInfo.isConnected()) {
             hasInternetConnection = true;
-            buttonSignUp.setEnabled(true);
-            loginButton.setEnabled(true);
             buttonLoginStatus.setText(""); }
         else {
             hasInternetConnection = false;
-            buttonSignUp.setEnabled(false);
-            loginButton.setEnabled(false);
             buttonLoginStatus.setText("No Internet Connection!\nApp services will be unavailable.");
             Log.e(TAG, "Device does not have an internet connection!"); }
 
@@ -178,8 +176,7 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
 //        prefManager.setIsUserSignedUp(true);
         Intent mainActivity = new Intent(LoginActivity.this, MainActivity.class);
         mainActivity.putExtra("email", username);
-        startActivity(mainActivity);
-        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+        startActivity(mainActivity, fadeOutActivity);
         finish();
     }
 
@@ -288,17 +285,12 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
                     buttonErrorText = getString(R.string.aws_login_error_disabled);
                     buttonLoginStatus.setClickable(true);
                 }
-                else if (ex.toLowerCase().contains("password attempts exceeded")) {
-                    buttonErrorText = getString(R.string.login_button_error_aws_attempts_exceeded);
-                    buttonLoginStatus.setClickable(true);
-                }
-                else if (ex.toLowerCase().contains("incorrect username or password")) {
+                else if (ex.toLowerCase().contains("notauthorizedexception")) {
                     buttonErrorText = String.format("%s\n Reset it?", getString(R.string.login_button_error_aws_user_exists));
                     buttonLoginStatus.setClickable(true);
                 }
                 else if (ex.toLowerCase().contains("passwordresetrequiredexception")) {
                     buttonErrorText = getString(R.string.login_button_error_aws_new_password);
-                    //TODO launch reset password dialog
                 }
                 else if (ex.toLowerCase().contains("usernotconfirmedexception")) {
                     buttonErrorText = getString(R.string.login_button_error_verify);
@@ -331,11 +323,9 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         @Override
         public void onSuccess() {
             Log.d(AWSTAG, "Code was sent!");
-            showCodeView = true;
             final Runnable clearView = new Runnable() {
                 public void run() {
                     buttonDismissAuthCodeClicked(codeAuthWindow);
-                    buttonLogInClicked(loginView); // TODO
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -353,19 +343,8 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         @SuppressLint("SetTextI18n")
         @Override
         public void onFailure(Exception exception) {
-            String ex = exception.toString();
-            String buttonErrorText;
-            Log.d(AWSTAG, "AWS Code Authentication Failure: " + ex);
-            if (ex.toLowerCase().contains("codemismatchexception")) {
-                buttonErrorText = getString(R.string.login_button_error_aws_code_error_incorrect);
-            }
-            else if (ex.toLowerCase().contains("limitexceededexception")) {
-                buttonErrorText = getString(R.string.login_button_error_aws_code_error_limit);
-            }
-            else {
-                buttonErrorText = getString(R.string.login_button_error_aws_code_error_default);
-            }
-            codeViewStatusAnimation(1, 200, buttonErrorText.toUpperCase());
+            Log.d(AWSTAG, "AWS Code Send Failure: " + exception);
+            codeViewStatusAnimation(1, 200, "INCORRECT CODE");
             codeViewErrorAnimation();
         }
     };
@@ -474,8 +453,7 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
     public void buttonSignUpClicked(View view) {
         android.util.Log.d(TAG, "Debug: Login Register Clicked");
         Intent signUp = new Intent(LoginActivity.this, SignupActivity.class);
-        startActivity(signUp);
-        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+        startActivity(signUp, fadeOutActivity);
     }
 
     public void buttonStatusClicked(View view) {
@@ -592,6 +570,11 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         final TransitionDrawable backgroundTransition, buttonTransition;
         final boolean reverse;
 
+//        if (status == 0) { // SUCCESS
+//            reverse = false;
+//            buttonTransition = (TransitionDrawable) ContextCompat.getDrawable(this, R.drawable.code_authorization_button_success_animation);
+//            backgroundTransition = (TransitionDrawable) ContextCompat.getDrawable(this, R.drawable.code_authorization_success_animation);
+//        }
         if (status == 1) { // FAILURE
             reverse = false;
             buttonTransition = (TransitionDrawable) ContextCompat.getDrawable(this, R.drawable.code_authorization_button_fail_animation);
