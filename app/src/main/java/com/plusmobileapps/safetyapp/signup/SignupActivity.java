@@ -26,6 +26,7 @@ import android.view.animation.AnimationSet;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.ScaleAnimation;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -48,8 +49,14 @@ import com.plusmobileapps.safetyapp.main.MainActivity;
 import com.plusmobileapps.safetyapp.util.FileUtil;
 
 import org.apache.commons.lang3.StringUtils;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -58,27 +65,22 @@ import java.util.Objects;
 import br.com.simplepass.loading_button_lib.customViews.CircularProgressButton;
 
 
-public class SignupActivity extends AppCompatActivity implements SignupContract.View, SignupDownloadCallback {
+public class SignupActivity extends AppCompatActivity implements SignupContract.View {
 
     public static final String TAG = "SignupActivity";
     private SignupContract.Presenter presenter;
     private View customPopup, customPopupWindow;
     private Bitmap backgroundCapture;
     private ImageView customPopupBackground;
-    private TextInputLayout nameInput, emailInput, passwordInput, passwordCheckInput, InputschoolNameInput;
-    private TextView statusText, alertTitle, alertContent, alertButton;
+    private TextInputLayout nameInput, emailInput, passwordInput, passwordCheckInput, schoolInput;
+    private TextView statusText, alertContent;
     private Spinner schoolSpinner, roleSpinner;
     private CircularProgressButton signUpButton;
-    private ArrayList<String> schoolList;
-    private ArrayAdapter<String> schoolSpinnerList;
     private EditText newSchool, nameField, emailField, passwordField;
-    private boolean schoolExists, userSignedUp = false;
-    private SchoolDownloadFragment schoolDownloadFragment;
+    private boolean userSignedUp = false;
     private CognitoUserPool userPool;
     private CognitoUserAttributes userAttributes;
     private Handler handler;
-    private Bundle fadeOutActivity;
-    private boolean downloading;
     private String email, name;
     private int nameCharCount, emailCharCount;
 
@@ -101,11 +103,6 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
         w.setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION, 2000);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_signup);
-
-        schoolDownloadFragment = SchoolDownloadFragment.getInstance(getFragmentManager());
-        schoolDownloadFragment.setCallback(this);
-
-        schoolList = new ArrayList<>();
 
 
         schoolSpinner = findViewById(R.id.spinner_signup_school_name);
@@ -140,9 +137,9 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
         addContentView(customPopup, defaultLayoutParams);
         customPopupWindow = findViewById(R.id.viewAlertWindow);
         customPopupBackground = findViewById(R.id.imageBackgroundBlur);
-        alertTitle = findViewById(R.id.textTitle);
+        TextView alertTitle = findViewById(R.id.textTitle);
         alertContent = findViewById(R.id.textDescription);
-        alertButton = findViewById(R.id.buttonText);
+        TextView alertButton = findViewById(R.id.buttonText);
 
         Objects.requireNonNull(nameInput.getEditText()).addTextChangedListener(nameListener);
         Objects.requireNonNull(emailInput.getEditText()).addTextChangedListener(emailListener);
@@ -152,13 +149,13 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
         statusText.setText("");
         alertTitle.setText(getString(R.string.signup_confirm_title));
         alertButton.setText(getString(R.string.signup_button_inbox));
-        fadeOutActivity = ActivityOptionsCompat.makeCustomAnimation(this, 1, android.R.anim.fade_out).toBundle();
         ArrayAdapter adapter = ArrayAdapter.createFromResource(this, R.array.signup_roles, R.layout.activity_signup_spinner);
         adapter.setDropDownViewResource(R.layout.activity_signup_spinner_dropdown);
         roleSpinner.setAdapter(adapter);
 
         userPool = new AwsServices().initAWSUserPool(this);
         userAttributes = new CognitoUserAttributes();
+        initSchoolSpinner();
     }
 
     @Override
@@ -166,9 +163,7 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
         super.onResume();
         Log.d("Debug"+TAG, "onResume");
         if (userSignedUp) launchLoginScreen();
-        else {
-            downloadSchools();
-            presenter.start(); }
+        else presenter.start();
     }
 
     @Override
@@ -189,45 +184,56 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
 
     public void launchHomeScreen() {
         Intent signUp = new Intent(SignupActivity.this, MainActivity.class);
-        startActivity(signUp, fadeOutActivity);
+        startActivity(signUp);
+        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
         finish();
     }
+
+    @Override
+    public void populateSchoolSpinner(ArrayList<String> schools) { }
 
     public void launchLoginScreen() {
         Intent login = new Intent(SignupActivity.this, LoginActivity.class);
         login.putExtra("openAni", "back");
-        startActivity(login, fadeOutActivity);
-        finish();
+        startActivity(login);
+        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
     }
 
-    public void populateSchoolSpinner(ArrayList<String> schools) {
-      /*  schoolList.remove("");
-        schoolList.remove(getString(R.string.new_school));
-        for (int i = 0; i < schools.size(); i++) {
-            schoolList.add(schools.get(i));
-            System.out.println(schoolList.get(i));
-        if(schools.size()>0 ) {
-            for (int i = 0; i < schools.size(); i++) {
-                schoolList.add(schools.get(i));
-                System.out.println(schoolList.get(i));
-            }
+    public void initSchoolSpinner() {
+        JSONObject schoolListObj;
+        ArrayList<String> schoolList;
+
+        FileUtil.download(this, "schools.json", getString(R.string.path_database));
+
+        schoolListObj = new JSONObject();
+
+
+        String schools[] = new String[0];
+        try { schools = (String[]) schoolListObj.get("schoolList"); }
+        catch (JSONException e) {
+            Log.d(TAG, "Unable to convert JSON object to string array.");
+            e.printStackTrace();
         }
-        schoolList.add("");
-        schoolList.add(getString(R.string.new_school));
-        Log.d(TAG, "Populating spinner with " + schoolList.size() + " schools");
-        schoolSpinnerList = new ArrayAdapter<String>(this, R.layout.fragment_spinner_item, schoolList);
-        schoolSpinnerList.setDropDownViewResource(R.layout.fragment_spinner_item);
+
+        schoolList = new ArrayList<>(Arrays.asList(schools));
+        Collections.sort(schoolList);
+//        schoolList.add("Add A School");
+
+        schoolList.add("School 1");
+        schoolList.add("School 2");
+        schoolList.add("School 3");
+        schoolList.add("School 4");
+        schoolList.add("School 5");
+
+        ArrayAdapter<String> schoolSpinnerList = new ArrayAdapter<>(this, R.layout.activity_signup_spinner, schoolList);
+        schoolSpinnerList.setDropDownViewResource(R.layout.activity_signup_spinner_dropdown);
         schoolSpinner.setAdapter(schoolSpinnerList);
         schoolSpinner.setSelection(0);
         schoolSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                if (getString(R.string.new_school).equals(schoolSpinner.getSelectedItem().toString())) {
-                    newSchool.setVisibility(View.VISIBLE);
-                    schoolSpinner.setVisibility(View.GONE);
-                    schoolExists = false;
-                } else {
-                    schoolExists = true;
+                if (schoolSpinner.getSelectedItem().toString().equals("Add A School")) {
+                    // TODO Hide
                 }
             }
 
@@ -236,7 +242,7 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
 
             }
         });
-    */}
+    }
 
 
     private View.OnClickListener saveSignupClickListener = new View.OnClickListener() {
@@ -244,20 +250,11 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
         @Override
         public void onClick(View v) {
             HashMap<String, String> formInput = new HashMap<>();
-            String school;
             statusText.setText("");
             nameInput.clearFocus();
             emailInput.clearFocus();
             passwordInput.clearFocus();
             passwordCheckInput.clearFocus();
-
-            if (schoolExists) {
-                Spinner schoolInput = findViewById(R.id.spinner_signup_school_name);
-                school = schoolInput.getSelectedItem().toString();
-                Log.d(TAG, "Chosen School: " + school); }
-            else {
-                school = newSchool.getEditableText().toString();
-                Log.d(TAG, "New School: " + school); }
 
             name = Objects.requireNonNull(nameInput.getEditText()).getText().toString();
             email = Objects.requireNonNull(emailInput.getEditText()).getText().toString();
@@ -265,6 +262,7 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
             String passwordCheck = Objects.requireNonNull(passwordCheckInput.getEditText()).getText().toString();
 
             String role = roleSpinner.getSelectedItem().toString();
+            String school = schoolSpinner.getSelectedItem().toString();
 
             formInput.put(SignupPresenter.NAME_INPUT, name);
             formInput.put(SignupPresenter.EMAIL_INPUT, email);
@@ -408,55 +406,6 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
     };
 
 
-    private void downloadSchools() {
-        if (!downloading && schoolDownloadFragment != null) {
-            schoolDownloadFragment.getSchools();
-            downloading = true; }
-    }
-
-    @Override
-    public ArrayList<String> updateFromDownload(String result, ArrayList<String> schoolList) {
-        downloading = true;
-        Log.d(TAG, "Result from GetSchoolsTask: " + result);
-        populateSchoolSpinner(schoolList);
-        return schoolList;
-    }
-
-    @Override
-    public NetworkInfo getActiveNetworkInfo() {
-        ConnectivityManager connectivityManager =
-                (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
-        return connectivityManager.getActiveNetworkInfo();
-    }
-
-    @Override
-    public void onProgressUpdate(int progressCode, int percentComplete) {
-        switch (progressCode) {
-            // You can add UI behavior for progress updates here.
-            case SignupDownloadCallback.Progress.ERROR:
-                break;
-
-            case SignupDownloadCallback.Progress.CONNECT_SUCCESS:
-                break;
-
-            case SignupDownloadCallback.Progress.GET_INPUT_STREAM_SUCCESS:
-                break;
-
-            case SignupDownloadCallback.Progress.PROCESS_INPUT_STREAM_IN_PROGRESS:
-                break;
-
-            case SignupDownloadCallback.Progress.PROCESS_INPUT_STREAM_SUCCESS:
-                break;
-        }
-    }
-
-    @Override
-    public void finishDownloading() {
-        downloading = false;
-        if (schoolDownloadFragment != null) {
-            schoolDownloadFragment.cancelGetSchools(); }
-    }
-
     // Handler: Signup User
     SignUpHandler signupCallback = new SignUpHandler() {
         // Button Animations
@@ -507,7 +456,6 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
             handler.postDelayed(resetButton, 3000);
         }
     };
-
 
 
     public void showPopupView(){
