@@ -117,6 +117,7 @@
                 android:name="android.content.SyncAdapter"
                 android:resource="@xml/syncadapter" />
         </service>
+        <activity android:name=".util.exportPdf"/>
 
         <activity android:name=".AdminSettings" />
         <activity android:name=".main.removeUser"

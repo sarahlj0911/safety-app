@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <Button
+        android:id="@+id/exportBtn"
+        android:layout_width="389dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="11dp"
+        android:layout_marginEnd="11dp"
+        android:layout_marginBottom="16dp"
+        android:onClick="export"
+        android:text="@string/export"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar2"
+        android:layout_width="413dp"
+        android:background="?attr/colorPrimary"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_height="wrap_content" />
+
+    <CheckBox
+        android:id="@+id/checkBoxActionItems"
+        android:layout_width="365dp"
+        android:layout_height="70dp"
+        android:layout_marginStart="23dp"
+        android:layout_marginTop="6dp"
+        android:layout_marginEnd="23dp"
+        android:layout_marginBottom="6dp"
+        android:text="@string/action_items"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toTopOf="@+id/WalkthroughCommentsChkbox"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ChooseTxtView" />
+
+    <CheckBox
+        android:id="@+id/WalkthroughCommentsChkbox"
+        android:layout_width="365dp"
+        android:layout_height="70dp"
+        android:layout_marginStart="23dp"
+        android:layout_marginTop="6dp"
+        android:layout_marginEnd="23dp"
+        android:layout_marginBottom="6dp"
+        android:text="@string/walkthrough_comments"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toTopOf="@+id/PhotoChkBox"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/checkBoxActionItems" />
+
+    <CheckBox
+        android:id="@+id/PhotoChkBox"
+        android:layout_width="365dp"
+        android:layout_height="70dp"
+        android:layout_marginStart="23dp"
+        android:layout_marginTop="6dp"
+        android:layout_marginEnd="23dp"
+        android:layout_marginBottom="295dp"
+        android:text="@string/photos"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toTopOf="@+id/exportBtn"
+        app:layout_constraintEnd_toStartOf="@+id/WalkthroughCommentsChkbox"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/WalkthroughCommentsChkbox" />
+
+    <TextView
+        android:id="@+id/ChooseTxtView"
+        android:layout_width="365dp"
+        android:layout_height="74dp"
+        android:layout_marginStart="23dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="23dp"
+        android:text="@string/please_select_which_items_to_include_in_your_report"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toTopOf="@+id/checkBoxActionItems"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar2" />
+
+    <TextView
+        android:id="@+id/TestTextView"
+        android:layout_width="333dp"
+        android:layout_height="189dp"
+        android:layout_marginStart="35dp"
+        android:layout_marginTop="37dp"
+        android:layout_marginEnd="35dp"
+        android:layout_marginBottom="63dp"
+        android:text="@string/test_data_will_appear_here"
+        app:layout_constraintBottom_toTopOf="@+id/exportBtn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/PhotoChkBox" />
+</android.support.constraint.ConstraintLayout>
