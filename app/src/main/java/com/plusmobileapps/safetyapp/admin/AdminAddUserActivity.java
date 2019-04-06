@@ -20,7 +20,9 @@ public class AdminAddUserActivity extends AppCompatActivity {
         setContentView(R.layout.activity_admin_add_user);
 
     }
-
+    public void onClickAddUser(){
+       System.out.println("added");
+    }
     public void backClicked(){
         Intent i=new Intent(AdminAddUserActivity.this,AdminMainActivity.class);
         startActivity(i);
