@@ -112,7 +112,7 @@ public class WalkthroughContentFragment extends Fragment
                              Bundle savedInstanceState) {
         packageManager = this.getActivity().getPackageManager();
         View view;
-        if(savedInstanceState != null)
+        if(savedInstanceState.getString("priority") != null)
         {
             view = inflater.inflate(R.layout.activity_saved_action, container, false);
             String walkthroughJsonObject = getArguments().getString("walkthroughQuestion");
