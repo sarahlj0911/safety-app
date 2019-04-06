@@ -1,44 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/viewSignup"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_toEndOf="@id/label_signup_role"
     android:gravity="center_horizontal"
     tools:context="com.plusmobileapps.safetyapp.signup.SignupActivity">
 
-    <android.support.design.widget.AppBarLayout
-        android:id="@+id/toolbar"
+    <ImageView
+        android:id="@+id/imageBackground"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:contentDescription="@string/login_image_logo_description"
+        android:cropToPadding="true"
+        android:scaleType="centerCrop"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/signup_background" />
+
+    <TextView
+        android:id="@+id/title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay">
-
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/main_toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            app:popupTheme="@style/AppTheme.PopupOverlay"
-            app:title="@string/title_signup" />
-
-    </android.support.design.widget.AppBarLayout>
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="50dp"
+        android:text="@string/sign_up_title"
+        android:textAlignment="center"
+        android:textColor="@android:color/white"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <android.support.design.widget.TextInputLayout
         android:id="@+id/signup_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/toolbar"
-        android:layout_centerInParent="true"
-        android:layout_marginTop="40dp">
+        android:layout_below="@+id/title"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="10dp"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:textColorHint="@android:color/white"
+        android:theme="@style/InputLayoutFieldMain"
+        app:errorTextAppearance="@style/error_appearance"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/title">
 
         <EditText
             android:id="@+id/fieldName"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
-            android:hint="@string/hint_name"
-            android:inputType="text"
             android:autofillHints="Enter your name"
+            android:backgroundTint="@android:color/white"
+            android:hint="@string/hint_name"
+            android:inputType="textPersonName"
+            android:nextFocusDown="@+id/fieldEmail"
+            android:singleLine="true"
+            android:textColor="@android:color/white"
             tools:targetApi="o" />
 
     </android.support.design.widget.TextInputLayout>
@@ -48,18 +78,31 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/signup_name"
-        android:layout_centerInParent="true"
-        android:layout_marginTop="8dp">
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:textColorHint="@android:color/white"
+        android:theme="@style/InputLayoutFieldMain"
+        app:errorTextAppearance="@style/error_appearance"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/signup_name">
 
         <EditText
             android:id="@+id/fieldEmail"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
+            android:backgroundTint="@android:color/white"
             android:hint="@string/hint_email"
             android:importantForAutofill="no"
             android:inputType="textEmailAddress"
-            tools:targetApi="o"/>
+            android:nextFocusDown="@+id/fieldPassword"
+            android:singleLine="true"
+            android:textColor="@android:color/white"
+            tools:targetApi="o" />
 
     </android.support.design.widget.TextInputLayout>
 
@@ -68,18 +111,33 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/signup_email"
-        android:layout_centerInParent="true"
-        android:layout_marginTop="8dp">
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:textColorHint="@android:color/white"
+        android:theme="@style/InputLayoutFieldMain"
+        android:visibility="visible"
+        app:errorTextAppearance="@style/error_appearance"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/signup_email">
 
         <EditText
             android:id="@+id/fieldPassword"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
+            android:backgroundTint="@android:color/white"
             android:hint="@string/hint_password"
-            android:inputType="textPassword"
             android:importantForAutofill="no"
-            tools:targetApi="o"/>
+            android:inputType="textPassword"
+            android:nextFocusDown="@+id/fieldPasswordCheck"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:textColor="@android:color/white"
+            tools:targetApi="o" />
 
     </android.support.design.widget.TextInputLayout>
 
@@ -88,19 +146,33 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/signup_password"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
         android:imeOptions="actionDone"
-        android:layout_centerInParent="true"
-        android:layout_marginTop="8dp">
+        android:textColorHint="@android:color/white"
+        android:theme="@style/InputLayoutFieldMain"
+        android:visibility="visible"
+        app:errorTextAppearance="@style/error_appearance"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/signup_password">
 
         <EditText
             android:id="@+id/fieldPasswordCheck"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
+            android:backgroundTint="@android:color/white"
             android:hint="@string/hint_password_check"
-            android:importantForAutofill="no"
             android:imeOptions="actionDone"
+            android:importantForAutofill="no"
             android:inputType="textPassword"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:textColor="@android:color/white"
             tools:targetApi="o" />
 
     </android.support.design.widget.TextInputLayout>
@@ -108,26 +180,43 @@
     <TextView
         android:id="@+id/label_signup_school_name"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="35dp"
         android:layout_below="@+id/signup_password_check"
         android:layout_alignStart="@+id/label_signup_role"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="90dp"
         android:focusableInTouchMode="false"
+        android:gravity="center"
         android:text="@string/label_signup_school_name"
-        android:textColor="@android:color/black"
-        android:textSize="18sp" />
+        android:textColor="@android:color/white"
+        android:textSize="18sp"
+        android:visibility="visible"
+        app:layout_constraintBottom_toTopOf="@+id/textViewStatus"
+        app:layout_constraintStart_toStartOf="@+id/signup_password_check"
+        app:layout_constraintTop_toBottomOf="@+id/signup_password_check"
+        app:layout_constraintVertical_bias="0.0" />
 
     <Spinner
         android:id="@+id/spinner_signup_school_name"
         android:layout_width="220dp"
-        android:layout_height="32dp"
+        android:layout_height="35dp"
         android:layout_alignStart="@+id/spinner_signup_role"
         android:layout_alignTop="@+id/label_signup_school_name"
+        android:layout_marginStart="10dp"
+        android:background="@color/soft_white"
         android:defaultFocusHighlightEnabled="false"
-        android:focusableInTouchMode="false"
         android:fadingEdge="vertical"
-        android:singleLine="false"
-        android:paddingTop="7dp" tools:targetApi="o"/>
+        android:focusableInTouchMode="false"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:spinnerMode="dropdown"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="@+id/label_signup_school_name"
+        app:layout_constraintEnd_toEndOf="@+id/signup_password_check"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/label_signup_school_name"
+        app:layout_constraintTop_toTopOf="@+id/label_signup_school_name"
+        tools:targetApi="o" />
 
     <EditText
         android:id="@+id/new_school_text_box"
@@ -135,40 +224,68 @@
         android:layout_height="wrap_content"
         android:layout_alignStart="@+id/spinner_signup_school_name"
         android:layout_alignTop="@+id/spinner_signup_school_name"
-        android:visibility="invisible"
+        android:layout_marginStart="10dp"
+        android:backgroundTint="@android:color/white"
         android:focusableInTouchMode="false"
-        android:paddingTop="7dp"
-        android:textSize="18sp"
         android:importantForAutofill="no"
-        tools:targetApi="o"
-        tools:ignore="LabelFor,TextFields" />
+        android:paddingLeft="10dp"
+        android:paddingTop="7dp"
+        android:paddingRight="10dp"
+        android:textColor="@android:color/white"
+        android:textSize="18sp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/label_signup_school_name"
+        app:layout_constraintEnd_toEndOf="@+id/signup_password_check"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/label_signup_school_name"
+        app:layout_constraintTop_toTopOf="@+id/label_signup_school_name"
+        tools:ignore="LabelFor,TextFields"
+        tools:targetApi="o" />
 
     <TextView
         android:id="@+id/label_signup_role"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/button_save_signup"
+        android:layout_width="0dp"
+        android:layout_height="35dp"
         android:layout_below="@+id/new_school_text_box"
-        android:layout_marginTop="37dp"
+        android:layout_alignStart="@+id/button_save_signup"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="20dp"
         android:focusableInTouchMode="false"
+        android:gravity="center_vertical"
         android:text="@string/label_signup_role"
-        android:textColor="@android:color/black"
-        android:textSize="18sp" />
+        android:textColor="@android:color/white"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/textViewStatus"
+        app:layout_constraintEnd_toEndOf="@+id/label_signup_school_name"
+        app:layout_constraintStart_toStartOf="@+id/label_signup_school_name"
+        app:layout_constraintTop_toBottomOf="@+id/label_signup_school_name"
+        app:layout_constraintVertical_bias="0.0" />
 
     <Spinner
         android:id="@+id/spinner_signup_role"
         android:layout_width="220dp"
-        android:layout_height="32dp"
+        android:layout_height="35dp"
         android:layout_alignBaseline="@+id/label_signup_role"
         android:layout_alignEnd="@+id/signup_email"
         android:layout_alignBottom="@+id/label_signup_role"
+        android:layout_marginStart="10dp"
+        android:layout_marginBottom="4dp"
+        android:background="@color/soft_white"
         android:defaultFocusHighlightEnabled="false"
         android:entries="@array/signup_roles"
+        android:fadingEdge="vertical"
         android:focusable="false"
         android:focusableInTouchMode="false"
-        android:fadingEdge="vertical"
-        android:paddingTop="7dp"
+        android:gravity="center_vertical"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
         android:prompt="@string/signup_role_prompt"
+        android:spinnerMode="dropdown"
+        app:layout_constraintBottom_toBottomOf="@+id/label_signup_role"
+        app:layout_constraintEnd_toEndOf="@+id/new_school_text_box"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/label_signup_role"
+        app:layout_constraintTop_toTopOf="@+id/label_signup_role"
         tools:targetApi="o" />
 
     <TextView
@@ -179,38 +296,53 @@
         android:layout_below="@+id/spinner_signup_role"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginStart="0dp"
-        android:layout_marginEnd="0dp"
-        android:layout_marginBottom="20dp"
-        android:gravity="bottom"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="10dp"
         android:text="@string/status_placeholder"
         android:textAlignment="center"
-        android:textColor="@color/actionItemRed"
-        android:textStyle="bold" />
+        android:textColor="@android:color/white"
+        app:layout_constraintBottom_toTopOf="@+id/button_save_signup"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
-    <Button
+
+    <br.com.simplepass.loading_button_lib.customViews.CircularProgressButton
         android:id="@+id/button_save_signup"
         android:layout_width="300dp"
-        android:layout_height="wrap_content"
+        android:layout_height="55dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="50dp"
-        android:text="@string/btn_signup" />
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="90dp"
+        android:background="@drawable/login_button_ripple"
+        android:stateListAnimator="@null"
+        android:text="@string/btn_signup"
+        android:textAlignment="center"
+        android:textColor="@drawable/login_button_text"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/imageBackground"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:spinning_bar_color="@android:color/white"
+        app:spinning_bar_width="4.5dp" />
 
     <TextView
         android:id="@+id/alertView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginStart="0dp"
-        android:layout_marginTop="0dp"
-        android:layout_marginEnd="0dp"
-        android:layout_marginBottom="0dp"
         android:text=""
         android:textSize="20sp"
-        android:visibility="invisible" />
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/imageBackground"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/imageBackground" />
 
-</RelativeLayout>
+</android.support.constraint.ConstraintLayout>

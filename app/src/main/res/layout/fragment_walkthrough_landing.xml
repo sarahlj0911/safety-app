@@ -21,13 +21,15 @@
         android:id="@+id/landing_walkthrough_recyclerview"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
+
     <View
         android:id="@+id/overlay"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@android:color/transparent"
         android:clickable="true"
-        android:visibility="gone"/>
+        android:focusable="true"
+        android:visibility="gone" />
 
     <ProgressBar
         android:id="@+id/pb_loading_indicator"
