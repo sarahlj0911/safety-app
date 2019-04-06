@@ -238,6 +238,10 @@ public class WalkthroughContentFragment extends Fragment
         {
             mapPic.setBackgroundResource(R.drawable.ASU_map);
         }
+        else
+        {
+            mapPic.setBackgroundResource(R.drawable.No_map);
+        }
 
         return view;
     }
