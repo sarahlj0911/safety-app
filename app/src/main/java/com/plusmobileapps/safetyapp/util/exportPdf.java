@@ -7,7 +7,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.widget.CheckBox;
 
+import com.plusmobileapps.safetyapp.MyApplication;
 import com.plusmobileapps.safetyapp.R;
+import com.plusmobileapps.safetyapp.data.AppDatabase;
 
 import java.util.Stack;
 
@@ -20,7 +22,7 @@ public class exportPdf extends AppCompatActivity {
     protected CheckBox WalkthroughCommentsbox;
     protected CheckBox Picsbox;
     PdfDocument document = new PdfDocument();
-    //public DataExtractor extractor = new DataExtractor();
+
     String Results = "";
 
     //public Document doc = new Document();
@@ -45,17 +47,10 @@ public class exportPdf extends AppCompatActivity {
 
 
     public void export() {
-        Stack actionItemsStack = new Stack();
-        //actionItemsStack = extractor.getlist();
-        //add to global pdf class
-        String nextItem = "";
-        while (!actionItemsStack.empty()) {
-            nextItem = (String) actionItemsStack.pop();
+        AppDatabase db = AppDatabase.getAppDatabase(MyApplication.getAppContext());
 
-            //Todo
-            //write to local file
-            //document.writeTo();
-        }
+
+
 
 
     }

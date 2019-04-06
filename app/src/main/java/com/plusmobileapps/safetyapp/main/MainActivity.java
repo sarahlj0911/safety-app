@@ -41,11 +41,17 @@ import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
 import com.plusmobileapps.safetyapp.AdminSettings;
 import com.plusmobileapps.safetyapp.AwsServices;
 import com.plusmobileapps.safetyapp.R;
+import com.plusmobileapps.safetyapp.actionitems.detail.ActionItemDetailActivity;
 import com.plusmobileapps.safetyapp.actionitems.landing.ActionItemPresenter;
+import com.plusmobileapps.safetyapp.data.entity.Response;
 import com.plusmobileapps.safetyapp.login.LoginActivity;
 import com.plusmobileapps.safetyapp.summary.landing.SummaryPresenter;
 import com.plusmobileapps.safetyapp.util.FileUtil;
+import com.plusmobileapps.safetyapp.util.exportPdf;
 import com.plusmobileapps.safetyapp.walkthrough.landing.WalkthroughLandingPresenter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class MainActivity extends AppCompatActivity implements MainActivityContract.View {
@@ -78,6 +84,9 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
     // Instance fields
     Account account;
     ContentResolver contentResolver;
+
+    //Action Items
+    public List<Response> actionItems = new ArrayList<>(0);
 
 
     @Override
@@ -179,6 +188,8 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
     private void setUpPresenters(MainActivityFragmentFactory factory) {
         new WalkthroughLandingPresenter(factory.getWalkthroughLandingFragment());
         new ActionItemPresenter(factory.getActionItemsFragment());
+        actionItems = new ActionItemPresenter(factory.getActionItemsFragment()).actionItems;
+        System.out.println("HEY LOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOK"+actionItems);
         new SummaryPresenter(factory.getSummaryFragment());
     }
 
@@ -301,6 +312,11 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
                 signOutUser();
                 launchLoginScreen();
                 break;
+            case R.id.ExportActionPlan:
+                Intent ExportIntent = new Intent(this, exportPdf.class);
+                //while loop putting information into bundle
+                //ExportIntent.putExtra("ActionItems",actionItems);
+                //ActionItemPresenter presenter = new ActionItemPresenter();
         }
         return super.onOptionsItemSelected(item);
     }
