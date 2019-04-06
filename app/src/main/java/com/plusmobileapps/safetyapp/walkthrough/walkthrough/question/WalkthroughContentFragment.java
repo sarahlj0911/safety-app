@@ -192,7 +192,7 @@ public class WalkthroughContentFragment extends Fragment
         {
             genLoc.setText(savedInstanceState.getString("building"));
         }
-        
+
         if(savedInstanceState.getString("campus") != null)
         {
             schoolName.setText(savedInstanceState.getString("campus"));
@@ -504,7 +504,8 @@ public class WalkthroughContentFragment extends Fragment
                 currentPriority = Priority.NONE.ordinal();
                 break;
             case R.id.saveButton:
-                //TODO Save things here
+                Bundle saved = new Bundle();
+                onSaveInstanceState(saved);
                 break;
             case R.id.editSavedWalkthroughButton:
                 //TODO Edit things here
