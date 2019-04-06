@@ -164,13 +164,18 @@
     <string name="school">School</string>
     <string name="create_user">Create User</string>
     <string name="Admin_add">Add User</string>
-    <string name="Admin_remove">remove User</string>
+    <string name="Admin_remove">Remove User</string>
+    <string name="dropdown_signout">Sign Out</string>
     <string name="login_button_error_aws_user_exists">Incorrect Password</string>
-    <string name="login_button_user_confirmed">Account Confirmed!\nLogin Again</string>
+    <string name="login_button_error_aws_attempts_exceeded">Password Attempts Exceeded!\nTry again soon.</string>
+    <string name="login_button_user_confirmed">Account Confirmed!\nLogging in…</string>
     <string name="login_button_error_aws_new_password">Password Reset Required</string>
     <string name="login_button_error_aws_error">Unknown AWS Issue</string>
+    <string name="login_button_error_aws_code_error_incorrect">Incorrect Code</string>
+    <string name="login_button_error_aws_code_error_limit">Attempt Limit Exceeded</string>
+    <string name="login_button_error_aws_code_error_default">Unknown Error</string>
     <string name="login_button_error_aws_internal_error">AWS Internal Error</string>
-    <string name="login_button_user_not_found">User Not Found</string>
+    <string name="login_button_user_not_found">Account Not Found</string>
     <string name="login_button_error_verify">Need to Verify Account\nContinue Process?</string>
     <string name="login_button_error_AWS_connection_issue">AWS Connection Issue</string>
     <string name="authorization_code_input_field">Enter your code here</string>
@@ -198,6 +203,7 @@
     </string-array>
 
     <string name="user_not_found">User not found</string>
+    <string name="path_database">/data/data/com.plusmobileapps.safetyapp/databases/</string>
 
 
 </resources>

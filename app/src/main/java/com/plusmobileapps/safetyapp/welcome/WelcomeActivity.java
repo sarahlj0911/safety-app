@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -50,16 +51,13 @@ public class WelcomeActivity extends AppCompatActivity {
                 try {
                     curUser = userDao.getUser();
                     launchMainScreen();
-                    curUser.setLastLogin(1);
-                }
+                    curUser.setLastLogin(1); }
                 catch (NullPointerException e) {
                     System.err.println("Error: NullPointerException for user. Reverting to LoginActivity.");
-                    launchLoginScreen();
-                }
+                    launchLoginScreen(); }
             }
             else {
-                launchLoginScreen();
-            }
+                launchLoginScreen(); }
         }
 
         setContentView(R.layout.activity_welcome);
@@ -69,7 +67,7 @@ public class WelcomeActivity extends AppCompatActivity {
         btnBack = findViewById(R.id.welcome_btn_back);
         btnNext = findViewById(R.id.welcome_btn_next);
 
-        layouts = new int[]{
+        layouts = new int[] {
                 R.layout.welcome_slide1,
                 R.layout.welcome_slide2,
                 R.layout.welcome_slide3,
@@ -140,6 +138,7 @@ public class WelcomeActivity extends AppCompatActivity {
         Intent login = new Intent(this, LoginActivity.class);
         login.putExtra("openAni", "start");
         startActivity(login);
+        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
         finish();
     }
 

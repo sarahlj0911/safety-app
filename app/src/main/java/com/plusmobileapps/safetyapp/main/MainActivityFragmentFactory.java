@@ -5,7 +5,6 @@ import com.plusmobileapps.safetyapp.summary.landing.SummaryFragment;
 import com.plusmobileapps.safetyapp.walkthrough.landing.WalkthroughLandingFragment;
 
 public class MainActivityFragmentFactory {
-    private static MainActivityFragmentFactory instance = null;
     private WalkthroughLandingFragment walkthroughLandingFragment;
     private ActionItemsFragment actionItemsFragment;
     private SummaryFragment summaryFragment;
