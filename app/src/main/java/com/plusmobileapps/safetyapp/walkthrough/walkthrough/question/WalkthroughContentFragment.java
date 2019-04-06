@@ -112,7 +112,8 @@ public class WalkthroughContentFragment extends Fragment
                              Bundle savedInstanceState) {
         packageManager = this.getActivity().getPackageManager();
         View view;
-        if(savedInstanceState.getString("priority") != null)
+        if(savedInstanceState.getString("priority").equalsIgnoreCase("high") ||
+                savedInstanceState.getString("priority").equalsIgnoreCase("medium"))
         {
             view = inflater.inflate(R.layout.activity_saved_action, container, false);
             String walkthroughJsonObject = getArguments().getString("walkthroughQuestion");
@@ -504,11 +505,13 @@ public class WalkthroughContentFragment extends Fragment
                 currentPriority = Priority.NONE.ordinal();
                 break;
             case R.id.saveButton:
-                Bundle saved = new Bundle();
-                onSaveInstanceState(saved);
+                Bundle saver = new Bundle();
+                onSaveInstanceState(saver);
                 break;
             case R.id.editSavedWalkthroughButton:
-                //TODO Edit things here
+                priority = Priority.NONE;
+                Bundle editor = new Bundle();
+                onSaveInstanceState(editor);
                 break;
             default:
                 break;
