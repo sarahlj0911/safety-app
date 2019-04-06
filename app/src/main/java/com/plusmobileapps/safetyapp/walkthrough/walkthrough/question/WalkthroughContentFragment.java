@@ -130,7 +130,7 @@ public class WalkthroughContentFragment extends Fragment
 
             walkthroughQuestion = new Gson().fromJson(walkthroughJsonObject, Question.class);
             initViews(view);
-            generateQuestionView(view, walkthroughQuestion);
+            generateQuestionView(view, walkthroughQuestion, savedInstanceState);
 
             if (packageManager.hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
                 cameraButton.setOnClickListener(this);
@@ -142,7 +142,8 @@ public class WalkthroughContentFragment extends Fragment
         return view;
     }
 
-    private View generateQuestionView(View view, Question question) {
+    private View generateQuestionView(View view, Question question, Bundle savedInstanceState) {
+        /*
         radioGroup = view.findViewById(R.id.walkthroughStatus);
         radioGroup.setOnCheckedChangeListener(ratingChangeListener);
         radioGroup.addView(generateRadioButton(question.getRatingOption1(), Rating.OPTION1));
@@ -153,8 +154,49 @@ public class WalkthroughContentFragment extends Fragment
         if (question.getRatingOption4() != null && !question.getRatingOption4().equals("")) {
             radioGroup.addView(generateRadioButton(question.getRatingOption4(), Rating.OPTION4));
         }
+        */
 
-        descriptionTextView.setText(question.getQuestionText());
+        if(savedInstanceState.getString("photoPath") != null)
+        {
+            String picPath = savedInstanceState.getString("photoPath");
+            Drawable picture = Drawable.createFromPath(picPath);
+
+            picDisplay.setBackground(picture);
+        }
+
+        if(savedInstanceState.getString("actionPlan") != null)
+        {
+            actionPlanLabel.setText(savedInstanceState.getString("actionPlan"));
+        }
+
+        if(savedInstanceState.getString("description") != null)
+        {
+            descriptionTextView.setText(savedInstanceState.getString("description"));
+        }
+        else
+        {
+            descriptionTextView.setText(question.getQuestionText());
+        }
+
+        if(savedInstanceState.getString("date") != null)
+        {
+            dateTextView.setText(savedInstanceState.getString("date"));
+        }
+
+        if(savedInstanceState.getString("area") != null)
+        {
+            locationTextView.setText(savedInstanceState.getString("area"));
+        }
+
+        if(savedInstanceState.getString("building") != null)
+        {
+            genLoc.setText(savedInstanceState.getString("building"));
+        }
+        
+        if(savedInstanceState.getString("campus") != null)
+        {
+            schoolName.setText(savedInstanceState.getString("campus"));
+        }
 
         return view;
     }
