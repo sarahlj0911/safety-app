@@ -200,48 +200,7 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
     }
 
     public void initSchoolSpinner() {
-        JSONObject schoolListObj;
-        ArrayList<String> schoolList;
 
-        FileUtil.download(this, "schools.json", getString(R.string.path_database));
-
-        schoolListObj = new JSONObject();
-
-
-        String schools[] = new String[0];
-        try { schools = (String[]) schoolListObj.get("schoolList"); }
-        catch (JSONException e) {
-            Log.d(TAG, "Unable to convert JSON object to string array.");
-            e.printStackTrace();
-        }
-
-        schoolList = new ArrayList<>(Arrays.asList(schools));
-        Collections.sort(schoolList);
-//        schoolList.add("Add A School");
-
-        schoolList.add("School 1");
-        schoolList.add("School 2");
-        schoolList.add("School 3");
-        schoolList.add("School 4");
-        schoolList.add("School 5");
-
-        ArrayAdapter<String> schoolSpinnerList = new ArrayAdapter<>(this, R.layout.activity_signup_spinner, schoolList);
-        schoolSpinnerList.setDropDownViewResource(R.layout.activity_signup_spinner_dropdown);
-        schoolSpinner.setAdapter(schoolSpinnerList);
-        schoolSpinner.setSelection(0);
-        schoolSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                if (schoolSpinner.getSelectedItem().toString().equals("Add A School")) {
-                    // TODO Hide
-                }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
-        });
     }
 
 

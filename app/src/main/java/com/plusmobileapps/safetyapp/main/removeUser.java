@@ -24,6 +24,7 @@ import com.amazonaws.mobileconnectors.cognitoidentityprovider.handlers.GetDetail
 import com.plusmobileapps.safetyapp.AwsServices;
 import com.plusmobileapps.safetyapp.R;
 
+import java.util.List;
 import java.util.Map;
 
 public class removeUser extends AppCompatActivity {
@@ -95,12 +96,18 @@ public class removeUser extends AppCompatActivity {
                                                                 Log.d("finduser","Delete failed, probe exception for details");
                                                             }
                                                         };
+                                                        List<String> attri = null;
+                                                        attri.add("email");
+                                                        attri.add("custom:role");
+                                                        user.deleteAttributes(attri, handler);
                                                         user.deleteUser(handler);
                                                     }
                                                 })
                                                 .setNegativeButton("No", new DialogInterface.OnClickListener() {
                                                     public void onClick(DialogInterface dialog, int id) {
                                                         Log.d("finduser", "confirmation dialog, no");
+                                                        Snackbar mySnackbar = Snackbar.make(view, "delete cancelled", Snackbar.LENGTH_SHORT);
+                                                        mySnackbar.show();
                                                     }
                                                 })
                                                 .show();
