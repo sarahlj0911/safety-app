@@ -21,7 +21,7 @@ public class ActionItemAdapter extends RecyclerView.Adapter<ActionItemAdapter.Vi
     private static final String TAG = "ActionItemAdapter";
     private ActionItemsFragment.ActionItemListener itemListener;
 
-    private List<Response> actionItems;
+    public List<Response> actionItems;
 
     public ActionItemAdapter(List<Response> actionItems, ActionItemsFragment.ActionItemListener itemListener) {
         this.actionItems = actionItems;

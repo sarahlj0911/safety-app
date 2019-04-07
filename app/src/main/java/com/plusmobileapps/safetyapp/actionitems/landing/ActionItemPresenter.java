@@ -32,6 +32,9 @@ public class ActionItemPresenter implements ActionItemContract.Presenter {
         }
         updateNoActionItemText();
     }
+    public void getActionItems(){
+        new LoadActionItemTask(this, actionItems).execute();
+    }
 
     @Override
     public void openActionItemDetail(int position) {
@@ -45,6 +48,7 @@ public class ActionItemPresenter implements ActionItemContract.Presenter {
         responses.addAll(actionItems);
         view.showActionItems(responses);
     }
+    //added function to retreive action items.
     public List returnActionItems(){
         List<Response> responses = new ArrayList<>(0);
         responses.addAll(actionItems);

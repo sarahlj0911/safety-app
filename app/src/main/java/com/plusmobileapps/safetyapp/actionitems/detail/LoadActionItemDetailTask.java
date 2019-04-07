@@ -28,6 +28,7 @@ public class LoadActionItemDetailTask extends AsyncTask<Void, Void, Response> {
         LocationDao locationDao = db.locationDao();
         QuestionDao questionDao = db.questionDao();
 
+
         Response response = responseDao.getByResponseId(actionItemId);
         String locationName = locationDao.getByLocationId(response.getLocationId()).getName();
         response.setLocationName(locationName);

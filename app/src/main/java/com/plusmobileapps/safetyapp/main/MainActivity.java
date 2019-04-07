@@ -85,10 +85,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
     Account account;
     ContentResolver contentResolver;
 
-    //Action Items
-    public List<Response> actionItems = new ArrayList<>(0);
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -162,7 +158,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
     @Override
     public void onStop(){
         super.onStop();
-        signOutUser();
+        //signOutUser();
     }
 
     @Override
@@ -188,8 +184,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
     private void setUpPresenters(MainActivityFragmentFactory factory) {
         new WalkthroughLandingPresenter(factory.getWalkthroughLandingFragment());
         new ActionItemPresenter(factory.getActionItemsFragment());
-        actionItems = new ActionItemPresenter(factory.getActionItemsFragment()).actionItems;
-        System.out.println("HEY LOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOK"+actionItems);
         new SummaryPresenter(factory.getSummaryFragment());
     }
 
@@ -314,9 +308,9 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
                 break;
             case R.id.ExportActionPlan:
                 Intent ExportIntent = new Intent(this, exportPdf.class);
-                //while loop putting information into bundle
-                //ExportIntent.putExtra("ActionItems",actionItems);
-                //ActionItemPresenter presenter = new ActionItemPresenter();
+                startActivity(ExportIntent);
+                break;
+
         }
         return super.onOptionsItemSelected(item);
     }
