@@ -17,7 +17,7 @@ public class SaveSchoolTask extends AsyncTask<Void, Void, Boolean> {
     private AppDatabase db;
     private School school;
 
-    SaveSchoolTask(School school) {
+    public SaveSchoolTask(School school) {
         this.school = school;
     }
 
