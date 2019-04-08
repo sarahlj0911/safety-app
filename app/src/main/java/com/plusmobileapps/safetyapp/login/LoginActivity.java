@@ -36,6 +36,9 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.amazonaws.mobile.client.AWSMobileClient;
+import com.amazonaws.mobile.client.AWSStartupHandler;
+import com.amazonaws.mobile.client.AWSStartupResult;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoDevice;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUser;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUserCodeDeliveryDetails;
@@ -53,6 +56,7 @@ import com.plusmobileapps.safetyapp.BlurUtils;
 import com.plusmobileapps.safetyapp.R;
 import com.plusmobileapps.safetyapp.main.MainActivity;
 import com.plusmobileapps.safetyapp.signup.SignupActivity;
+import com.plusmobileapps.safetyapp.util.FileUtil;
 
 import java.util.HashMap;
 import java.util.Objects;
@@ -124,6 +128,15 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         buttonLoginStatus.setClickable(false);
 
         userPool = new AwsServices().initAWSUserPool(this);
+
+        AWSMobileClient.getInstance().initialize(this, new AWSStartupHandler() {
+            @Override
+            public void onComplete(AWSStartupResult awsStartupResult) {
+            }
+        }).execute();
+        FileUtil.download(this, "schools.json", "/data/data/com.plusmobileapps.safetyapp/databases/schools.json");
+
+
     }
 
     @Override
