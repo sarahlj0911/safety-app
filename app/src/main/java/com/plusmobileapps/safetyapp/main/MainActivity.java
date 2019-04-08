@@ -127,12 +127,13 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
         user = userPool.getUser(userEmail);
         user.getDetailsInBackground(getUserDetailsHandler);
 
+
         selectedSchool = "newSchool";
 
         FileUtil.deleteDb(this);
-        FileUtil.download(this, "uploads/appDB.db", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db");
-        FileUtil.download(this, "uploads/appDB.db-shm", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db-shm");
-        FileUtil.download(this, "uploads/appDB.db-wal", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db-wal");
+        FileUtil.download(this, "uploads1/appDB.db", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db");
+        FileUtil.download(this, "uploads1/appDB.db-shm", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db-shm");
+        FileUtil.download(this, "uploads1/appDB.db-wal", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db-wal");
         
 
     }
@@ -153,9 +154,9 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
     public void onStop(){
         super.onStop();
         try {
-            FileUtil.upload(this, "uploads1/appDB1.db", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db");
-            FileUtil.upload(this, "uploads1/appDB1.db-shm", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db-shm");
-            FileUtil.upload(this, "uploads1/appDB1.db-wal", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db-wal");
+            FileUtil.upload(this, "uploads1/appDB.db", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db");
+            FileUtil.upload(this, "uploads1/appDB.db-shm", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db-shm");
+            FileUtil.upload(this, "uploads1/appDB.db-wal", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db-wal");
         }
         catch(Exception ex) {}
         user.signOut();
