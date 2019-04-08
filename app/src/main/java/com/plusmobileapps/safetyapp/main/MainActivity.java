@@ -1,15 +1,22 @@
 package com.plusmobileapps.safetyapp.main;
 
+import android.Manifest;
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.content.FileProvider;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -40,16 +47,19 @@ import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
 import com.plusmobileapps.safetyapp.AdminSettings;
 import com.plusmobileapps.safetyapp.AwsServices;
+import com.plusmobileapps.safetyapp.BuildConfig;
 import com.plusmobileapps.safetyapp.R;
 import com.plusmobileapps.safetyapp.actionitems.detail.ActionItemDetailActivity;
 import com.plusmobileapps.safetyapp.actionitems.landing.ActionItemPresenter;
 import com.plusmobileapps.safetyapp.data.entity.Response;
 import com.plusmobileapps.safetyapp.login.LoginActivity;
 import com.plusmobileapps.safetyapp.summary.landing.SummaryPresenter;
+import com.plusmobileapps.safetyapp.util.ActionItemsExport;
 import com.plusmobileapps.safetyapp.util.FileUtil;
 import com.plusmobileapps.safetyapp.util.exportPdf;
 import com.plusmobileapps.safetyapp.walkthrough.landing.WalkthroughLandingPresenter;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -73,7 +83,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
     DynamoDBMapper dynamoDBMapper;
 
     // SyncAdapter Constants
-    public static final String AUTHORITY = "com.plusmobileapps.safetyapp.provider";     // The authority for the sync adapter's content provider
+    public static final String AUTHORITY = "com.plusmobileapps.safetyapp.fileprovider";     // The authority for the sync adapter's content provider
     public static final String ACCOUNT_TYPE = "safetyapp.com";                          // An account type, in the form of a domain name
     public static final String ACCOUNT = "safetyapp";                                   // The account name
 
@@ -87,6 +97,20 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+
+            } else {
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                        100);
+
+            }
+        } else {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -148,6 +172,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
 
         FileUtil.download(this, "uploads/appDB1.db", getString(R.string.path_database));
     }
+}
 
     @Override
     public void onResume() {
@@ -307,8 +332,11 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
                 launchLoginScreen();
                 break;
             case R.id.ExportActionPlan:
-                Intent ExportIntent = new Intent(this, exportPdf.class);
-                startActivity(ExportIntent);
+                ActionItemsExport pdf = new ActionItemsExport();
+                pdf.exportActionItems();
+                Toast.makeText(this, "PDF has been saved to your pictures folder.",
+                        Toast.LENGTH_LONG).show();
+
                 break;
 
         }

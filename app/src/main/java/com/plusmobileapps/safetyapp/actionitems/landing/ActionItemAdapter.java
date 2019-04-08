@@ -48,6 +48,7 @@ public class ActionItemAdapter extends RecyclerView.Adapter<ActionItemAdapter.Vi
         if (actionItem.getImagePath() != null) {
             File file = new File(actionItem.getImagePath());
             Picasso.get().load(file).into(holder.getImageView());
+
         }
 
         int priority = actionItem.getPriority();
