@@ -239,6 +239,7 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
             String passwordCheck = Objects.requireNonNull(passwordCheckInput.getEditText()).getText().toString();
 
             String role = roleSpinner.getSelectedItem().toString();
+
             String school = schoolSpinner.getSelectedItem().toString();
 
             formInput.put(SignupPresenter.NAME_INPUT, name);
