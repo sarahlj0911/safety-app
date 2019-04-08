@@ -88,6 +88,7 @@ public class ActionItemsExport {
 
             doc.add(Ptitle);
             doc.add(new LineSeparator(1, 100, BaseColor.BLACK, LineSeparator.ALIGN_CENTER, 0));
+            doc.add(new Paragraph("\n"));
 
             for (int i = 0; i < actionItems.size(); i++) {
                 Log.d(TAG, "adding action item # " + i);

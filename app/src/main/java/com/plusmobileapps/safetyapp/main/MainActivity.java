@@ -97,20 +97,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        if (ContextCompat.checkSelfPermission(this,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                != PackageManager.PERMISSION_GRANTED) {
 
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-
-            } else {
-                ActivityCompat.requestPermissions(this,
-                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                        100);
-
-            }
-        } else {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -171,7 +158,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
         //boolean fileDeleted = FileUtil.deleteDb(this);
 
         FileUtil.download(this, "uploads/appDB1.db", getString(R.string.path_database));
-    }
+
 }
 
     @Override
@@ -332,10 +319,25 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
                 launchLoginScreen();
                 break;
             case R.id.ExportActionPlan:
-                ActionItemsExport pdf = new ActionItemsExport();
-                pdf.exportActionItems();
-                Toast.makeText(this, "PDF has been saved to your pictures folder.",
-                        Toast.LENGTH_LONG).show();
+                if (ContextCompat.checkSelfPermission(this,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                        != PackageManager.PERMISSION_GRANTED) {
+
+                    if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                            Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+
+                    } else {
+                        ActivityCompat.requestPermissions(this,
+                                new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                                100);
+
+                    }
+                } else {
+                    ActionItemsExport pdf = new ActionItemsExport();
+                    pdf.exportActionItems();
+                    Toast.makeText(this, "PDF has been saved to your pictures folder.",
+                            Toast.LENGTH_LONG).show();
+                }
 
                 break;
 
