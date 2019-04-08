@@ -122,7 +122,7 @@ public abstract class AppDatabase extends RoomDatabase {
                                 }
                             }
                         })
-                        .addMigrations(MIGRATION_2_3)
+                        .addMigrations(MIGRATION_2_3).allowMainThreadQueries()
                         .build();
 
             }

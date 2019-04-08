@@ -53,6 +53,8 @@ public class ActionItemsFragment extends Fragment implements ActionItemContract.
 
         recyclerView = rootView.findViewById(R.id.action_items_recyclerview);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+        //seting view for action items
         recyclerView.setAdapter(adapter);
         recyclerView.setItemAnimator(new SlideInRightAnimator());
 
