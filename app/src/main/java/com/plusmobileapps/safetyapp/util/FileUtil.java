@@ -59,10 +59,9 @@ public class FileUtil {
                         .s3Client(new AmazonS3Client(AWSMobileClient.getInstance().getCredentialsProvider()))
                         .build();
         try {
-            File localFile = new File("/data/data/com.plusmobileapps.safetyapp/databases/appDB1.db");
+            File localFile = new File(path);
 
 
-            Log.d("YourActivity", localFile.getPath());
 
             TransferObserver downloadObserver =
                     transferUtility.download(file, localFile);
@@ -75,6 +74,7 @@ public class FileUtil {
                 public void onStateChanged(int id, TransferState state) {
                     if (TransferState.COMPLETED == state) {
                         // Handle a completed upload.
+                        Log.d("YourActivity", "download complete");
                     }
                 }
 
@@ -89,6 +89,7 @@ public class FileUtil {
                 @Override
                 public void onError(int id, Exception ex) {
                     // Handle errors
+                    Log.d("YourActivity", ex.toString());
                 }
 
             });
@@ -149,5 +150,3 @@ public class FileUtil {
     }
 
 }
-
-
