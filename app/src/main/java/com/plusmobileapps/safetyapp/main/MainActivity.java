@@ -155,7 +155,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
         FileUtil.download(this, "uploads/appDB1.db", getString(R.string.path_database));
 
     }
-}
+
 
     @Override
     public void onResume() {
