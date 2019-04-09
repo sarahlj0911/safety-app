@@ -42,7 +42,6 @@ import com.amazonaws.mobile.client.AWSStartupResult;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoDevice;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUser;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUserCodeDeliveryDetails;
-import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUserDetails;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUserPool;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUserSession;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.continuations.AuthenticationContinuation;
@@ -51,7 +50,6 @@ import com.amazonaws.mobileconnectors.cognitoidentityprovider.continuations.Chal
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.continuations.MultiFactorAuthenticationContinuation;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.handlers.AuthenticationHandler;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.handlers.GenericHandler;
-import com.amazonaws.mobileconnectors.cognitoidentityprovider.handlers.GetDetailsHandler;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.handlers.VerificationHandler;
 import com.plusmobileapps.safetyapp.AwsServices;
 import com.plusmobileapps.safetyapp.BlurUtils;
@@ -73,7 +71,7 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
     private View codeAuthWindow, codeView, loginView;
     private Handler handler;
     private LoginContract.Presenter presenter;
-    private String username, password, userName, userRole, userSchool;
+    private String username, password;
     private TextView appTitle, textNewUser;
     private ImageView backgroundBlur, codeBackground, buttonCodeBackground, appLogo;
     private Button buttonLoginStatus, buttonDismissCodeView, buttonCode, buttonSignUp;
@@ -85,29 +83,6 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
     // AWS
     private CognitoUserPool userPool;
     private CognitoUser user;
-
-    // Login Button Animations
-    final Runnable resetButton = new Runnable() {
-        public void run() {
-            loginButton.revertAnimation();
-        }
-    };
-    final Runnable waitAndLaunchMain = new Runnable() {
-        public void run() {
-            launchHomeScreen();
-        }
-    };
-    final Runnable successAnimation = new Runnable() {
-        public void run() {
-            loginButton.doneLoadingAnimation(Color.parseColor("#ffffff"), BitmapFactory.decodeResource(getResources(), R.drawable.login_button_confirmed));
-        }
-    };
-    final Runnable failureAnimation = new Runnable() {
-        public void run() {
-            if (showCodeView) showCodeAuthorizationView();
-            loginButton.doneLoadingAnimation(Color.parseColor("#ffffff"), BitmapFactory.decodeResource(getResources(), R.drawable.login_button_failed));
-        }
-    };
 
 
     @Override
@@ -202,11 +177,7 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
 //        PrefManager prefManager = new PrefManager(this);
 //        prefManager.setIsUserSignedUp(true);
         Intent mainActivity = new Intent(LoginActivity.this, MainActivity.class);
-        mainActivity.putExtra("activity", "from login");
         mainActivity.putExtra("email", username);
-        mainActivity.putExtra("name", userName);
-        mainActivity.putExtra("role", userRole);
-        mainActivity.putExtra("school", userSchool);
         startActivity(mainActivity);
         overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
         finish();
@@ -234,18 +205,35 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
     }
 
 
-
-
     // Handler: Login User
     AuthenticationHandler authenticationHandler = new AuthenticationHandler() {
         // Button Animations
-
+        final Runnable waitAndLaunchMain = new Runnable() {
+            public void run() {
+                launchHomeScreen();
+            }
+        };
+        final Runnable resetButton = new Runnable() {
+            public void run() {
+                loginButton.revertAnimation();
+            }
+        };
+        final Runnable successAnimation = new Runnable() {
+            public void run() {
+                loginButton.doneLoadingAnimation(Color.parseColor("#ffffff"), BitmapFactory.decodeResource(getResources(), R.drawable.login_button_confirmed));
+            }
+        };
+        final Runnable failureAnimation = new Runnable() {
+            public void run() {
+                if (showCodeView) showCodeAuthorizationView();
+                loginButton.doneLoadingAnimation(Color.parseColor("#ffffff"), BitmapFactory.decodeResource(getResources(), R.drawable.login_button_failed));
+            }
+        };
 
         @Override
         public void onSuccess(CognitoUserSession userSession, CognitoDevice newDevice) {
-            Log.d(AWSTAG, "Login successful");
-            user = userPool.getUser(username);
-            user.getDetailsInBackground(getUserDetailsHandler);
+                    handler.postDelayed(successAnimation, 0);
+                    handler.postDelayed(waitAndLaunchMain, 500);
         }
 
         @Override
@@ -398,35 +386,6 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
                 showErr = "ATTEMPT LIMIT EXCEEDED";
             else showErr = "ISSUE SENDING CODE";
             codeViewStatusAnimation(1, 200, showErr);
-        }
-    };
-
-    // Handler: Get User Details
-    GetDetailsHandler getUserDetailsHandler = new GetDetailsHandler() {
-        @Override
-        public void onSuccess(final CognitoUserDetails list) {
-            // Successfully retrieved user details
-            userName = list.getAttributes().getAttributes().get("name");
-            userRole = list.getAttributes().getAttributes().get("custom:role");
-            userSchool = list.getAttributes().getAttributes().get("custom:school");
-            Log.d(AWSTAG, "Successfully loaded " +userName+ " as role " +userRole+ " at school " +userSchool);
-            handler.postDelayed(successAnimation, 0);
-            handler.postDelayed(waitAndLaunchMain, 300);
-        }
-
-        @Override
-        public void onFailure(final Exception exception) {
-            Log.d(AWSTAG, "Failed to retrieve the user's details: " + exception);
-            final String finalButtonErrorText = getString(R.string.aws_login_error_details);
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    buttonLoginStatus.setText(finalButtonErrorText);
-                    buttonLoginStatus.setAlpha(1);
-                }
-            });
-            handler.postDelayed(failureAnimation, 0);
-            handler.postDelayed(resetButton, 3000);
         }
     };
 
