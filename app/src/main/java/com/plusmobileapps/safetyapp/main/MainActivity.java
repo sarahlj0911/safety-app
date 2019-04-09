@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.NonNull;
@@ -52,7 +53,11 @@ import com.plusmobileapps.safetyapp.R;
 import com.plusmobileapps.safetyapp.actionitems.detail.ActionItemDetailActivity;
 import com.plusmobileapps.safetyapp.actionitems.landing.ActionItemPresenter;
 import com.plusmobileapps.safetyapp.data.entity.Response;
+import com.plusmobileapps.safetyapp.data.entity.School;
+import com.plusmobileapps.safetyapp.data.entity.User;
 import com.plusmobileapps.safetyapp.login.LoginActivity;
+import com.plusmobileapps.safetyapp.signup.SaveSchoolTask;
+import com.plusmobileapps.safetyapp.signup.SaveUserTask;
 import com.plusmobileapps.safetyapp.summary.landing.SummaryPresenter;
 import com.plusmobileapps.safetyapp.util.ActionItemsExport;
 import com.plusmobileapps.safetyapp.util.FileUtil;
@@ -62,6 +67,7 @@ import com.plusmobileapps.safetyapp.walkthrough.landing.WalkthroughLandingPresen
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 
 public class MainActivity extends AppCompatActivity implements MainActivityContract.View {
@@ -365,6 +371,31 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
             userName = list.getAttributes().getAttributes().get("name");
             userRole = list.getAttributes().getAttributes().get("custom:role");
             userSchool = list.getAttributes().getAttributes().get("custom:school");
+            userEmail = list.getAttributes().getAttributes().get("email");
+            School school = new School(1, userSchool);
+
+            AsyncTask<Void, Void, Boolean> saveSchoolTask = new SaveSchoolTask(school).execute();
+            try {
+                saveSchoolTask.get();
+            } catch (InterruptedException | ExecutionException e) {
+                Log.d(TAG, "Problem saving school");
+                Log.d(TAG, e.getMessage());
+            }
+            User user = new User(1, 1, userEmail, userName, userRole);
+
+            AsyncTask<Void, Void, Boolean> saveUserTask = new SaveUserTask(user).execute();
+            try {
+                saveUserTask.get();
+            } catch (InterruptedException | ExecutionException e) {
+                Log.d(TAG, "Issue saving user");
+                Log.d(TAG, e.getMessage());
+
+            }
+
+
+
+
+
             Log.d(AWSTAG, "Successfully loaded " +userName+ " as role " +userRole+ " at school " +userSchool);
         }
 
