@@ -138,7 +138,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
         ContentResolver.addPeriodicSync(account, AUTHORITY, Bundle.EMPTY, SYNC_INTERVAL);
 
 
-
         userPool = new AwsServices().initAWSUserPool(this);
         user = userPool.getUser(userEmail);
 
@@ -146,18 +145,17 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
 
 
 
-        selectedSchool = this.userSchool;
 
         FileUtil.deleteDb(this);
-        FileUtil.download(this, "selectedSchool/appDB.db", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db");
-        FileUtil.download(this, "selectedSchool/appDB.db-shm", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db-shm");
-        FileUtil.download(this, "selectedSchool/appDB.db-wal", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db-wal");
-        
+        FileUtil.download(this, selectedSchool+"/appDB.db", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db");
+        FileUtil.download(this, selectedSchool+"/appDB.db-shm", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db-shm");
+        FileUtil.download(this, selectedSchool+"/appDB.db-wal", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db-wal");
+
 
         FileUtil.download(this, "uploads/appDB1.db", getString(R.string.path_database));
 
     }
-}
+
 
     @Override
     public void onResume() {
@@ -177,9 +175,9 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
 
         //signOutUser();
         try {
-            FileUtil.upload(this, "selectedSchool/appDB.db", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db");
-            FileUtil.upload(this, "selectedSchool/appDB.db-shm", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db-shm");
-            FileUtil.upload(this, "selectedSchool/appDB.db-wal", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db-wal");
+            FileUtil.upload(this, selectedSchool+"/appDB.db", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db");
+            FileUtil.upload(this, selectedSchool+"/appDB.db-shm", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db-shm");
+            FileUtil.upload(this, selectedSchool+"/appDB.db-wal", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db-wal");
         }
         catch(Exception ex) {}
         user.signOut();
@@ -367,6 +365,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
             userName = list.getAttributes().getAttributes().get("name");
             userRole = list.getAttributes().getAttributes().get("custom:role");
             userSchool = list.getAttributes().getAttributes().get("custom:school");
+            selectedSchool = userSchool;
             Log.d(AWSTAG, "Successfully loaded " +userName+ " as role " +userRole+ " at school " +userSchool);
         }
 
