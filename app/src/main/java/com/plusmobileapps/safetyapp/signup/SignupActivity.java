@@ -93,10 +93,6 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
         Log.d("Debug"+TAG, "onCreate");
         super.onCreate(savedInstanceState);
 
-
-
-
-
         handler = new Handler();
         presenter = new SignupPresenter(this);
         Window w = getWindow();
@@ -104,18 +100,9 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_signup);
 
-
         schoolSpinner = findViewById(R.id.spinner_signup_school_name);
-        Schools.load(this.getApplicationContext());
-        schoolNames = Schools.schoolNames;
-        schoolsAdapter = new ArrayAdapter<>(
-                this,
-                android.R.layout.simple_list_item_1,
-                schoolNames );
-
-        schoolSpinner.setAdapter(schoolsAdapter);
-
         roleSpinner = findViewById(R.id.spinner_signup_role);
+
         newSchool = findViewById(R.id.new_school_text_box);
         signUpButton = findViewById(R.id.button_save_signup);
         signUpButton.setOnClickListener(saveSignupClickListener);
@@ -149,6 +136,17 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
         statusText.setText("");
         alertTitle.setText(getString(R.string.signup_confirm_title));
         alertButton.setText(getString(R.string.signup_button_inbox));
+
+        Schools.load(this.getApplicationContext());
+        schoolNames = Schools.schoolNames;
+
+        schoolsAdapter = new ArrayAdapter<>(
+                this,
+                android.R.layout.simple_list_item_1,
+                schoolNames );
+        schoolsAdapter.setDropDownViewResource(R.layout.activity_signup_spinner_dropdown);
+        schoolSpinner.setAdapter(schoolsAdapter);
+
         ArrayAdapter adapter = ArrayAdapter.createFromResource(this, R.array.signup_roles, R.layout.activity_signup_spinner);
         adapter.setDropDownViewResource(R.layout.activity_signup_spinner_dropdown);
         roleSpinner.setAdapter(adapter);
