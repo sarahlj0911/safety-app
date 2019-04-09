@@ -184,6 +184,7 @@
     <string name="code_authorization_confirmed">CONFIRMED</string>
     <string name="sign_up_title">Create Your Account</string>
     <string name="aws_login_error_disabled">Your Account Has Been Disabled</string>
+    <string name="aws_login_error_details">Unable to load your account.\nTry again…</string>
 
     <string name="delete_user">delete user</string>
     <string name="add_user">add user</string>
