@@ -159,7 +159,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
         FileUtil.download(this, selectedSchool+"/appDB.db-wal", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db-wal");
 
 
-        FileUtil.download(this, "uploads/appDB1.db", getString(R.string.path_database));
+        //FileUtil.download(this, "uploads/appDB1.db", getString(R.string.path_database));
 
     }
 
@@ -370,8 +370,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
             userName = list.getAttributes().getAttributes().get("name");
             userRole = list.getAttributes().getAttributes().get("custom:role");
             userSchool = list.getAttributes().getAttributes().get("custom:school");
-
-            Log.d(AWSTAG, "Successfully loaded " +userName+ " as role " +userRole+ " at school " +userSchool);
             Log.d(AWSTAG, "Reloaded " +userName+ " as role " +userRole+ " at school " +userSchool);
 
         }
