@@ -86,6 +86,29 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
     private CognitoUserPool userPool;
     private CognitoUser user;
 
+    // Login Button Animations
+    final Runnable resetButton = new Runnable() {
+        public void run() {
+            loginButton.revertAnimation();
+        }
+    };
+    final Runnable waitAndLaunchMain = new Runnable() {
+        public void run() {
+            launchHomeScreen();
+        }
+    };
+    final Runnable successAnimation = new Runnable() {
+        public void run() {
+            loginButton.doneLoadingAnimation(Color.parseColor("#ffffff"), BitmapFactory.decodeResource(getResources(), R.drawable.login_button_confirmed));
+        }
+    };
+    final Runnable failureAnimation = new Runnable() {
+        public void run() {
+            if (showCodeView) showCodeAuthorizationView();
+            loginButton.doneLoadingAnimation(Color.parseColor("#ffffff"), BitmapFactory.decodeResource(getResources(), R.drawable.login_button_failed));
+        }
+    };
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -211,20 +234,12 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
     }
 
 
+
+
     // Handler: Login User
     AuthenticationHandler authenticationHandler = new AuthenticationHandler() {
         // Button Animations
-        final Runnable resetButton = new Runnable() {
-            public void run() {
-                loginButton.revertAnimation();
-            }
-        };
-        final Runnable failureAnimation = new Runnable() {
-            public void run() {
-                if (showCodeView) showCodeAuthorizationView();
-                loginButton.doneLoadingAnimation(Color.parseColor("#ffffff"), BitmapFactory.decodeResource(getResources(), R.drawable.login_button_failed));
-            }
-        };
+
 
         @Override
         public void onSuccess(CognitoUserSession userSession, CognitoDevice newDevice) {
@@ -388,16 +403,6 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
 
     // Handler: Get User Details
     GetDetailsHandler getUserDetailsHandler = new GetDetailsHandler() {
-        final Runnable waitAndLaunchMain = new Runnable() {
-            public void run() {
-                launchHomeScreen();
-            }
-        };
-        final Runnable successAnimation = new Runnable() {
-            public void run() {
-                loginButton.doneLoadingAnimation(Color.parseColor("#ffffff"), BitmapFactory.decodeResource(getResources(), R.drawable.login_button_confirmed));
-            }
-        };
         @Override
         public void onSuccess(final CognitoUserDetails list) {
             // Successfully retrieved user details
@@ -412,6 +417,16 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         @Override
         public void onFailure(final Exception exception) {
             Log.d(AWSTAG, "Failed to retrieve the user's details: " + exception);
+            final String finalButtonErrorText = getString(R.string.aws_login_error_details);
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    buttonLoginStatus.setText(finalButtonErrorText);
+                    buttonLoginStatus.setAlpha(1);
+                }
+            });
+            handler.postDelayed(failureAnimation, 0);
+            handler.postDelayed(resetButton, 3000);
         }
     };
 
