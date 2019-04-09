@@ -18,9 +18,12 @@ public class LoginPresenter implements LoginContract.Presenter {
 
     private static final String TAG = "LoginPresenter";
     private LoginContract.View view;
+    static final String NAME_INPUT = "name";
     static final String EMAIL_INPUT = "email";
     static final String PASSWORD_INPUT = "password";
+    static final String PASSWORD_INPUT_CHECK = "passwordCheck";
     static final String SCHOOL_NAME_INPUT = "school_name";
+    static final String ROLE_INPUT = "role";
 
 
     LoginPresenter(LoginContract.View view) {

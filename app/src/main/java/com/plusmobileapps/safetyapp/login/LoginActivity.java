@@ -455,12 +455,14 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
             formInput.put(SignupPresenter.SCHOOL_NAME_INPUT, school);
             formInput.put(SignupPresenter.ROLE_INPUT, role);
          */
+        formInput.put(LoginPresenter.NAME_INPUT,"tempname");
 
         formInput.put(LoginPresenter.EMAIL_INPUT, username);
         formInput.put(LoginPresenter.PASSWORD_INPUT, password);
         //temp fix we need to get this value from AWS
-        formInput.put(LoginPresenter.)
         formInput.put(LoginPresenter.SCHOOL_NAME_INPUT,"temp school so app wont crash");
+        formInput.put(LoginPresenter.ROLE_INPUT,"temprole");
+
 
         boolean validInput = presenter.processFormInput(formInput);
 
