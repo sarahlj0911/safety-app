@@ -114,14 +114,29 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
         setUpPresenters(factory);
         presenter = new MainActivityPresenter(this);
 
+        userPool = new AwsServices().initAWSUserPool(this);
+
         Intent intent = getIntent();
-        userEmail = intent.getStringExtra("email");
+        if (intent.getStringExtra("activity").equals("from login")) {
+            userName = intent.getStringExtra("name");
+            userRole = intent.getStringExtra("role");
+            userSchool = intent.getStringExtra("school");
+            selectedSchool = userSchool;
+            user = userPool.getUser(userEmail);
+        }
+        else {
+            userEmail = intent.getStringExtra("email");
+            user = userPool.getUser(userEmail);
+            user.getDetailsInBackground(getUserDetailsHandler);
+            selectedSchool = "newSchool";
+        }
+
 
         // AWSMobileClient enables AWS user credentials to access your table
         AWSMobileClient.getInstance().initialize(this, new AWSStartupHandler() {
             @Override
             public void onComplete(AWSStartupResult awsStartupResult) {
-                Log.d(AWSTAG, "You are connected to AWS's database!");
+                Log.d(AWSTAG, "You are connected to the AWS database!");
             }
         }).execute();
 
@@ -137,15 +152,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
         ContentResolver.setSyncAutomatically(account, AUTHORITY, true);
         ContentResolver.addPeriodicSync(account, AUTHORITY, Bundle.EMPTY, SYNC_INTERVAL);
 
-
-
-        userPool = new AwsServices().initAWSUserPool(this);
-        user = userPool.getUser(userEmail);
-        user.getDetailsInBackground(getUserDetailsHandler);
-
-
-        selectedSchool = "newSchool";
-
         FileUtil.deleteDb(this);
         FileUtil.download(this, "uploads1/appDB.db", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db");
         FileUtil.download(this, "uploads1/appDB.db-shm", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db-shm");
@@ -155,13 +161,12 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
         FileUtil.download(this, "uploads/appDB1.db", getString(R.string.path_database));
 
     }
-}
+
 
     @Override
     public void onResume() {
         super.onResume();
         user.getSession(authenticationHandler);
-
     }
 
     @Override
@@ -179,10 +184,9 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
             FileUtil.upload(this, "uploads1/appDB.db-shm", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db-shm");
             FileUtil.upload(this, "uploads1/appDB.db-wal", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db-wal");
         }
-        catch(Exception ex) {}
+        catch(Exception ex) {ex.printStackTrace();}
         user.signOut();
         Log.d(AWSTAG, "Signed out user "+userEmail+" automatically");
-
     }
 
     @Override
@@ -365,7 +369,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
             userName = list.getAttributes().getAttributes().get("name");
             userRole = list.getAttributes().getAttributes().get("custom:role");
             userSchool = list.getAttributes().getAttributes().get("custom:school");
-            Log.d(AWSTAG, "Successfully loaded " +userName+ " as role " +userRole+ " at school " +userSchool);
+            Log.d(AWSTAG, "Reloaded " +userName+ " as role " +userRole+ " at school " +userSchool);
         }
 
         @Override
