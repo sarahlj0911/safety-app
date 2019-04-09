@@ -97,21 +97,9 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        if (ContextCompat.checkSelfPermission(this,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                != PackageManager.PERMISSION_GRANTED) {
 
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-
-            } else {
-                ActivityCompat.requestPermissions(this,
-                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                        100);
-
-            }
-        } else {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
 
         mTextMessage = findViewById(R.id.message);
@@ -149,41 +137,52 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
         ContentResolver.setSyncAutomatically(account, AUTHORITY, true);
         ContentResolver.addPeriodicSync(account, AUTHORITY, Bundle.EMPTY, SYNC_INTERVAL);
 
-        AWSCredentialsProvider credentialsProvider = AWSMobileClient.getInstance().getCredentialsProvider();
-        AWSConfiguration configuration = AWSMobileClient.getInstance().getConfiguration();
 
-        // Add code to instantiate a AmazonDynamoDBClient
-        AmazonDynamoDBClient dynamoDBClient = new AmazonDynamoDBClient(credentialsProvider);
-        this.dynamoDBMapper = DynamoDBMapper.builder()
-                .dynamoDBClient(dynamoDBClient)
-                .awsConfiguration(configuration)
-                .build();
 
         userPool = new AwsServices().initAWSUserPool(this);
         user = userPool.getUser(userEmail);
         user.getDetailsInBackground(getUserDetailsHandler);
 
-        selectedSchool = "newSchool";
-        //FileUtil.upload(this, "uploads/appDB.db", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db");
-        //FileUtil.upload(this, "uploads/appDB.db-shm", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db-shm");
-        //FileUtil.upload(this, "uploads/appDB.db-wal", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db-wal");
 
-        //boolean fileDeleted = FileUtil.deleteDb(this);
+        selectedSchool = "newSchool";
+
+        FileUtil.deleteDb(this);
+        FileUtil.download(this, "uploads1/appDB.db", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db");
+        FileUtil.download(this, "uploads1/appDB.db-shm", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db-shm");
+        FileUtil.download(this, "uploads1/appDB.db-wal", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db-wal");
+
 
         FileUtil.download(this, "uploads/appDB1.db", getString(R.string.path_database));
+
     }
-}
+
 
     @Override
     public void onResume() {
         super.onResume();
         user.getSession(authenticationHandler);
+
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
     }
 
     @Override
     public void onStop(){
         super.onStop();
+
         //signOutUser();
+        try {
+            FileUtil.upload(this, "uploads1/appDB.db", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db");
+            FileUtil.upload(this, "uploads1/appDB.db-shm", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db-shm");
+            FileUtil.upload(this, "uploads1/appDB.db-wal", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db-wal");
+        }
+        catch(Exception ex) {}
+        user.signOut();
+        Log.d(AWSTAG, "Signed out user "+userEmail+" automatically");
+
     }
 
     @Override
@@ -332,10 +331,25 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
                 launchLoginScreen();
                 break;
             case R.id.ExportActionPlan:
-                ActionItemsExport pdf = new ActionItemsExport();
-                pdf.exportActionItems();
-                Toast.makeText(this, "PDF has been saved to your pictures folder.",
-                        Toast.LENGTH_LONG).show();
+                if (ContextCompat.checkSelfPermission(this,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                        != PackageManager.PERMISSION_GRANTED) {
+
+                    if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                            Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+
+                    } else {
+                        ActivityCompat.requestPermissions(this,
+                                new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                                100);
+
+                    }
+                } else {
+                    ActionItemsExport pdf = new ActionItemsExport();
+                    pdf.exportActionItems();
+                    Toast.makeText(this, "PDF has been saved to your pictures folder.",
+                            Toast.LENGTH_LONG).show();
+                }
 
                 break;
 
