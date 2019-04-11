@@ -371,6 +371,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
             userName = list.getAttributes().getAttributes().get("name");
             userRole = list.getAttributes().getAttributes().get("custom:role");
             userSchool = list.getAttributes().getAttributes().get("custom:school");
+
             userEmail = list.getAttributes().getAttributes().get("email");
             School school = new School(1, userSchool);
 
@@ -391,10 +392,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
                 Log.d(TAG, e.getMessage());
 
             }
-
-
-
-
 
             Log.d(AWSTAG, "Successfully loaded " +userName+ " as role " +userRole+ " at school " +userSchool);
         }
