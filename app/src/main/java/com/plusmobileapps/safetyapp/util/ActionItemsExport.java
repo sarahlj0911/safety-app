@@ -9,19 +9,6 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 
-import com.itextpdf.text.BaseColor;
-import com.itextpdf.text.Chunk;
-import com.itextpdf.text.Document;
-import com.itextpdf.text.DocumentException;
-import com.itextpdf.text.Element;
-import com.itextpdf.text.Font;
-import com.itextpdf.text.Image;
-import com.itextpdf.text.PageSize;
-import com.itextpdf.text.Paragraph;
-import com.itextpdf.text.pdf.PdfImage;
-import com.itextpdf.text.pdf.PdfWriter;
-import com.itextpdf.text.pdf.codec.Base64;
-import com.itextpdf.text.pdf.draw.LineSeparator;
 import com.plusmobileapps.safetyapp.MyApplication;
 import com.plusmobileapps.safetyapp.data.AppDatabase;
 import com.plusmobileapps.safetyapp.data.dao.LocationDao;
@@ -32,10 +19,12 @@ import com.plusmobileapps.safetyapp.data.entity.Question;
 import com.plusmobileapps.safetyapp.data.entity.Response;
 import com.squareup.picasso.Picasso;
 
+import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 
 import java.io.InputStream;
@@ -50,61 +39,63 @@ import static android.os.Environment.getExternalStoragePublicDirectory;
 
 public class ActionItemsExport {
     private static final String TAG = "EXPORT_PDF: ";
-
     public ActionItemsExport() {
 
     }
 
     public void exportActionItems() {
         List<Response> actionItems = new ArrayList<>(0);
+        List<String> ExportStringData = new ArrayList<>(0);
         AppDatabase db = AppDatabase.getAppDatabase(MyApplication.getAppContext());
         ResponseDao responseDao = db.responseDao();
         LocationDao locationDao = db.locationDao();
         QuestionDao questionDao = db.questionDao();
-        File mydir = new File(getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/SafetyAppExports/");
+        File mydir = new File("/data/data/com.plusmobileapps.safetyapp/files/");
         if (!mydir.exists()) {
             mydir.mkdirs();
         }
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String outpath = getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/SafetyAppExports/SAfETyPlan" + timeStamp + ".pdf";
+        String outpath = getExternalStoragePublicDirectory("/data/data/com.plusmobileapps.safetyapp/files/")+"SafetyAppExport_" + timeStamp + ".html";
         try {
-            Document doc = new Document(PageSize.A4, 50, 50, 50, 50);
-            File myFile = new File(outpath);
-            myFile.createNewFile();
-            OutputStream outputStream = new FileOutputStream(myFile);
-            Log.d(TAG, "Creating file:" + outpath);
+            File exportHtml = new File(outpath);
+            if (!exportHtml.exists()) {
+                exportHtml.createNewFile();
+            }
 
-            PdfWriter.getInstance(doc, outputStream);
-            doc.open();
-            doc.addTitle("Saftey Plan Details");
-            //doc.add(new Paragraph());
+            exportHtml.createNewFile();
+            BufferedWriter bw = new BufferedWriter(new FileWriter(exportHtml));
+
+
+            Log.d(TAG, "Creating file:" + outpath);
+            ExportStringData.add("<head><title>Safety App Exports</title>" +
+                    "<style> body {  background-color: white;color: black font-family: Arial, Helvetica, sans-serif;} </style>");
+
+            ExportStringData.add("<body><center><h1>Safety Plan Details</h1>");
+
 
             actionItems = responseDao.getAllActionItems(1);
             String currentPlace = "2";
             String PreviousPlace = "1";
-            String title = "School Assessment for Environmental Typography \n Exported Report and Action Items ";
-            Paragraph Ptitle = new Paragraph(title, new Font(Font.FontFamily.HELVETICA, 10, Font.BOLD));
-            Ptitle.setAlignment(Element.ALIGN_MIDDLE);
-
-            doc.add(Ptitle);
-            doc.add(new LineSeparator(1, 100, BaseColor.BLACK, LineSeparator.ALIGN_CENTER, 0));
-            doc.add(new Paragraph("\n"));
-
+            ExportStringData.add("<p><h2>School Assessment for Environmental Typography</h2></p>");
+            ExportStringData.add("<p>Exported Report and Action Items</p></center>");
             for (int i = 0; i < actionItems.size(); i++) {
                 Log.d(TAG, "adding action item # " + i);
                 Response actionItem = actionItems.get(i);
                 currentPlace = locationDao.getByLocationId(actionItem.getLocationId()).getName();
                 if (!currentPlace.equals(PreviousPlace)) {
                     PreviousPlace = locationDao.getByLocationId(actionItem.getLocationId()).getName();
-                    Font font = new Font(Font.FontFamily.HELVETICA, 8, Font.BOLD);
-                    font.setStyle(Font.UNDERLINE);
-                    doc.add(new Paragraph(PreviousPlace, font));
+                    ExportStringData.add("</p><p><u><h4>"+PreviousPlace+"</u></h4>");
+
                 }
 
                 Question question = questionDao.getByQuestionID(actionItem.getQuestionId());
                 /*todo fix photo functionality
                 if (actionItem.getImagePath() != null) {
                     Log.d(TAG, "Getting Image from: " + actionItem.getImagePath());
+
+
+                    //todo copy pic to my folder to be able to use img src tag like this
+                    <img src="smiley.gif" alt="Smiley face" width="42" height="42" align="left">
 
                     Chunk c = new Chunk();
                     Image image = Image.getInstance(actionItem.getImagePath(), true);
@@ -130,16 +121,16 @@ public class ActionItemsExport {
                 toExport += actionItem.getActionPlan();
                 toExport += "\n";
 
-                doc.add(new Paragraph(toExport, new Font(Font.FontFamily.HELVETICA, 5, Font.NORMAL)));
+                //doc.add(new Paragraph(toExport, new Font(Font.FontFamily.HELVETICA, 5, Font.NORMAL)));
 
             }
 
 
-            doc.close();
-        } catch (DocumentException e) {
-            e.printStackTrace();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
+           // doc.close();
+        //} catch (DocumentException e) {
+            //e.printStackTrace();
+        //} catch (FileNotFoundException e) {
+          //  e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }

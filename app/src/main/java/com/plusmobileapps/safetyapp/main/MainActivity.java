@@ -379,25 +379,26 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
                 launchLoginScreen();
                 break;
             case R.id.ExportActionPlan:
-                if (ContextCompat.checkSelfPermission(this,
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                        != PackageManager.PERMISSION_GRANTED) {
+                //if (ContextCompat.checkSelfPermission(this,
+                        //Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                        //!= PackageManager.PERMISSION_GRANTED) {
 
-                    if (ActivityCompat.shouldShowRequestPermissionRationale(this,
-                            Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                    //if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                            //Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
 
-                    } else {
-                        ActivityCompat.requestPermissions(this,
-                                new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                                100);
+                    //} else {
+                        //ActivityCompat.requestPermissions(this,
+                                //new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                                //100);
 
-                    }
-                } else {
-                    ActionItemsExport pdf = new ActionItemsExport();
-                    pdf.exportActionItems();
+                   //}
+               // } else {
+                    ActionItemsExport html = new ActionItemsExport();
+                    html.exportActionItems();
+                    //todo create action Item web view intent
                     Toast.makeText(this, "PDF has been saved to your pictures folder.",
                             Toast.LENGTH_LONG).show();
-                }
+                //}
 
                 break;
 
