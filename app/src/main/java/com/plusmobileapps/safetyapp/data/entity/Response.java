@@ -8,8 +8,12 @@ import android.arch.persistence.room.PrimaryKey;
 
 
 /**
+ * Class intended to store responses to questions
+ * asked in the walkthrough.
+ *
  * Created by aaronmusengo on 1/23/18.
  * Updated by Robert Beerman on 3/18/2018
+ * Updated by Travis Hawley on 4/19/19
  */
 
 @Entity(tableName = "responses",
@@ -218,6 +222,10 @@ public class Response {
         this.persisted = persisted;
     }
 
+    /*
+    * Intended to allow direct comparison of
+    * response objects.
+    */
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof Response) {
@@ -230,6 +238,12 @@ public class Response {
         return false;
     }
 
+    /*
+     * Intended to allow for response objects
+     * to be outputed as strings for easier
+     * examination of the contents and
+     * transfer to other formats.
+     */
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("Response{");
