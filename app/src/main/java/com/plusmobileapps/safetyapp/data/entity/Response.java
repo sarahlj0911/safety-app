@@ -240,7 +240,7 @@ public class Response {
 
     /*
      * Intended to allow for response objects
-     * to be outputed as strings for easier
+     * to be output as strings for easier
      * examination of the contents and
      * transfer to other formats.
      */

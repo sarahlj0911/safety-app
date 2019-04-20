@@ -10,6 +10,14 @@ import com.plusmobileapps.safetyapp.util.DateTimeUtil;
 
 import java.util.Date;
 
+/**
+ * Class intended for the creation and manipulation of
+ * walkthrough objects in the code. Intended for use
+ * to improve school safety through resolution
+ * of given problems.
+ *
+ * Updated by Travis Hawley on 4/19/19
+ */
 @Entity(tableName = "walkthroughs",
         foreignKeys = @ForeignKey(entity = School.class,
                 parentColumns = "schoolId",
@@ -132,6 +140,10 @@ public class Walkthrough {
         return complete != 100;
     }
 
+    /*
+    * Intended to allow for direct comparison of
+    * walkthrough objects.
+    */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -150,6 +162,12 @@ public class Walkthrough {
         return result;
     }
 
+    /*
+     * Intended to allow for walkthrough objects
+     * to be output as strings for easier
+     * examination of the contents and
+     * transfer to other formats.
+     */
     @Override
     public String toString() {
         return "Walkthrough{" +
