@@ -120,14 +120,64 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
         setUpPresenters(factory);
         presenter = new MainActivityPresenter(this);
 
-        Intent intent = getIntent();
-        userEmail = intent.getStringExtra("email");
+        userPool = new AwsServices().initAWSUserPool(this);
+
+
+
+
+        //Intent intent = getIntent();
+        Bundle extras = getIntent().getExtras();
+        if (extras.getString("activity").equals("from login")) {
+            userName = extras.getString("name");
+            userRole = extras.getString("role");
+            userSchool = extras.getString("school");
+            userEmail = extras.getString("email");
+            selectedSchool = userSchool;
+            user = userPool.getUser(userEmail);
+        }
+        else {
+            userEmail = extras.getString("email");
+            user = userPool.getUser(userEmail);
+            user.getDetailsInBackground(getUserDetailsHandler);
+            selectedSchool = "newSchool";
+        }
+        //put info into the db
+        Log.d(TAG,"Getting user info from Login activity "+userName+" "+userName+" "+userRole+" "+userSchool);
+        FileUtil.deleteDb(this);
+        FileUtil.download(this, selectedSchool+"/appDB.db", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db");
+        FileUtil.download(this, selectedSchool+"/appDB.db-shm", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db-shm");
+        FileUtil.download(this, selectedSchool+"/appDB.db-wal", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db-wal");
+
+        School school = new School(1, userSchool);
+
+        AsyncTask<Void, Void, Boolean> saveSchoolTask = new SaveSchoolTask(school).execute();
+        try {
+            saveSchoolTask.get();
+        } catch (InterruptedException | ExecutionException e) {
+            Log.d(TAG, "Problem saving school");
+            Log.d(TAG, e.getMessage());
+        }
+        User usertoenter = new User(1, 1, userEmail, userName, userRole);
+
+        AsyncTask<Void, Void, Boolean> saveUserTask = new SaveUserTask(usertoenter).execute();
+        try {
+            saveUserTask.get();
+        } catch (InterruptedException | ExecutionException e) {
+            Log.d(TAG, "Issue saving user");
+            Log.d(TAG, e.getMessage());
+
+        }
+
+
+
+
+
 
         // AWSMobileClient enables AWS user credentials to access your table
         AWSMobileClient.getInstance().initialize(this, new AWSStartupHandler() {
             @Override
             public void onComplete(AWSStartupResult awsStartupResult) {
-                Log.d(AWSTAG, "You are connected to AWS's database!");
+                Log.d(AWSTAG, "You are connected to the AWS database!");
             }
         }).execute();
 
@@ -143,22 +193,16 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
         ContentResolver.setSyncAutomatically(account, AUTHORITY, true);
         ContentResolver.addPeriodicSync(account, AUTHORITY, Bundle.EMPTY, SYNC_INTERVAL);
 
-
-
         userPool = new AwsServices().initAWSUserPool(this);
         user = userPool.getUser(userEmail);
         user.getDetailsInBackground(getUserDetailsHandler);
 
 
-        selectedSchool = "newSchool";
 
-        FileUtil.deleteDb(this);
-        FileUtil.download(this, "uploads1/appDB.db", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db");
-        FileUtil.download(this, "uploads1/appDB.db-shm", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db-shm");
-        FileUtil.download(this, "uploads1/appDB.db-wal", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db-wal");
-        
 
-        FileUtil.download(this, "uploads/appDB1.db", getString(R.string.path_database));
+
+
+        //FileUtil.download(this, "uploads/appDB1.db", getString(R.string.path_database));
 
     }
 
@@ -167,7 +211,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
     public void onResume() {
         super.onResume();
         user.getSession(authenticationHandler);
-
     }
 
     @Override
@@ -181,14 +224,13 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
 
         //signOutUser();
         try {
-            FileUtil.upload(this, "uploads1/appDB.db", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db");
-            FileUtil.upload(this, "uploads1/appDB.db-shm", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db-shm");
-            FileUtil.upload(this, "uploads1/appDB.db-wal", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db-wal");
+            FileUtil.upload(this, selectedSchool+"/appDB.db", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db");
+            FileUtil.upload(this, selectedSchool+"/appDB.db-shm", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db-shm");
+            FileUtil.upload(this, selectedSchool+"/appDB.db-wal", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db-wal");
         }
-        catch(Exception ex) {}
+        catch(Exception ex) {ex.printStackTrace();}
         user.signOut();
         Log.d(AWSTAG, "Signed out user "+userEmail+" automatically");
-
     }
 
     @Override
@@ -371,77 +413,55 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
             userName = list.getAttributes().getAttributes().get("name");
             userRole = list.getAttributes().getAttributes().get("custom:role");
             userSchool = list.getAttributes().getAttributes().get("custom:school");
+
             userEmail = list.getAttributes().getAttributes().get("email");
-            School school = new School(1, userSchool);
-
-            AsyncTask<Void, Void, Boolean> saveSchoolTask = new SaveSchoolTask(school).execute();
-            try {
-                saveSchoolTask.get();
-            } catch (InterruptedException | ExecutionException e) {
-                Log.d(TAG, "Problem saving school");
-                Log.d(TAG, e.getMessage());
-            }
-            User user = new User(1, 1, userEmail, userName, userRole);
-
-            AsyncTask<Void, Void, Boolean> saveUserTask = new SaveUserTask(user).execute();
-            try {
-                saveUserTask.get();
-            } catch (InterruptedException | ExecutionException e) {
-                Log.d(TAG, "Issue saving user");
-                Log.d(TAG, e.getMessage());
-
-            }
 
 
 
-
-
-            Log.d(AWSTAG, "Successfully loaded " +userName+ " as role " +userRole+ " at school " +userSchool);
+            Log.d(AWSTAG, "Successfully loaded " + userName + " as role " + userRole + " at school " + userSchool);
         }
-
         @Override
         public void onFailure(final Exception exception) {
             Log.d(AWSTAG, "Failed to retrieve the user's details: " + exception);
         }
-    };
+        };
 
-    public void signOutUser(){
-        try {
-            user.signOut();
-            Log.d(AWSTAG, "Signed out user "+userEmail);
+        public void signOutUser() {
+            try {
+                user.signOut();
+                Log.d(AWSTAG, "Signed out user " + userEmail);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
-        catch (Exception e){
-            e.printStackTrace();
-        }
+
+        AuthenticationHandler authenticationHandler = new AuthenticationHandler() {
+            @Override
+            public void onSuccess(CognitoUserSession userSession, CognitoDevice newDevice) {
+                Log.d(AWSTAG, "User " + userEmail + " automatically signed back in");
+            }
+
+            @Override
+            public void getAuthenticationDetails(AuthenticationContinuation authenticationContinuation, String userId) {
+                Log.d(AWSTAG, "Refreshing user " + userEmail + " details");
+            }
+
+            @Override
+            public void getMFACode(MultiFactorAuthenticationContinuation continuation) {
+                Log.d(AWSTAG, "Encountered MFA challenge. Sending user back to login...");
+                launchLoginScreen();
+            }
+
+            @Override
+            public void authenticationChallenge(ChallengeContinuation continuation) {
+                Log.d(AWSTAG, "Encountered authentication challenge. Sending user back to login...");
+                launchLoginScreen();
+            }
+
+            @Override
+            public void onFailure(Exception exception) {
+                Log.d(AWSTAG, "Unable to login user: " + exception);
+            }
+        };
+
     }
-
-    AuthenticationHandler authenticationHandler = new AuthenticationHandler() {
-        @Override
-        public void onSuccess(CognitoUserSession userSession, CognitoDevice newDevice) {
-            Log.d(AWSTAG, "User "+userEmail+" automatically signed back in");
-        }
-
-        @Override
-        public void getAuthenticationDetails(AuthenticationContinuation authenticationContinuation, String userId) {
-            Log.d(AWSTAG, "Refreshing user "+userEmail+" details");
-        }
-
-        @Override
-        public void getMFACode(MultiFactorAuthenticationContinuation continuation) {
-            Log.d(AWSTAG, "Encountered MFA challenge. Sending user back to login...");
-            launchLoginScreen();
-        }
-
-        @Override
-        public void authenticationChallenge(ChallengeContinuation continuation) {
-            Log.d(AWSTAG, "Encountered authentication challenge. Sending user back to login...");
-            launchLoginScreen();
-        }
-
-        @Override
-        public void onFailure(Exception exception) {
-            Log.d(AWSTAG, "Unable to login user: "+exception);
-        }
-    };
-
-}

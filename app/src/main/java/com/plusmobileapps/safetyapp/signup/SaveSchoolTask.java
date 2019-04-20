@@ -1,6 +1,7 @@
 package com.plusmobileapps.safetyapp.signup;
 
 import android.os.AsyncTask;
+import android.util.Log;
 
 import com.plusmobileapps.safetyapp.MyApplication;
 import com.plusmobileapps.safetyapp.data.AppDatabase;
@@ -32,6 +33,7 @@ public class SaveSchoolTask extends AsyncTask<Void, Void, Boolean> {
 
     @Override
     protected void onPostExecute(Boolean finished) {
+        Log.d(TAG,"school saved");
 
     }
 }
