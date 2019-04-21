@@ -44,10 +44,9 @@ public class AdminNewTicketActivity extends AppCompatActivity {
         });
 
     }
-    public void backClicked(){
+    public void backClicked(View v){
         Log.d("BACK CLICKED", "BACK CLICKED");
-        Intent i=new Intent(AdminNewTicketActivity.this,AdminMainActivity.class);
-        startActivity(i);
+        finish();
 
     }
 }

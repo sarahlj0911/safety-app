@@ -60,6 +60,30 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.Clean"/>
         <activity
+            android:name=".admin.AdminMainActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.Clean"/>
+        <activity
+            android:name=".admin.AdminAddUserActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.Clean"/>
+        <activity
+            android:name=".admin.AdminNewTicketActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.Clean"/>
+        <activity
+            android:name=".admin.AdminViewHistoryActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.Clean"/>
+        <activity
+            android:name=".admin.AdminDeleteUserActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.Clean"/>
+        <activity
+            android:name=".admin.ViewTicketsActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.Clean"/>
+        <activity
             android:name=".main.MainActivity"
             android:screenOrientation="portrait" />
         <activity

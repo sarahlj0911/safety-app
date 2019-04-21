@@ -12,38 +12,24 @@
         android:background="@android:color/darker_gray"/>
 
     <Button
-        android:id="@+id/button"
-        android:layout_width="match_parent"
-        android:layout_height="91dp"
-        android:onClick="viewTickets"
-        android:text="@string/view_current_tickets" />
-
-    <Button
         android:id="@+id/button2"
         android:layout_width="match_parent"
-        android:layout_height="89dp"
+        android:layout_height="179dp"
         android:onClick="viewHistory"
         android:text="@string/ticket_history" />
 
     <Button
         android:id="@+id/button3"
         android:layout_width="match_parent"
-        android:layout_height="91dp"
-        android:onClick="@add_user"
+        android:layout_height="179dp"
+        android:onClick="addUser"
         android:text="@string/add_user" />
 
     <Button
         android:id="@+id/button4"
         android:layout_width="match_parent"
-        android:layout_height="86dp"
+        android:layout_height="186dp"
         android:onClick="deleteUser"
         android:text="@string/delete_user" />
-
-    <Button
-        android:id="@+id/button5"
-        android:layout_width="match_parent"
-        android:layout_height="106dp"
-        android:onClick="newTicket"
-        android:text="@string/new_ticket" />
 
 </LinearLayout>

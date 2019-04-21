@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.ActivityOptionsCompat;
@@ -35,6 +36,7 @@ import com.amazonaws.mobileconnectors.cognitoidentityprovider.continuations.Auth
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.continuations.ChallengeContinuation;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.continuations.MultiFactorAuthenticationContinuation;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.handlers.AuthenticationHandler;
+import com.amazonaws.mobileconnectors.cognitoidentityprovider.handlers.GenericHandler;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.handlers.GetDetailsHandler;
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
@@ -42,6 +44,7 @@ import com.plusmobileapps.safetyapp.AdminSettings;
 import com.plusmobileapps.safetyapp.AwsServices;
 import com.plusmobileapps.safetyapp.R;
 import com.plusmobileapps.safetyapp.actionitems.landing.ActionItemPresenter;
+import com.plusmobileapps.safetyapp.admin.AdminMainActivity;
 import com.plusmobileapps.safetyapp.login.LoginActivity;
 import com.plusmobileapps.safetyapp.summary.landing.SummaryPresenter;
 import com.plusmobileapps.safetyapp.util.FileUtil;
@@ -57,6 +60,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
     private String walkthroughFragmentTitle = "";
     private MainActivityPresenter presenter;
     private String selectedSchool = "";
+    private Menu menu;
 
     // AWS
     private CognitoUserPool userPool;
@@ -84,7 +88,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        userRole="default";
         mTextMessage = findViewById(R.id.message);
         navigation = findViewById(R.id.navigation);
         viewPager = findViewById(R.id.view_pager);
@@ -133,6 +137,8 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
         userPool = new AwsServices().initAWSUserPool(this);
         user = userPool.getUser(userEmail);
         user.getDetailsInBackground(getUserDetailsHandler);
+
+
         selectedSchool = "newSchool";
         //FileUtil.upload(this, "uploads/appDB.db", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db");
         //FileUtil.upload(this, "uploads/appDB.db-shm", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db-shm");
@@ -283,6 +289,18 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
     public boolean onCreateOptionsMenu(Menu menu){
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.drop_down_menu,menu);
+
+       this.menu=menu;
+
+        Log.d("ROLE!!!!!",userRole);
+      /*  if(userRole.compareToIgnoreCase("Administrator")!=0){
+            MenuItem adminSettings = menu.findItem(R.id.settings_menu_admin);
+            Log.d("ROLE!!!!!",userRole);
+            adminSettings.setVisible(false);
+
+
+        }*/
+
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -290,15 +308,20 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
     public boolean onOptionsItemSelected(MenuItem item){
 
         switch(item.getItemId()){
-            case R.id.settings_menu:
+            /*case R.id.settings_menu:
                 // Settings selected
                 Intent adminSettings = new Intent(this, AdminSettings.class);
                 startActivity(adminSettings);
-                break;
+                break;*/
             case R.id.settings_menu_signout:
                 // Settings selected
                 signOutUser();
                 launchLoginScreen();
+                break;
+                case R.id.settings_menu_admin:
+                // Settings selected
+                    Intent admin = new Intent(this, AdminMainActivity.class);
+                    startActivity(admin);
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -313,7 +336,19 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
             userRole = list.getAttributes().getAttributes().get("custom:role");
             userSchool = list.getAttributes().getAttributes().get("custom:school");
             Log.d(AWSTAG, "Successfully loaded " +userName+ " as role " +userRole+ " at school " +userSchool);
-            // userRole.equals("Administrator")
+
+
+
+            // If the userRole is not an administrator, take away the admin settings menu item
+            Log.d("ROLE!!!!!",userRole);
+            if(!userRole.equals("Administrator")){
+                MenuItem adminSettings = menu.findItem(R.id.settings_menu_admin);
+                Log.d("NOT ADMIN!!!!!",userRole);
+                adminSettings.setVisible(false);
+
+
+            }
+
         }
 
         @Override
@@ -321,7 +356,10 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
             Log.d(AWSTAG, "Failed to retrieve the user's details: " + exception);
         }
     };
+    public void getRole(){
+        user.getDetailsInBackground(getUserDetailsHandler);
 
+    }
     public void signOutUser(){
         try {
             user.signOut();
@@ -331,6 +369,18 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
             e.printStackTrace();
         }
     }
+    GenericHandler verify = new GenericHandler() {
+
+        @Override
+        public void onSuccess() {
+            // Attribute verification was successful!
+        }
+
+        @Override
+        public void onFailure(Exception exception) {
+            // Attribute verification failed, probe exception for details
+        }
+    };
 
     AuthenticationHandler authenticationHandler = new AuthenticationHandler() {
         @Override

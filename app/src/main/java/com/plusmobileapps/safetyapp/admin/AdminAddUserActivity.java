@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 
 import com.plusmobileapps.safetyapp.PrefManager;
@@ -23,9 +24,8 @@ public class AdminAddUserActivity extends AppCompatActivity {
     public void onClickAddUser(){
        System.out.println("added");
     }
-    public void backClicked(){
-        Intent i=new Intent(AdminAddUserActivity.this,AdminMainActivity.class);
-        startActivity(i);
+    public void backClicked(View v){
+        finish();
 
     }
 
