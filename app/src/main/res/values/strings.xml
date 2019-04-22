@@ -213,6 +213,7 @@
     <string name="test_data_will_appear_here">testdatawillappearhere</string>
     <string name="export_action_plan">Export Action Plan</string>
     <string name="Return">Return</string>
+    <string name="Print">Print</string>
 
 
 </resources>

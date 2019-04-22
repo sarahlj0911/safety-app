@@ -143,10 +143,10 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
         }
         //put info into the db
         Log.d(TAG,"Getting user info from Login activity "+userName+" "+userName+" "+userRole+" "+userSchool);
-        FileUtil.deleteDb(this);
-        FileUtil.download(this, selectedSchool+"/appDB.db", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db");
-        FileUtil.download(this, selectedSchool+"/appDB.db-shm", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db-shm");
-        FileUtil.download(this, selectedSchool+"/appDB.db-wal", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db-wal");
+        //FileUtil.deleteDb(this);
+        //FileUtil.download(this, selectedSchool+"/appDB.db", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db");
+        //FileUtil.download(this, selectedSchool+"/appDB.db-shm", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db-shm");
+        //FileUtil.download(this, selectedSchool+"/appDB.db-wal", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db-wal");
 
         School school = new School(1, userSchool);
 
@@ -379,28 +379,12 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
                 launchLoginScreen();
                 break;
             case R.id.ExportActionPlan:
-                //if (ContextCompat.checkSelfPermission(this,
-                        //Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                        //!= PackageManager.PERMISSION_GRANTED) {
-
-                    //if (ActivityCompat.shouldShowRequestPermissionRationale(this,
-                            //Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-
-                    //} else {
-                        //ActivityCompat.requestPermissions(this,
-                                //new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                                //100);
-
-                   //}
-               // } else {
                     ActionItemsExport html = new ActionItemsExport();
-                    html.exportActionItems();
-                    //todo create action Item web view intent
-                    Toast.makeText(this, "PDF has been saved to your pictures folder.",
-                            Toast.LENGTH_LONG).show();
-                //}
-
-                break;
+                    String htmlString = html.exportActionItems();
+                    Intent printIntent = new Intent(this, exportPdf.class);
+                    printIntent.putExtra("html",htmlString);
+                    startActivity(printIntent);
+                    break;
 
         }
         return super.onOptionsItemSelected(item);

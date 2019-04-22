@@ -143,6 +143,8 @@ public class FileUtil {
         // listener, check for the state and progress in the observer.
         if (TransferState.COMPLETED == uploadObserver.getState()) {
             // Handle a completed upload.
+            Log.d("YourActivity", "Upload Complete");
+
         }
 
         Log.d("YourActivity", "Bytes Transferrred: " + uploadObserver.getBytesTransferred());
