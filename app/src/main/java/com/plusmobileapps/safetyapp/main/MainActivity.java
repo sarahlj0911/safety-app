@@ -155,7 +155,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
 
             //todo change wait to something else
         try {
-            Thread.sleep(1000);
+            Thread.sleep(5000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
