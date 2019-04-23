@@ -28,7 +28,7 @@ public class ActionItemsExport {
 
     }
 
-    public String exportActionItems() {
+    public void exportActionItems() {
         List<Response> actionItems = new ArrayList<>(0);
         List<String> ExportStringData = new ArrayList<>(0);
         AppDatabase db = AppDatabase.getAppDatabase(MyApplication.getAppContext());
@@ -73,6 +73,7 @@ public class ActionItemsExport {
                 }
                 Question question = questionDao.getByQuestionID(actionItem.getQuestionId());
                 if (actionItem.getImagePath() != null) {
+                    ExportStringData.add("</p><p>");
                     Log.d(TAG, "Getting Image from: " + actionItem.getImagePath());
                     File SourcePic = new File(actionItem.getImagePath());
                     String[] picdest = actionItem.getImagePath().split("/");
@@ -84,15 +85,13 @@ public class ActionItemsExport {
                     copyFile(SourcePic,DestinationPic);
                     ExportStringData.add("<img src=\""+ filename +"\" alt=\"Action Item Pic\" width=\"70\" height=\"70\" align=\"left\">");
                 }
-
-
                 PreviousPlace = locationDao.getByLocationId(actionItem.getLocationId()).getName();
-                ExportStringData.add("<br>"+ question.getShortDesc()+"<br>     Action plan: "+ actionItem.getActionPlan()+"<br><br>");
-                ExportStringData.add("</html>");
+                ExportStringData.add("<br>"+ question.getShortDesc()+"<br>Action plan: "+ actionItem.getActionPlan()+"<br><br><br>");
             }
+            ExportStringData.add("</html>");
+
             for (int i = 0; i<ExportStringData.size();i++) {
                 bw.append(ExportStringData.get(i));
-                htmlString += ExportStringData.get(i);
             }
             bw.flush();
             bw.close();
@@ -102,7 +101,6 @@ public class ActionItemsExport {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return htmlString;
 
     }
 

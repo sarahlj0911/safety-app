@@ -37,8 +37,13 @@ import java.nio.file.Path;
 public class FileUtil {
     public static boolean deleteDb(Context context) {
         File file = new File("/data/data/com.plusmobileapps.safetyapp/databases/appDB.db");
+        File shm = new File("/data/data/com.plusmobileapps.safetyapp/databases/appDB.db-shm");
+        File wal = new File("/data/data/com.plusmobileapps.safetyapp/databases/appDB.db-wal");
+
         if(file.exists())
             file.delete();
+            shm.delete();
+            wal.delete();
 
         String s = "@@@" +  context.getDatabasePath("appDB");
 

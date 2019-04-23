@@ -37,7 +37,6 @@ public class exportPdf extends AppCompatActivity {
 
         });
 
-        Bundle extras = getIntent().getExtras();
         ActionItems.loadUrl("file:///data/data/com.plusmobileapps.safetyapp/files/SafetyAppExport.html");
         ActionItems.reload();
 

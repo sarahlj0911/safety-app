@@ -15,7 +15,7 @@ import java.io.InputStream;
 import java.util.LinkedList;
 import java.util.List;
 
-public class Schools {
+public class  Schools {
     static String json = null;
     public static List<String> schoolNames = new LinkedList<>();
     public static JSONObject obj;
