@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import com.plusmobileapps.safetyapp.data.dao.SchoolDao;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -49,9 +50,11 @@ import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
 import com.plusmobileapps.safetyapp.AdminSettings;
 import com.plusmobileapps.safetyapp.AwsServices;
 import com.plusmobileapps.safetyapp.BuildConfig;
+import com.plusmobileapps.safetyapp.MyApplication;
 import com.plusmobileapps.safetyapp.R;
 import com.plusmobileapps.safetyapp.actionitems.detail.ActionItemDetailActivity;
 import com.plusmobileapps.safetyapp.actionitems.landing.ActionItemPresenter;
+import com.plusmobileapps.safetyapp.data.AppDatabase;
 import com.plusmobileapps.safetyapp.data.entity.Response;
 import com.plusmobileapps.safetyapp.data.entity.School;
 import com.plusmobileapps.safetyapp.data.entity.User;
@@ -143,30 +146,42 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
         }
         //put info into the db
         Log.d(TAG,"Getting user info from Login activity "+userName+" "+userName+" "+userRole+" "+userSchool);
-        FileUtil.deleteDb(this);
-        FileUtil.download(this, selectedSchool+"/appDB.db", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db");
-        FileUtil.download(this, selectedSchool+"/appDB.db-shm", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db-shm");
-        FileUtil.download(this, selectedSchool+"/appDB.db-wal", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db-wal");
 
-        School school = new School(1, userSchool);
+            FileUtil.deleteDb(this);
 
-        AsyncTask<Void, Void, Boolean> saveSchoolTask = new SaveSchoolTask(school).execute();
+            FileUtil.download(this, selectedSchool+"/appDB.db", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db");
+            FileUtil.download(this, selectedSchool+"/appDB.db-shm", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db-shm");
+            FileUtil.download(this, selectedSchool+"/appDB.db-wal", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db-wal");
+
+            //todo change wait to something else
         try {
-            saveSchoolTask.get();
-        } catch (InterruptedException | ExecutionException e) {
-            Log.d(TAG, "Problem saving school");
-            Log.d(TAG, e.getMessage());
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
-        User usertoenter = new User(1, 1, userEmail, userName, userRole);
 
-        AsyncTask<Void, Void, Boolean> saveUserTask = new SaveUserTask(usertoenter).execute();
-        try {
-            saveUserTask.get();
-        } catch (InterruptedException | ExecutionException e) {
-            Log.d(TAG, "Issue saving user");
-            Log.d(TAG, e.getMessage());
 
-        }
+           School school = new School(1, userSchool);
+           AsyncTask<Void, Void, Boolean> saveSchoolTask = new SaveSchoolTask(school).execute();
+           try {
+               saveSchoolTask.get();
+           } catch (InterruptedException | ExecutionException e) {
+               Log.d(TAG, "Problem saving school");
+               Log.d(TAG, e.getMessage());
+           }
+           User usertoenter = new User(1, 1, userEmail, userName, userRole);
+
+           AsyncTask<Void, Void, Boolean> saveUserTask = new SaveUserTask(usertoenter).execute();
+           try {
+               saveUserTask.get();
+           } catch (InterruptedException | ExecutionException e) {
+               Log.d(TAG, "Issue saving user");
+               Log.d(TAG, e.getMessage());
+
+           }
+
+
+
 
 
 
@@ -203,6 +218,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
 
 
         //FileUtil.download(this, "uploads/appDB1.db", getString(R.string.path_database));
+        //swipeAdapter.notify();
 
     }
 
@@ -224,9 +240,11 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
 
         //signOutUser();
         try {
-            FileUtil.upload(this, selectedSchool+"/appDB.db", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db");
-            FileUtil.upload(this, selectedSchool+"/appDB.db-shm", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db-shm");
-            FileUtil.upload(this, selectedSchool+"/appDB.db-wal", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db-wal");
+           // FileUtil.upload(this, selectedSchool+"/appDB.db", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db");
+            //FileUtil.upload(this, selectedSchool+"/appDB.db-shm", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db-shm");
+            //FileUtil.upload(this, selectedSchool+"/appDB.db-wal", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db-wal");
+            //FileUtil.upload(this, "/",getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+
         }
         catch(Exception ex) {ex.printStackTrace();}
         user.signOut();
@@ -368,38 +386,17 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
     public boolean onOptionsItemSelected(MenuItem item){
 
         switch(item.getItemId()){
-            case R.id.settings_menu:
-                // Settings selected
-                Intent adminSettings = new Intent(this, AdminSettings.class);
-                startActivity(adminSettings);
-                break;
             case R.id.settings_menu_signout:
                 // Settings selected
                 signOutUser();
                 launchLoginScreen();
                 break;
             case R.id.ExportActionPlan:
-                if (ContextCompat.checkSelfPermission(this,
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                        != PackageManager.PERMISSION_GRANTED) {
-
-                    if (ActivityCompat.shouldShowRequestPermissionRationale(this,
-                            Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-
-                    } else {
-                        ActivityCompat.requestPermissions(this,
-                                new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                                100);
-
-                    }
-                } else {
-                    ActionItemsExport pdf = new ActionItemsExport();
-                    pdf.exportActionItems();
-                    Toast.makeText(this, "PDF has been saved to your pictures folder.",
-                            Toast.LENGTH_LONG).show();
-                }
-
-                break;
+                    ActionItemsExport html = new ActionItemsExport();
+                    html.exportActionItems();
+                    Intent printIntent = new Intent(this, exportPdf.class);
+                    startActivity(printIntent);
+                    break;
 
         }
         return super.onOptionsItemSelected(item);

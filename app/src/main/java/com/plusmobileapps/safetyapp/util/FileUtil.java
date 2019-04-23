@@ -37,8 +37,13 @@ import java.nio.file.Path;
 public class FileUtil {
     public static boolean deleteDb(Context context) {
         File file = new File("/data/data/com.plusmobileapps.safetyapp/databases/appDB.db");
+        File shm = new File("/data/data/com.plusmobileapps.safetyapp/databases/appDB.db-shm");
+        File wal = new File("/data/data/com.plusmobileapps.safetyapp/databases/appDB.db-wal");
+
         if(file.exists())
             file.delete();
+            shm.delete();
+            wal.delete();
 
         String s = "@@@" +  context.getDatabasePath("appDB");
 
@@ -143,6 +148,8 @@ public class FileUtil {
         // listener, check for the state and progress in the observer.
         if (TransferState.COMPLETED == uploadObserver.getState()) {
             // Handle a completed upload.
+            Log.d("YourActivity", "Upload Complete");
+
         }
 
         Log.d("YourActivity", "Bytes Transferrred: " + uploadObserver.getBytesTransferred());
