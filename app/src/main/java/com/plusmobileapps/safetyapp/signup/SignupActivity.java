@@ -33,6 +33,9 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.amazonaws.mobile.client.AWSMobileClient;
+import com.amazonaws.mobile.client.AWSStartupHandler;
+import com.amazonaws.mobile.client.AWSStartupResult;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUser;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUserAttributes;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUserCodeDeliveryDetails;
@@ -55,6 +58,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Objects;
 
 import br.com.simplepass.loading_button_lib.customViews.CircularProgressButton;
@@ -76,15 +81,18 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
     private CognitoUserPool userPool;
     private CognitoUserAttributes userAttributes;
     private Handler handler;
-    private Bundle fadeOutActivity;
     private String email, name;
     private int nameCharCount, emailCharCount;
+
+    public ArrayAdapter<String> schoolsAdapter;
+    List<String> schoolNames = new LinkedList<>();
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Log.d("Debug"+TAG, "onCreate");
         super.onCreate(savedInstanceState);
+
         handler = new Handler();
         presenter = new SignupPresenter(this);
         Window w = getWindow();
@@ -94,6 +102,7 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
 
         schoolSpinner = findViewById(R.id.spinner_signup_school_name);
         roleSpinner = findViewById(R.id.spinner_signup_role);
+
         newSchool = findViewById(R.id.new_school_text_box);
         signUpButton = findViewById(R.id.button_save_signup);
         signUpButton.setOnClickListener(saveSignupClickListener);
@@ -127,7 +136,17 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
         statusText.setText("");
         alertTitle.setText(getString(R.string.signup_confirm_title));
         alertButton.setText(getString(R.string.signup_button_inbox));
-        fadeOutActivity = ActivityOptionsCompat.makeCustomAnimation(this, 1, android.R.anim.fade_out).toBundle();
+
+        Schools.load(this.getApplicationContext());
+        schoolNames = Schools.schoolNames;
+
+        schoolsAdapter = new ArrayAdapter<>(
+                this,
+                android.R.layout.simple_list_item_1,
+                schoolNames );
+        schoolsAdapter.setDropDownViewResource(R.layout.activity_signup_spinner_dropdown);
+        schoolSpinner.setAdapter(schoolsAdapter);
+
         ArrayAdapter adapter = ArrayAdapter.createFromResource(this, R.array.signup_roles, R.layout.activity_signup_spinner);
         adapter.setDropDownViewResource(R.layout.activity_signup_spinner_dropdown);
         roleSpinner.setAdapter(adapter);
@@ -163,7 +182,8 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
 
     public void launchHomeScreen() {
         Intent signUp = new Intent(SignupActivity.this, MainActivity.class);
-        startActivity(signUp, fadeOutActivity);
+        startActivity(signUp);
+        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
         finish();
     }
 
@@ -173,53 +193,12 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
     public void launchLoginScreen() {
         Intent login = new Intent(SignupActivity.this, LoginActivity.class);
         login.putExtra("openAni", "back");
-        startActivity(login, fadeOutActivity);
-        finish();
+        startActivity(login);
+        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
     }
 
     public void initSchoolSpinner() {
-        JSONObject schoolListObj;
-        ArrayList<String> schoolList;
 
-        FileUtil.download(this, "schools.json", getString(R.string.path_database));
-
-        schoolListObj = new JSONObject();
-
-
-        String schools[] = new String[0];
-        try { schools = (String[]) schoolListObj.get("schoolList"); }
-        catch (JSONException e) {
-            Log.d(TAG, "Unable to convert JSON object to string array.");
-            e.printStackTrace();
-        }
-
-        schoolList = new ArrayList<>(Arrays.asList(schools));
-        Collections.sort(schoolList);
-//        schoolList.add("Add A School");
-
-        schoolList.add("School 1");
-        schoolList.add("School 2");
-        schoolList.add("School 3");
-        schoolList.add("School 4");
-        schoolList.add("School 5");
-
-        ArrayAdapter<String> schoolSpinnerList = new ArrayAdapter<>(this, R.layout.activity_signup_spinner, schoolList);
-        schoolSpinnerList.setDropDownViewResource(R.layout.activity_signup_spinner_dropdown);
-        schoolSpinner.setAdapter(schoolSpinnerList);
-        schoolSpinner.setSelection(0);
-        schoolSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                if (schoolSpinner.getSelectedItem().toString().equals("Add A School")) {
-                    // TODO Hide
-                }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
-        });
     }
 
 
@@ -240,6 +219,7 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
             String passwordCheck = Objects.requireNonNull(passwordCheckInput.getEditText()).getText().toString();
 
             String role = roleSpinner.getSelectedItem().toString();
+
             String school = schoolSpinner.getSelectedItem().toString();
 
             formInput.put(SignupPresenter.NAME_INPUT, name);
@@ -440,9 +420,9 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-            alertContent.setText(String.format("A confirmation email has been sent to %s.", email));
-            customPopupBackground.setImageBitmap(new BlurUtils().blur(SignupActivity.this, backgroundCapture, 25f));
-            codeViewShowAnimation(true, 250);
+                alertContent.setText(String.format("A confirmation email has been sent to %s.", email));
+                customPopupBackground.setImageBitmap(new BlurUtils().blur(SignupActivity.this, backgroundCapture, 25f));
+                codeViewShowAnimation(true, 250);
             }
         });
     }

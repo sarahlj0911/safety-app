@@ -33,6 +33,11 @@ android {
     }
     productFlavors {
     }
+        compileOptions {
+            sourceCompatibility JavaVersion.VERSION_1_8
+            targetCompatibility JavaVersion.VERSION_1_8
+        }
+
 }
 apply plugin: 'com.amazonaws.appsync'
 
@@ -53,10 +58,11 @@ dependencies {
     implementation "com.android.support:cardview-v7:$rootProject.ext.supportLibraryVersion"
     implementation 'com.google.code.gson:gson:2.8.2'
     implementation 'com.android.support.constraint:constraint-layout:1.1.3'
-    implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.+'
+    implementation 'org.apache.commons:commons-lang3:3.+'
 
     // AWS Mobile Client SDK
     implementation('com.amazonaws:aws-android-sdk-mobile-client:2.7.+@aar') { transitive = true }
+
     //implementation 'com.amazonaws:aws-android-sdk-mobile-client:2.11.+'
 
     // AWS Cognito UserPools for SignIn
@@ -79,6 +85,7 @@ dependencies {
     implementation 'com.amazonaws:aws-android-sdk-ddb-mapper:2.7.+'
 
     // Blur Background
+
     // implementation 'com.github.jrvansuita:GaussianBlur:+'
 
     //good library to easily animate the recycler view **updated
@@ -93,7 +100,6 @@ dependencies {
 
     //image loading library
     implementation 'com.squareup.picasso:picasso:2.71828'
-
     implementation 'br.com.simplepass:loading-button-android:1.7.+'
 
     //test
@@ -104,4 +110,5 @@ dependencies {
     testImplementation "org.hamcrest:hamcrest-all:$rootProject.ext.hamcrestVersion"
     testImplementation "org.powermock:powermock-module-junit4:$rootProject.ext.powerMockito"
     testImplementation "org.powermock:powermock-api-mockito:$rootProject.ext.powerMockito"
+    implementation files('libs/itextg-5.5.10.jar')
 }

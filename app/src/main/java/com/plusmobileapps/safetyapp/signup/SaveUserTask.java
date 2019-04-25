@@ -17,7 +17,7 @@ public class SaveUserTask extends AsyncTask<Void, Void, Boolean> {
     private AppDatabase db;
     private User user;
 
-    SaveUserTask(User user) {
+    public SaveUserTask(User user) {
         this.user = user;
     }
 

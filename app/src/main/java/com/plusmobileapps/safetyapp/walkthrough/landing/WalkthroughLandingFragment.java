@@ -66,7 +66,8 @@ public class WalkthroughLandingFragment extends Fragment
     }
 
     public static WalkthroughLandingFragment newInstance() {
-        return new WalkthroughLandingFragment();
+        WalkthroughLandingFragment fragment = new WalkthroughLandingFragment();
+        return fragment;
     }
 
     @Override
