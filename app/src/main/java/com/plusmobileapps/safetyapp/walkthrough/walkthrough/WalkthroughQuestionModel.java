@@ -39,6 +39,7 @@ public class WalkthroughQuestionModel extends AsyncTask<Void, Void, List<Questio
         QuestionDao questionDao = db.questionDao();
         questions = questionDao.getQuestionsForLocationType(this.locationId);
         return questions;
+
     }
 
     @Override

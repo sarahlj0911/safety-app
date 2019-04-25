@@ -1,24 +1,15 @@
 package com.plusmobileapps.safetyapp.main;
 
-import android.Manifest;
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.content.res.Configuration;
-import com.plusmobileapps.safetyapp.data.dao.SchoolDao;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.ActivityOptionsCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.content.FileProvider;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -26,15 +17,10 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.amazonaws.auth.AWSCredentialsProvider;
 import com.amazonaws.mobile.client.AWSMobileClient;
-import com.amazonaws.mobile.client.AWSStartupHandler;
-import com.amazonaws.mobile.client.AWSStartupResult;
-import com.amazonaws.mobile.config.AWSConfiguration;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoDevice;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUser;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUserDetails;
@@ -46,16 +32,10 @@ import com.amazonaws.mobileconnectors.cognitoidentityprovider.continuations.Mult
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.handlers.AuthenticationHandler;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.handlers.GetDetailsHandler;
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBMapper;
-import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
-import com.plusmobileapps.safetyapp.AdminSettings;
 import com.plusmobileapps.safetyapp.AwsServices;
-import com.plusmobileapps.safetyapp.BuildConfig;
-import com.plusmobileapps.safetyapp.MyApplication;
 import com.plusmobileapps.safetyapp.R;
-import com.plusmobileapps.safetyapp.actionitems.detail.ActionItemDetailActivity;
 import com.plusmobileapps.safetyapp.actionitems.landing.ActionItemPresenter;
-import com.plusmobileapps.safetyapp.data.AppDatabase;
-import com.plusmobileapps.safetyapp.data.entity.Response;
+import com.plusmobileapps.safetyapp.admin.AdminMainActivity;
 import com.plusmobileapps.safetyapp.data.entity.School;
 import com.plusmobileapps.safetyapp.data.entity.User;
 import com.plusmobileapps.safetyapp.login.LoginActivity;
@@ -67,9 +47,7 @@ import com.plusmobileapps.safetyapp.util.FileUtil;
 import com.plusmobileapps.safetyapp.util.exportPdf;
 import com.plusmobileapps.safetyapp.walkthrough.landing.WalkthroughLandingPresenter;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 
 
@@ -82,6 +60,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
     private String walkthroughFragmentTitle = "";
     private MainActivityPresenter presenter;
     private String selectedSchool = "";
+    private Menu menu;
 
     // AWS
     private CognitoUserPool userPool;
@@ -110,7 +89,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_main);
-
+        userRole="default";
         mTextMessage = findViewById(R.id.message);
         navigation = findViewById(R.id.navigation);
         viewPager = findViewById(R.id.view_pager);
@@ -130,7 +109,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
 
         //Intent intent = getIntent();
         Bundle extras = getIntent().getExtras();
-        if (extras.getString("activity").equals("from login")) {
+        if (Objects.equals(extras.getString("activity"), "from login")) {
             userName = extras.getString("name");
             userRole = extras.getString("role");
             userSchool = extras.getString("school");
@@ -169,9 +148,9 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
                Log.d(TAG, "Problem saving school");
                Log.d(TAG, e.getMessage());
            }
-           User usertoenter = new User(1, 1, userEmail, userName, userRole);
+           User userToEnter = new User(1, 1, userEmail, userName, userRole);
 
-           AsyncTask<Void, Void, Boolean> saveUserTask = new SaveUserTask(usertoenter).execute();
+           AsyncTask<Void, Void, Boolean> saveUserTask = new SaveUserTask(userToEnter).execute();
            try {
                saveUserTask.get();
            } catch (InterruptedException | ExecutionException e) {
@@ -180,21 +159,8 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
 
            }
 
-
-
-
-
-
-
-
-
         // AWSMobileClient enables AWS user credentials to access your table
-        AWSMobileClient.getInstance().initialize(this, new AWSStartupHandler() {
-            @Override
-            public void onComplete(AWSStartupResult awsStartupResult) {
-                Log.d(AWSTAG, "You are connected to the AWS database!");
-            }
-        }).execute();
+        AWSMobileClient.getInstance().initialize(this, awsStartupResult -> Log.d(AWSTAG, "You are connected to the AWS database!")).execute();
 
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         final MainSwipeAdapter swipeAdapter = new MainSwipeAdapter(getSupportFragmentManager(), factory);
@@ -211,14 +177,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
         userPool = new AwsServices().initAWSUserPool(this);
         user = userPool.getUser(userEmail);
         user.getDetailsInBackground(getUserDetailsHandler);
-
-
-
-
-
-
-        //FileUtil.download(this, "uploads/appDB1.db", getString(R.string.path_database));
-        //swipeAdapter.notify();
 
     }
 
@@ -237,16 +195,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
     @Override
     public void onStop(){
         super.onStop();
-
-        //signOutUser();
-        try {
-           // FileUtil.upload(this, selectedSchool+"/appDB.db", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db");
-            //FileUtil.upload(this, selectedSchool+"/appDB.db-shm", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db-shm");
-            //FileUtil.upload(this, selectedSchool+"/appDB.db-wal", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db-wal");
-            //FileUtil.upload(this, "/",getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-
-        }
-        catch(Exception ex) {ex.printStackTrace();}
         user.signOut();
         Log.d(AWSTAG, "Signed out user "+userEmail+" automatically");
     }
@@ -379,6 +327,18 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
     public boolean onCreateOptionsMenu(Menu menu){
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.drop_down_menu,menu);
+
+       this.menu=menu;
+
+        Log.d("ROLE!!!!!",userRole);
+      /*  if(userRole.compareToIgnoreCase("Administrator")!=0){
+            MenuItem adminSettings = menu.findItem(R.id.settings_menu_admin);
+            Log.d("ROLE!!!!!",userRole);
+            adminSettings.setVisible(false);
+
+
+        }*/
+
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -391,13 +351,19 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
                 signOutUser();
                 launchLoginScreen();
                 break;
-            case R.id.ExportActionPlan:
+
+          case R.id.settings_menu_admin:
+                // Settings selected
+                    Intent admin = new Intent(this, AdminMainActivity.class);
+                    startActivity(admin);
+                break;
+
+          case R.id.ExportActionPlan:
                     ActionItemsExport html = new ActionItemsExport();
                     html.exportActionItems();
                     Intent printIntent = new Intent(this, exportPdf.class);
                     startActivity(printIntent);
                     break;
-
         }
         return super.onOptionsItemSelected(item);
     }
@@ -411,17 +377,21 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
             userRole = list.getAttributes().getAttributes().get("custom:role");
             userSchool = list.getAttributes().getAttributes().get("custom:school");
 
+          // If the userRole is not an administrator, take away the admin settings menu item
+            if(!userRole.equals("Administrator")){
+                MenuItem adminSettings = menu.findItem(R.id.settings_menu_admin);
+                adminSettings.setVisible(false);
+            }
+          
             userEmail = list.getAttributes().getAttributes().get("email");
-
-
-
             Log.d(AWSTAG, "Successfully loaded " + userName + " as role " + userRole + " at school " + userSchool);
         }
         @Override
         public void onFailure(final Exception exception) {
             Log.d(AWSTAG, "Failed to retrieve the user's details: " + exception);
         }
-        };
+
+    };
 
         public void signOutUser() {
             try {

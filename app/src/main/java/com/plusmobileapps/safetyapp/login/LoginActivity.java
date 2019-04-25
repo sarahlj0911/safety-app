@@ -349,12 +349,9 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
                 public void run() {
                     buttonDismissAuthCodeClicked(codeAuthWindow);
                     buttonLogInClicked(loginView); // TODO
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            buttonLoginStatus.setText(R.string.login_button_user_confirmed);
-                            buttonLoginStatus.setClickable(false);
-                        }
+                    runOnUiThread(() -> {
+                        buttonLoginStatus.setText(R.string.login_button_user_confirmed);
+                        buttonLoginStatus.setClickable(false);
                     });
                 }
             };
@@ -421,12 +418,9 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         public void onFailure(final Exception exception) {
             Log.d(AWSTAG, "Failed to retrieve the user's details: " + exception);
             final String finalButtonErrorText = getString(R.string.aws_login_error_details);
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    buttonLoginStatus.setText(finalButtonErrorText);
-                    buttonLoginStatus.setAlpha(1);
-                }
+            runOnUiThread(() -> {
+                buttonLoginStatus.setText(finalButtonErrorText);
+                buttonLoginStatus.setAlpha(1);
             });
             handler.postDelayed(failureAnimation, 0);
             handler.postDelayed(resetButton, 3000);
@@ -474,13 +468,10 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
 
         @Override
         public void onTextChanged(CharSequence s, int start, int before, int count) {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    if (codeInput.length() == 0) codeInput.setTypeface(null, Typeface.NORMAL);
-                    else codeInput.setTypeface(null, Typeface.BOLD);
-                    codeViewStatusAnimation(2, 200, "CONFIRM");
-                }
+            runOnUiThread(() -> {
+                if (codeInput.length() == 0) codeInput.setTypeface(null, Typeface.NORMAL);
+                else codeInput.setTypeface(null, Typeface.BOLD);
+                codeViewStatusAnimation(2, 200, "CONFIRM");
             });
         }
 
@@ -535,17 +526,9 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         android.util.Log.d(TAG, "Debug: Confirm Code Button Pressed");
         codeInput.clearFocus();
         if (buttonCode.getText().toString().toLowerCase().contains("confirm")) {
-            new Thread(new Runnable() {
-                public void run() {
-                    user.confirmSignUp(codeInput.getText().toString(), true, confirmCodeHandler);
-                }
-            }).start();
-        } else if (buttonCode.getText().toString().toLowerCase().contains("resend")) {
-            new Thread(new Runnable() {
-                public void run() {
-                    user.resendConfirmationCode(resendConfirmationCodeHandler);
-                }
-            }).start();
+            new Thread(() -> user.confirmSignUp(codeInput.getText().toString(), true, confirmCodeHandler)).start(); }
+        else if (buttonCode.getText().toString().toLowerCase().contains("resend")) {
+            new Thread(() -> user.resendConfirmationCode(resendConfirmationCodeHandler)).start();
         }
     }
 
@@ -553,23 +536,15 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         hideKeyboard(view);
         showCodeView = false;
         buttonDismissCodeView.setClickable(false);
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                codeViewShowAnimation(false, 100);
-            }
-        });
+        runOnUiThread(() -> codeViewShowAnimation(false, 100));
     }
 
     public void showCodeAuthorizationView() {
         buttonDismissCodeView.setClickable(true);
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                Bitmap backgroundCapture = takeScreenshot();
-                backgroundBlur.setImageBitmap(new BlurUtils().blur(LoginActivity.this, backgroundCapture, 25f));
-                codeViewShowAnimation(true, 250);
-            }
+        runOnUiThread(() -> {
+            Bitmap backgroundCapture = takeScreenshot();
+            backgroundBlur.setImageBitmap(new BlurUtils().blur(LoginActivity.this, backgroundCapture, 25f));
+            codeViewShowAnimation(true, 250);
         });
     }
 
@@ -645,28 +620,25 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
             buttonTransition = (TransitionDrawable) ContextCompat.getDrawable(this, R.drawable.code_authorization_button_success_animation);
             backgroundTransition = (TransitionDrawable) ContextCompat.getDrawable(this, R.drawable.code_authorization_success_animation); }
 
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                buttonCode.setText(buttonText);
-                buttonCodeBackground.setImageDrawable(buttonTransition);
-                codeBackground.setImageDrawable(backgroundTransition);
-                if (reverse) {
-                    buttonCode.setTextColor(getColor(R.color.button_verification_text));
-                    Objects.requireNonNull(buttonTransition).resetTransition();
-                    Objects.requireNonNull(backgroundTransition).resetTransition();
+        runOnUiThread(() -> {
+            buttonCode.setText(buttonText);
+            buttonCodeBackground.setImageDrawable(buttonTransition);
+            codeBackground.setImageDrawable(backgroundTransition);
+            if (reverse) {
+                buttonCode.setTextColor(getColor(R.color.button_verification_text));
+                Objects.requireNonNull(buttonTransition).resetTransition();
+                Objects.requireNonNull(backgroundTransition).resetTransition();
 
-                    Handler handler = new Handler(getBaseContext().getMainLooper());
-                    final Runnable resetButton = new Runnable() {
-                        public void run() {
-                            buttonCode.setBackgroundResource(R.drawable.rounded_button_animation); }};
-                    handler.postDelayed(resetButton, duration); }
-                else {
-                    buttonCode.setTextColor(Color.WHITE);
-                    buttonCode.setBackgroundResource(0);
-                    Objects.requireNonNull(buttonTransition).startTransition(duration);
-                    Objects.requireNonNull(backgroundTransition).startTransition(duration); }
-            }
+                Handler handler = new Handler(getBaseContext().getMainLooper());
+                final Runnable resetButton = new Runnable() {
+                    public void run() {
+                        buttonCode.setBackgroundResource(R.drawable.rounded_button_animation); }};
+                handler.postDelayed(resetButton, duration); }
+            else {
+                buttonCode.setTextColor(Color.WHITE);
+                buttonCode.setBackgroundResource(0);
+                Objects.requireNonNull(buttonTransition).startTransition(duration);
+                Objects.requireNonNull(backgroundTransition).startTransition(duration); }
         });
     }
 
