@@ -67,7 +67,7 @@ import br.com.simplepass.loading_button_lib.customViews.CircularProgressButton;
 
 
 public class LoginActivity extends AppCompatActivity implements LoginContract.View {
-    
+
     private static final String TAG = "LoginActivity";
     private static final String AWSTAG = "LoginActivityAWS";
     private View codeAuthWindow, codeView, loginView;
@@ -85,7 +85,7 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
     // AWS
     private CognitoUserPool userPool;
     private CognitoUser user;
-  
+
     // Login Button Animations
     final Runnable resetButton = new Runnable() {
         public void run() {
@@ -110,7 +110,7 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
     };
 
 
-  @Override
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         presenter = new LoginPresenter(this);
@@ -119,14 +119,14 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         w.setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION, 2000);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_login);
-        
+
         loginView = findViewById(R.id.viewLogin);
         codeAuthWindow = findViewById(R.id.viewAuthCode);
         codeView = findViewById(R.id.codeView);
-        
+
         emailField = findViewById(R.id.textInputLayoutEmail);
         passwordField = findViewById(R.id.textInputLayoutPassword);
-        
+
         buttonCode = findViewById(R.id.buttonText);
         buttonDismissCodeView = findViewById(R.id.buttonDismissAuthCode);
         loginButton = findViewById(R.id.buttonLogin);
@@ -135,23 +135,23 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         codeBackground = findViewById(R.id.viewAuthCodeBackground);
         buttonCodeBackground = findViewById(R.id.buttonCodeBackground);
         buttonSignUp = findViewById(R.id.buttonSignUp);
-        
+
         textNewUser = findViewById(R.id.textRegister);
         appTitle = findViewById(R.id.textViewTitle);
         appLogo = findViewById(R.id.imageLogo);
-        
+
         codeInput = findViewById(R.id.editTextCodeInput);
         emailInput = findViewById(R.id.fieldEmail);
         passwordInput = findViewById(R.id.fieldPassword);
-        
+
         Objects.requireNonNull(emailField.getEditText()).addTextChangedListener(emailListener);
         Objects.requireNonNull(passwordField.getEditText()).addTextChangedListener(passwordListener);
         codeInput.addTextChangedListener(codeListener);
-        
+
         loginButton.setBackgroundResource(R.drawable.login_button_ripple);
         buttonDismissCodeView.setClickable(false);
         buttonLoginStatus.setClickable(false);
-        
+
         userPool = new AwsServices().initAWSUserPool(this);
 
         AWSMobileClient.getInstance().initialize(this, new AWSStartupHandler() {
@@ -163,12 +163,12 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
 
 
     }
-    
+
     @Override
     protected void onResume() {
         super.onResume();
         String openAnimation = getIntent().getStringExtra("openAni");
-        
+
         passwordInput.setText("");
         emailInput.setText("");
         buttonLoginStatus.setText("");
@@ -187,20 +187,20 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
             loginButton.setEnabled(false);
             buttonLoginStatus.setText("No Internet Connection!\nApp services will be unavailable.");
             Log.e(TAG, "Device does not have an internet connection!"); }
-        
+
         if (openAnimation != null && openAnimation.equals("start")) activityStartingAnimation();
     }
-    
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
         loginButton.dispose();
     }
-    
+
     @Override
     public void launchHomeScreen() {
-        //        PrefManager prefManager = new PrefManager(this);
-        //        prefManager.setIsUserSignedUp(true);
+//        PrefManager prefManager = new PrefManager(this);
+//        prefManager.setIsUserSignedUp(true);
         Intent mainActivity = new Intent(LoginActivity.this, MainActivity.class);
         mainActivity.putExtra("activity", "from login");
         mainActivity.putExtra("email", username);
@@ -212,31 +212,36 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
         finish();
     }
-    
+
     @Override
     public void setPresenter(LoginContract.Presenter presenter) {
         this.presenter = presenter;
     }
-    
-    
+
+
     public void displayInvalidEmailError(boolean show) {
         emailField.setError(getString(R.string.error_email_invalid));
         emailField.setErrorEnabled(show);
     }
-    
+
     public void displayNoEmailError(boolean show) {
         emailField.setError(getString(R.string.error_email_none));
         emailField.setErrorEnabled(show);
     }
-    
+
     public void displayNoPasswordError(boolean show) {
         passwordField.setError(getString(R.string.error_password_none));
         passwordField.setErrorEnabled(show);
     }
 
 
+
+
     // Handler: Login User
     AuthenticationHandler authenticationHandler = new AuthenticationHandler() {
+        // Button Animations
+
+
         @Override
         public void onSuccess(CognitoUserSession userSession, CognitoDevice newDevice) {
             Log.d(AWSTAG, "Login successful");
@@ -344,12 +349,9 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
                 public void run() {
                     buttonDismissAuthCodeClicked(codeAuthWindow);
                     buttonLogInClicked(loginView); // TODO
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            buttonLoginStatus.setText(R.string.login_button_user_confirmed);
-                            buttonLoginStatus.setClickable(false);
-                        }
+                    runOnUiThread(() -> {
+                        buttonLoginStatus.setText(R.string.login_button_user_confirmed);
+                        buttonLoginStatus.setClickable(false);
                     });
                 }
             };
@@ -416,12 +418,9 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         public void onFailure(final Exception exception) {
             Log.d(AWSTAG, "Failed to retrieve the user's details: " + exception);
             final String finalButtonErrorText = getString(R.string.aws_login_error_details);
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    buttonLoginStatus.setText(finalButtonErrorText);
-                    buttonLoginStatus.setAlpha(1);
-                }
+            runOnUiThread(() -> {
+                buttonLoginStatus.setText(finalButtonErrorText);
+                buttonLoginStatus.setAlpha(1);
             });
             handler.postDelayed(failureAnimation, 0);
             handler.postDelayed(resetButton, 3000);
@@ -469,13 +468,10 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
 
         @Override
         public void onTextChanged(CharSequence s, int start, int before, int count) {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    if (codeInput.length() == 0) codeInput.setTypeface(null, Typeface.NORMAL);
-                    else codeInput.setTypeface(null, Typeface.BOLD);
-                    codeViewStatusAnimation(2, 200, "CONFIRM");
-                }
+            runOnUiThread(() -> {
+                if (codeInput.length() == 0) codeInput.setTypeface(null, Typeface.NORMAL);
+                else codeInput.setTypeface(null, Typeface.BOLD);
+                codeViewStatusAnimation(2, 200, "CONFIRM");
             });
         }
 
@@ -493,441 +489,198 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         buttonLoginStatus.setAlpha(0);
         buttonLoginStatus.setClickable(false);
 
-@Override
-public void onSuccess(CognitoUserSession userSession, CognitoDevice newDevice) {
-handler.postDelayed(successAnimation, 0);
-handler.postDelayed(waitAndLaunchMain, 500);
-}
+        username = emailInput.getText().toString();
+        password = passwordInput.getText().toString();
 
-@Override
-public void getAuthenticationDetails(AuthenticationContinuation authenticationContinuation, String userId) {
-Log.d(AWSTAG, "Sign-in: Getting Details");
-AuthenticationDetails authenticationDetails = new AuthenticationDetails(userId, password, null);    // The API needs user sign-in credentials to continue
-authenticationContinuation.setAuthenticationDetails(authenticationDetails);     // Pass the user sign-in credentials to the continuation
-authenticationContinuation.continueTask();  // Allow the sign-in to continue
-}
+        formInput.put(LoginPresenter.EMAIL_INPUT, username);
+        formInput.put(LoginPresenter.PASSWORD_INPUT, password);
 
-@Override
-public void getMFACode(MultiFactorAuthenticationContinuation multiFactorAuthenticationContinuation) {
-Log.d(AWSTAG, "Sign-in: Using multi-factor authentication");
-// multiFactorAuthenticationContinuation.setMfaCode(mfaVerificationCode);
-// multiFactorAuthenticationContinuation.continueTask();
-}
+        boolean validInput = presenter.processFormInput(formInput);
 
-@Override
-public void authenticationChallenge(ChallengeContinuation continuation) {
-Log.d(AWSTAG, "Sign-in Challenge: " + continuation.getChallengeName());
-if (continuation.getChallengeName().contains("NEW_PASSWORD_REQUIRED")) {
-user = userPool.getUser(username);
-showCodeView = true;
-runOnUiThread(new Runnable() {
-@Override
-public void run() {
-buttonLoginStatus.setText(getString(R.string.login_button_error_verify));
-buttonLoginStatus.setClickable(true);
-}
-}); }
-else { runOnUiThread(new Runnable() {
-@Override
-public void run() {
-buttonLoginStatus.setText(getString(R.string.login_button_error_aws_user_exists));
-handler.postDelayed(failureAnimation, 0);
-handler.postDelayed(resetButton, 3000);
-}
-});
-}
-}
+        // Check login with AWS
+        if (validInput & hasInternetConnection) {
+            loginButton.startAnimation();
+            codeInput.setText("");
+            codeViewStatusAnimation(3, 0, "RESEND CODE");
+            userPool.getUser(username).getSessionInBackground(authenticationHandler); // Sign in the user
+        }
+    }
 
-@Override
-public void onFailure(Exception exception) {
-String ex = exception.toString();
-String buttonErrorText;
-Log.d(TAG, "AWS Sign-in Failure: " + ex);
-if (!ex.toLowerCase().contains("cognitointernalerrorexception")) {
-if (ex.toLowerCase().contains("usernotfoundexception")) {
-buttonErrorText = getString(R.string.login_button_user_not_found);
-}
-else if (ex.toLowerCase().contains("user is disabled")) {
-buttonErrorText = getString(R.string.aws_login_error_disabled);
-buttonLoginStatus.setClickable(true);
-}
-else if (ex.toLowerCase().contains("password attempts exceeded")) {
-buttonErrorText = getString(R.string.login_button_error_aws_attempts_exceeded);
-buttonLoginStatus.setClickable(true);
-}
-else if (ex.toLowerCase().contains("incorrect username or password")) {
-buttonErrorText = String.format("%s\n Reset it?", getString(R.string.login_button_error_aws_user_exists));
-buttonLoginStatus.setClickable(true);
-}
-else if (ex.toLowerCase().contains("passwordresetrequiredexception")) {
-buttonErrorText = getString(R.string.login_button_error_aws_new_password);
-//TODO launch reset password dialog
-}
-else if (ex.toLowerCase().contains("usernotconfirmedexception")) {
-buttonErrorText = getString(R.string.login_button_error_verify);
-user = userPool.getUser(username);
-buttonLoginStatus.setClickable(true);
-showCodeView = true;
-}
-else if (ex.toLowerCase().contains("unable to resolve host")) {
-buttonErrorText = getString(R.string.login_button_error_AWS_connection_issue);
-}
-else {
-buttonErrorText = getString(R.string.login_button_error_aws_error);
-}
-final String finalButtonErrorText = buttonErrorText;
-runOnUiThread(new Runnable() {
-@Override
-public void run() {
-buttonLoginStatus.setText(finalButtonErrorText);
-buttonLoginStatus.setAlpha(1);
-}
-});
-}
-handler.postDelayed(failureAnimation, 0);
-handler.postDelayed(resetButton, 3000);
-}
-};
+    public void buttonSignUpClicked(View view) {
+        android.util.Log.d(TAG, "Debug: Login Register Clicked");
+        Intent signUp = new Intent(LoginActivity.this, SignupActivity.class);
+        startActivity(signUp);
+        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+    }
 
-// Handler: Code Confirmation
-GenericHandler confirmCodeHandler = new GenericHandler() {
-@Override
-public void onSuccess() {
-Log.d(AWSTAG, "Code was sent!");
-showCodeView = true;
-final Runnable clearView = new Runnable() {
-public void run() {
-buttonDismissAuthCodeClicked(codeAuthWindow);
-buttonLogInClicked(loginView); // TODO
-runOnUiThread(new Runnable() {
-@Override
-public void run() {
-buttonLoginStatus.setText(R.string.login_button_user_confirmed);
-buttonLoginStatus.setClickable(false);
-}
-});
-}
-};
-Handler viewHandler = new Handler(getBaseContext().getMainLooper());
-codeViewStatusAnimation(0, 200, "CONFIRMED");
-viewHandler.postDelayed(clearView, 2000);
-}
+    public void buttonStatusClicked(View view) {
+        if (buttonLoginStatus.getText().toString().toLowerCase().contains("reset")) {
+            android.util.Log.d(TAG, "Debug: Reset Password Clicked");
+            // TODO Create in page activity to prompt that password reset has been sent to user
+            // use ForgotPassword API and then create a password using the delivered code
+            // by calling ConfirmForgotPassword API before they sign in
+        } else showCodeAuthorizationView();
+    }
 
-@SuppressLint("SetTextI18n")
-@Override
-public void onFailure(Exception exception) {
-String ex = exception.toString();
-String buttonErrorText;
-Log.d(AWSTAG, "AWS Code Authentication Failure: " + ex);
-if (ex.toLowerCase().contains("codemismatchexception")) {
-buttonErrorText = getString(R.string.login_button_error_aws_code_error_incorrect);
-}
-else if (ex.toLowerCase().contains("limitexceededexception")) {
-buttonErrorText = getString(R.string.login_button_error_aws_code_error_limit);
-}
-else {
-buttonErrorText = getString(R.string.login_button_error_aws_code_error_default);
-}
-codeViewStatusAnimation(1, 200, buttonErrorText.toUpperCase());
-codeViewErrorAnimation();
-}
-};
+    public void buttonConfirmCodeClicked(View view) {
+        android.util.Log.d(TAG, "Debug: Confirm Code Button Pressed");
+        codeInput.clearFocus();
+        if (buttonCode.getText().toString().toLowerCase().contains("confirm")) {
+            new Thread(() -> user.confirmSignUp(codeInput.getText().toString(), true, confirmCodeHandler)).start(); }
+        else if (buttonCode.getText().toString().toLowerCase().contains("resend")) {
+            new Thread(() -> user.resendConfirmationCode(resendConfirmationCodeHandler)).start();
+        }
+    }
 
-// Handler: Resend Confirmation Code
-VerificationHandler resendConfirmationCodeHandler = new VerificationHandler() {
-@Override
-public void onSuccess(CognitoUserCodeDeliveryDetails verificationCodeDeliveryMedium) {
-Log.d(AWSTAG, "Resend Code Successful");
-codeViewStatusAnimation(0, 200, "CODE SENT");
-}
+    public void buttonDismissAuthCodeClicked(View view) {
+        hideKeyboard(view);
+        showCodeView = false;
+        buttonDismissCodeView.setClickable(false);
+        runOnUiThread(() -> codeViewShowAnimation(false, 100));
+    }
 
-@Override
-public void onFailure(Exception ex) {
-String showErr;
-Log.d(AWSTAG, "Resend Code Failure: " + ex);
-if (ex.toString().toLowerCase().contains("limitexceededexception"))
-showErr = "ATTEMPT LIMIT EXCEEDED";
-else showErr = "ISSUE SENDING CODE";
-codeViewStatusAnimation(1, 200, showErr);
-}
-};
+    public void showCodeAuthorizationView() {
+        buttonDismissCodeView.setClickable(true);
+        runOnUiThread(() -> {
+            Bitmap backgroundCapture = takeScreenshot();
+            backgroundBlur.setImageBitmap(new BlurUtils().blur(LoginActivity.this, backgroundCapture, 25f));
+            codeViewShowAnimation(true, 250);
+        });
+    }
 
+    private Bitmap takeScreenshot() {
+        try {
+            View screen = getWindow().getDecorView().getRootView();
+            screen.setDrawingCacheEnabled(true);
+            return Bitmap.createBitmap(screen.getDrawingCache()); }
+        catch (Throwable e) {
+            e.printStackTrace();
+            return null; }
+    }
 
-private TextWatcher emailListener = new TextWatcher() {
-@Override
-public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-}
+    /**
+     * Hides the keyboard
+     * REF: https://stackoverflow.com/questions/1109022/close-hide-the-android-soft-keyboard#
+     */
+    private void hideKeyboard(View v) {
+        if (v != null) {
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(v.getWindowToken(), 0); }
+    }
 
-@Override
-public void onTextChanged(CharSequence s, int start, int before, int count) {
-int charCount = emailInput.getText().length();
-if (charCount > emailCharCount + 1) passwordInput.requestFocus();
-emailCharCount = charCount;
-presenter.emailTextAdded();
-}
+    private void codeViewShowAnimation(Boolean show, int duration) {
+        AnimationSet animations = new AnimationSet(false);
+        animations.setRepeatMode(0);
 
-@Override
-public void afterTextChanged(Editable s) {
-}
-};
+        if (show) {
+            codeView.setVisibility(View.VISIBLE);
+            AlphaAnimation fadeInAni = new AlphaAnimation(0.0f, 1.0f);
+            fadeInAni.setInterpolator(new AccelerateInterpolator());
+            fadeInAni.setDuration(duration);
+            animations.addAnimation(fadeInAni);
 
-private TextWatcher passwordListener = new TextWatcher() {
-@Override
-public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-}
+            Animation scaleInAni = new ScaleAnimation(0.97f, 1f, 0.97f, 1f, codeAuthWindow.getWidth() / 2f, codeAuthWindow.getHeight() / 2f);
+            scaleInAni.setDuration(1000);
+            scaleInAni.setInterpolator(new DecelerateInterpolator());
+            codeAuthWindow.startAnimation(scaleInAni); }
+        else {
+            AlphaAnimation fadeOutAni = new AlphaAnimation(1.0f, 0.0f);
+            fadeOutAni.setInterpolator(new AccelerateInterpolator());
+            fadeOutAni.setDuration(duration);
+            fadeOutAni.setAnimationListener(new Animation.AnimationListener() {
+                @Override
+                public void onAnimationStart(Animation animation) { }
 
-@Override
-public void onTextChanged(CharSequence s, int start, int before, int count) {
-presenter.passwordTextAdded();
-}
+                @Override
+                public void onAnimationEnd(Animation animation) {
+                    codeView.setVisibility(View.INVISIBLE); }
 
-@Override
-public void afterTextChanged(Editable s) {
-}
-};
+                @Override
+                public void onAnimationRepeat(Animation animation) { }
+            });
+            animations.addAnimation(fadeOutAni);
 
-private TextWatcher codeListener = new TextWatcher() {
-@Override
-public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-}
+            Animation scaleOutAni = new ScaleAnimation(1f, 0.97f, 1f, 0.97f, codeAuthWindow.getWidth() / 2f, codeAuthWindow.getHeight() / 2f);
+            scaleOutAni.setDuration(duration);
+            scaleOutAni.setInterpolator(new AccelerateDecelerateInterpolator());
+            codeAuthWindow.startAnimation(scaleOutAni); }
+        codeView.startAnimation(animations);
+    }
 
-@Override
-public void onTextChanged(CharSequence s, int start, int before, int count) {
-runOnUiThread(new Runnable() {
-@Override
-public void run() {
-if (codeInput.length() == 0) codeInput.setTypeface(null, Typeface.NORMAL);
-else codeInput.setTypeface(null, Typeface.BOLD);
-codeViewStatusAnimation(2, 200, "CONFIRM");
-}
-});
-}
+    private void codeViewStatusAnimation(int status, final int duration, final String buttonText) {
+        final TransitionDrawable backgroundTransition, buttonTransition;
+        final boolean reverse;
 
-@Override
-public void afterTextChanged(Editable s) {
-}
-};
+        if (status == 1) { // FAILURE
+            reverse = false;
+            buttonTransition = (TransitionDrawable) ContextCompat.getDrawable(this, R.drawable.code_authorization_button_fail_animation);
+            backgroundTransition = (TransitionDrawable) ContextCompat.getDrawable(this, R.drawable.code_authorization_fail_animation); }
+        else {  // RESET
+            reverse = status > 1;
+            buttonTransition = (TransitionDrawable) ContextCompat.getDrawable(this, R.drawable.code_authorization_button_success_animation);
+            backgroundTransition = (TransitionDrawable) ContextCompat.getDrawable(this, R.drawable.code_authorization_success_animation); }
 
+        runOnUiThread(() -> {
+            buttonCode.setText(buttonText);
+            buttonCodeBackground.setImageDrawable(buttonTransition);
+            codeBackground.setImageDrawable(backgroundTransition);
+            if (reverse) {
+                buttonCode.setTextColor(getColor(R.color.button_verification_text));
+                Objects.requireNonNull(buttonTransition).resetTransition();
+                Objects.requireNonNull(backgroundTransition).resetTransition();
 
-public void buttonLogInClicked(View view) {
-android.util.Log.d(TAG, "Debug: Login Button Clicked");
-HashMap<String, String> formInput = new HashMap<>();
-emailInput.clearFocus();
-passwordInput.clearFocus();
-buttonLoginStatus.setAlpha(0);
-buttonLoginStatus.setClickable(false);
+                Handler handler = new Handler(getBaseContext().getMainLooper());
+                final Runnable resetButton = new Runnable() {
+                    public void run() {
+                        buttonCode.setBackgroundResource(R.drawable.rounded_button_animation); }};
+                handler.postDelayed(resetButton, duration); }
+            else {
+                buttonCode.setTextColor(Color.WHITE);
+                buttonCode.setBackgroundResource(0);
+                Objects.requireNonNull(buttonTransition).startTransition(duration);
+                Objects.requireNonNull(backgroundTransition).startTransition(duration); }
+        });
+    }
 
-username = emailInput.getText().toString();
-password = passwordInput.getText().toString();
+    private void codeViewErrorAnimation() {
+        Animation shakeViewAni = AnimationUtils.loadAnimation(this, R.anim.shake_horizontally);
+        codeAuthWindow.startAnimation(shakeViewAni);
+    }
 
-formInput.put(LoginPresenter.EMAIL_INPUT, username);
-formInput.put(LoginPresenter.PASSWORD_INPUT, password);
+    private void activityStartingAnimation() {
+        Animation fadeIn, logoStart, emailFieldAni, passwordFieldAni, newUserAni, signUpAni, statusAni, buttonAni;
+        int fieldOffset, fieldOffsetPlus;
 
-boolean validInput = presenter.processFormInput(formInput);
+        fieldOffset = 500;
+        fieldOffsetPlus = 85;
 
-// Check login with AWS
-if (validInput & hasInternetConnection) {
-loginButton.startAnimation();
-codeInput.setText("");
-codeViewStatusAnimation(3, 0, "RESEND CODE");
-userPool.getUser(username).getSessionInBackground(authenticationHandler); // Sign in the user
-}
-}
+        fadeIn = new AlphaAnimation(0.0f, 1.0f);
+        fadeIn.setDuration(100);
+        fadeIn.setStartOffset(900);
 
-public void buttonSignUpClicked(View view) {
-android.util.Log.d(TAG, "Debug: Login Register Clicked");
-Intent signUp = new Intent(LoginActivity.this, SignupActivity.class);
-startActivity(signUp);
-overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
-}
+        logoStart = AnimationUtils.loadAnimation(this, R.anim.logo_start_animation);
+        emailFieldAni = AnimationUtils.loadAnimation(this, R.anim.fade_move_up_animation);
+        passwordFieldAni = AnimationUtils.loadAnimation(this, R.anim.fade_move_up_animation);
+        newUserAni = AnimationUtils.loadAnimation(this, R.anim.fade_move_up_animation);
+        signUpAni = AnimationUtils.loadAnimation(this, R.anim.fade_move_up_animation);
+        statusAni = AnimationUtils.loadAnimation(this, R.anim.fade_move_up_animation);
+        buttonAni = AnimationUtils.loadAnimation(this, R.anim.fade_move_up_animation);
 
-public void buttonStatusClicked(View view) {
-if (buttonLoginStatus.getText().toString().toLowerCase().contains("reset")) {
-android.util.Log.d(TAG, "Debug: Reset Password Clicked");
-// TODO Create in page activity to prompt that password reset has been sent to user
-// use ForgotPassword API and then create a password using the delivered code
-// by calling ConfirmForgotPassword API before they sign in
-} else showCodeAuthorizationView();
-}
+        emailFieldAni.setStartOffset(fieldOffset + fieldOffsetPlus*2);
+        passwordFieldAni.setStartOffset(fieldOffset + fieldOffsetPlus*3);
+        newUserAni.setStartOffset(fieldOffset + fieldOffsetPlus*4);
+        signUpAni.setStartOffset(fieldOffset + fieldOffsetPlus*4);
+        statusAni.setStartOffset(fieldOffset + fieldOffsetPlus*5);
+        buttonAni.setStartOffset(fieldOffset + fieldOffsetPlus*6);
 
-public void buttonConfirmCodeClicked(View view) {
-android.util.Log.d(TAG, "Debug: Confirm Code Button Pressed");
-codeInput.clearFocus();
-if (buttonCode.getText().toString().toLowerCase().contains("confirm")) {
-new Thread(new Runnable() {
-public void run() {
-user.confirmSignUp(codeInput.getText().toString(), true, confirmCodeHandler);
-}
-}).start();
-} else if (buttonCode.getText().toString().toLowerCase().contains("resend")) {
-new Thread(new Runnable() {
-public void run() {
-user.resendConfirmationCode(resendConfirmationCodeHandler);
-}
-}).start();
-}
-}
+        appLogo.startAnimation(logoStart);
+        appTitle.startAnimation(fadeIn);
+        emailField.startAnimation(emailFieldAni);
+        passwordField.startAnimation(passwordFieldAni);
+        textNewUser.startAnimation(newUserAni);
+        buttonSignUp.startAnimation(signUpAni);
+        buttonLoginStatus.startAnimation(statusAni);
+        loginButton.startAnimation(buttonAni);
 
-public void buttonDismissAuthCodeClicked(View view) {
-hideKeyboard(view);
-showCodeView = false;
-buttonDismissCodeView.setClickable(false);
-runOnUiThread(new Runnable() {
-@Override
-public void run() {
-codeViewShowAnimation(false, 100);
-}
-});
-}
-
-public void showCodeAuthorizationView() {
-buttonDismissCodeView.setClickable(true);
-runOnUiThread(new Runnable() {
-@Override
-public void run() {
-Bitmap backgroundCapture = takeScreenshot();
-backgroundBlur.setImageBitmap(new BlurUtils().blur(LoginActivity.this, backgroundCapture, 25f));
-codeViewShowAnimation(true, 250);
-}
-});
-}
-
-private Bitmap takeScreenshot() {
-try {
-View screen = getWindow().getDecorView().getRootView();
-screen.setDrawingCacheEnabled(true);
-return Bitmap.createBitmap(screen.getDrawingCache()); }
-catch (Throwable e) {
-e.printStackTrace();
-return null; }
-}
-
-/**
- * Hides the keyboard
- * REF: https://stackoverflow.com/questions/1109022/close-hide-the-android-soft-keyboard#
- */
-private void hideKeyboard(View v) {
-if (v != null) {
-InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-imm.hideSoftInputFromWindow(v.getWindowToken(), 0); }
-}
-
-private void codeViewShowAnimation(Boolean show, int duration) {
-AnimationSet animations = new AnimationSet(false);
-animations.setRepeatMode(0);
-
-if (show) {
-codeView.setVisibility(View.VISIBLE);
-AlphaAnimation fadeInAni = new AlphaAnimation(0.0f, 1.0f);
-fadeInAni.setInterpolator(new AccelerateInterpolator());
-fadeInAni.setDuration(duration);
-animations.addAnimation(fadeInAni);
-
-Animation scaleInAni = new ScaleAnimation(0.97f, 1f, 0.97f, 1f, codeAuthWindow.getWidth() / 2f, codeAuthWindow.getHeight() / 2f);
-scaleInAni.setDuration(1000);
-scaleInAni.setInterpolator(new DecelerateInterpolator());
-codeAuthWindow.startAnimation(scaleInAni); }
-else {
-AlphaAnimation fadeOutAni = new AlphaAnimation(1.0f, 0.0f);
-fadeOutAni.setInterpolator(new AccelerateInterpolator());
-fadeOutAni.setDuration(duration);
-fadeOutAni.setAnimationListener(new Animation.AnimationListener() {
-@Override
-public void onAnimationStart(Animation animation) { }
-
-@Override
-public void onAnimationEnd(Animation animation) {
-codeView.setVisibility(View.INVISIBLE); }
-
-@Override
-public void onAnimationRepeat(Animation animation) { }
-});
-animations.addAnimation(fadeOutAni);
-
-Animation scaleOutAni = new ScaleAnimation(1f, 0.97f, 1f, 0.97f, codeAuthWindow.getWidth() / 2f, codeAuthWindow.getHeight() / 2f);
-scaleOutAni.setDuration(duration);
-scaleOutAni.setInterpolator(new AccelerateDecelerateInterpolator());
-codeAuthWindow.startAnimation(scaleOutAni); }
-codeView.startAnimation(animations);
-}
-
-private void codeViewStatusAnimation(int status, final int duration, final String buttonText) {
-final TransitionDrawable backgroundTransition, buttonTransition;
-final boolean reverse;
-
-if (status == 1) { // FAILURE
-reverse = false;
-buttonTransition = (TransitionDrawable) ContextCompat.getDrawable(this, R.drawable.code_authorization_button_fail_animation);
-backgroundTransition = (TransitionDrawable) ContextCompat.getDrawable(this, R.drawable.code_authorization_fail_animation); }
-else {  // RESET
-reverse = status > 1;
-buttonTransition = (TransitionDrawable) ContextCompat.getDrawable(this, R.drawable.code_authorization_button_success_animation);
-backgroundTransition = (TransitionDrawable) ContextCompat.getDrawable(this, R.drawable.code_authorization_success_animation); }
-
-runOnUiThread(new Runnable() {
-@Override
-public void run() {
-buttonCode.setText(buttonText);
-buttonCodeBackground.setImageDrawable(buttonTransition);
-codeBackground.setImageDrawable(backgroundTransition);
-if (reverse) {
-buttonCode.setTextColor(getColor(R.color.button_verification_text));
-Objects.requireNonNull(buttonTransition).resetTransition();
-Objects.requireNonNull(backgroundTransition).resetTransition();
-
-Handler handler = new Handler(getBaseContext().getMainLooper());
-final Runnable resetButton = new Runnable() {
-public void run() {
-buttonCode.setBackgroundResource(R.drawable.rounded_button_animation); }};
-handler.postDelayed(resetButton, duration); }
-else {
-buttonCode.setTextColor(Color.WHITE);
-buttonCode.setBackgroundResource(0);
-Objects.requireNonNull(buttonTransition).startTransition(duration);
-Objects.requireNonNull(backgroundTransition).startTransition(duration); }
-}
-});
-}
-
-private void codeViewErrorAnimation() {
-Animation shakeViewAni = AnimationUtils.loadAnimation(this, R.anim.shake_horizontally);
-codeAuthWindow.startAnimation(shakeViewAni);
-}
-
-private void activityStartingAnimation() {
-Animation fadeIn, logoStart, emailFieldAni, passwordFieldAni, newUserAni, signUpAni, statusAni, buttonAni;
-int fieldOffset, fieldOffsetPlus;
-
-fieldOffset = 500;
-fieldOffsetPlus = 85;
-
-fadeIn = new AlphaAnimation(0.0f, 1.0f);
-fadeIn.setDuration(100);
-fadeIn.setStartOffset(900);
-
-logoStart = AnimationUtils.loadAnimation(this, R.anim.logo_start_animation);
-emailFieldAni = AnimationUtils.loadAnimation(this, R.anim.fade_move_up_animation);
-passwordFieldAni = AnimationUtils.loadAnimation(this, R.anim.fade_move_up_animation);
-newUserAni = AnimationUtils.loadAnimation(this, R.anim.fade_move_up_animation);
-signUpAni = AnimationUtils.loadAnimation(this, R.anim.fade_move_up_animation);
-statusAni = AnimationUtils.loadAnimation(this, R.anim.fade_move_up_animation);
-buttonAni = AnimationUtils.loadAnimation(this, R.anim.fade_move_up_animation);
-
-emailFieldAni.setStartOffset(fieldOffset + fieldOffsetPlus*2);
-passwordFieldAni.setStartOffset(fieldOffset + fieldOffsetPlus*3);
-newUserAni.setStartOffset(fieldOffset + fieldOffsetPlus*4);
-signUpAni.setStartOffset(fieldOffset + fieldOffsetPlus*4);
-statusAni.setStartOffset(fieldOffset + fieldOffsetPlus*5);
-buttonAni.setStartOffset(fieldOffset + fieldOffsetPlus*6);
-
-appLogo.startAnimation(logoStart);
-appTitle.startAnimation(fadeIn);
-emailField.startAnimation(emailFieldAni);
-passwordField.startAnimation(passwordFieldAni);
-textNewUser.startAnimation(newUserAni);
-buttonSignUp.startAnimation(signUpAni);
-buttonLoginStatus.startAnimation(statusAni);
-loginButton.startAnimation(buttonAni);
-
-}
+    }
 }
