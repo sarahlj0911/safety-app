@@ -25,6 +25,7 @@ public class LoginPresenter implements LoginContract.Presenter {
 
         // Code section by Robert Beerman
         String email = formInput.get(EMAIL_INPUT);
+
         if (email != null) {
             if (isEmpty(email)) {
                 view.displayNoEmailError(true);
@@ -43,6 +44,7 @@ public class LoginPresenter implements LoginContract.Presenter {
                 isValidInput = false; }
             else { view.displayNoPasswordError(false); }
         }
+
         return isValidInput;
     }
 

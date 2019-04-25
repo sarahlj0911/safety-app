@@ -41,7 +41,7 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
-@Database(entities = {Location.class, Question.class, QuestionMapping.class, Response.class, School.class, User.class, Walkthrough.class}, version = 3)
+@Database(entities = {Location.class, Question.class, QuestionMapping.class, Response.class, School.class, User.class, Walkthrough.class}, version = 4)
 public abstract class AppDatabase extends RoomDatabase {
 
     private static AppDatabase INSTANCE;
@@ -122,7 +122,7 @@ public abstract class AppDatabase extends RoomDatabase {
                                 }
                             }
                         })
-                        .addMigrations(MIGRATION_2_3)
+                        .addMigrations(MIGRATION_2_3).allowMainThreadQueries()
                         .build();
 
             }

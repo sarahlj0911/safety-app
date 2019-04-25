@@ -184,6 +184,7 @@
     <string name="code_authorization_confirmed">CONFIRMED</string>
     <string name="sign_up_title">Create Your Account</string>
     <string name="aws_login_error_disabled">Your Account Has Been Disabled</string>
+    <string name="aws_login_error_details">Unable to load your account.\nTry again…</string>
 
     <string name="delete_user">delete user</string>
     <string name="add_user">add user</string>
@@ -204,6 +205,15 @@
 
     <string name="user_not_found">User not found</string>
     <string name="path_database">/data/data/com.plusmobileapps.safetyapp/databases/</string>
+    <string name="export">Export</string>
+    <string name="action_items">Action Items</string>
+    <string name="walkthrough_comments">Walkthough Comments</string>
+    <string name="photos">Photos</string>
+    <string name="please_select_which_items_to_include_in_your_report">Please select which items to include in your report</string>
+    <string name="test_data_will_appear_here">testdatawillappearhere</string>
+    <string name="export_action_plan">Export Action Plan</string>
+    <string name="Return">Return</string>
+    <string name="Print">Print</string>
 
 
 </resources>

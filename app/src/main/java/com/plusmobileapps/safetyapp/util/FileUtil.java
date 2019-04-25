@@ -37,8 +37,13 @@ import java.nio.file.Path;
 public class FileUtil {
     public static boolean deleteDb(Context context) {
         File file = new File("/data/data/com.plusmobileapps.safetyapp/databases/appDB.db");
+        File shm = new File("/data/data/com.plusmobileapps.safetyapp/databases/appDB.db-shm");
+        File wal = new File("/data/data/com.plusmobileapps.safetyapp/databases/appDB.db-wal");
+
         if(file.exists())
             file.delete();
+            shm.delete();
+            wal.delete();
 
         String s = "@@@" +  context.getDatabasePath("appDB");
 
@@ -59,10 +64,9 @@ public class FileUtil {
                         .s3Client(new AmazonS3Client(AWSMobileClient.getInstance().getCredentialsProvider()))
                         .build();
         try {
-            File localFile = new File("/data/data/com.plusmobileapps.safetyapp/databases/appDB1.db");
+            File localFile = new File(path);
 
 
-            Log.d("YourActivity", localFile.getPath());
 
             TransferObserver downloadObserver =
                     transferUtility.download(file, localFile);
@@ -75,6 +79,7 @@ public class FileUtil {
                 public void onStateChanged(int id, TransferState state) {
                     if (TransferState.COMPLETED == state) {
                         // Handle a completed upload.
+                        Log.d("YourActivity", "download complete");
                     }
                 }
 
@@ -89,6 +94,7 @@ public class FileUtil {
                 @Override
                 public void onError(int id, Exception ex) {
                     // Handle errors
+                    Log.d("YourActivity", ex.toString());
                 }
 
             });
@@ -142,6 +148,8 @@ public class FileUtil {
         // listener, check for the state and progress in the observer.
         if (TransferState.COMPLETED == uploadObserver.getState()) {
             // Handle a completed upload.
+            Log.d("YourActivity", "Upload Complete");
+
         }
 
         Log.d("YourActivity", "Bytes Transferrred: " + uploadObserver.getBytesTransferred());
@@ -149,5 +157,3 @@ public class FileUtil {
     }
 
 }
-
-

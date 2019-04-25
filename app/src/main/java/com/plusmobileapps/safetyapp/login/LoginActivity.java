@@ -36,9 +36,13 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.amazonaws.mobile.client.AWSMobileClient;
+import com.amazonaws.mobile.client.AWSStartupHandler;
+import com.amazonaws.mobile.client.AWSStartupResult;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoDevice;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUser;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUserCodeDeliveryDetails;
+import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUserDetails;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUserPool;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUserSession;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.continuations.AuthenticationContinuation;
@@ -47,12 +51,14 @@ import com.amazonaws.mobileconnectors.cognitoidentityprovider.continuations.Chal
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.continuations.MultiFactorAuthenticationContinuation;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.handlers.AuthenticationHandler;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.handlers.GenericHandler;
+import com.amazonaws.mobileconnectors.cognitoidentityprovider.handlers.GetDetailsHandler;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.handlers.VerificationHandler;
 import com.plusmobileapps.safetyapp.AwsServices;
 import com.plusmobileapps.safetyapp.BlurUtils;
 import com.plusmobileapps.safetyapp.R;
 import com.plusmobileapps.safetyapp.main.MainActivity;
 import com.plusmobileapps.safetyapp.signup.SignupActivity;
+import com.plusmobileapps.safetyapp.util.FileUtil;
 
 import java.util.HashMap;
 import java.util.Objects;
@@ -67,7 +73,7 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
     private View codeAuthWindow, codeView, loginView;
     private Handler handler;
     private LoginContract.Presenter presenter;
-    private String username, password;
+    private String username, password, userName, userRole, userSchool, Email;
     private TextView appTitle, textNewUser;
     private ImageView backgroundBlur, codeBackground, buttonCodeBackground, appLogo;
     private Button buttonLoginStatus, buttonDismissCodeView, buttonCode, buttonSignUp;
@@ -79,9 +85,32 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
     // AWS
     private CognitoUserPool userPool;
     private CognitoUser user;
-    
-    
-    @Override
+  
+    // Login Button Animations
+    final Runnable resetButton = new Runnable() {
+        public void run() {
+            loginButton.revertAnimation();
+        }
+    };
+    final Runnable waitAndLaunchMain = new Runnable() {
+        public void run() {
+            launchHomeScreen();
+        }
+    };
+    final Runnable successAnimation = new Runnable() {
+        public void run() {
+            loginButton.doneLoadingAnimation(Color.parseColor("#ffffff"), BitmapFactory.decodeResource(getResources(), R.drawable.login_button_confirmed));
+        }
+    };
+    final Runnable failureAnimation = new Runnable() {
+        public void run() {
+            if (showCodeView) showCodeAuthorizationView();
+            loginButton.doneLoadingAnimation(Color.parseColor("#ffffff"), BitmapFactory.decodeResource(getResources(), R.drawable.login_button_failed));
+        }
+    };
+
+
+  @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         presenter = new LoginPresenter(this);
@@ -124,6 +153,15 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         buttonLoginStatus.setClickable(false);
         
         userPool = new AwsServices().initAWSUserPool(this);
+
+        AWSMobileClient.getInstance().initialize(this, new AWSStartupHandler() {
+            @Override
+            public void onComplete(AWSStartupResult awsStartupResult) {
+            }
+        }).execute();
+        FileUtil.download(this, "schools.json", "/data/data/com.plusmobileapps.safetyapp/databases/schools.json");
+
+
     }
     
     @Override
@@ -164,7 +202,12 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         //        PrefManager prefManager = new PrefManager(this);
         //        prefManager.setIsUserSignedUp(true);
         Intent mainActivity = new Intent(LoginActivity.this, MainActivity.class);
+        mainActivity.putExtra("activity", "from login");
         mainActivity.putExtra("email", username);
+        mainActivity.putExtra("name", userName);
+        mainActivity.putExtra("role", userRole);
+        mainActivity.putExtra("school", userSchool);
+        Log.d(TAG,"Sending Info to main activity "+userName+" "+username+" "+userRole+" "+userSchool);
         startActivity(mainActivity);
         overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
         finish();
@@ -190,32 +233,265 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         passwordField.setError(getString(R.string.error_password_none));
         passwordField.setErrorEnabled(show);
     }
-    
-    
+
+
     // Handler: Login User
     AuthenticationHandler authenticationHandler = new AuthenticationHandler() {
-    // Button Animations
-    final Runnable waitAndLaunchMain = new Runnable() {
-    public void run() {
-    launchHomeScreen();
-}
-};
-final Runnable resetButton = new Runnable() {
-public void run() {
-loginButton.revertAnimation();
-}
-};
-final Runnable successAnimation = new Runnable() {
-public void run() {
-loginButton.doneLoadingAnimation(Color.parseColor("#ffffff"), BitmapFactory.decodeResource(getResources(), R.drawable.login_button_confirmed));
-}
-};
-final Runnable failureAnimation = new Runnable() {
-public void run() {
-if (showCodeView) showCodeAuthorizationView();
-loginButton.doneLoadingAnimation(Color.parseColor("#ffffff"), BitmapFactory.decodeResource(getResources(), R.drawable.login_button_failed));
-}
-};
+        @Override
+        public void onSuccess(CognitoUserSession userSession, CognitoDevice newDevice) {
+            Log.d(AWSTAG, "Login successful");
+            user = userPool.getUser(username);
+            user.getDetailsInBackground(getUserDetailsHandler);
+        }
+
+        @Override
+        public void getAuthenticationDetails(AuthenticationContinuation authenticationContinuation, String userId) {
+            Log.d(AWSTAG, "Sign-in: Getting Details");
+            AuthenticationDetails authenticationDetails = new AuthenticationDetails(userId, password, null);    // The API needs user sign-in credentials to continue
+            authenticationContinuation.setAuthenticationDetails(authenticationDetails);     // Pass the user sign-in credentials to the continuation
+            authenticationContinuation.continueTask();  // Allow the sign-in to continue
+        }
+
+        @Override
+        public void getMFACode(MultiFactorAuthenticationContinuation multiFactorAuthenticationContinuation) {
+            Log.d(AWSTAG, "Sign-in: Using multi-factor authentication");
+            // multiFactorAuthenticationContinuation.setMfaCode(mfaVerificationCode);
+            // multiFactorAuthenticationContinuation.continueTask();
+        }
+
+        @Override
+        public void authenticationChallenge(ChallengeContinuation continuation) {
+            Log.d(AWSTAG, "Sign-in Challenge: " + continuation.getChallengeName());
+            if (continuation.getChallengeName().contains("NEW_PASSWORD_REQUIRED")) {
+                user = userPool.getUser(username);
+                showCodeView = true;
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        buttonLoginStatus.setText(getString(R.string.login_button_error_verify));
+                        buttonLoginStatus.setClickable(true);
+                    }
+                }); }
+            else { runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    buttonLoginStatus.setText(getString(R.string.login_button_error_aws_user_exists));
+                    handler.postDelayed(failureAnimation, 0);
+                    handler.postDelayed(resetButton, 3000);
+                }
+            });
+            }
+        }
+
+        @Override
+        public void onFailure(Exception exception) {
+            String ex = exception.toString();
+            String buttonErrorText;
+            Log.d(TAG, "AWS Sign-in Failure: " + ex);
+            if (!ex.toLowerCase().contains("cognitointernalerrorexception")) {
+                if (ex.toLowerCase().contains("usernotfoundexception")) {
+                    buttonErrorText = getString(R.string.login_button_user_not_found);
+                }
+                else if (ex.toLowerCase().contains("user is disabled")) {
+                    buttonErrorText = getString(R.string.aws_login_error_disabled);
+                    buttonLoginStatus.setClickable(true);
+                }
+                else if (ex.toLowerCase().contains("password attempts exceeded")) {
+                    buttonErrorText = getString(R.string.login_button_error_aws_attempts_exceeded);
+                    buttonLoginStatus.setClickable(true);
+                }
+                else if (ex.toLowerCase().contains("incorrect username or password")) {
+                    buttonErrorText = String.format("%s\n Reset it?", getString(R.string.login_button_error_aws_user_exists));
+                    buttonLoginStatus.setClickable(true);
+                }
+                else if (ex.toLowerCase().contains("passwordresetrequiredexception")) {
+                    buttonErrorText = getString(R.string.login_button_error_aws_new_password);
+                    //TODO launch reset password dialog
+                }
+                else if (ex.toLowerCase().contains("usernotconfirmedexception")) {
+                    buttonErrorText = getString(R.string.login_button_error_verify);
+                    user = userPool.getUser(username);
+                    buttonLoginStatus.setClickable(true);
+                    showCodeView = true;
+                }
+                else if (ex.toLowerCase().contains("unable to resolve host")) {
+                    buttonErrorText = getString(R.string.login_button_error_AWS_connection_issue);
+                }
+                else {
+                    buttonErrorText = getString(R.string.login_button_error_aws_error);
+                }
+                final String finalButtonErrorText = buttonErrorText;
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        buttonLoginStatus.setText(finalButtonErrorText);
+                        buttonLoginStatus.setAlpha(1);
+                    }
+                });
+            }
+            handler.postDelayed(failureAnimation, 0);
+            handler.postDelayed(resetButton, 3000);
+        }
+    };
+
+    // Handler: Code Confirmation
+    GenericHandler confirmCodeHandler = new GenericHandler() {
+        @Override
+        public void onSuccess() {
+            Log.d(AWSTAG, "Code was sent!");
+            showCodeView = true;
+            final Runnable clearView = new Runnable() {
+                public void run() {
+                    buttonDismissAuthCodeClicked(codeAuthWindow);
+                    buttonLogInClicked(loginView); // TODO
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            buttonLoginStatus.setText(R.string.login_button_user_confirmed);
+                            buttonLoginStatus.setClickable(false);
+                        }
+                    });
+                }
+            };
+            Handler viewHandler = new Handler(getBaseContext().getMainLooper());
+            codeViewStatusAnimation(0, 200, "CONFIRMED");
+            viewHandler.postDelayed(clearView, 2000);
+        }
+
+        @SuppressLint("SetTextI18n")
+        @Override
+        public void onFailure(Exception exception) {
+            String ex = exception.toString();
+            String buttonErrorText;
+            Log.d(AWSTAG, "AWS Code Authentication Failure: " + ex);
+            if (ex.toLowerCase().contains("codemismatchexception")) {
+                buttonErrorText = getString(R.string.login_button_error_aws_code_error_incorrect);
+            }
+            else if (ex.toLowerCase().contains("limitexceededexception")) {
+                buttonErrorText = getString(R.string.login_button_error_aws_code_error_limit);
+            }
+            else {
+                buttonErrorText = getString(R.string.login_button_error_aws_code_error_default);
+            }
+            codeViewStatusAnimation(1, 200, buttonErrorText.toUpperCase());
+            codeViewErrorAnimation();
+        }
+    };
+
+    // Handler: Resend Confirmation Code
+    VerificationHandler resendConfirmationCodeHandler = new VerificationHandler() {
+        @Override
+        public void onSuccess(CognitoUserCodeDeliveryDetails verificationCodeDeliveryMedium) {
+            Log.d(AWSTAG, "Resend Code Successful");
+            codeViewStatusAnimation(0, 200, "CODE SENT");
+        }
+
+        @Override
+        public void onFailure(Exception ex) {
+            String showErr;
+            Log.d(AWSTAG, "Resend Code Failure: " + ex);
+            if (ex.toString().toLowerCase().contains("limitexceededexception"))
+                showErr = "ATTEMPT LIMIT EXCEEDED";
+            else showErr = "ISSUE SENDING CODE";
+            codeViewStatusAnimation(1, 200, showErr);
+        }
+    };
+
+    // Handler: Get User Details
+    GetDetailsHandler getUserDetailsHandler = new GetDetailsHandler() {
+        @Override
+        public void onSuccess(final CognitoUserDetails list) {
+            // Successfully retrieved user details
+            userName = list.getAttributes().getAttributes().get("name");
+            userRole = list.getAttributes().getAttributes().get("custom:role");
+            userSchool = list.getAttributes().getAttributes().get("custom:school");
+
+            Log.d(AWSTAG, "Successfully loaded " +userName+ " as role " +userRole+ " at school " +userSchool);
+
+            handler.postDelayed(successAnimation, 0);
+            handler.postDelayed(waitAndLaunchMain, 300);
+        }
+
+        @Override
+        public void onFailure(final Exception exception) {
+            Log.d(AWSTAG, "Failed to retrieve the user's details: " + exception);
+            final String finalButtonErrorText = getString(R.string.aws_login_error_details);
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    buttonLoginStatus.setText(finalButtonErrorText);
+                    buttonLoginStatus.setAlpha(1);
+                }
+            });
+            handler.postDelayed(failureAnimation, 0);
+            handler.postDelayed(resetButton, 3000);
+        }
+    };
+
+
+    private TextWatcher emailListener = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+            int charCount = emailInput.getText().length();
+            if (charCount > emailCharCount + 1) passwordInput.requestFocus();
+            emailCharCount = charCount;
+            presenter.emailTextAdded();
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+        }
+    };
+
+    private TextWatcher passwordListener = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+            presenter.passwordTextAdded();
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+        }
+    };
+
+    private TextWatcher codeListener = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    if (codeInput.length() == 0) codeInput.setTypeface(null, Typeface.NORMAL);
+                    else codeInput.setTypeface(null, Typeface.BOLD);
+                    codeViewStatusAnimation(2, 200, "CONFIRM");
+                }
+            });
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+        }
+    };
+
+
+    public void buttonLogInClicked(View view) {
+        android.util.Log.d(TAG, "Debug: Login Button Clicked");
+        HashMap<String, String> formInput = new HashMap<>();
+        emailInput.clearFocus();
+        passwordInput.clearFocus();
+        buttonLoginStatus.setAlpha(0);
+        buttonLoginStatus.setClickable(false);
 
 @Override
 public void onSuccess(CognitoUserSession userSession, CognitoDevice newDevice) {
