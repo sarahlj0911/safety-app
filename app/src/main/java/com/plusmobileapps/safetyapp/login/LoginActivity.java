@@ -13,7 +13,6 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.TextInputLayout;
-import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
@@ -87,14 +86,10 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
     private CognitoUser user;
 
     // Login Button Animations
+    final Runnable waitAndLaunchMain = () -> launchHomeScreen();
     final Runnable resetButton = new Runnable() {
         public void run() {
             loginButton.revertAnimation();
-        }
-    };
-    final Runnable waitAndLaunchMain = new Runnable() {
-        public void run() {
-            launchHomeScreen();
         }
     };
     final Runnable successAnimation = new Runnable() {
@@ -108,7 +103,6 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
             loginButton.doneLoadingAnimation(Color.parseColor("#ffffff"), BitmapFactory.decodeResource(getResources(), R.drawable.login_button_failed));
         }
     };
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -154,14 +148,8 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
 
         userPool = new AwsServices().initAWSUserPool(this);
 
-        AWSMobileClient.getInstance().initialize(this, new AWSStartupHandler() {
-            @Override
-            public void onComplete(AWSStartupResult awsStartupResult) {
-            }
-        }).execute();
-        FileUtil.download(this, "schools.json", "/data/data/com.plusmobileapps.safetyapp/databases/schools.json");
-
-
+        AWSMobileClient.getInstance().initialize(this, awsStartupResult -> { }).execute();
+        FileUtil.download(this, "schools.json", getString(R.string.schoolJsonFile));
     }
 
     @Override
@@ -270,20 +258,14 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
             if (continuation.getChallengeName().contains("NEW_PASSWORD_REQUIRED")) {
                 user = userPool.getUser(username);
                 showCodeView = true;
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        buttonLoginStatus.setText(getString(R.string.login_button_error_verify));
-                        buttonLoginStatus.setClickable(true);
-                    }
+                runOnUiThread(() -> {
+                    buttonLoginStatus.setText(getString(R.string.login_button_error_verify));
+                    buttonLoginStatus.setClickable(true);
                 }); }
-            else { runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    buttonLoginStatus.setText(getString(R.string.login_button_error_aws_user_exists));
-                    handler.postDelayed(failureAnimation, 0);
-                    handler.postDelayed(resetButton, 3000);
-                }
+            else { runOnUiThread(() -> {
+                buttonLoginStatus.setText(getString(R.string.login_button_error_aws_user_exists));
+                handler.postDelayed(failureAnimation, 0);
+                handler.postDelayed(resetButton, 3000);
             });
             }
         }
@@ -326,12 +308,9 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
                     buttonErrorText = getString(R.string.login_button_error_aws_error);
                 }
                 final String finalButtonErrorText = buttonErrorText;
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        buttonLoginStatus.setText(finalButtonErrorText);
-                        buttonLoginStatus.setAlpha(1);
-                    }
+                runOnUiThread(() -> {
+                    buttonLoginStatus.setText(finalButtonErrorText);
+                    buttonLoginStatus.setAlpha(1);
                 });
             }
             handler.postDelayed(failureAnimation, 0);
@@ -345,15 +324,13 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         public void onSuccess() {
             Log.d(AWSTAG, "Code was sent!");
             showCodeView = true;
-            final Runnable clearView = new Runnable() {
-                public void run() {
-                    buttonDismissAuthCodeClicked(codeAuthWindow);
-                    buttonLogInClicked(loginView); // TODO
-                    runOnUiThread(() -> {
-                        buttonLoginStatus.setText(R.string.login_button_user_confirmed);
-                        buttonLoginStatus.setClickable(false);
-                    });
-                }
+            final Runnable clearView = () -> {
+                buttonDismissAuthCodeClicked(codeAuthWindow);
+                buttonLogInClicked(loginView);
+                runOnUiThread(() -> {
+                    buttonLoginStatus.setText(R.string.login_button_user_confirmed);
+                    buttonLoginStatus.setClickable(false);
+                });
             };
             Handler viewHandler = new Handler(getBaseContext().getMainLooper());
             codeViewStatusAnimation(0, 200, "CONFIRMED");
@@ -630,9 +607,7 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
                 Objects.requireNonNull(backgroundTransition).resetTransition();
 
                 Handler handler = new Handler(getBaseContext().getMainLooper());
-                final Runnable resetButton = new Runnable() {
-                    public void run() {
-                        buttonCode.setBackgroundResource(R.drawable.rounded_button_animation); }};
+                final Runnable resetButton = () -> buttonCode.setBackgroundResource(R.drawable.rounded_button_animation);
                 handler.postDelayed(resetButton, duration); }
             else {
                 buttonCode.setTextColor(Color.WHITE);

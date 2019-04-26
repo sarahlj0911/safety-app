@@ -214,6 +214,10 @@
     <string name="export_action_plan">Export Action Plan</string>
     <string name="Return">Return</string>
     <string name="Print">Print</string>
+    <string name="schoolJsonFile">/data/data/com.plusmobileapps.safetyapp/databases/schools.json</string>
+    <string name="appDbMain">/data/data/com.plusmobileapps.safetyapp/databases/appDB.db</string>
+    <string name="appDbShm">/data/data/com.plusmobileapps.safetyapp/databases/appDB.db-shm</string>
+    <string name="appDbWal">/data/data/com.plusmobileapps.safetyapp/databases/appDB.db-wal</string>
 
 
 </resources>
