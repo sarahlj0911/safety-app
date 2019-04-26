@@ -116,7 +116,9 @@ public class WalkthroughLandingFragment extends Fragment
         Log.d(TAG, "Resumed; should start presenter and upload data");
 
         // presenter has to be started in either case
-        presenter.start();
+        if (presenter!=null) {
+            presenter.start();
+        }
     }
 
     @Override

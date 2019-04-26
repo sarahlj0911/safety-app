@@ -5,12 +5,9 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.TextInputLayout;
-import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -26,16 +23,12 @@ import android.view.animation.AnimationSet;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.ScaleAnimation;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.amazonaws.mobile.client.AWSMobileClient;
-import com.amazonaws.mobile.client.AWSStartupHandler;
-import com.amazonaws.mobile.client.AWSStartupResult;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUser;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUserAttributes;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUserCodeDeliveryDetails;
@@ -46,17 +39,10 @@ import com.plusmobileapps.safetyapp.BlurUtils;
 import com.plusmobileapps.safetyapp.R;
 import com.plusmobileapps.safetyapp.login.LoginActivity;
 import com.plusmobileapps.safetyapp.main.MainActivity;
-import com.plusmobileapps.safetyapp.util.FileUtil;
 
 import org.apache.commons.lang3.StringUtils;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -140,10 +126,7 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
         Schools.load(this.getApplicationContext());
         schoolNames = Schools.schoolNames;
 
-        schoolsAdapter = new ArrayAdapter<>(
-                this,
-                android.R.layout.simple_list_item_1,
-                schoolNames );
+        schoolsAdapter = new ArrayAdapter<>(this, R.layout.activity_signup_spinner, schoolNames);
         schoolsAdapter.setDropDownViewResource(R.layout.activity_signup_spinner_dropdown);
         schoolSpinner.setAdapter(schoolsAdapter);
 
@@ -153,7 +136,6 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
 
         userPool = new AwsServices().initAWSUserPool(this);
         userAttributes = new CognitoUserAttributes();
-        initSchoolSpinner();
     }
 
     @Override
@@ -176,6 +158,9 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
         launchLoginScreen();
     }
 
+    @Override
+    public void populateSchoolSpinner(ArrayList<String> schools) { }
+
     public void setPresenter(SignupContract.Presenter presenter) {
         this.presenter = presenter;
     }
@@ -183,24 +168,16 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
     public void launchHomeScreen() {
         Intent signUp = new Intent(SignupActivity.this, MainActivity.class);
         startActivity(signUp);
-        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+        overridePendingTransition(R.anim.fade_in, R.anim.fade_out_none);
         finish();
     }
-
-    @Override
-    public void populateSchoolSpinner(ArrayList<String> schools) { }
 
     public void launchLoginScreen() {
         Intent login = new Intent(SignupActivity.this, LoginActivity.class);
         login.putExtra("openAni", "back");
         startActivity(login);
-        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+        overridePendingTransition(R.anim.fade_in, R.anim.fade_out_none);
     }
-
-    public void initSchoolSpinner() {
-
-    }
-
 
     private View.OnClickListener saveSignupClickListener = new View.OnClickListener() {
 
@@ -364,66 +341,11 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
     };
 
 
-    // Handler: Signup User
-    SignUpHandler signupCallback = new SignUpHandler() {
-        // Button Animations
-        final Runnable successAnimation = new Runnable() { public void run() {
-            signUpButton.doneLoadingAnimation(Color.parseColor("#ffffff"), BitmapFactory.decodeResource(getResources(), R.drawable.login_button_confirmed)); }
-        };
-        final Runnable failureAnimation = new Runnable() { public void run() {
-            signUpButton.doneLoadingAnimation(Color.parseColor("#ffffff"), BitmapFactory.decodeResource(getResources(), R.drawable.login_button_failed)); }
-        };
-        final Runnable resetButton = new Runnable() { public void run() {
-            signUpButton.revertAnimation();
-        } };
-        final Runnable waitAndLaunchDialog = new Runnable() { public void run() {
-            userSignedUp = true;
-            backgroundCapture = takeScreenshot();
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    showPopupView();
-                }
-            });
-        } };
-
-        @Override
-        public void onSuccess(CognitoUser user, boolean signUpConfirmationState, CognitoUserCodeDeliveryDetails cognitoUserCodeDeliveryDetails) {
-            statusText.setText("");
-            if (!signUpConfirmationState) { // User confirming via email code
-                handler.postDelayed(successAnimation, 0);
-                handler.postDelayed(waitAndLaunchDialog, 500);
-            }
-            else launchHomeScreen();
-        }
-
-        @Override
-        public void onFailure(Exception exception) {
-            String e = exception.toString();
-            Log.d(TAG, "User sign-up failed: " + e);
-            String error;
-            if (e.toLowerCase().contains("constraint: member")) {
-                error = "Password must be at least 8 characters";
-            } else if (e.toLowerCase().contains("policy:")) {
-                error = StringUtils.substringBetween(e, "policy:", " (Service");
-            } else if (e.toLowerCase().contains("usernameexistsexception")) {
-                error = StringUtils.substringBetween(e, "UsernameExistsException:", " (Service");
-            } else error = getApplicationContext().getString(R.string.status_text, name);
-            statusText.setText(error);
-            handler.postDelayed(failureAnimation, 0);
-            handler.postDelayed(resetButton, 3000);
-        }
-    };
-
-
     public void showPopupView(){
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                alertContent.setText(String.format("A confirmation email has been sent to %s.", email));
-                customPopupBackground.setImageBitmap(new BlurUtils().blur(SignupActivity.this, backgroundCapture, 25f));
-                codeViewShowAnimation(true, 250);
-            }
+        runOnUiThread(() -> {
+            alertContent.setText(String.format("A confirmation email has been sent to %s.", email));
+            customPopupBackground.setImageBitmap(new BlurUtils().blur(SignupActivity.this, backgroundCapture, 25f));
+            codeViewShowAnimation(true, 250);
         });
     }
 
@@ -437,10 +359,7 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
     public void buttonDismissViewClicked(View view) {
         hideKeyboard(view);
         customPopupWindow.setClickable(false);
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() { codeViewShowAnimation(false, 100); }
-        });
+        runOnUiThread(() -> codeViewShowAnimation(false, 100));
     }
 
     private void hideKeyboard(View v) {
@@ -492,4 +411,50 @@ public class SignupActivity extends AppCompatActivity implements SignupContract.
             animations.addAnimation(fadeOutAni); }
         customPopup.startAnimation(animations);
     }
+
+    SignUpHandler signupCallback = new SignUpHandler() {
+        // Button Animations
+        final Runnable successAnimation = new Runnable() { public void run() {
+            signUpButton.doneLoadingAnimation(Color.parseColor("#ffffff"), BitmapFactory.decodeResource(getResources(), R.drawable.login_button_confirmed)); }
+        };
+        final Runnable failureAnimation = new Runnable() { public void run() {
+            signUpButton.doneLoadingAnimation(Color.parseColor("#ffffff"), BitmapFactory.decodeResource(getResources(), R.drawable.login_button_failed)); }
+        };
+        final Runnable resetButton = new Runnable() { public void run() {
+            signUpButton.revertAnimation();
+        } };
+        final Runnable waitAndLaunchDialog = new Runnable() { public void run() {
+            userSignedUp = true;
+            backgroundCapture = takeScreenshot();
+            runOnUiThread(SignupActivity.this::showPopupView);
+        } };
+
+        @Override
+        public void onSuccess(CognitoUser user, boolean signUpConfirmationState, CognitoUserCodeDeliveryDetails cognitoUserCodeDeliveryDetails) {
+            statusText.setText("");
+            if (!signUpConfirmationState) { // User confirming via email code
+                handler.postDelayed(successAnimation, 0);
+                handler.postDelayed(waitAndLaunchDialog, 500);
+            }
+            else launchHomeScreen();
+        }
+
+        @Override
+        public void onFailure(Exception exception) {
+            String e = exception.toString();
+            Log.d(TAG, "User sign-up failed: " + e);
+            String error;
+            if (e.toLowerCase().contains("constraint: member")) {
+                error = "Password must be at least 8 characters";
+            } else if (e.toLowerCase().contains("policy:")) {
+                error = StringUtils.substringBetween(e, "policy:", " (Service");
+            } else if (e.toLowerCase().contains("usernameexistsexception")) {
+                error = StringUtils.substringBetween(e, "UsernameExistsException:", " (Service");
+            } else error = getApplicationContext().getString(R.string.status_text, name);
+            statusText.setText(error);
+            handler.postDelayed(failureAnimation, 0);
+            handler.postDelayed(resetButton, 3000);
+        }
+    };
+
 }
