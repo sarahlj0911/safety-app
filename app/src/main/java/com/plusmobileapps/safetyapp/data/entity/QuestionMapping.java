@@ -5,7 +5,10 @@ import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
 
 /**
+ * Class intended to map question and question location.
+ *
  * Created by aaronmusengo on 2/10/18.
+ * Updated by Travis Hawley on 4/19/19
  */
 
 @Entity(tableName = "question_mapping")

@@ -202,7 +202,7 @@
         <item>User2</item>
         <item>User3</item>
     </string-array>
-
+    <string name="DbStatus">Updating Database</string>
     <string name="user_not_found">User not found</string>
     <string name="path_database">/data/data/com.plusmobileapps.safetyapp/databases/</string>
     <string name="export">Export</string>

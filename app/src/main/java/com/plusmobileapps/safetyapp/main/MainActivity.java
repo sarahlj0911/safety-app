@@ -36,10 +36,15 @@ import com.amazonaws.mobileconnectors.cognitoidentityprovider.handlers.Authentic
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.handlers.GetDetailsHandler;
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBMapper;
 import com.plusmobileapps.safetyapp.AwsServices;
+import com.plusmobileapps.safetyapp.MyApplication;
 import com.plusmobileapps.safetyapp.R;
 import com.plusmobileapps.safetyapp.actionitems.landing.ActionItemPresenter;
 
+import com.plusmobileapps.safetyapp.admin.AdminDeleteUserActivity;
 import com.plusmobileapps.safetyapp.admin.AdminMainActivity;
+import com.plusmobileapps.safetyapp.data.AppDatabase;
+import com.plusmobileapps.safetyapp.data.dao.ResponseDao;
+import com.plusmobileapps.safetyapp.data.entity.Response;
 import com.plusmobileapps.safetyapp.data.entity.School;
 import com.plusmobileapps.safetyapp.data.entity.User;
 import com.plusmobileapps.safetyapp.login.LoginActivity;
@@ -51,6 +56,9 @@ import com.plusmobileapps.safetyapp.util.FileUtil;
 import com.plusmobileapps.safetyapp.util.exportPdf;
 import com.plusmobileapps.safetyapp.walkthrough.landing.WalkthroughLandingPresenter;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 
@@ -105,9 +113,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
 
         userPool = new AwsServices().initAWSUserPool(this);
 
-
-
-
         //Intent intent = getIntent();
         Bundle extras = getIntent().getExtras();
         if (Objects.equals(extras.getString("activity"), "from login")) {
@@ -124,25 +129,25 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
             user.getDetailsInBackground(getUserDetailsHandler);
             selectedSchool = "newSchool";
         }
-        //put info into the db
+
+
+        //download pictures from aws
         Log.d(TAG,"Getting user info from Login activity "+userName+" "+userName+" "+userRole+" "+userSchool);
-
-            FileUtil.deleteDb(this);
-
-            FileUtil.download(this, selectedSchool+"/appDB.db", getString(R.string.appDbMain));
-            FileUtil.download(this, selectedSchool+"/appDB.db-shm", getString(R.string.appDbShm));
-            FileUtil.download(this, selectedSchool+"/appDB.db-wal", getString(R.string.appDbWal));
-
-            //todo change wait to something else
-        try {
-            Thread.sleep(5000); }
-        catch (InterruptedException e) {
-            e.printStackTrace();
+        List<Response> actionItems = new ArrayList<>(0);
+        AppDatabase db = AppDatabase.getAppDatabase(MyApplication.getAppContext());
+        ResponseDao responseDao = db.responseDao();
+        actionItems = responseDao.getAllActionItems(1);
+        for (int i = 0; i < actionItems.size(); i++) {
+            Response actionItem = actionItems.get(i);
+            if(actionItem.getImagePath()!=null) {
+                String[] picdest = actionItem.getImagePath().split("/");
+                String filename = picdest[picdest.length - 1];
+                FileUtil.download(this, selectedSchool + "/ActionItemPictures/" + filename, actionItem.getImagePath());
+            }
         }
 
-        School school = new School(1, userSchool);
-        User usertoenter = new User(1, 1, userEmail, userName, userRole);
 
+        //put info into the db
            School school = new School(1, userSchool);
            AsyncTask<Void, Void, Boolean> saveSchoolTask = new SaveSchoolTask(school).execute();
            try {
@@ -198,6 +203,24 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
     @Override
     public void onStop(){
         super.onStop();
+        try {
+            List<Response> actionItems = new ArrayList<>(0);
+            AppDatabase db = AppDatabase.getAppDatabase(MyApplication.getAppContext());
+            ResponseDao responseDao = db.responseDao();
+            actionItems = responseDao.getAllActionItems(1);
+            for (int i = 0; i < actionItems.size(); i++) {
+                Response actionItem = actionItems.get(i);
+                if(actionItem.getImagePath()!=null) {
+                    String[] picdest = actionItem.getImagePath().split("/");
+                    String filename = picdest[picdest.length - 1];
+                    FileUtil.upload(this, selectedSchool + "/ActionItemPictures/" + filename, actionItem.getImagePath());
+                }
+            }
+            FileUtil.upload(this, selectedSchool+"/appDB.db", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db");
+            FileUtil.upload(this, selectedSchool+"/appDB.db-shm", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db-shm");
+            FileUtil.upload(this, selectedSchool+"/appDB.db-wal", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db-wal");
+        }
+        catch(Exception ex) {ex.printStackTrace();}
         user.signOut();
         Log.d(AWSTAG, "Signed out user "+userEmail+" automatically");
     }
@@ -357,7 +380,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
 
           case R.id.settings_menu_admin:
                 // Settings selected
-                    Intent admin = new Intent(this, AdminMainActivity.class);
+                    Intent admin = new Intent(this, AdminDeleteUserActivity.class);
                     startActivity(admin);
                 break;
 
