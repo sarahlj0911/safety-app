@@ -207,28 +207,18 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         //Due to time constraints we were unable to implement a async call correctly, this was our temporary solution to give the app time to download the file before it starts the main activity
         //this can be fixed by changing how the call is made, or making the walk-thoughs use a list view so they can be updated after the download is complete.
 
-        download.postDelayed(new Runnable() {
-
-            public void run() {
-                Intent MainActivity = new Intent(LoginActivity.this, MainActivity.class);
-                MainActivity.putExtra("activity", "from login");
-                MainActivity.putExtra("email", username);
-                MainActivity.putExtra("name", userName);
-                MainActivity.putExtra("role", userRole);
-                MainActivity.putExtra("school", userSchool);
-                Log.d(TAG,"Sending Info to main activity "+userName+" "+username+" "+userRole+" "+userSchool);
-                startActivity(MainActivity);
-                overridePendingTransition(R.anim.fade_in, R.anim.fade_out_none);
-                finish();
-
-            }
+        download.postDelayed(() -> {
+            Intent MainActivity = new Intent(LoginActivity.this, MainActivity.class);
+            MainActivity.putExtra("activity", "from login");
+            MainActivity.putExtra("email", username);
+            MainActivity.putExtra("name", userName);
+            MainActivity.putExtra("role", userRole);
+            MainActivity.putExtra("school", userSchool);
+            Log.d(TAG,"Sending Info to main activity "+userName+" "+username+" "+userRole+" "+userSchool);
+            startActivity(MainActivity);
+            overridePendingTransition(R.anim.fade_in, R.anim.fade_out_none);
+            finish();
         }, 3000);
-
-
-
-
-
-
     }
 
     @Override

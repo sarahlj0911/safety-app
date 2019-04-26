@@ -21,9 +21,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.amazonaws.mobile.client.AWSMobileClient;
-import com.amazonaws.mobile.client.AWSStartupHandler;
-import com.amazonaws.mobile.client.AWSStartupResult;
-
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoDevice;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUser;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUserDetails;
@@ -34,14 +31,11 @@ import com.amazonaws.mobileconnectors.cognitoidentityprovider.continuations.Chal
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.continuations.MultiFactorAuthenticationContinuation;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.handlers.AuthenticationHandler;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.handlers.GetDetailsHandler;
-import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBMapper;
 import com.plusmobileapps.safetyapp.AwsServices;
 import com.plusmobileapps.safetyapp.MyApplication;
 import com.plusmobileapps.safetyapp.R;
 import com.plusmobileapps.safetyapp.actionitems.landing.ActionItemPresenter;
-
 import com.plusmobileapps.safetyapp.admin.AdminDeleteUserActivity;
-import com.plusmobileapps.safetyapp.admin.AdminMainActivity;
 import com.plusmobileapps.safetyapp.data.AppDatabase;
 import com.plusmobileapps.safetyapp.data.dao.ResponseDao;
 import com.plusmobileapps.safetyapp.data.entity.Response;
@@ -61,7 +55,6 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.channels.FileChannel;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.ExecutionException;
@@ -139,7 +132,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
 
         //download pictures from aws
         Log.d(TAG,"Getting user info from Login activity "+userName+", "+userName+", "+userRole+", "+userSchool);
-        List<Response> actionItems = new ArrayList<>(0);
+        List<Response> actionItems;
         AppDatabase db = AppDatabase.getAppDatabase(MyApplication.getAppContext());
         ResponseDao responseDao = db.responseDao();
         actionItems = responseDao.getAllActionItems(1);
@@ -210,7 +203,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
     public void onStop(){
         super.onStop();
         try {
-            List<Response> actionItems = new ArrayList<>(0);
+            List<Response> actionItems;
             AppDatabase db = AppDatabase.getAppDatabase(MyApplication.getAppContext());
             ResponseDao responseDao = db.responseDao();
             actionItems = responseDao.getAllActionItems(1);
