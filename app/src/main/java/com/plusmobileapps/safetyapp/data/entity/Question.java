@@ -6,7 +6,12 @@ import android.arch.persistence.room.PrimaryKey;
 
 
 /**
+ * Class intended for the creation and manipulation
+ * of question objects in the code. Questions intended
+ * for use in walkthroughs.
+ *
  * Created by aaronmusengo on 1/23/18.
+ * Updated by Travis Hawley on 4/19/19
  */
 
 @Entity(tableName = "question")

@@ -5,7 +5,13 @@ import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
 
 /**
+ * Class intended for the creation and manipulation of
+ * school objects in the code to allow for different
+ * schools to have sole access to their own
+ * information.
+ *
  * Created by aaronmusengo on 2/7/18.
+ * Updated by Travis Hawley on 4/19/19
  */
 
 @Entity(tableName = "schools")
