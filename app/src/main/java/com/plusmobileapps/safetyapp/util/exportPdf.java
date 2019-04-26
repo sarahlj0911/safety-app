@@ -74,6 +74,7 @@ public class exportPdf extends AppCompatActivity {
             printManager.print(jobName, printAdapter, builder.build());
         });
 
+        actionItems.setAlpha(0);
         actionItems.setWebViewClient(new WebViewClient() {
             public void onPageFinished(WebView view, String url) {
                 Log.d("Web View", "Finished loading");
