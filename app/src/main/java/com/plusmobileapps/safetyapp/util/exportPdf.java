@@ -1,11 +1,11 @@
 package com.plusmobileapps.safetyapp.util;
 
 import android.content.Context;
-import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
-import android.print.*;
+import android.print.PrintAttributes;
+import android.print.PrintDocumentAdapter;
+import android.print.PrintManager;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -13,7 +13,6 @@ import android.util.Log;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
-import android.view.animation.AnimationSet;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
@@ -27,12 +26,11 @@ public class exportPdf extends AppCompatActivity {
     ProgressBar progressBar;
     Button returnMain, print;
     Handler handler;
+    View fadeView;
     int aniDuration = 500;
 
     final Runnable showWebView = () -> {
-        AlphaAnimation fadeInAni = new AlphaAnimation(0.0f, 1.0f);
         AlphaAnimation fadeOutAni = new AlphaAnimation(1.0f, 0.0f);
-        fadeInAni.setDuration(aniDuration);
         fadeOutAni.setDuration(aniDuration);
         fadeOutAni.setAnimationListener(new Animation.AnimationListener() {
             @Override
@@ -42,6 +40,7 @@ public class exportPdf extends AppCompatActivity {
             @Override
             public void onAnimationEnd(Animation animation) {
                 progressBar.setVisibility(View.INVISIBLE);
+                fadeView.setVisibility(View.INVISIBLE);
             }
 
             @Override
@@ -49,7 +48,7 @@ public class exportPdf extends AppCompatActivity {
             }
         });
         progressBar.startAnimation(fadeOutAni);
-        actionItems.startAnimation(fadeInAni);
+        fadeView.startAnimation(fadeOutAni);
     };
 
     @Override
@@ -60,11 +59,10 @@ public class exportPdf extends AppCompatActivity {
         returnMain = findViewById(R.id.webViewBack);
         progressBar = findViewById(R.id.progressBar);
         print = findViewById(R.id.print);
+        fadeView = findViewById(R.id.viewFade);
         handler = new Handler();
 
-        returnMain.setOnClickListener(v -> {
-            this.finish();
-        });
+        returnMain.setOnClickListener(v -> this.finish());
         print.setOnClickListener(v -> {
             PrintManager printManager = (PrintManager) getSystemService(Context.PRINT_SERVICE);
             PrintDocumentAdapter printAdapter = actionItems.createPrintDocumentAdapter("ActionItemsDoc");
@@ -74,7 +72,7 @@ public class exportPdf extends AppCompatActivity {
             printManager.print(jobName, printAdapter, builder.build());
         });
 
-        actionItems.setAlpha(0);
+        fadeView.setVisibility(View.VISIBLE);
         actionItems.setWebViewClient(new WebViewClient() {
             public void onPageFinished(WebView view, String url) {
                 Log.d("Web View", "Finished loading");
