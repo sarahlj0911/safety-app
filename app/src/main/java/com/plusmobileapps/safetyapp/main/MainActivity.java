@@ -40,6 +40,7 @@ import com.plusmobileapps.safetyapp.MyApplication;
 import com.plusmobileapps.safetyapp.R;
 import com.plusmobileapps.safetyapp.actionitems.landing.ActionItemPresenter;
 
+import com.plusmobileapps.safetyapp.admin.AdminDeleteUserActivity;
 import com.plusmobileapps.safetyapp.admin.AdminMainActivity;
 import com.plusmobileapps.safetyapp.data.AppDatabase;
 import com.plusmobileapps.safetyapp.data.dao.ResponseDao;
@@ -111,7 +112,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
         presenter = new MainActivityPresenter(this);
 
         userPool = new AwsServices().initAWSUserPool(this);
-        
+
         //Intent intent = getIntent();
         Bundle extras = getIntent().getExtras();
         if (Objects.equals(extras.getString("activity"), "from login")) {
@@ -379,7 +380,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
 
           case R.id.settings_menu_admin:
                 // Settings selected
-                    Intent admin = new Intent(this, AdminMainActivity.class);
+                    Intent admin = new Intent(this, AdminDeleteUserActivity.class);
                     startActivity(admin);
                 break;
 

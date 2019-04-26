@@ -191,8 +191,8 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
 //        PrefManager prefManager = new PrefManager(this);
 //        prefManager.setIsUserSignedUp(true);
       AlertDialog.Builder updating =  new AlertDialog.Builder(this)
-                .setTitle("Updating")
-                .setMessage("Please wait while we get your schools walkthroughs.");
+                .setTitle("Updating...")
+                .setMessage("Please wait while we get your school's walkthroughs.");
         updating.show();
 
         Handler download = new Handler();
