@@ -140,9 +140,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
             e.printStackTrace();
         }
 
-        School school = new School(1, userSchool);
-        User usertoenter = new User(1, 1, userEmail, userName, userRole);
-
            School school = new School(1, userSchool);
            AsyncTask<Void, Void, Boolean> saveSchoolTask = new SaveSchoolTask(school).execute();
            try {
