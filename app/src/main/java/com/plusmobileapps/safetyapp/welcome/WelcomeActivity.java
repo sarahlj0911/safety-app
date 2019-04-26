@@ -83,30 +83,24 @@ public class WelcomeActivity extends AppCompatActivity {
         welcomeViewPager.addOnPageChangeListener(viewPagerPageChangeListener);
 
         btnBack.setVisibility(View.INVISIBLE);
-        btnBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                int current = getItem(-1);
-                if (current > -1) {
-                    welcomeViewPager.setCurrentItem(current);
-                }
+        btnBack.setOnClickListener(v -> {
+            int current = getItem(-1);
+            if (current > -1) {
+                welcomeViewPager.setCurrentItem(current);
             }
         });
 
-        btnNext.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // checking for last page
-                // if last page home screen will be launched
-                int current = getItem(+1);
-                if (current < layouts.length) {
-                    // move to next screen
-                    welcomeViewPager.setCurrentItem(current);
-                } else {
-                    prefManager.setIsTutorialSeen(true);
-                    //launchHomeScreen();
-                    launchLoginScreen();
-                }
+        btnNext.setOnClickListener(v -> {
+            // checking for last page
+            // if last page home screen will be launched
+            int current = getItem(+1);
+            if (current < layouts.length) {
+                // move to next screen
+                welcomeViewPager.setCurrentItem(current);
+            } else {
+                prefManager.setIsTutorialSeen(true);
+                //launchHomeScreen();
+                launchLoginScreen();
             }
         });
     }
@@ -138,7 +132,7 @@ public class WelcomeActivity extends AppCompatActivity {
         Intent login = new Intent(this, LoginActivity.class);
         login.putExtra("openAni", "start");
         startActivity(login);
-        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+        overridePendingTransition(R.anim.fade_in, R.anim.fade_out_none);
         finish();
     }
 
@@ -184,8 +178,7 @@ public class WelcomeActivity extends AppCompatActivity {
     public class WelcomeViewPagerAdapter extends PagerAdapter {
         private LayoutInflater layoutInflater;
 
-        WelcomeViewPagerAdapter() {
-        }
+        WelcomeViewPagerAdapter() { }
 
         @NonNull
         @Override

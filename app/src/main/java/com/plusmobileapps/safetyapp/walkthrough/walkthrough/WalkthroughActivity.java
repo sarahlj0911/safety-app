@@ -165,19 +165,9 @@ public class WalkthroughActivity extends AppCompatActivity implements Walkthroug
         presenter.backButtonPressed();
     }
 
-    View.OnClickListener previousButtonListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            presenter.previousQuestionClicked();
-        }
-    };
+    View.OnClickListener previousButtonListener = v -> presenter.previousQuestionClicked();
 
-    View.OnClickListener nextButtonListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            presenter.nextQuestionClicked();
-        }
-    };
+    View.OnClickListener nextButtonListener = v -> presenter.nextQuestionClicked();
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {

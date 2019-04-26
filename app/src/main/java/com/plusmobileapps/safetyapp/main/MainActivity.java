@@ -21,6 +21,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.amazonaws.mobile.client.AWSMobileClient;
+import com.amazonaws.mobile.client.AWSStartupHandler;
+import com.amazonaws.mobile.client.AWSStartupResult;
+
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoDevice;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUser;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUserDetails;
@@ -35,6 +38,7 @@ import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBMapper;
 import com.plusmobileapps.safetyapp.AwsServices;
 import com.plusmobileapps.safetyapp.R;
 import com.plusmobileapps.safetyapp.actionitems.landing.ActionItemPresenter;
+
 import com.plusmobileapps.safetyapp.admin.AdminMainActivity;
 import com.plusmobileapps.safetyapp.data.entity.School;
 import com.plusmobileapps.safetyapp.data.entity.User;
@@ -67,11 +71,8 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
     private CognitoUser user;
     private String userEmail, userName, userRole, userSchool;
 
-    // DB mapper
-    DynamoDBMapper dynamoDBMapper;
-
     // SyncAdapter Constants
-    public static final String AUTHORITY = "com.plusmobileapps.safetyapp.fileprovider";     // The authority for the sync adapter's content provider
+    public static final String AUTHORITY = "com.plusmobileapps.safetyapp.fileprovider"; // The authority for the sync adapter's content provider
     public static final String ACCOUNT_TYPE = "safetyapp.com";                          // An account type, in the form of a domain name
     public static final String ACCOUNT = "safetyapp";                                   // The account name
 
@@ -128,17 +129,19 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
 
             FileUtil.deleteDb(this);
 
-            FileUtil.download(this, selectedSchool+"/appDB.db", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db");
-            FileUtil.download(this, selectedSchool+"/appDB.db-shm", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db-shm");
-            FileUtil.download(this, selectedSchool+"/appDB.db-wal", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db-wal");
+            FileUtil.download(this, selectedSchool+"/appDB.db", getString(R.string.appDbMain));
+            FileUtil.download(this, selectedSchool+"/appDB.db-shm", getString(R.string.appDbShm));
+            FileUtil.download(this, selectedSchool+"/appDB.db-wal", getString(R.string.appDbWal));
 
             //todo change wait to something else
         try {
-            Thread.sleep(5000);
-        } catch (InterruptedException e) {
+            Thread.sleep(5000); }
+        catch (InterruptedException e) {
             e.printStackTrace();
         }
 
+        School school = new School(1, userSchool);
+        User usertoenter = new User(1, 1, userEmail, userName, userRole);
 
            School school = new School(1, userSchool);
            AsyncTask<Void, Void, Boolean> saveSchoolTask = new SaveSchoolTask(school).execute();
@@ -214,7 +217,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
     private void launchLoginScreen() {
         Intent loginActivity = new Intent(MainActivity.this, LoginActivity.class);
         startActivity(loginActivity);
-        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+        overridePendingTransition(R.anim.fade_in, R.anim.fade_out_none);
         finish();
     }
 
