@@ -192,7 +192,7 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
 //        prefManager.setIsUserSignedUp(true);
       AlertDialog.Builder updating =  new AlertDialog.Builder(this)
                 .setTitle("Updating...")
-                .setMessage("Please wait while we get your school's walkthroughs.");
+                .setMessage("Please wait while the walk-through for "+ userSchool+" is updating.");
         updating.show();
 
         Handler download = new Handler();
@@ -201,6 +201,11 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         FileUtil.download(this, userSchool+"/appDB.db-wal", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db-wal");
 
         buttonLoginStatus.setText(R.string.DbStatus);
+
+        //todo implement proper async await calls.
+        //
+        //Due to time constraints we were unable to implement a async call correctly, this was our temporary solution to give the app time to download the file before it starts the main activity
+        //this can be fixed by changing how the call is made, or making the walk-thoughs use a list view so they can be updated after the download is complete.
 
         download.postDelayed(new Runnable() {
 

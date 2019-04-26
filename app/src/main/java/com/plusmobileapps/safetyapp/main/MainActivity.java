@@ -132,7 +132,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
 
 
         //download pictures from aws
-        Log.d(TAG,"Getting user info from Login activity "+userName+" "+userName+" "+userRole+" "+userSchool);
+        Log.d(TAG,"Getting user info from Login activity "+userName+", "+userName+", "+userRole+", "+userSchool);
         List<Response> actionItems = new ArrayList<>(0);
         AppDatabase db = AppDatabase.getAppDatabase(MyApplication.getAppContext());
         ResponseDao responseDao = db.responseDao();
@@ -380,7 +380,10 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
 
           case R.id.settings_menu_admin:
                 // Settings selected
+              //todo change AdminDeleteUserActivity to AdminMainActivity
+              //todo finish implmentation of AdminAddUserActivity, AdminNewTicketActivity, and AdminViewHistoryActivity
                     Intent admin = new Intent(this, AdminDeleteUserActivity.class);
+
                     startActivity(admin);
                 break;
 
