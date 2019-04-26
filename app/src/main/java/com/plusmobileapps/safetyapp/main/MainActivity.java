@@ -23,6 +23,7 @@ import android.widget.Toast;
 import com.amazonaws.mobile.client.AWSMobileClient;
 import com.amazonaws.mobile.client.AWSStartupHandler;
 import com.amazonaws.mobile.client.AWSStartupResult;
+
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoDevice;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUser;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUserDetails;
@@ -37,6 +38,8 @@ import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBMapper;
 import com.plusmobileapps.safetyapp.AwsServices;
 import com.plusmobileapps.safetyapp.R;
 import com.plusmobileapps.safetyapp.actionitems.landing.ActionItemPresenter;
+
+import com.plusmobileapps.safetyapp.admin.AdminMainActivity;
 import com.plusmobileapps.safetyapp.data.entity.School;
 import com.plusmobileapps.safetyapp.data.entity.User;
 import com.plusmobileapps.safetyapp.login.LoginActivity;
@@ -61,6 +64,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
     private String walkthroughFragmentTitle = "";
     private MainActivityPresenter presenter;
     private String selectedSchool = "";
+    private Menu menu;
 
     // AWS
     private CognitoUserPool userPool;
@@ -86,7 +90,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_main);
-
+        userRole="default";
         mTextMessage = findViewById(R.id.message);
         navigation = findViewById(R.id.navigation);
         viewPager = findViewById(R.id.view_pager);
@@ -139,22 +143,24 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
         School school = new School(1, userSchool);
         User usertoenter = new User(1, 1, userEmail, userName, userRole);
 
-        AsyncTask<Void, Void, Boolean> saveSchoolTask = new SaveSchoolTask(school).execute();
-        try {
-           saveSchoolTask.get(); }
-        catch (InterruptedException | ExecutionException e) {
-           Log.d(TAG, "Problem saving school");
-           Log.d(TAG, e.getMessage());
-        }
+           School school = new School(1, userSchool);
+           AsyncTask<Void, Void, Boolean> saveSchoolTask = new SaveSchoolTask(school).execute();
+           try {
+               saveSchoolTask.get();
+           } catch (InterruptedException | ExecutionException e) {
+               Log.d(TAG, "Problem saving school");
+               Log.d(TAG, e.getMessage());
+           }
+           User userToEnter = new User(1, 1, userEmail, userName, userRole);
 
-        AsyncTask<Void, Void, Boolean> saveUserTask = new SaveUserTask(usertoenter).execute();
-        try {
-           saveUserTask.get(); }
-        catch (InterruptedException | ExecutionException e) {
-           Log.d(TAG, "Issue saving user");
-           Log.d(TAG, e.getMessage());
+           AsyncTask<Void, Void, Boolean> saveUserTask = new SaveUserTask(userToEnter).execute();
+           try {
+               saveUserTask.get();
+           } catch (InterruptedException | ExecutionException e) {
+               Log.d(TAG, "Issue saving user");
+               Log.d(TAG, e.getMessage());
 
-        }
+           }
 
         // AWSMobileClient enables AWS user credentials to access your table
         AWSMobileClient.getInstance().initialize(this, awsStartupResult -> Log.d(AWSTAG, "You are connected to the AWS database!")).execute();
@@ -174,14 +180,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
         userPool = new AwsServices().initAWSUserPool(this);
         user = userPool.getUser(userEmail);
         user.getDetailsInBackground(getUserDetailsHandler);
-
-
-
-
-
-
-        //FileUtil.download(this, "uploads/appDB1.db", getString(R.string.path_database));
-        //swipeAdapter.notify();
 
     }
 
@@ -332,6 +330,18 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
     public boolean onCreateOptionsMenu(Menu menu){
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.drop_down_menu,menu);
+
+       this.menu=menu;
+
+        Log.d("ROLE!!!!!",userRole);
+      /*  if(userRole.compareToIgnoreCase("Administrator")!=0){
+            MenuItem adminSettings = menu.findItem(R.id.settings_menu_admin);
+            Log.d("ROLE!!!!!",userRole);
+            adminSettings.setVisible(false);
+
+
+        }*/
+
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -344,13 +354,19 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
                 signOutUser();
                 launchLoginScreen();
                 break;
-            case R.id.ExportActionPlan:
+
+          case R.id.settings_menu_admin:
+                // Settings selected
+                    Intent admin = new Intent(this, AdminMainActivity.class);
+                    startActivity(admin);
+                break;
+
+          case R.id.ExportActionPlan:
                     ActionItemsExport html = new ActionItemsExport();
                     html.exportActionItems();
                     Intent printIntent = new Intent(this, exportPdf.class);
                     startActivity(printIntent);
                     break;
-
         }
         return super.onOptionsItemSelected(item);
     }
@@ -364,17 +380,21 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
             userRole = list.getAttributes().getAttributes().get("custom:role");
             userSchool = list.getAttributes().getAttributes().get("custom:school");
 
+          // If the userRole is not an administrator, take away the admin settings menu item
+            if(!userRole.equals("Administrator")){
+                MenuItem adminSettings = menu.findItem(R.id.settings_menu_admin);
+                adminSettings.setVisible(false);
+            }
+          
             userEmail = list.getAttributes().getAttributes().get("email");
-
-
-
             Log.d(AWSTAG, "Successfully loaded " + userName + " as role " + userRole + " at school " + userSchool);
         }
         @Override
         public void onFailure(final Exception exception) {
             Log.d(AWSTAG, "Failed to retrieve the user's details: " + exception);
         }
-        };
+
+    };
 
         public void signOutUser() {
             try {

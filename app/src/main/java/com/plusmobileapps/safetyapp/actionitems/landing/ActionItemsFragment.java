@@ -69,7 +69,9 @@ public class ActionItemsFragment extends Fragment implements ActionItemContract.
     @Override
     public void onResume() {
         super.onResume();
-        presenter.start();
+        if (presenter!=null) {
+            presenter.start();
+        }
     }
 
     /**

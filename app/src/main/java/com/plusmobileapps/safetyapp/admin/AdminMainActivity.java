@@ -4,7 +4,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
+
+import com.plusmobileapps.safetyapp.AdminSettings;
+import com.plusmobileapps.safetyapp.walkthrough.landing.WalkthroughLandingPresenter;
 
 import com.plusmobileapps.safetyapp.PrefManager;
 import com.plusmobileapps.safetyapp.R;
@@ -24,31 +28,31 @@ public class AdminMainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_admin_main);
 
     }
-    public void viewTickets(){
-        Log.d("onclick","viewtickets");
+    public void viewTickets(View v){
+        Log.d("onclick","viewtickets clicked");
 
         Intent i=new Intent(AdminMainActivity.this,ViewTicketsActivity.class);
         startActivity(i);
     }
-    public void viewHistory(){
-        Log.d("onclick","viewHistory");
+    public void viewHistory(View v){
+        Log.d("onclick","viewHistory clicked");
         Intent i=new Intent(AdminMainActivity.this,AdminViewHistoryActivity.class);
         startActivity(i);
     }
-    public void addUser(){
-        Log.d("onclick","addUser");
+    public void addUser(View v){
+        Log.d("onclick","addUser clicked ");
 
-        Intent i=new Intent(AdminMainActivity.this,AdminAddUserActivity.class);
+        Intent i=new Intent(AdminMainActivity.this, AdminSettings.class);
         startActivity(i);
     }
-    public void deleteUser(){
-        Log.d("onclick","viewtickets");
+    public void deleteUser(View v){
+        Log.d("onclick","viewtickets clicked");
 
         Intent i=new Intent(AdminMainActivity.this,AdminDeleteUserActivity.class);
         startActivity(i);
     }
-    public void newTicket(){
-        Log.d("onclick","viewtickets");
+    public void newTicket(View v){
+        Log.d("onclick","viewtickets clicked");
 
     }
 }
