@@ -40,10 +40,11 @@ public class FileUtil {
         File shm = new File("/data/data/com.plusmobileapps.safetyapp/databases/appDB.db-shm");
         File wal = new File("/data/data/com.plusmobileapps.safetyapp/databases/appDB.db-wal");
 
-        if(file.exists())
+        if(file.exists()) {
             file.delete();
             shm.delete();
             wal.delete();
+        }
 
         String s = "@@@" +  context.getDatabasePath("appDB");
 
