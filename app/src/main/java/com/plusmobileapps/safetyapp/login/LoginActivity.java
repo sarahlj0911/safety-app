@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -189,16 +190,40 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
     public void launchHomeScreen() {
 //        PrefManager prefManager = new PrefManager(this);
 //        prefManager.setIsUserSignedUp(true);
-        Intent mainActivity = new Intent(LoginActivity.this, MainActivity.class);
-        mainActivity.putExtra("activity", "from login");
-        mainActivity.putExtra("email", username);
-        mainActivity.putExtra("name", userName);
-        mainActivity.putExtra("role", userRole);
-        mainActivity.putExtra("school", userSchool);
-        Log.d(TAG,"Sending Info to main activity "+userName+" "+username+" "+userRole+" "+userSchool);
-        startActivity(mainActivity);
-        overridePendingTransition(R.anim.fade_in, R.anim.fade_out_none);
-        finish();
+      AlertDialog.Builder updating =  new AlertDialog.Builder(this)
+                .setTitle("Updating")
+                .setMessage("Please wait while we get your schools walkthroughs.");
+        updating.show();
+
+        Handler download = new Handler();
+        FileUtil.download(this, userSchool+"/appDB.db", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db");
+        FileUtil.download(this, userSchool+"/appDB.db-shm", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db-shm");
+        FileUtil.download(this, userSchool+"/appDB.db-wal", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db-wal");
+
+        buttonLoginStatus.setText(R.string.DbStatus);
+
+        download.postDelayed(new Runnable() {
+
+            public void run() {
+                Intent MainActivity = new Intent(LoginActivity.this, MainActivity.class);
+                MainActivity.putExtra("activity", "from login");
+                MainActivity.putExtra("email", username);
+                MainActivity.putExtra("name", userName);
+                MainActivity.putExtra("role", userRole);
+                MainActivity.putExtra("school", userSchool);
+                Log.d(TAG,"Sending Info to main activity "+userName+" "+username+" "+userRole+" "+userSchool);
+                startActivity(MainActivity);
+                overridePendingTransition(R.anim.fade_in, R.anim.fade_out_none);
+                finish();
+
+            }
+        }, 3000);
+
+
+
+
+
+
     }
 
     @Override
@@ -375,6 +400,7 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
             codeViewStatusAnimation(1, 200, showErr);
         }
     };
+
 
     // Handler: Get User Details
     GetDetailsHandler getUserDetailsHandler = new GetDetailsHandler() {

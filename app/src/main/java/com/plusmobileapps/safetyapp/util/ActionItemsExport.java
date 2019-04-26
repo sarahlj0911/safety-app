@@ -74,6 +74,9 @@ public class ActionItemsExport {
                 Question question = questionDao.getByQuestionID(actionItem.getQuestionId());
                 if (actionItem.getImagePath() != null) {
                     ExportStringData.add("</p><p>");
+
+
+
                     Log.d(TAG, "Getting Image from: " + actionItem.getImagePath());
                     File SourcePic = new File(actionItem.getImagePath());
                     String[] picdest = actionItem.getImagePath().split("/");
