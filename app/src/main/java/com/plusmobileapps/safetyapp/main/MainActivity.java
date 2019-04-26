@@ -57,10 +57,16 @@ import com.plusmobileapps.safetyapp.util.exportPdf;
 import com.plusmobileapps.safetyapp.walkthrough.landing.WalkthroughLandingPresenter;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.ExecutionException;
+
+import id.zelory.compressor.Compressor;
 
 
 public class MainActivity extends AppCompatActivity implements MainActivityContract.View {
@@ -213,6 +219,10 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
                 if(actionItem.getImagePath()!=null) {
                     String[] picdest = actionItem.getImagePath().split("/");
                     String filename = picdest[picdest.length - 1];
+                    File uncompressedpic = new File(actionItem.getImagePath());
+                    File compressedpic = new Compressor(this).compressToFile(uncompressedpic);
+                    //replaces picture
+                    copyFile(compressedpic,uncompressedpic);
                     FileUtil.upload(this, selectedSchool + "/ActionItemPictures/" + filename, actionItem.getImagePath());
                 }
             }
@@ -459,5 +469,25 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
                 Log.d(AWSTAG, "Unable to login user: " + exception);
             }
         };
+    private void copyFile(File sourceFile, File destFile) throws IOException {
+        if (!sourceFile.exists()) {
+            return;
+        }
+        if (destFile.exists()) {
+            destFile.delete();
+        }
+        FileChannel source = null;
+        FileChannel destination = null;
+
+        source = new FileInputStream(sourceFile).getChannel();
+        destination = new FileOutputStream(destFile).getChannel();
+        destination.transferFrom(source, 0, source.size());
+        if (source != null) {
+            source.close();
+        }
+        if (destination != null) {
+            destination.close();
+        }
+    }
 
     }

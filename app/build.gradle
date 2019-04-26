@@ -105,6 +105,7 @@ dependencies {
     //image loading library
     implementation 'com.squareup.picasso:picasso:2.71828'
     implementation 'br.com.simplepass:loading-button-android:1.7.+'
+    implementation 'id.zelory:compressor:2.1.0'
 
     //test
 
@@ -115,4 +116,5 @@ dependencies {
     testImplementation "org.powermock:powermock-module-junit4:$rootProject.ext.powerMockito"
     testImplementation "org.powermock:powermock-api-mockito:$rootProject.ext.powerMockito"
     implementation files('libs/itextg-5.5.10.jar')
+
 }
