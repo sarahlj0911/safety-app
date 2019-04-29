@@ -272,6 +272,17 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
                     public void onError(int id, Exception ex) {
                         // Handle errors
                         Log.d("FileUtil", ex.toString());
+                        Log.d("FileUtil", "download complete");
+                        Intent MainActivity = new Intent(LoginActivity.this, MainActivity.class);
+                        MainActivity.putExtra("activity", "from login");
+                        MainActivity.putExtra("email", username);
+                        MainActivity.putExtra("name", userName);
+                        MainActivity.putExtra("role", userRole);
+                        MainActivity.putExtra("school", userSchool);
+                        Log.d(TAG, "Sending Info to main activity " + userName + " " + username + " " + userRole + " " + userSchool);
+                        startActivity(MainActivity);
+                        overridePendingTransition(R.anim.fade_in, R.anim.fade_out_none);
+                        finish();
                     }
 
                 });
