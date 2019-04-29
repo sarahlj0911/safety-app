@@ -53,6 +53,11 @@ import com.amazonaws.mobileconnectors.cognitoidentityprovider.handlers.Authentic
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.handlers.GenericHandler;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.handlers.GetDetailsHandler;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.handlers.VerificationHandler;
+import com.amazonaws.mobileconnectors.s3.transferutility.TransferListener;
+import com.amazonaws.mobileconnectors.s3.transferutility.TransferObserver;
+import com.amazonaws.mobileconnectors.s3.transferutility.TransferState;
+import com.amazonaws.mobileconnectors.s3.transferutility.TransferUtility;
+import com.amazonaws.services.s3.AmazonS3Client;
 import com.plusmobileapps.safetyapp.AwsServices;
 import com.plusmobileapps.safetyapp.BlurUtils;
 import com.plusmobileapps.safetyapp.R;
@@ -60,6 +65,7 @@ import com.plusmobileapps.safetyapp.main.MainActivity;
 import com.plusmobileapps.safetyapp.signup.SignupActivity;
 import com.plusmobileapps.safetyapp.util.FileUtil;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Objects;
 
@@ -82,6 +88,7 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
     private CircularProgressButton loginButton;
     private boolean showCodeView, hasInternetConnection;
     private int emailCharCount;
+    public static int dlCount;
     // AWS
     private CognitoUserPool userPool;
     private CognitoUser user;
@@ -196,18 +203,90 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         updating.show();
 
         Handler download = new Handler();
-        FileUtil.download(this, userSchool+"/appDB.db", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db");
-        FileUtil.download(this, userSchool+"/appDB.db-shm", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db-shm");
-        FileUtil.download(this, userSchool+"/appDB.db-wal", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db-wal");
+        //FileUtil.download(this, userSchool+"/appDB.db", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db");
+        //FileUtil.download(this, userSchool+"/appDB.db-shm", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db-shm");
+        //FileUtil.download(this, userSchool+"/appDB.db-wal", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db-wal");
 
-        buttonLoginStatus.setText(R.string.DbStatus);
+        String[] paths = new String[]{"/data/data/com.plusmobileapps.safetyapp/databases/appDB.db","/data/data/com.plusmobileapps.safetyapp/databases/appDB.db-shm","/data/data/com.plusmobileapps.safetyapp/databases/appDB.db-wal"};
+        String[] files = new String[]{userSchool+"/appDB.db",userSchool+"/appDB.db-shm",userSchool+"/appDB.db-wal",};
+
+        dlCount = 0;
+        for(int i =0;i<paths.length;i++) {
+
+
+
+            TransferUtility transferUtility =
+                    TransferUtility.builder()
+                            .context(this)
+                            .awsConfiguration(AWSMobileClient.getInstance().getConfiguration())
+                            .s3Client(new AmazonS3Client(AWSMobileClient.getInstance().getCredentialsProvider()))
+                            .build();
+            try {
+                File localFile = new File(paths[i]);
+
+
+                TransferObserver downloadObserver =
+                        transferUtility.download(files[i], localFile);
+
+                Log.d("FileUtil", localFile.toString());
+
+
+                downloadObserver.setTransferListener(new TransferListener() {
+
+                    @Override
+                    public void onStateChanged(int id, TransferState state) {
+                        if (TransferState.COMPLETED == state) {
+                            dlCount++;
+                            if(dlCount==3) {
+                                Log.d("FileUtil", "download complete");
+                                Intent MainActivity = new Intent(LoginActivity.this, MainActivity.class);
+                                MainActivity.putExtra("activity", "from login");
+                                MainActivity.putExtra("email", username);
+                                MainActivity.putExtra("name", userName);
+                                MainActivity.putExtra("role", userRole);
+                                MainActivity.putExtra("school", userSchool);
+                                Log.d(TAG, "Sending Info to main activity " + userName + " " + username + " " + userRole + " " + userSchool);
+                                startActivity(MainActivity);
+                                overridePendingTransition(R.anim.fade_in, R.anim.fade_out_none);
+                                finish();
+                            }
+
+                                Log.d("Downloading Files", "finished "+dlCount);
+                            }
+
+                            // Handle a completed download
+
+                        }
+
+
+
+                    @Override
+                    public void onProgressChanged(int id, long bytesCurrent, long bytesTotal) {
+                        float percentDonef = ((float) bytesCurrent / (float) bytesTotal) * 100;
+                        int percentDone = (int) percentDonef;
+                        Log.d("FileUtil", "ID:" + id + " bytesCurrent: " + bytesCurrent
+                                + " bytesTotal: " + bytesTotal + " " + percentDone + "%");
+                    }
+
+                    @Override
+                    public void onError(int id, Exception ex) {
+                        // Handle errors
+                        Log.d("FileUtil", ex.toString());
+                    }
+
+                });
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
 
         //todo implement proper async await calls.
         //
         //Due to time constraints we were unable to implement a async call correctly, this was our temporary solution to give the app time to download the file before it starts the main activity
         //this can be fixed by changing how the call is made, or making the walk-thoughs use a list view so they can be updated after the download is complete.
 
-        download.postDelayed(() -> {
+        /*download.postDelayed(() -> {
             Intent MainActivity = new Intent(LoginActivity.this, MainActivity.class);
             MainActivity.putExtra("activity", "from login");
             MainActivity.putExtra("email", username);
@@ -219,6 +298,7 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
             overridePendingTransition(R.anim.fade_in, R.anim.fade_out_none);
             finish();
         }, 3000);
+        */
     }
 
     @Override

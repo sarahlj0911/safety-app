@@ -2,6 +2,7 @@ package com.plusmobileapps.safetyapp.util;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.Environment;
@@ -28,6 +29,8 @@ import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.DeleteVersionRequest;
 import com.amazonaws.services.s3.model.PutObjectResult;
+import com.plusmobileapps.safetyapp.login.LoginActivity;
+import com.plusmobileapps.safetyapp.main.MainActivity;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -72,30 +75,38 @@ public class FileUtil {
             TransferObserver downloadObserver =
                     transferUtility.download(file, localFile);
 
-            Log.d("YourActivity", localFile.toString());
+            Log.d("FileUtil", localFile.toString());
+
+
+
+
+
+
 
             downloadObserver.setTransferListener(new TransferListener() {
 
                 @Override
                 public void onStateChanged(int id, TransferState state) {
                     if (TransferState.COMPLETED == state) {
-                        // Handle a completed upload.
-                        Log.d("YourActivity", "download complete");
+                        // Handle a completed download
+
+                        Log.d("FileUtil", "download complete");
                     }
                 }
+
 
                 @Override
                 public void onProgressChanged(int id, long bytesCurrent, long bytesTotal) {
                     float percentDonef = ((float) bytesCurrent / (float) bytesTotal) * 100;
                     int percentDone = (int) percentDonef;
-                    Log.d("YourActivity", "ID:" + id + " bytesCurrent: " + bytesCurrent
+                    Log.d("FileUtil", "ID:" + id + " bytesCurrent: " + bytesCurrent
                             + " bytesTotal: " + bytesTotal + " " + percentDone + "%");
                 }
 
                 @Override
                 public void onError(int id, Exception ex) {
                     // Handle errors
-                    Log.d("YourActivity", ex.toString());
+                    Log.d("FileUtil", ex.toString());
                 }
 
             });
@@ -134,7 +145,7 @@ public class FileUtil {
                 float percentDonef = ((float) bytesCurrent / (float) bytesTotal) * 100;
                 int percentDone = (int)percentDonef;
 
-                Log.d("YourActivity", "ID:" + id + " bytesCurrent: " + bytesCurrent
+                Log.d("FileUtil", "ID:" + id + " bytesCurrent: " + bytesCurrent
                         + " bytesTotal: " + bytesTotal + " " + percentDone + "%");
             }
 
@@ -149,12 +160,12 @@ public class FileUtil {
         // listener, check for the state and progress in the observer.
         if (TransferState.COMPLETED == uploadObserver.getState()) {
             // Handle a completed upload.
-            Log.d("YourActivity", "Upload Complete");
+            Log.d("FileUtil", "Upload Complete");
 
         }
 
-        Log.d("YourActivity", "Bytes Transferrred: " + uploadObserver.getBytesTransferred());
-        Log.d("YourActivity", "Bytes Total: " + uploadObserver.getBytesTotal());
+        Log.d("FileUtil", "Bytes Transferrred: " + uploadObserver.getBytesTransferred());
+        Log.d("FileUtil", "Bytes Total: " + uploadObserver.getBytesTotal());
     }
 
 }
