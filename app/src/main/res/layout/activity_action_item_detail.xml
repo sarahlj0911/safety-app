@@ -10,7 +10,7 @@
         android:layout_height="match_parent"
         android:isScrollContainer="false"
         android:orientation="vertical"
-        tools:context="com.plusmobileapps.safetyapp.actionitems.detail.ActionItemDetailActivity">
+        tools:context="com.ASUPEACLab.safetyapp.actionitems.detail.ActionItemDetailActivity">
 
         <android.support.design.widget.AppBarLayout
             android:id="@+id/appBarLayout"

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.plusmobileapps.safetyapp.walkthrough.walkthrough.WalkthroughActivity">
+    tools:context="com.ASUPEACLab.safetyapp.walkthrough.walkthrough.WalkthroughActivity">
 
 
     <android.support.design.widget.AppBarLayout

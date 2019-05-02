@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.plusmobileapps.safetyapp">
+    package="com.ASUPEACLab.safetyapp">
 
     <uses-feature
         android:name="android.hardware.camera"
@@ -98,7 +98,7 @@
             android:screenOrientation="portrait" /> <!-- FileProvider for picture files -->
         <provider
             android:name="android.support.v4.content.FileProvider"
-            android:authorities="com.plusmobileapps.safetyapp.fileprovider"
+            android:authorities="com.ASUPEACLab.safetyapp.fileprovider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
@@ -121,7 +121,7 @@
 
         <provider
             android:name=".sync.StubProvider"
-            android:authorities="com.plusmobileapps.safetyapp.provider"
+            android:authorities="com.ASUPEACLab.safetyapp.provider"
             android:exported="false"
             android:syncable="true" />
 
@@ -143,7 +143,7 @@
 
         <activity android:name=".AdminSettings" />
         <activity android:name=".main.removeUser"
-            android:parentActivityName="com.plusmobileapps.safetyapp.main.MainActivity"/>
+            android:parentActivityName=".main.MainActivity"/>
     </application>
 
 </manifest>

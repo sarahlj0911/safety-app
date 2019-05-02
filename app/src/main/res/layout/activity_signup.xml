@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:layout_toEndOf="@id/label_signup_role"
     android:gravity="center_horizontal"
-    tools:context="com.plusmobileapps.safetyapp.signup.SignupActivity">
+    tools:context="com.ASUPEACLab.safetyapp.signup.SignupActivity">
 
     <ImageView
         android:id="@+id/imageBackground"
