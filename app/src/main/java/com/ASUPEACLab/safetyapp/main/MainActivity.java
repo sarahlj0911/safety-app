@@ -79,7 +79,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
     private String userEmail, userName, userRole, userSchool;
 
     // SyncAdapter Constants
-    public static final String AUTHORITY = "com.plusmobileapps.safetyapp.fileprovider"; // The authority for the sync adapter's content provider
+    public static final String AUTHORITY = "com.ASUPEACLab.safetyapp.fileprovider"; // The authority for the sync adapter's content provider
     public static final String ACCOUNT_TYPE = "safetyapp.com";                          // An account type, in the form of a domain name
     public static final String ACCOUNT = "safetyapp";                                   // The account name
 
@@ -219,9 +219,9 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
                     FileUtil.upload(this, selectedSchool + "/ActionItemPictures/" + filename, actionItem.getImagePath());
                 }
             }
-            FileUtil.upload(this, selectedSchool+"/appDB.db", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db");
-            FileUtil.upload(this, selectedSchool+"/appDB.db-shm", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db-shm");
-            FileUtil.upload(this, selectedSchool+"/appDB.db-wal", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db-wal");
+            FileUtil.upload(this, selectedSchool+"/appDB.db", "/data/data/com.ASUPEACLab.safetyapp/databases/appDB.db");
+            FileUtil.upload(this, selectedSchool+"/appDB.db-shm", "/data/data/com.ASUPEACLab.safetyapp/databases/appDB.db-shm");
+            FileUtil.upload(this, selectedSchool+"/appDB.db-wal", "/data/data/com.ASUPEACLab.safetyapp/databases/appDB.db-wal");
         }
         catch(Exception ex) {ex.printStackTrace();}
         user.signOut();

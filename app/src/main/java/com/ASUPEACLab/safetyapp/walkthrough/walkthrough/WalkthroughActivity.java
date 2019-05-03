@@ -26,7 +26,7 @@ import java.util.Stack;
 public class WalkthroughActivity extends AppCompatActivity implements WalkthroughContract.View {
 
     static final String TAG = "WalkthroughActivity";
-    public static final String EXTRA_LOCATION_ID = "com.plusmobileapps.safetyapp.walkthrough.overview.LOCATION";
+    public static final String EXTRA_LOCATION_ID = "com.ASUPEACLab.safetyapp.walkthrough.overview.LOCATION";
     FragmentManager fragmentManager;
     WalkthroughPresenter presenter = new WalkthroughPresenter(this);
 

@@ -35,11 +35,11 @@ public class ActionItemsExport {
         ResponseDao responseDao = db.responseDao();
         LocationDao locationDao = db.locationDao();
         QuestionDao questionDao = db.questionDao();
-        File mydir = new File("/data/data/com.plusmobileapps.safetyapp/files/");
+        File mydir = new File("/data/data/com.ASUPEACLab.safetyapp/files/");
         if (!mydir.exists()) {
             mydir.mkdirs();
         }
-        String outpath = "/data/data/com.plusmobileapps.safetyapp/files/SafetyAppExport.html";
+        String outpath = "/data/data/com.ASUPEACLab.safetyapp/files/SafetyAppExport.html";
         try {
             File exportHtml = new File(outpath);
             if (!exportHtml.exists()) {
@@ -81,7 +81,7 @@ public class ActionItemsExport {
                     File SourcePic = new File(actionItem.getImagePath());
                     String[] picdest = actionItem.getImagePath().split("/");
                     String filename = picdest[picdest.length-1];
-                    File DestinationPic = new File("/data/data/com.plusmobileapps.safetyapp/files/"+filename);
+                    File DestinationPic = new File("/data/data/com.ASUPEACLab.safetyapp/files/"+filename);
                     if(!DestinationPic.exists()){
                         DestinationPic.createNewFile();
                     }

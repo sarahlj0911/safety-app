@@ -18,7 +18,7 @@ public class UploadTask {
 
     // SyncAdapter Constants
     // The authority for the sync adapter's content provier
-    public static final String AUTHORITY = "com.plusmobileapps.safetyapp.provider";
+    public static final String AUTHORITY = "com.ASUPEACLab.safetyapp.provider";
     // An account type, in the form of a domain name
     public static final String ACCOUNT_TYPE = "safetyapp.com";
     // The account name

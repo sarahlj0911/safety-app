@@ -204,7 +204,7 @@
     </string-array>
     <string name="DbStatus">Updating Database</string>
     <string name="user_not_found">User not found</string>
-    <string name="path_database">/data/data/com.plusmobileapps.safetyapp/databases/</string>
+    <string name="path_database">/data/data/com.ASUPEACLab.safetyapp/databases/</string>
     <string name="export">Export</string>
     <string name="action_items">Action Items</string>
     <string name="walkthrough_comments">Walkthough Comments</string>
@@ -214,10 +214,10 @@
     <string name="export_action_plan">Export Action Plan</string>
     <string name="Return">Return</string>
     <string name="Print">Print</string>
-    <string name="schoolJsonFile">/data/data/com.plusmobileapps.safetyapp/databases/schools.json</string>
-    <string name="appDbMain">/data/data/com.plusmobileapps.safetyapp/databases/appDB.db</string>
-    <string name="appDbShm">/data/data/com.plusmobileapps.safetyapp/databases/appDB.db-shm</string>
-    <string name="appDbWal">/data/data/com.plusmobileapps.safetyapp/databases/appDB.db-wal</string>
+    <string name="schoolJsonFile">/data/data/com.ASUPEACLab.safetyapp/databases/schools.json</string>
+    <string name="appDbMain">/data/data/com.ASUPEACLab.safetyapp/databases/appDB.db</string>
+    <string name="appDbShm">/data/data/com.ASUPEACLab.safetyapp/databases/appDB.db-shm</string>
+    <string name="appDbWal">/data/data/com.ASUPEACLab.safetyapp/databases/appDB.db-wal</string>
 
 
 </resources>

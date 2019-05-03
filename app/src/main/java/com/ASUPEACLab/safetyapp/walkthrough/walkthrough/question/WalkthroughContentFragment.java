@@ -338,8 +338,9 @@ public class WalkthroughContentFragment extends Fragment
                     }
 
                     if (imageFile != null) {
+                        //Uri uri = FileProvider.getUriForFile(MainActivity.this, BuildConfig.APPLICATION_ID + ".provider",fileImagePath)
                         Uri imageURI = FileProvider.getUriForFile(this.getActivity(),
-                                "com.plusmobileapps.safetyapp.fileprovider",
+                                "com.ASUPEACLab.safetyapp.fileprovider",
                                 imageFile);
                         Log.d(TAG, "imageURI: " + imageURI.toString());
                         takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageURI);

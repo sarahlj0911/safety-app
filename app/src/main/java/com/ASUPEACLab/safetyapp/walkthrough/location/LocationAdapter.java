@@ -19,7 +19,7 @@ import java.util.List;
 public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHolder> {
 
     private static final String TAG = "LocationAdapter";
-    public static final String EXTRA_LOCATION = "com.plusmobileapps.safetyapp.location.overview.LOCATION";
+    public static final String EXTRA_LOCATION = "com.ASUPEACLab.safetyapp.location.overview.LOCATION";
     private Location location;
     private LocationActivity.LocationItemListener itemListener;
     private List<Location> locations;

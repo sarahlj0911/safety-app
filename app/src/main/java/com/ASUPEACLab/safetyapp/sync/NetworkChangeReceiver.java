@@ -11,7 +11,7 @@ import android.util.Log;
 
 public class NetworkChangeReceiver extends BroadcastReceiver {
 
-    public static final String NETWORK_AVAILABLE_ACTION = "com.plusmobileapps.NetworkAvailable";
+    public static final String NETWORK_AVAILABLE_ACTION = "com.ASUPEACLab.NetworkAvailable";
     public static final String IS_NETWORK_AVAILABLE = "isNetworkAvailable";
 
     @Override

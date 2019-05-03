@@ -200,12 +200,7 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
                 .setMessage("Please wait while the walk-through for "+ userSchool+" is updating.");
         updating.show();
 
-        Handler download = new Handler();
-        //FileUtil.download(this, userSchool+"/appDB.db", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db");
-        //FileUtil.download(this, userSchool+"/appDB.db-shm", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db-shm");
-        //FileUtil.download(this, userSchool+"/appDB.db-wal", "/data/data/com.plusmobileapps.safetyapp/databases/appDB.db-wal");
-
-        String[] paths = new String[]{"/data/data/com.plusmobileapps.safetyapp/databases/appDB.db","/data/data/com.plusmobileapps.safetyapp/databases/appDB.db-shm","/data/data/com.plusmobileapps.safetyapp/databases/appDB.db-wal"};
+        String[] paths = new String[]{"/data/data/com.ASUPEACLab.safetyapp/databases/appDB.db","/data/data/com.ASUPEACLab.safetyapp/databases/appDB.db-shm","/data/data/com.ASUPEACLab.safetyapp/databases/appDB.db-wal"};
         String[] files = new String[]{userSchool+"/appDB.db",userSchool+"/appDB.db-shm",userSchool+"/appDB.db-wal",};
 
         dlCount = 0;

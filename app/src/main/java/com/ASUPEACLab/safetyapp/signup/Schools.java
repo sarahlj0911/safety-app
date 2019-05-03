@@ -22,7 +22,7 @@ public class  Schools {
     static void load(Context context) {
 
         try {
-            File file = new File("/data/data/com.plusmobileapps.safetyapp/databases/schools.json");
+            File file = new File("/data/data/com.ASUPEACLab.safetyapp/databases/schools.json");
             FileInputStream is = new FileInputStream(file);
             int size = is.available();
             byte[] buffer = new byte[size];

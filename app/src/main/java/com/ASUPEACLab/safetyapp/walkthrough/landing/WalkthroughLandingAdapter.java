@@ -17,7 +17,7 @@ import java.util.List;
 public class WalkthroughLandingAdapter extends RecyclerView.Adapter<WalkthroughLandingAdapter.CardViewHolder> {
 
     private static final String TAG = "WalkthruLandingAdapter";
-    public static final String EXTRA_WALKTHROUGH = "com.plusmobileapps.safetyapp.walkthrough.landing.WALKTHROUGH";
+    public static final String EXTRA_WALKTHROUGH = "com.ASUPEACLab.safetyapp.walkthrough.landing.WALKTHROUGH";
     public static final int ITEM_TYPE_NORMAL = 1;
     public static final int ITEM_TYPE_HEADER = 0;
     private Walkthrough walkthrough;
