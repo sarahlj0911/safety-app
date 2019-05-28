@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:layout_editor_absoluteY="25dp">
 
     <TextView
         android:id="@+id/Admin_enter_new_info"
@@ -18,69 +19,91 @@
         app:layout_constraintBottom_toTopOf="@+id/new_user_username"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_chainStyle="packed" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/new_user_username"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginStart="50dp"
-        android:layout_marginEnd="84dp"
-        android:layout_marginBottom="13dp"
         android:autofillHints=""
         android:ems="10"
-        android:hint="@string/username"
+        android:hint="Name"
+        android:inputType="textPersonName"
+        app:layout_constraintBottom_toTopOf="@+id/new_user_userID"
+        app:layout_constraintEnd_toEndOf="@+id/new_user_password"
+        app:layout_constraintStart_toStartOf="@+id/new_user_password"
+        app:layout_constraintTop_toBottomOf="@+id/Admin_enter_new_info"
+        tools:targetApi="o" />
+
+    <EditText
+        android:id="@+id/new_user_userID"
+        android:layout_width="250dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="51dp"
+        android:autofillHints=""
+        android:ems="10"
+        android:hint="User ID"
         android:inputType="textPersonName"
         app:layout_constraintBottom_toTopOf="@+id/new_user_password"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/Admin_enter_new_info"
+        app:layout_constraintTop_toBottomOf="@+id/new_user_username"
         tools:targetApi="o" />
 
     <EditText
         android:id="@+id/new_user_password"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginEnd="84dp"
-        android:layout_marginBottom="12dp"
         android:autofillHints=""
         android:ems="10"
         android:hint="@string/temporary_password"
         android:inputType="textPassword"
         app:layout_constraintBottom_toTopOf="@+id/new_user_school_id"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/new_user_username"
-        app:layout_constraintTop_toBottomOf="@+id/new_user_username"
+        app:layout_constraintEnd_toEndOf="@+id/new_user_school_id"
+        app:layout_constraintStart_toStartOf="@+id/new_user_school_id"
+        app:layout_constraintTop_toBottomOf="@+id/new_user_userID"
         tools:targetApi="o" />
 
     <EditText
         android:id="@+id/new_user_school_id"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginEnd="84dp"
-        android:layout_marginBottom="30dp"
+        android:layout_marginStart="1dp"
+        android:layout_marginEnd="1dp"
         android:autofillHints=""
         android:ems="10"
         android:hint="@string/school"
         android:inputType="textPersonName"
-        app:layout_constraintBottom_toTopOf="@+id/create_user_btn"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/new_user_password"
+        app:layout_constraintBottom_toTopOf="@+id/new_user_role"
+        app:layout_constraintEnd_toEndOf="@+id/new_user_userID"
+        app:layout_constraintStart_toStartOf="@+id/new_user_role"
         app:layout_constraintTop_toBottomOf="@+id/new_user_password"
+        tools:targetApi="o" />
+
+    <EditText
+        android:id="@+id/new_user_role"
+        android:layout_width="251dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="49dp"
+        android:layout_marginBottom="86dp"
+        android:autofillHints=""
+        android:ems="10"
+        android:hint="Role"
+        android:inputType="textPersonName"
+        app:layout_constraintBottom_toTopOf="@+id/create_user_btn"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/new_user_school_id"
         tools:targetApi="o" />
 
     <Button
         android:id="@+id/create_user_btn"
-        android:layout_width="374dp"
+        android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginStart="48dp"
-        android:layout_marginEnd="137dp"
-        android:layout_marginBottom="219dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginBottom="8dp"
         android:text="@string/create_user"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.415"
-        app:layout_constraintStart_toStartOf="@+id/new_user_school_id"
-        app:layout_constraintTop_toBottomOf="@+id/new_user_school_id" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/new_user_role" />
 </android.support.constraint.ConstraintLayout>

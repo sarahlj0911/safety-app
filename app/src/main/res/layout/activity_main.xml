@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.plusmobileapps.safetyapp.main.MainActivity">
+    tools:context="com.ASUPEACLab.safetyapp.main.MainActivity">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/toolbar"
@@ -27,8 +27,8 @@
         android:id="@+id/view_pager"
         android:layout_width="match_parent"
         android:layout_height="fill_parent"
-        android:layout_below="@+id/toolbar"
-        android:layout_above="@id/navigation">
+        android:layout_above="@id/navigation"
+        android:layout_below="@+id/toolbar">
 
     </android.support.v4.view.ViewPager>
 

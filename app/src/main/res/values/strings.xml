@@ -78,15 +78,16 @@
     <string name="status_text">"Unable to Sign Up %1$s \n AWS Error"</string>
 
 
-    <!-- Signup Confirmation Page Strings -->
+    <!-- Signup Confirmation -->
     <string name="signup_confirm_title">Almost There!</string>
     <string name="signup_confirm_description">A confirmation email has been sent to %1$s. Please enter the code you receive in the field below.</string>
     <string name="signup_code">Code</string>
     <string name="signup_status">Incorrect Confirmation Code</string>
-    <string name="signup_confirm_button">Confirm</string>
+    <string name="signup_button_confirm">Confirm</string>
+    <string name="signup_button_inbox">Go To Inbox</string>
 
 
-    <!-- Login Page Strings -->
+    <!-- Login Page -->
     <string name="login_field_email_placeholder">Email</string>
     <string name="Login_field_password_placeholder">Password</string>
     <string name="login_image_background_description">background</string>
@@ -95,11 +96,16 @@
     <string name="login_button_register">Sign Up</string>
     <string name="error_password_none">Password is required</string>
     <string name="login_code_title">Account Verification</string>
-    <string name="login_code_button_send_email">Resend Email</string>
+    <string name="login_code_button_send_email">Resend Code</string>
     <string name="login_code_button_confirm">Confirm</string>
     <string name="login_code_status_placeholder">Code Status</string>
+    <string name="login_code_button_sent">Code Sent</string>
+    <string name="login_code_button_error">Issue Sending Code</string>
 
-
+    <!-- Placeholders -->
+    <string name="placeholder_title">Title</string>
+    <string name="placeholder_content">This is some dummy text to fill in the content. Place change this text to whatever you would like when initializing this view. Until then, you will have this beautiful text filling in the spaces.</string>
+    <string name="placeholder_button">Button</string>
 
     <string-array name="signup_roles">
         <item>Administrator</item>
@@ -157,16 +163,61 @@
     <string name="temporary_password">Temporary Password</string>
     <string name="school">School</string>
     <string name="create_user">Create User</string>
-    <string name="Admin_settings">Admin Settings</string>
+    <string name="Admin_add">Add User</string>
+    <string name="Admin_remove">Remove User</string>
+    <string name="dropdown_signout">Sign Out</string>
     <string name="login_button_error_aws_user_exists">Incorrect Password</string>
-    <string name="login_button_user_confirmed">Account Confirmed!\nLogin Again</string>
+    <string name="login_button_error_aws_attempts_exceeded">Password Attempts Exceeded!\nTry again soon.</string>
+    <string name="login_button_user_confirmed">Account Confirmed!\nLogging in…</string>
     <string name="login_button_error_aws_new_password">Password Reset Required</string>
-    <string name="login_button_error_aws_error">Connection Issue with AWS</string>
-    <string name="login_button_user_not_found">User Not Found</string>
-    <string name="login_button_error_verify">Need to Verify Account\nContinue Process? </string>
+    <string name="login_button_error_aws_error">Unknown AWS Issue</string>
+    <string name="login_button_error_aws_code_error_incorrect">Incorrect Code</string>
+    <string name="login_button_error_aws_code_error_limit">Attempt Limit Exceeded</string>
+    <string name="login_button_error_aws_code_error_default">Unknown Error</string>
+    <string name="login_button_error_aws_internal_error">AWS Internal Error</string>
+    <string name="login_button_user_not_found">Account Not Found</string>
+    <string name="login_button_error_verify">Need to Verify Account\nContinue Process?</string>
+    <string name="login_button_error_AWS_connection_issue">AWS Connection Issue</string>
     <string name="authorization_code_input_field">Enter your code here</string>
     <string name="authorization_code_des">You still need to verify your account. Please enter the code that was previously emailed to you.</string>
     <string name="code_listener_button_confirm">CONFIRM</string>
+    <string name="code_authorization_confirmed">CONFIRMED</string>
+    <string name="sign_up_title">Create Your Account</string>
+    <string name="aws_login_error_disabled">Your Account Has Been Disabled</string>
+    <string name="aws_login_error_details">Unable to load your account.\nTry again…</string>
+
+    <string name="delete_user">delete user</string>
+    <string name="add_user">add user</string>
+    <string name="view_current_tickets">View Current Tickets</string>
+    <string name="ticket_history">Ticket History</string>
+    <string name="string_ticket_history" />
+    <string name="new_ticket">New Ticket</string>
+    <string name="view_history">View History</string>
+    <string name="string_view_history" />
+    <string name="enter_your_name">Enter your name:</string>
+    <string name="view_tickets">View Tickets</string>
+
+    <string-array name="userArray">
+        <item>User1</item>
+        <item>User2</item>
+        <item>User3</item>
+    </string-array>
+    <string name="DbStatus">Updating Database</string>
+    <string name="user_not_found">User not found</string>
+    <string name="path_database">/data/data/com.ASUPEACLab.safetyapp/databases/</string>
+    <string name="export">Export</string>
+    <string name="action_items">Action Items</string>
+    <string name="walkthrough_comments">Walkthough Comments</string>
+    <string name="photos">Photos</string>
+    <string name="please_select_which_items_to_include_in_your_report">Please select which items to include in your report</string>
+    <string name="test_data_will_appear_here">testdatawillappearhere</string>
+    <string name="export_action_plan">Export Action Plan</string>
+    <string name="Return">Return</string>
+    <string name="Print">Print</string>
+    <string name="schoolJsonFile">/data/data/com.ASUPEACLab.safetyapp/databases/schools.json</string>
+    <string name="appDbMain">/data/data/com.ASUPEACLab.safetyapp/databases/appDB.db</string>
+    <string name="appDbShm">/data/data/com.ASUPEACLab.safetyapp/databases/appDB.db-shm</string>
+    <string name="appDbWal">/data/data/com.ASUPEACLab.safetyapp/databases/appDB.db-wal</string>
+
 
 </resources>
-

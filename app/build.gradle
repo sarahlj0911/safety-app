@@ -4,15 +4,19 @@ android {
     compileSdkVersion 28
     buildToolsVersion '28.0.3'
     defaultConfig {
-        applicationId "com.plusmobileapps.safetyapp"
+        applicationId "com.ASUPEACLab.safetyapp"
         minSdkVersion 23
         targetSdkVersion 28
         renderscriptTargetApi 19
         renderscriptSupportModeEnabled true
-        versionCode 3
+        versionCode 4
         versionName "1.1"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
+        compileOptions {
+            sourceCompatibility 1.8
+            targetCompatibility 1.8
+        }
     }
     lintOptions {
         abortOnError false
@@ -33,7 +37,13 @@ android {
     }
     productFlavors {
     }
+        compileOptions {
+            sourceCompatibility JavaVersion.VERSION_1_8
+            targetCompatibility JavaVersion.VERSION_1_8
+        }
+
 }
+apply plugin: 'com.amazonaws.appsync'
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
@@ -52,12 +62,12 @@ dependencies {
     implementation "com.android.support:cardview-v7:$rootProject.ext.supportLibraryVersion"
     implementation 'com.google.code.gson:gson:2.8.2'
     implementation 'com.android.support.constraint:constraint-layout:1.1.3'
-    implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.+'
-
+    implementation 'org.apache.commons:commons-lang3:3.+'
 
     // AWS Mobile Client SDK
     implementation('com.amazonaws:aws-android-sdk-mobile-client:2.7.+@aar') { transitive = true }
-    // implementation 'com.amazonaws:aws-android-sdk-mobile-client:2.11.+'
+
+    //implementation 'com.amazonaws:aws-android-sdk-mobile-client:2.11.+'
 
     // AWS Cognito UserPools for SignIn
     implementation 'com.android.support:support-v4:24.+'
@@ -68,10 +78,10 @@ dependencies {
     implementation('com.amazonaws:aws-android-sdk-auth-ui:2.7.+@aar') { transitive = true }
 
     //Base SDK
-    implementation 'com.amazonaws:aws-android-sdk-core:2.11.+'
+    implementation 'com.amazonaws:aws-android-sdk-core:2.12.5'
 
     //AppSync SDK
-    implementation 'com.amazonaws:aws-android-sdk-appsync:2.7.+'
+    implementation 'com.amazonaws:aws-android-sdk-appsync:2.+'
     implementation 'org.eclipse.paho:org.eclipse.paho.client.mqttv3:1.2.0'
     implementation 'org.eclipse.paho:org.eclipse.paho.android.service:1.1.1'
 
@@ -79,6 +89,7 @@ dependencies {
     implementation 'com.amazonaws:aws-android-sdk-ddb-mapper:2.7.+'
 
     // Blur Background
+
     // implementation 'com.github.jrvansuita:GaussianBlur:+'
 
     //good library to easily animate the recycler view **updated
@@ -93,9 +104,8 @@ dependencies {
 
     //image loading library
     implementation 'com.squareup.picasso:picasso:2.71828'
-
     implementation 'br.com.simplepass:loading-button-android:1.7.+'
-
+    implementation 'id.zelory:compressor:2.1.0'
 
     //test
 
@@ -105,4 +115,6 @@ dependencies {
     testImplementation "org.hamcrest:hamcrest-all:$rootProject.ext.hamcrestVersion"
     testImplementation "org.powermock:powermock-module-junit4:$rootProject.ext.powerMockito"
     testImplementation "org.powermock:powermock-api-mockito:$rootProject.ext.powerMockito"
+    implementation files('libs/itextg-5.5.10.jar')
+
 }

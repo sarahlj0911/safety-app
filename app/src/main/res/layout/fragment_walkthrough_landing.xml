@@ -1,9 +1,9 @@
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/lib/com.plusmobileapps.safetyapp.walkthroughs.landing"
+    xmlns:app="http://schemas.android.com/apk/lib/com.ASUPEACLab.safetyapp.walkthroughs.landing"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.plusmobileapps.safetyapp.walkthrough.landing.WalkthroughLandingFragment"
+    tools:context="com.ASUPEACLab.safetyapp.walkthrough.landing.WalkthroughLandingFragment"
     android:id="@+id/fragment_walkthrough_landing_root"
     android:clickable="false">
 
@@ -21,13 +21,15 @@
         android:id="@+id/landing_walkthrough_recyclerview"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
+
     <View
         android:id="@+id/overlay"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@android:color/transparent"
         android:clickable="true"
-        android:visibility="gone"/>
+        android:focusable="true"
+        android:visibility="gone" />
 
     <ProgressBar
         android:id="@+id/pb_loading_indicator"

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.plusmobileapps.safetyapp">
+    package="com.ASUPEACLab.safetyapp">
 
     <uses-feature
         android:name="android.hardware.camera"
@@ -10,14 +10,13 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" /> <!-- SyncAdapter permissions -->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.READ_SYNC_SETTINGS" />
     <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS" />
     <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:name=".MyApplication"
@@ -28,7 +27,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar"
         tools:ignore="GoogleAppIndexingWarning">
-
         <service android:name="org.eclipse.paho.android.service.MqttService" />
 
         <activity
@@ -38,7 +36,6 @@
             android:theme="@style/AppTheme.Launcher">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -46,7 +43,7 @@
             android:name=".welcome.WelcomeActivity"
             android:label="@string/app_name_only"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.Walkthrough"></activity>
+            android:theme="@style/AppTheme.Walkthrough" />
         <activity
             android:name=".walkthrough.walkthrough.WalkthroughActivity"
             android:label="@string/title_activity_walkthrough"
@@ -56,6 +53,34 @@
             android:name=".login.LoginActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.Clean" />
+        <activity
+            android:name=".signup.SignupActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.Clean"/>
+        <activity
+            android:name=".admin.AdminMainActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.Clean"/>
+        <activity
+            android:name=".admin.AdminAddUserActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.Clean"/>
+        <activity
+            android:name=".admin.AdminNewTicketActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.Clean"/>
+        <activity
+            android:name=".admin.AdminViewHistoryActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.Clean"/>
+        <activity
+            android:name=".admin.AdminDeleteUserActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.Clean"/>
+        <activity
+            android:name=".admin.ViewTicketsActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.Clean"/>
         <activity
             android:name=".main.MainActivity"
             android:screenOrientation="portrait" />
@@ -73,17 +98,13 @@
             android:screenOrientation="portrait" /> <!-- FileProvider for picture files -->
         <provider
             android:name="android.support.v4.content.FileProvider"
-            android:authorities="com.plusmobileapps.safetyapp.fileprovider"
+            android:authorities="com.ASUPEACLab.safetyapp.fileprovider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
-
-        <activity
-            android:name=".signup.SignupActivity"
-            android:screenOrientation="portrait" />
 
         <service
             android:name=".sync.AuthenticatorService"
@@ -100,7 +121,7 @@
 
         <provider
             android:name=".sync.StubProvider"
-            android:authorities="com.plusmobileapps.safetyapp.provider"
+            android:authorities="com.ASUPEACLab.safetyapp.provider"
             android:exported="false"
             android:syncable="true" />
 
@@ -118,8 +139,11 @@
                 android:name="android.content.SyncAdapter"
                 android:resource="@xml/syncadapter" />
         </service>
+        <activity android:name=".util.exportPdf"/>
 
         <activity android:name=".AdminSettings" />
+        <activity android:name=".main.removeUser"
+            android:parentActivityName=".main.MainActivity"/>
     </application>
 
 </manifest>

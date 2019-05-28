@@ -1,8 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/settings_menu"
-
-        android:title="@string/Admin_settings" />
-
+        android:id="@+id/settings_menu_admin"
+        android:title="Admin Settings" />
+    <item
+        android:id="@+id/ExportActionPlan"
+        android:title = "@string/export_action_plan"
+        android:icon="@drawable/printicon"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/settings_menu_signout"
+        android:title="@string/dropdown_signout" />
 </menu>

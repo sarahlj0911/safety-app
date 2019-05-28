@@ -12,8 +12,11 @@
     <color name="status_bar_dark_transparent">#34000000</color>
     <color name="black_light">#19000000</color>
     <color name="text_unfocus">#B3FFFFFF</color>
+    <color name="soft_white">#33FFFFFF</color>
     <color name="error">#C50000</color>
     <color name="login_button_text_click">#EA4F1B</color>
+    <color name="code_authorization_code_success">#66AB17</color>
+
 
 
 
